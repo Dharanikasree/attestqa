@@ -1,0 +1,6 @@
+# Saved application bundles (--dump) and run output: local working files.
+bundles/
+results/
+*.log.jsonl
+fault-log.jsonl
+*.bak

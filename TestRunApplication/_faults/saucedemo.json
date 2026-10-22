@@ -1,0 +1,72 @@
+{
+  "app": "saucedemo",
+  "upstream": "https://www.saucedemo.com",
+  "note": "Seeded faults for the attestqa evaluation (research/SEEDED_FAULTS.md). Each 'find' must occur exactly once in the responses its 'path' selects; take it from the live application and run faultproxy.mjs --check before use. Never shown to the agent.",
+  "faults": [
+    {
+      "id": "SD-1",
+      "kind": "V",
+      "story": "Customer gives their details at checkout",
+      "criterion": "AC-2",
+      "change": "An empty postal code is accepted and the overview is shown",
+      "path": "/static/js/main\\..*\\.js$",
+      "contentType": "javascript",
+      "find": "TO-CONFIRM: the postal-code required check",
+      "replace": "TO-CONFIRM",
+      "confirmedOn": null,
+      "storyId": "TO-CONFIRM: the story's tracker id, as in the spec's @story tag"
+    },
+    {
+      "id": "SD-2",
+      "kind": "B",
+      "story": "Customer adds and removes products from the list",
+      "criterion": "AC-1",
+      "change": "After adding, the button still says Add to cart",
+      "path": "/static/js/main\\..*\\.js$",
+      "contentType": "javascript",
+      "find": "TO-CONFIRM: the Add to cart / Remove button label switch",
+      "replace": "TO-CONFIRM",
+      "confirmedOn": null,
+      "storyId": "TO-CONFIRM: the story's tracker id, as in the spec's @story tag"
+    },
+    {
+      "id": "SD-3",
+      "kind": "R",
+      "story": "Customer gives their details at checkout",
+      "criterion": "AC-3",
+      "change": "Cancel goes to the product list instead of the cart",
+      "path": "/static/js/main\\..*\\.js$",
+      "contentType": "javascript",
+      "find": "TO-CONFIRM: the Cancel navigation target on checkout step one",
+      "replace": "TO-CONFIRM",
+      "confirmedOn": null,
+      "storyId": "TO-CONFIRM: the story's tracker id, as in the spec's @story tag"
+    },
+    {
+      "id": "SD-4",
+      "kind": "C",
+      "story": "Customer checks the order totals before buying",
+      "criterion": "AC-3",
+      "change": "The total is item total plus tax plus 0.01",
+      "path": "/static/js/main\\..*\\.js$",
+      "contentType": "javascript",
+      "find": "TO-CONFIRM: the order total = item total + tax",
+      "replace": "TO-CONFIRM",
+      "confirmedOn": null,
+      "storyId": "TO-CONFIRM: the story's tracker id, as in the spec's @story tag"
+    },
+    {
+      "id": "SD-5",
+      "kind": "A",
+      "story": "A locked-out user cannot sign in",
+      "criterion": "AC-3",
+      "change": "The username field loses its placeholder and accessible name",
+      "path": "/static/js/main\\..*\\.js$",
+      "contentType": "javascript",
+      "find": "TO-CONFIRM: the username input's placeholder / aria attributes",
+      "replace": "TO-CONFIRM",
+      "confirmedOn": null,
+      "storyId": "TO-CONFIRM: the story's tracker id, as in the spec's @story tag"
+    }
+  ]
+}

@@ -1,0 +1,72 @@
+{
+  "app": "toolshop",
+  "upstream": "http://localhost:4200",
+  "note": "Seeded faults for the attestqa evaluation (research/SEEDED_FAULTS.md). Each 'find' must occur exactly once in the responses its 'path' selects; take it from the live application and run faultproxy.mjs --check before use. Never shown to the agent.",
+  "faults": [
+    {
+      "id": "TS-1",
+      "kind": "V",
+      "story": "Customer sends a message with the contact form",
+      "criterion": "AC-3",
+      "change": "An email without @ is accepted with no message",
+      "path": "\\.js$",
+      "contentType": "javascript",
+      "find": "TO-CONFIRM: the email-format validator of the contact form",
+      "replace": "TO-CONFIRM",
+      "confirmedOn": null,
+      "storyId": "TO-CONFIRM: the story's tracker id, as in the spec's @story tag"
+    },
+    {
+      "id": "TS-2",
+      "kind": "B",
+      "story": "Shopper opens a product's detail page",
+      "criterion": "AC-2",
+      "change": "The minus button stays enabled at 1 and takes the quantity to 0",
+      "path": "\\.js$",
+      "contentType": "javascript",
+      "find": "TO-CONFIRM: the lower bound (1) of the quantity decrement",
+      "replace": "TO-CONFIRM",
+      "confirmedOn": null,
+      "storyId": "TO-CONFIRM: the story's tracker id, as in the spec's @story tag"
+    },
+    {
+      "id": "TS-3",
+      "kind": "R",
+      "story": "New customer registers an account",
+      "criterion": "AC-1",
+      "change": "Registering goes to the home page instead of the sign-in page",
+      "path": "\\.js$",
+      "contentType": "javascript",
+      "find": "TO-CONFIRM: the navigation to the login route after a successful registration",
+      "replace": "TO-CONFIRM",
+      "confirmedOn": null,
+      "storyId": "TO-CONFIRM: the story's tracker id, as in the spec's @story tag"
+    },
+    {
+      "id": "TS-4",
+      "kind": "C",
+      "story": "Shopper adds tools to the cart and changes quantities",
+      "criterion": "AC-2",
+      "change": "The cart total is off by one unit price after a quantity change",
+      "path": "\\.js$",
+      "contentType": "javascript",
+      "find": "TO-CONFIRM: the cart total sum",
+      "replace": "TO-CONFIRM",
+      "confirmedOn": null,
+      "storyId": "TO-CONFIRM: the story's tracker id, as in the spec's @story tag"
+    },
+    {
+      "id": "TS-5",
+      "kind": "A",
+      "story": "Customer signs in and signs out",
+      "criterion": "AC-4",
+      "change": "The email field keeps its visible label but loses its label association",
+      "path": "\\.js$",
+      "contentType": "javascript",
+      "find": "TO-CONFIRM: the for= / id= pair of the sign-in email label and input",
+      "replace": "TO-CONFIRM",
+      "confirmedOn": null,
+      "storyId": "TO-CONFIRM: the story's tracker id, as in the spec's @story tag"
+    }
+  ]
+}

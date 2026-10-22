@@ -1,0 +1,72 @@
+{
+  "app": "booker",
+  "upstream": "http://localhost:3003",
+  "note": "Seeded faults for the attestqa evaluation (research/SEEDED_FAULTS.md). Each 'find' must occur exactly once in the responses its 'path' selects; take it from the live application and run faultproxy.mjs --check before use. Never shown to the agent.",
+  "faults": [
+    {
+      "id": "RB-1",
+      "kind": "V",
+      "story": "Visitor is told what is wrong with the contact form",
+      "criterion": "AC-2",
+      "change": "The short-phone message no longer gives the allowed length",
+      "path": ".*",
+      "contentType": "json",
+      "find": "TO-CONFIRM: the phone length message (API) or its text in the page bundle",
+      "replace": "TO-CONFIRM",
+      "confirmedOn": null,
+      "storyId": "TO-CONFIRM: the story's tracker id, as in the spec's @story tag"
+    },
+    {
+      "id": "RB-2",
+      "kind": "B",
+      "story": "Owner sees bookings in the report calendar",
+      "criterion": "AC-3",
+      "change": "The next-month button does nothing",
+      "path": "\\.js$",
+      "contentType": "javascript",
+      "find": "TO-CONFIRM: the calendar's next-month handler",
+      "replace": "TO-CONFIRM",
+      "confirmedOn": null,
+      "storyId": "TO-CONFIRM: the story's tracker id, as in the spec's @story tag"
+    },
+    {
+      "id": "RB-3",
+      "kind": "R",
+      "story": "Owner signs in to and out of the admin area",
+      "criterion": "AC-3",
+      "change": "Logout leaves the admin area on screen",
+      "path": "\\.js$",
+      "contentType": "javascript",
+      "find": "TO-CONFIRM: the post-logout navigation to the sign-in form",
+      "replace": "TO-CONFIRM",
+      "confirmedOn": null,
+      "storyId": "TO-CONFIRM: the story's tracker id, as in the spec's @story tag"
+    },
+    {
+      "id": "RB-4",
+      "kind": "C",
+      "story": "Guest chooses dates for a room",
+      "criterion": "AC-2",
+      "change": "The price for the stay counts one night fewer",
+      "path": "\\.js$",
+      "contentType": "javascript",
+      "find": "TO-CONFIRM: the number-of-nights calculation",
+      "replace": "TO-CONFIRM",
+      "confirmedOn": null,
+      "storyId": "TO-CONFIRM: the story's tracker id, as in the spec's @story tag"
+    },
+    {
+      "id": "RB-5",
+      "kind": "A",
+      "story": "Owner reads messages and they are marked as read",
+      "criterion": "AC-3",
+      "change": "The control that opens a message loses its accessible name",
+      "path": "\\.js$",
+      "contentType": "javascript",
+      "find": "TO-CONFIRM: the accessible name (aria-label / text) of the message row control",
+      "replace": "TO-CONFIRM",
+      "confirmedOn": null,
+      "storyId": "TO-CONFIRM: the story's tracker id, as in the spec's @story tag"
+    }
+  ]
+}

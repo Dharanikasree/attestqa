@@ -1,0 +1,72 @@
+{
+  "app": "juice-shop",
+  "upstream": "http://localhost:3100",
+  "note": "Seeded faults for the attestqa evaluation (research/SEEDED_FAULTS.md). Each 'find' must occur exactly once in the responses its 'path' selects; take it from the live application and run faultproxy.mjs --check before use. Never shown to the agent.",
+  "faults": [
+    {
+      "id": "JS-1",
+      "kind": "V",
+      "story": "Customer signs in with email and password",
+      "criterion": "AC-2",
+      "change": "A wrong password shows no message",
+      "path": "main.*\\.js$",
+      "contentType": "javascript",
+      "find": "TO-CONFIRM: the login error message binding",
+      "replace": "TO-CONFIRM",
+      "confirmedOn": null,
+      "storyId": "TO-CONFIRM: the story's tracker id, as in the spec's @story tag"
+    },
+    {
+      "id": "JS-2",
+      "kind": "B",
+      "story": "New customer registers an account",
+      "criterion": "AC-2",
+      "change": "The Register button is enabled while the passwords differ",
+      "path": "main.*\\.js$",
+      "contentType": "javascript",
+      "find": "TO-CONFIRM: the passwords-match condition on the Register button",
+      "replace": "TO-CONFIRM",
+      "confirmedOn": null,
+      "storyId": "TO-CONFIRM: the story's tracker id, as in the spec's @story tag"
+    },
+    {
+      "id": "JS-3",
+      "kind": "R",
+      "story": "Customer signs out",
+      "criterion": "AC-2",
+      "change": "Sign out goes to the login page instead of the home page",
+      "path": "main.*\\.js$",
+      "contentType": "javascript",
+      "find": "TO-CONFIRM: the post-logout navigation target",
+      "replace": "TO-CONFIRM",
+      "confirmedOn": null,
+      "storyId": "TO-CONFIRM: the story's tracker id, as in the spec's @story tag"
+    },
+    {
+      "id": "JS-4",
+      "kind": "C",
+      "story": "Customer adds products to the basket and changes quantities",
+      "criterion": "AC-2",
+      "change": "The basket total rises by one unit less than the line",
+      "path": "main.*\\.js$",
+      "contentType": "javascript",
+      "find": "TO-CONFIRM: the basket total calculation",
+      "replace": "TO-CONFIRM",
+      "confirmedOn": null,
+      "storyId": "TO-CONFIRM: the story's tracker id, as in the spec's @story tag"
+    },
+    {
+      "id": "JS-5",
+      "kind": "A",
+      "story": "Customer chooses the shop's language",
+      "criterion": "AC-3",
+      "change": "Labels change language but the page's lang attribute does not",
+      "path": "main.*\\.js$",
+      "contentType": "javascript",
+      "find": "TO-CONFIRM: the document.documentElement.lang update on language change",
+      "replace": "TO-CONFIRM",
+      "confirmedOn": null,
+      "storyId": "TO-CONFIRM: the story's tracker id, as in the spec's @story tag"
+    }
+  ]
+}
