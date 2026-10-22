@@ -120,6 +120,6 @@ Three changes from the first draft, found while confirming:
    Logout "shows the sign-in form again"; the real application goes to the guest
    home page. The criterion is ours and wrong; correct it in Azure DevOps before
    the runs.
-5. Story ids for Toolshop (Jira TOOL) and Juice Shop (Jira SCRUM, after seeding)
-   still to fill in `<app>.json`; Booker and SauceDemo follow the seed order
-   (91-102, 109-120).
+5. Story ids: filled in for all four (Toolshop TOOL-6..19, Juice Shop SCRUM-6/8/10
+   and SCRUM-18..27, Booker 91-102, SauceDemo 109-120). Juice Shop was seeded on
+   22 Oct; its order-tracking bug is SCRUM-28.

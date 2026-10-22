@@ -8,8 +8,8 @@
     "Juice Shop is running at http://localhost:3100 from the same image as the corpus runs; record the image tag in TestRunApplication/targets.yaml.",
     "Every acceptance criterion below describes what the build under test does. Walk each story once in the browser before seeding and correct any criterion that does not match; a criterion that is wrong from the start makes every result for that story meaningless.",
     "UI changes: Juice Shop runs from a published image, so a changed label or control needs either a customised build or Juice Shop's own customisation config. Decide which before the first ui-change run; if neither is practical, run those two stories as 'shared-epic' and say so in the threats section.",
-    "Reproduce both linked bugs on the build under test before seeding. SCRUM-12 already exists. The order-tracking bug must return other customers' orders through the tracking endpoint; if it does not, replace it with one that reproduces in the same area.",
-    "A second customer account with at least one placed order is needed for the order history and tracking stories; create it once and put it in .env as AQA_OTHER_USER/AQA_OTHER_PASS, never in this file."
+    "A second customer account with at least one placed order is needed for the order history and tracking stories; create it once and put it in .env as AQA_OTHER_USER/AQA_OTHER_PASS, never in this file.",
+    "Both linked bugs reproduce on the build under test (checked 22 Oct 2026: SCRUM-12 already on record; order tracking returns a full order to a visitor who is not signed in)."
   ],
   "epics": [
     {
@@ -54,7 +54,12 @@
       "epic": "account",
       "summary": "Customer signs in with email and password",
       "key": "SCRUM-6",
-      "subtasks": [{ "summary": "Show an error message when the credentials are wrong", "key": "SCRUM-7" }],
+      "subtasks": [
+        {
+          "summary": "Show an error message when the credentials are wrong",
+          "key": "SCRUM-7"
+        }
+      ],
       "uiChange": "After the first run: rename the visible label of the Log in button and change its id. Run the story again against that build."
     },
     {
@@ -64,7 +69,12 @@
       "epic": "account",
       "summary": "Customer signs out",
       "key": "SCRUM-8",
-      "subtasks": [{ "summary": "Remove the authentication token from the browser on logout", "key": "SCRUM-9" }]
+      "subtasks": [
+        {
+          "summary": "Remove the authentication token from the browser on logout",
+          "key": "SCRUM-9"
+        }
+      ]
     },
     {
       "ref": "register",
@@ -73,7 +83,12 @@
       "epic": "account",
       "summary": "New customer registers an account",
       "key": "SCRUM-10",
-      "subtasks": [{ "summary": "Check that password and repeat password match before enabling Register", "key": "SCRUM-11" }],
+      "subtasks": [
+        {
+          "summary": "Check that password and repeat password match before enabling Register",
+          "key": "SCRUM-11"
+        }
+      ],
       "uiChange": "After the first run: rename the visible label of the email field on the registration page and change its id. Run the story again against that build."
     },
     {
@@ -106,7 +121,11 @@
         "AC-2: In the basket, increasing or decreasing a product's quantity changes the line and the total price accordingly.",
         "AC-3: Removing a product takes it out of the basket and out of the total."
       ],
-      "subtasks": [{ "summary": "Keep the basket when the customer signs out and back in" }]
+      "subtasks": [
+        {
+          "summary": "Keep the basket when the customer signs out and back in"
+        }
+      ]
     },
     {
       "ref": "review",
@@ -242,11 +261,11 @@
       "ref": "bug-tracking",
       "story": "orders",
       "status": "In Progress",
-      "summary": "Order tracking returns other customers' orders",
+      "summary": "Order tracking shows any order to anyone who has its number, signed in or not",
       "description": [
-        "Steps: sign in as a customer, open order history and track one order; then request the tracking endpoint with an order id that is not this customer's, or with an id built to match every order.",
-        "EXPECTED: only the signed-in customer's own order is returned, or nothing.",
-        "ACTUAL: orders that belong to other customers are returned (to be confirmed on the build under test before seeding).",
+        "Steps: as a customer, place an order and note its order number in Order History. In a private browser window that is not signed in, request /rest/track-order/<that order number>.",
+        "EXPECTED: an order is shown only to the customer who placed it; a visitor who is not signed in sees nothing.",
+        "ACTUAL: the full order is returned: its products, quantities and prices, the total, the delivery price, the payment method, the address id and a partly masked email. Reproduced on the build under test on 22 Oct 2026.",
         "Filed by a person, not by attestqa."
       ]
     }

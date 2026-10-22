@@ -14,7 +14,7 @@
       "find": "this.contact.get(\"email\")?.setValidators([Validators.required, Validators.email]);",
       "replace": "this.contact.get(\"email\")?.setValidators([Validators.required]);",
       "confirmedOn": "Angular dev-server modules (22 Oct 2026)",
-      "storyId": "TO-CONFIRM: the story's tracker id, as in the spec's @story tag"
+      "storyId": "TOOL-18"
     },
     {
       "id": "TS-2",
@@ -27,7 +27,7 @@
       "find": "if (this.quantity > 1) {",
       "replace": "if (this.quantity > 0) {",
       "confirmedOn": "Angular dev-server modules (22 Oct 2026)",
-      "storyId": "TO-CONFIRM: the story's tracker id, as in the spec's @story tag"
+      "storyId": "TOOL-11"
     },
     {
       "id": "TS-3",
@@ -40,7 +40,7 @@
       "find": "this.accountService.redirectToLogin();",
       "replace": "window.location.assign(\"/\");",
       "confirmedOn": "Angular dev-server modules (22 Oct 2026)",
-      "storyId": "TO-CONFIRM: the story's tracker id, as in the spec's @story tag"
+      "storyId": "TOOL-14"
     },
     {
       "id": "TS-4",
@@ -53,7 +53,7 @@
       "find": "});\n  }\n  calculateTotal(items) {\n    return items.reduce((sum, cartItem) => {\n      const quantity = cartItem.quantity || 0;\n      const price = cartItem.discount_percentage ? cartItem.discounted_price : cartItem.product?.price || 0;\n      return sum + quantity * price;\n    }, 0);",
       "replace": "});\n  }\n  calculateTotal(items) {\n    return items.reduce((sum, cartItem) => {\n      const quantity = cartItem.quantity || 0;\n      const price = cartItem.discount_percentage ? cartItem.discounted_price : cartItem.product?.price || 0;\n      return sum + (quantity - 1) * price;\n    }, 0);",
       "confirmedOn": "Angular dev-server modules (22 Oct 2026)",
-      "storyId": "TO-CONFIRM: the story's tracker id, as in the spec's @story tag",
+      "storyId": "TOOL-12",
       "note": "The checkout module has two calculateTotal methods; this one is the cart component's (it follows delete(id))."
     },
     {
@@ -65,7 +65,7 @@
       "path": "^/auth\\.module-.*\\.js$",
       "contentType": "javascript",
       "confirmedOn": "Angular dev-server modules (22 Oct 2026)",
-      "storyId": "TO-CONFIRM: the story's tracker id, as in the spec's @story tag",
+      "storyId": "TOOL-13",
       "edits": [
         {
           "find": "[\"for\", \"email\", 1, \"form-label\"], [\"formControlName\", \"email\", \"id\", \"email\", \"data-test\", \"email\", \"type\", \"email\", \"aria-required\", \"true\", 1, \"form-control\", 3, \"ngClass\", \"placeholder\"], [\"id\", \"email-error\", \"data-test\", \"email-error\", 1, \"alert\", \"alert-danger\"], [\"for\", \"password\"]",

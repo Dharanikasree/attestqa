@@ -14,7 +14,7 @@
       "find": "this.error=e,this.userService.isLoggedIn.next(!1),this.emailControl.markAsPristine()",
       "replace": "this.error=void 0,this.userService.isLoggedIn.next(!1),this.emailControl.markAsPristine()",
       "confirmedOn": "main.js (unhashed Angular bundle, 22 Oct 2026)",
-      "storyId": "TO-CONFIRM: the story's tracker id, as in the spec's @story tag"
+      "storyId": "SCRUM-6"
     },
     {
       "id": "JS-2",
@@ -27,7 +27,7 @@
       "find": "n.passwordControl.invalid||n.repeatPasswordControl.invalid||n.securityQuestionControl.invalid",
       "replace": "n.passwordControl.invalid||n.securityQuestionControl.invalid",
       "confirmedOn": "main.js (unhashed Angular bundle, 22 Oct 2026)",
-      "storyId": "TO-CONFIRM: the story's tracker id, as in the spec's @story tag"
+      "storyId": "SCRUM-10"
     },
     {
       "id": "JS-3",
@@ -40,7 +40,7 @@
       "find": "return yield this.router.navigate([`/`])}))}changeLanguage",
       "replace": "return yield this.router.navigate([`/login`])}))}changeLanguage",
       "confirmedOn": "main.js (unhashed Angular bundle, 22 Oct 2026)",
-      "storyId": "TO-CONFIRM: the story's tracker id, as in the spec's @story tag"
+      "storyId": "SCRUM-8"
     },
     {
       "id": "JS-4",
@@ -53,7 +53,7 @@
       "find": "this.itemTotal=e.Products.reduce((i,n)=>i+n.price*n.BasketItem.quantity,0)",
       "replace": "this.itemTotal=e.Products.reduce((i,n)=>i+n.price*n.BasketItem.quantity-n.price,0)",
       "confirmedOn": "main.js (unhashed Angular bundle, 22 Oct 2026)",
-      "storyId": "TO-CONFIRM: the story's tracker id, as in the spec's @story tag"
+      "storyId": "SCRUM-19"
     },
     {
       "id": "JS-5",
@@ -66,7 +66,7 @@
       "find": "`aria-label`,`Text field for the login password`,3,`focus`,`formControl`,`type`],[`type`,`button`,`mat-icon-button`,``,`matSuffix`,``,`aria-label`,`Button to display the password`",
       "replace": "`aria-label`,`Text field for the login password`,3,`focus`,`formControl`,`type`],[`type`,`button`,`mat-icon-button`,``,`matSuffix`,``,`aria-label`,``",
       "confirmedOn": "main.js (unhashed Angular bundle, 22 Oct 2026)",
-      "storyId": "TO-CONFIRM: the story's tracker id, as in the spec's @story tag",
+      "storyId": "SCRUM-6",
       "note": "Replaces the planned language-attribute fault: Juice Shop never updates <html lang> (fixed lang=\"en\", changeLanguage does not touch it), so that behaviour is already the real build's, and the language story's AC-3 is expected to fail as a genuine defect."
     }
   ]
