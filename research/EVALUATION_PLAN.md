@@ -168,7 +168,7 @@ All counted from ledgers and files; nothing is taken from the model's own accoun
 | --- | --- |
 | 13–17 Oct | Finish v1.0.0 features (SCRUM-6, SCRUM-7, one Azure DevOps story, CI, extension). Freeze. |
 | 19–25 Oct | Set up Toolshop, Booker, SauceDemo projects; seed files and tracker items; seeded-fault patches; `1.0.0-rc.1` |
-| 26 Oct – 1 Nov | Runs: Juice Shop and Toolshop (Jira) |
+| 22 Oct – 1 Nov | Runs: Juice Shop and Toolshop (Jira). Started 22 Oct, four days early, once setup was complete; nothing else in the protocol changed |
 | 2–8 Nov | Runs: Booker and SauceDemo (Azure DevOps); seeded-fault runs for all four |
 | 9–14 Nov | Measures, review sheet, findings, Paper I results section; release notes |
 | 15 Nov | v1.0.0 |
