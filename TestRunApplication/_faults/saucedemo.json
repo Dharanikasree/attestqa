@@ -9,12 +9,12 @@
       "story": "Customer gives their details at checkout",
       "criterion": "AC-2",
       "change": "An empty postal code is accepted and the overview is shown",
-      "path": "/static/js/main\\..*\\.js$",
+      "path": "/assets/index-.*\\.js$",
       "contentType": "javascript",
-      "find": "TO-CONFIRM: the postal-code required check",
-      "replace": "TO-CONFIRM",
-      "confirmedOn": null,
-      "storyId": "TO-CONFIRM: the story's tracker id, as in the spec's @story tag"
+      "find": "a?(e.push(V.CHECKOUT_STEP_TWO",
+      "replace": "1?(e.push(V.CHECKOUT_STEP_TWO",
+      "confirmedOn": "assets/index-DnLqFcJI.js (22 Oct 2026)",
+      "storyId": "115"
     },
     {
       "id": "SD-2",
@@ -22,12 +22,12 @@
       "story": "Customer adds and removes products from the list",
       "criterion": "AC-1",
       "change": "After adding, the button still says Add to cart",
-      "path": "/static/js/main\\..*\\.js$",
+      "path": "/assets/index-.*\\.js$",
       "contentType": "javascript",
-      "find": "TO-CONFIRM: the Add to cart / Remove button label switch",
-      "replace": "TO-CONFIRM",
-      "confirmedOn": null,
-      "storyId": "TO-CONFIRM: the story's tracker id, as in the spec's @story tag"
+      "find": "let i=n?`Remove`:`Add to cart`,a=n?()=>p(e)",
+      "replace": "let i=n?`Add to cart`:`Add to cart`,a=n?()=>p(e)",
+      "confirmedOn": "assets/index-DnLqFcJI.js (22 Oct 2026)",
+      "storyId": "113"
     },
     {
       "id": "SD-3",
@@ -35,12 +35,12 @@
       "story": "Customer gives their details at checkout",
       "criterion": "AC-3",
       "change": "Cancel goes to the product list instead of the cart",
-      "path": "/static/js/main\\..*\\.js$",
+      "path": "/assets/index-.*\\.js$",
       "contentType": "javascript",
-      "find": "TO-CONFIRM: the Cancel navigation target on checkout step one",
-      "replace": "TO-CONFIRM",
-      "confirmedOn": null,
-      "storyId": "TO-CONFIRM: the story's tracker id, as in the spec's @story tag"
+      "find": "onClick:t=>{t.preventDefault(),e.push(V.CART)},size:ka.MEDIUM,testId:`cancel`",
+      "replace": "onClick:t=>{t.preventDefault(),e.push(V.INVENTORY)},size:ka.MEDIUM,testId:`cancel`",
+      "confirmedOn": "assets/index-DnLqFcJI.js (22 Oct 2026)",
+      "storyId": "115"
     },
     {
       "id": "SD-4",
@@ -48,12 +48,12 @@
       "story": "Customer checks the order totals before buying",
       "criterion": "AC-3",
       "change": "The total is item total plus tax plus 0.01",
-      "path": "/static/js/main\\..*\\.js$",
+      "path": "/assets/index-.*\\.js$",
       "contentType": "javascript",
-      "find": "TO-CONFIRM: the order total = item total + tax",
-      "replace": "TO-CONFIRM",
-      "confirmedOn": null,
-      "storyId": "TO-CONFIRM: the story's tracker id, as in the spec's @story tag"
+      "find": "i=(n+parseFloat(r)).toFixed(2)",
+      "replace": "i=(n+parseFloat(r)+.01).toFixed(2)",
+      "confirmedOn": "assets/index-DnLqFcJI.js (22 Oct 2026)",
+      "storyId": "116"
     },
     {
       "id": "SD-5",
@@ -61,12 +61,12 @@
       "story": "A locked-out user cannot sign in",
       "criterion": "AC-3",
       "change": "The username field loses its placeholder and accessible name",
-      "path": "/static/js/main\\..*\\.js$",
+      "path": "/assets/index-.*\\.js$",
       "contentType": "javascript",
-      "find": "TO-CONFIRM: the username input's placeholder / aria attributes",
-      "replace": "TO-CONFIRM",
-      "confirmedOn": null,
-      "storyId": "TO-CONFIRM: the story's tracker id, as in the spec's @story tag"
+      "find": "placeholder:`Username`,id:`user-name`",
+      "replace": "placeholder:``,id:`user-name`",
+      "confirmedOn": "assets/index-DnLqFcJI.js (22 Oct 2026)",
+      "storyId": "110"
     }
   ]
 }

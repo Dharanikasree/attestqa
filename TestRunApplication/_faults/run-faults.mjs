@@ -33,7 +33,8 @@ const port = Number(args.port ?? 8099);
 const out = join(here, "results", args.app);
 mkdirSync(out, { recursive: true });
 
-const ready = (f) => f.find && !f.find.startsWith("TO-CONFIRM");
+const editsOf = (f) => f.edits ?? [{ find: f.find, replace: f.replace }];
+const ready = (f) => editsOf(f).every((e) => e.find && !e.find.startsWith("TO-CONFIRM"));
 const faults = plan.faults.filter((f) => (args.fault ? f.id === args.fault : true));
 const notReady = faults.filter((f) => !ready(f));
 if (notReady.length)
@@ -108,7 +109,12 @@ async function once(fault) {
     const log = existsSync(logFile)
       ? readFileSync(logFile, "utf8").trim().split("\n").filter(Boolean).map((l) => JSON.parse(l))
       : [];
-    const valid = !fault || (log.some((e) => e.matches === 1) && !log.some((e) => e.matches > 1));
+    // Every edit of the fault applied exactly once somewhere, and never to a
+    // response where its text appeared more than once.
+    const valid =
+      !fault ||
+      (editsOf(fault).every((_, i) => log.some((e) => (e.edit ?? 0) === i && e.matches === 1)) &&
+        !log.some((e) => e.matches > 1));
     const stories = storyOfTests();
     const ofStory = fault ? failed.filter((f) => stories.get(f.title) === String(fault.storyId ?? "")) : [];
     const verdict = !fault

@@ -9,11 +9,11 @@
       "story": "Customer signs in with email and password",
       "criterion": "AC-2",
       "change": "A wrong password shows no message",
-      "path": "main.*\\.js$",
+      "path": "^/main\\.js$",
       "contentType": "javascript",
-      "find": "TO-CONFIRM: the login error message binding",
-      "replace": "TO-CONFIRM",
-      "confirmedOn": null,
+      "find": "this.error=e,this.userService.isLoggedIn.next(!1),this.emailControl.markAsPristine()",
+      "replace": "this.error=void 0,this.userService.isLoggedIn.next(!1),this.emailControl.markAsPristine()",
+      "confirmedOn": "main.js (unhashed Angular bundle, 22 Oct 2026)",
       "storyId": "TO-CONFIRM: the story's tracker id, as in the spec's @story tag"
     },
     {
@@ -22,11 +22,11 @@
       "story": "New customer registers an account",
       "criterion": "AC-2",
       "change": "The Register button is enabled while the passwords differ",
-      "path": "main.*\\.js$",
+      "path": "^/main\\.js$",
       "contentType": "javascript",
-      "find": "TO-CONFIRM: the passwords-match condition on the Register button",
-      "replace": "TO-CONFIRM",
-      "confirmedOn": null,
+      "find": "n.passwordControl.invalid||n.repeatPasswordControl.invalid||n.securityQuestionControl.invalid",
+      "replace": "n.passwordControl.invalid||n.securityQuestionControl.invalid",
+      "confirmedOn": "main.js (unhashed Angular bundle, 22 Oct 2026)",
       "storyId": "TO-CONFIRM: the story's tracker id, as in the spec's @story tag"
     },
     {
@@ -35,11 +35,11 @@
       "story": "Customer signs out",
       "criterion": "AC-2",
       "change": "Sign out goes to the login page instead of the home page",
-      "path": "main.*\\.js$",
+      "path": "^/main\\.js$",
       "contentType": "javascript",
-      "find": "TO-CONFIRM: the post-logout navigation target",
-      "replace": "TO-CONFIRM",
-      "confirmedOn": null,
+      "find": "return yield this.router.navigate([`/`])}))}changeLanguage",
+      "replace": "return yield this.router.navigate([`/login`])}))}changeLanguage",
+      "confirmedOn": "main.js (unhashed Angular bundle, 22 Oct 2026)",
       "storyId": "TO-CONFIRM: the story's tracker id, as in the spec's @story tag"
     },
     {
@@ -47,26 +47,27 @@
       "kind": "C",
       "story": "Customer adds products to the basket and changes quantities",
       "criterion": "AC-2",
-      "change": "The basket total rises by one unit less than the line",
-      "path": "main.*\\.js$",
+      "change": "The basket total is one unit price lower per line than the lines add up to",
+      "path": "^/main\\.js$",
       "contentType": "javascript",
-      "find": "TO-CONFIRM: the basket total calculation",
-      "replace": "TO-CONFIRM",
-      "confirmedOn": null,
+      "find": "this.itemTotal=e.Products.reduce((i,n)=>i+n.price*n.BasketItem.quantity,0)",
+      "replace": "this.itemTotal=e.Products.reduce((i,n)=>i+n.price*n.BasketItem.quantity-n.price,0)",
+      "confirmedOn": "main.js (unhashed Angular bundle, 22 Oct 2026)",
       "storyId": "TO-CONFIRM: the story's tracker id, as in the spec's @story tag"
     },
     {
       "id": "JS-5",
       "kind": "A",
-      "story": "Customer chooses the shop's language",
-      "criterion": "AC-3",
-      "change": "Labels change language but the page's lang attribute does not",
-      "path": "main.*\\.js$",
+      "story": "Customer signs in with email and password",
+      "criterion": "the story's accessibility design item",
+      "change": "Sign-in page: the icon-only button that shows the password loses its accessible name",
+      "path": "^/main\\.js$",
       "contentType": "javascript",
-      "find": "TO-CONFIRM: the document.documentElement.lang update on language change",
-      "replace": "TO-CONFIRM",
-      "confirmedOn": null,
-      "storyId": "TO-CONFIRM: the story's tracker id, as in the spec's @story tag"
+      "find": "`aria-label`,`Text field for the login password`,3,`focus`,`formControl`,`type`],[`type`,`button`,`mat-icon-button`,``,`matSuffix`,``,`aria-label`,`Button to display the password`",
+      "replace": "`aria-label`,`Text field for the login password`,3,`focus`,`formControl`,`type`],[`type`,`button`,`mat-icon-button`,``,`matSuffix`,``,`aria-label`,``",
+      "confirmedOn": "main.js (unhashed Angular bundle, 22 Oct 2026)",
+      "storyId": "TO-CONFIRM: the story's tracker id, as in the spec's @story tag",
+      "note": "Replaces the planned language-attribute fault: Juice Shop never updates <html lang> (fixed lang=\"en\", changeLanguage does not touch it), so that behaviour is already the real build's, and the language story's AC-3 is expected to fail as a genuine defect."
     }
   ]
 }

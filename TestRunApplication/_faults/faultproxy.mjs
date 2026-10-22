@@ -48,6 +48,13 @@ const log = (entry) => appendFileSync(logFile, JSON.stringify({ at: new Date().t
 const applies = (rule, path, type) =>
   new RegExp(rule.path).test(path) && (!rule.contentType || (type ?? "").includes(rule.contentType));
 
+/**
+ * A rule's edits: most faults are one find/replace; a fault that needs two
+ * changes (a label link and a placeholder) lists them under "edits". Each edit
+ * must match exactly once.
+ */
+const editsOf = (rule) => rule.edits ?? [{ find: rule.find, replace: rule.replace }];
+
 /** Count non-overlapping occurrences. */
 const count = (text, find) => (find ? text.split(find).length - 1 : 0);
 
@@ -90,11 +97,24 @@ if (args.dump) {
     const page = await fetchUpstream(e);
     const html = page.body.toString("utf8");
     writeFileSync(join(dir, `entry${e.replace(/[^a-z0-9]+/gi, "_")}.html`), html);
-    const srcs = [...html.matchAll(/(?:src|href)="([^"]+\.js)"/g)].map((m) => new URL(m[1], upstream).pathname);
-    for (const src of [...new Set(srcs)]) {
+    // Scripts the page loads, and the modules those scripts import on demand
+    // (Angular lazy routes, Next.js chunks): the code of a page reached later
+    // is in one of those, not in the entry bundle.
+    const queue = [...html.matchAll(/(?:src|href)="([^"]+\.js)"/g)].map((m) => new URL(m[1], upstream).pathname);
+    const seen = new Set();
+    while (queue.length) {
+      const src = queue.shift();
+      if (seen.has(src) || seen.size >= 400) continue;
+      seen.add(src);
       const r = await fetchUpstream(src);
-      writeFileSync(join(dir, src.replace(/^\//, "").replace(/\//g, "__")), r.body);
+      if ((r.res.statusCode ?? 0) >= 400) continue;
+      writeFileSync(join(dir, src.replace(/^\//, "").replace(/[\/:?*"<>|]/g, "__")), r.body);
       console.log(`  saved ${src} (${r.body.length} bytes)`);
+      const text = r.body.toString("utf8");
+      for (const m of text.matchAll(/import\(\s*["'`]([^"'`]+\.js)["'`]\s*\)|["'`](\/_next\/static\/chunks\/[^"'`]+\.js)["'`]/g)) {
+        const next = new URL(m[1] ?? m[2], new URL(src, upstream)).pathname;
+        if (!seen.has(next)) queue.push(next);
+      }
     }
   }
   console.log(`bundles in ${dir}`);
@@ -106,13 +126,29 @@ if (args.check) {
   const toCheck = active.length ? active : rules;
   let bad = 0;
   for (const rule of toCheck) {
-    if (!rule.find || rule.find.startsWith("TO-CONFIRM")) {
+    if (editsOf(rule).some((e) => !e.find || e.find.startsWith("TO-CONFIRM"))) {
       console.log(`  ${rule.id}  not ready: match text not taken from the live application yet`);
       bad++;
       continue;
     }
     // The probe: an explicit path, or the assets the entry page loads whose
     // path matches the rule (bundle names carry hashes).
+    // A rule on a server response the browser only gets by sending something
+    // (a form post) carries that request as its probe; it must be one the
+    // application refuses, so the check creates nothing.
+    if (rule.probe && typeof rule.probe === "object") {
+      const r = await fetchUpstream(rule.probe.path, {
+        method: rule.probe.method ?? "POST",
+        headers: { "content-type": "application/json" },
+        body: Buffer.from(JSON.stringify(rule.probe.body ?? {})),
+      });
+      const t = r.body.toString("utf8");
+      const hits = editsOf(rule).map((e) => count(t, e.find));
+      const ok = hits.every((h) => h === 1);
+      if (!ok) bad++;
+      console.log(`  ${rule.id}  ${ok ? "ok" : "NOT OK"}  found ${hits.join(" + ")} time(s) in the reply to ${rule.probe.method ?? "POST"} ${rule.probe.path} (${r.res.statusCode})  ${rule.change}`);
+      continue;
+    }
     let paths = rule.probe ? [rule.probe] : [];
     if (!paths.length) {
       const entry = await fetchUpstream(rule.entry ?? "/");
@@ -121,14 +157,12 @@ if (args.check) {
         .map((m) => new URL(m[1], upstream).pathname)
         .filter((p) => new RegExp(rule.path).test(p));
     }
-    let hits = 0;
-    for (const p of paths) {
-      const r = await fetchUpstream(p);
-      hits += count(r.body.toString("utf8"), rule.find);
-    }
-    const ok = hits === 1;
+    const texts = [];
+    for (const p of paths) texts.push((await fetchUpstream(p)).body.toString("utf8"));
+    const hits = editsOf(rule).map((e) => texts.reduce((n, t) => n + count(t, e.find), 0));
+    const ok = hits.every((h) => h === 1);
     if (!ok) bad++;
-    console.log(`  ${rule.id}  ${ok ? "ok" : "NOT OK"}  found ${hits} time(s) in ${paths.length} file(s)  ${rule.change}`);
+    console.log(`  ${rule.id}  ${ok ? "ok" : "NOT OK"}  found ${hits.join(" + ")} time(s) in ${paths.length} file(s)  ${rule.change}`);
   }
   process.exit(bad ? 1 : 0);
 }
@@ -161,10 +195,13 @@ http
     let body = up.body;
     for (const rule of active) {
       if (!applies(rule, new URL(req.url, upstream).pathname, out["content-type"])) continue;
-      const text = body.toString("utf8");
-      const n = count(text, rule.find);
-      log({ fault: rule.id, path: req.url, matches: n });
-      if (n === 1) body = Buffer.from(text.replace(rule.find, rule.replace), "utf8");
+      let text = body.toString("utf8");
+      editsOf(rule).forEach((e, edit) => {
+        const n = count(text, e.find);
+        log({ fault: rule.id, edit, path: req.url, matches: n });
+        if (n === 1) text = text.replace(e.find, e.replace);
+      });
+      body = Buffer.from(text, "utf8");
     }
     delete out["content-length"];
     delete out["content-encoding"];

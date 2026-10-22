@@ -40,8 +40,8 @@ accessible name no longer matches what is shown.
 | TS-1 | V | Contact form: an email without "@" is accepted with no message | Contact form, AC-3 |
 | TS-2 | B | Product detail: the "−" quantity button stays enabled at 1 and takes the quantity to 0 | Product detail, AC-2 |
 | TS-3 | R | Registering successfully goes to the home page instead of the sign-in page | Register, AC-1 |
-| TS-4 | C | Cart: the cart total leaves out the last line's quantity change (total off by one unit price) | Cart, AC-2 |
-| TS-5 | A | Sign-in page: the email field keeps its visible label but loses its label association | Sign in and out, AC-4 (accessibility scan) |
+| TS-4 | C | Cart: the cart total is one unit price short per line, while each line total stays right | Cart, AC-2 |
+| TS-5 | A | Sign-in page: the email field keeps its visible label, but the label is unlinked and the placeholder empty, so it has no accessible name | Sign in and out, AC-4 (accessibility scan) |
 
 Toolshop also publishes a "with bugs" edition. Its bugs were not chosen by us
 and are not recorded against stories, so it is not used for this section.
@@ -52,9 +52,9 @@ and are not recorded against stories, so it is not used for this section.
 | --- | --- | --- | --- |
 | RB-1 | V | Contact form: a too-short phone number is refused, but the message no longer gives the allowed length | Contact form validation, AC-2 |
 | RB-2 | B | Admin report: the next-month button does nothing | Report calendar, AC-3 |
-| RB-3 | R | Admin Logout leaves the admin area on screen instead of the sign-in form | Admin sign in and out, AC-3 |
+| RB-3 | R | After Logout the browser goes to an admin page instead of the guest home page | Admin sign in and out, AC-3 (see note 4) |
 | RB-4 | C | Booking calendar: the price for the stay counts one night fewer than chosen | Choose dates, AC-2 |
-| RB-5 | A | Admin messages: the control that opens a message loses its accessible name | Messages, AC-3 (accessibility scan) |
+| RB-5 | A | Admin navigation: the Messages link stays visible but is hidden from assistive technology | Messages, AC-3 (accessibility scan) |
 
 ### SauceDemo (Azure DevOps, attestqa-saucedemo)
 
@@ -74,7 +74,7 @@ and are not recorded against stories, so it is not used for this section.
 | JS-2 | B | Register: the Register button is enabled while the two passwords differ | Register, AC-2 |
 | JS-3 | R | Sign out: the browser goes to the login page instead of the storefront home page | Sign out, AC-2 |
 | JS-4 | C | Basket: raising a product's quantity raises the line but the basket total by one unit less | Basket, AC-2 |
-| JS-5 | A | Language: the labels change language but the page's language attribute does not | Language, AC-3 |
+| JS-5 | A | Sign-in page: the icon-only button that shows the password loses its accessible name | Sign in (its accessibility design item) |
 
 ## What is counted
 
@@ -89,6 +89,23 @@ Run with plain `npx playwright test` against the final suite of each
 application after its stories are done (no agent, no model). 20 faults × 1
 run, plus 4 control runs.
 
+## Confirmed 22 Oct 2026
+
+Every rule's exact text was taken from what each application serves (bundles
+saved with `faultproxy.mjs --dump`) and matches exactly once; Booker's RB-1 is a
+server message, checked by sending a contact message the application refuses.
+Three changes from the first draft, found while confirming:
+
+- JS-5 was "labels change language but the page's lang attribute does not". Juice
+  Shop never updates `<html lang>` (it is fixed at "en"), so that is how the real
+  build behaves: the language story's AC-3 should fail on the genuine build, a
+  real accessibility defect. JS-5 now removes the accessible name of the sign-in
+  page's show-password button.
+- RB-5 was on the message rows, which open on a click on plain text and carry no
+  accessible name to remove. It now hides the admin Messages link from assistive
+  technology.
+- TS-4 targets the cart component's total (the checkout module has two).
+
 ## Open points
 
 1. Each rule's exact match text, taken from the live bundle or API in the setup
@@ -99,3 +116,10 @@ run, plus 4 control runs.
 3. The proxy is a small Node script in TestRunApplication/_faults/ with one JSON
    file of rules per application, committed with the evaluation, so every fault
    is reproducible.
+4. Booker's story "Owner signs in to and out of the admin area", AC-3, says
+   Logout "shows the sign-in form again"; the real application goes to the guest
+   home page. The criterion is ours and wrong; correct it in Azure DevOps before
+   the runs.
+5. Story ids for Toolshop (Jira TOOL) and Juice Shop (Jira SCRUM, after seeding)
+   still to fill in `<app>.json`; Booker and SauceDemo follow the seed order
+   (91-102, 109-120).

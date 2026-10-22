@@ -9,11 +9,11 @@
       "story": "Customer sends a message with the contact form",
       "criterion": "AC-3",
       "change": "An email without @ is accepted with no message",
-      "path": "\\.js$",
+      "path": "^/contact\\.module-.*\\.js$",
       "contentType": "javascript",
-      "find": "TO-CONFIRM: the email-format validator of the contact form",
-      "replace": "TO-CONFIRM",
-      "confirmedOn": null,
+      "find": "this.contact.get(\"email\")?.setValidators([Validators.required, Validators.email]);",
+      "replace": "this.contact.get(\"email\")?.setValidators([Validators.required]);",
+      "confirmedOn": "Angular dev-server modules (22 Oct 2026)",
       "storyId": "TO-CONFIRM: the story's tracker id, as in the spec's @story tag"
     },
     {
@@ -22,11 +22,11 @@
       "story": "Shopper opens a product's detail page",
       "criterion": "AC-2",
       "change": "The minus button stays enabled at 1 and takes the quantity to 0",
-      "path": "\\.js$",
+      "path": "^/products\\.module-.*\\.js$",
       "contentType": "javascript",
-      "find": "TO-CONFIRM: the lower bound (1) of the quantity decrement",
-      "replace": "TO-CONFIRM",
-      "confirmedOn": null,
+      "find": "if (this.quantity > 1) {",
+      "replace": "if (this.quantity > 0) {",
+      "confirmedOn": "Angular dev-server modules (22 Oct 2026)",
       "storyId": "TO-CONFIRM: the story's tracker id, as in the spec's @story tag"
     },
     {
@@ -35,11 +35,11 @@
       "story": "New customer registers an account",
       "criterion": "AC-1",
       "change": "Registering goes to the home page instead of the sign-in page",
-      "path": "\\.js$",
+      "path": "^/auth\\.module-.*\\.js$",
       "contentType": "javascript",
-      "find": "TO-CONFIRM: the navigation to the login route after a successful registration",
-      "replace": "TO-CONFIRM",
-      "confirmedOn": null,
+      "find": "this.accountService.redirectToLogin();",
+      "replace": "window.location.assign(\"/\");",
+      "confirmedOn": "Angular dev-server modules (22 Oct 2026)",
       "storyId": "TO-CONFIRM: the story's tracker id, as in the spec's @story tag"
     },
     {
@@ -47,26 +47,35 @@
       "kind": "C",
       "story": "Shopper adds tools to the cart and changes quantities",
       "criterion": "AC-2",
-      "change": "The cart total is off by one unit price after a quantity change",
-      "path": "\\.js$",
+      "change": "The cart total is one unit price short per line, while each line total stays right",
+      "path": "^/checkout\\.module-.*\\.js$",
       "contentType": "javascript",
-      "find": "TO-CONFIRM: the cart total sum",
-      "replace": "TO-CONFIRM",
-      "confirmedOn": null,
-      "storyId": "TO-CONFIRM: the story's tracker id, as in the spec's @story tag"
+      "find": "});\n  }\n  calculateTotal(items) {\n    return items.reduce((sum, cartItem) => {\n      const quantity = cartItem.quantity || 0;\n      const price = cartItem.discount_percentage ? cartItem.discounted_price : cartItem.product?.price || 0;\n      return sum + quantity * price;\n    }, 0);",
+      "replace": "});\n  }\n  calculateTotal(items) {\n    return items.reduce((sum, cartItem) => {\n      const quantity = cartItem.quantity || 0;\n      const price = cartItem.discount_percentage ? cartItem.discounted_price : cartItem.product?.price || 0;\n      return sum + (quantity - 1) * price;\n    }, 0);",
+      "confirmedOn": "Angular dev-server modules (22 Oct 2026)",
+      "storyId": "TO-CONFIRM: the story's tracker id, as in the spec's @story tag",
+      "note": "The checkout module has two calculateTotal methods; this one is the cart component's (it follows delete(id))."
     },
     {
       "id": "TS-5",
       "kind": "A",
       "story": "Customer signs in and signs out",
       "criterion": "AC-4",
-      "change": "The email field keeps its visible label but loses its label association",
-      "path": "\\.js$",
+      "change": "Sign-in page: the email field keeps its visible label, but the label is no longer linked to it and its placeholder is empty, so it has no accessible name",
+      "path": "^/auth\\.module-.*\\.js$",
       "contentType": "javascript",
-      "find": "TO-CONFIRM: the for= / id= pair of the sign-in email label and input",
-      "replace": "TO-CONFIRM",
-      "confirmedOn": null,
-      "storyId": "TO-CONFIRM: the story's tracker id, as in the spec's @story tag"
+      "confirmedOn": "Angular dev-server modules (22 Oct 2026)",
+      "storyId": "TO-CONFIRM: the story's tracker id, as in the spec's @story tag",
+      "edits": [
+        {
+          "find": "[\"for\", \"email\", 1, \"form-label\"], [\"formControlName\", \"email\", \"id\", \"email\", \"data-test\", \"email\", \"type\", \"email\", \"aria-required\", \"true\", 1, \"form-control\", 3, \"ngClass\", \"placeholder\"], [\"id\", \"email-error\", \"data-test\", \"email-error\", 1, \"alert\", \"alert-danger\"], [\"for\", \"password\"]",
+          "replace": "[\"for\", \"email-unlinked\", 1, \"form-label\"], [\"formControlName\", \"email\", \"id\", \"email\", \"data-test\", \"email\", \"type\", \"email\", \"aria-required\", \"true\", 1, \"form-control\", 3, \"ngClass\", \"placeholder\"], [\"id\", \"email-error\", \"data-test\", \"email-error\", 1, \"alert\", \"alert-danger\"], [\"for\", \"password\"]"
+        },
+        {
+          "find": "t_r3(\"fields.email.placeholder\")))(\"ngClass\", i03.",
+          "replace": "\"\"))(\"ngClass\", i03."
+        }
+      ]
     }
   ]
 }
