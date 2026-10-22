@@ -1,6 +1,15 @@
 {
   "app": "booker",
   "upstream": "http://localhost:3003",
+  "entries": [
+    "/",
+    "/admin",
+    "/admin/rooms",
+    "/admin/message",
+    "/admin/report",
+    "/admin/branding",
+    "/reservation/1"
+  ],
   "note": "Seeded faults for the attestqa evaluation (research/SEEDED_FAULTS.md). Each 'find' must occur exactly once in the responses its 'path' selects; take it from the live application and run faultproxy.mjs --check before use. Never shown to the agent.",
   "faults": [
     {

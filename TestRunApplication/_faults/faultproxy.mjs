@@ -83,6 +83,39 @@ function fetchUpstream(path, { method = "GET", headers = {}, body } = {}) {
   });
 }
 
+// ---- the scripts an application loads -------------------------------------
+// The scripts each entry page loads, and the modules those scripts import on
+// demand (Angular lazy routes, Next.js chunks): the code of a page reached
+// later is in one of those, not in the entry bundle. Used by --dump and
+// --check alike, so the check sees every file a fault may live in.
+async function crawl(entries) {
+  const files = new Map();
+  const pages = [];
+  const queue = [];
+  for (const e of entries) {
+    const page = await fetchUpstream(e);
+    const html = page.body.toString("utf8");
+    pages.push({ entry: e, html });
+    queue.push(...[...html.matchAll(/(?:src|href)="([^"]+\.js)"/g)].map((m) => new URL(m[1], upstream).pathname));
+  }
+  while (queue.length) {
+    const src = queue.shift();
+    if (files.has(src) || files.size >= 400) continue;
+    const r = await fetchUpstream(src);
+    if ((r.res.statusCode ?? 0) >= 400) continue;
+    files.set(src, r.body);
+    const text = r.body.toString("utf8");
+    for (const m of text.matchAll(/import\(\s*["'`]([^"'`]+\.js)["'`]\s*\)|["'`](\/_next\/static\/chunks\/[^"'`]+\.js)["'`]/g)) {
+      const next = new URL(m[1] ?? m[2], new URL(src, upstream)).pathname;
+      if (!files.has(next)) queue.push(next);
+    }
+  }
+  return { files, pages };
+}
+
+/** Entry pages: --dump's list, else the rules file's "entries", else "/". */
+const planEntries = args.rules ? JSON.parse(readFileSync(args.rules, "utf8")).entries : undefined;
+
 // ---- --dump: save the entry page and the scripts it loads ------------------
 // So the exact text of each rule can be taken from what the browser really
 // receives. Writes bundles/<host>/ beside this script.
@@ -92,30 +125,13 @@ if (args.dump) {
   const { fileURLToPath } = await import("node:url");
   const dir = join(dirname(fileURLToPath(import.meta.url)), "bundles", upstream.host.replace(/[:]/g, "_"));
   mkdirSync(dir, { recursive: true });
-  const entries = typeof args.dump === "string" ? args.dump.split(",") : ["/"];
-  for (const e of entries) {
-    const page = await fetchUpstream(e);
-    const html = page.body.toString("utf8");
-    writeFileSync(join(dir, `entry${e.replace(/[^a-z0-9]+/gi, "_")}.html`), html);
-    // Scripts the page loads, and the modules those scripts import on demand
-    // (Angular lazy routes, Next.js chunks): the code of a page reached later
-    // is in one of those, not in the entry bundle.
-    const queue = [...html.matchAll(/(?:src|href)="([^"]+\.js)"/g)].map((m) => new URL(m[1], upstream).pathname);
-    const seen = new Set();
-    while (queue.length) {
-      const src = queue.shift();
-      if (seen.has(src) || seen.size >= 400) continue;
-      seen.add(src);
-      const r = await fetchUpstream(src);
-      if ((r.res.statusCode ?? 0) >= 400) continue;
-      writeFileSync(join(dir, src.replace(/^\//, "").replace(/[\/:?*"<>|]/g, "__")), r.body);
-      console.log(`  saved ${src} (${r.body.length} bytes)`);
-      const text = r.body.toString("utf8");
-      for (const m of text.matchAll(/import\(\s*["'`]([^"'`]+\.js)["'`]\s*\)|["'`](\/_next\/static\/chunks\/[^"'`]+\.js)["'`]/g)) {
-        const next = new URL(m[1] ?? m[2], new URL(src, upstream)).pathname;
-        if (!seen.has(next)) queue.push(next);
-      }
-    }
+  const entries = typeof args.dump === "string" ? args.dump.split(",") : planEntries ?? ["/"];
+  const { files, pages } = await crawl(entries);
+  for (const { entry, html } of pages)
+    writeFileSync(join(dir, `entry${entry.replace(/[^a-z0-9]+/gi, "_")}.html`), html);
+  for (const [src, body] of files) {
+    writeFileSync(join(dir, src.replace(/^\//, "").replace(/[\/:?*"<>|]/g, "__")), body);
+    console.log(`  saved ${src} (${body.length} bytes)`);
   }
   console.log(`bundles in ${dir}`);
   process.exit(0);
@@ -125,6 +141,7 @@ if (args.dump) {
 if (args.check) {
   const toCheck = active.length ? active : rules;
   let bad = 0;
+  let loaded;
   for (const rule of toCheck) {
     if (editsOf(rule).some((e) => !e.find || e.find.startsWith("TO-CONFIRM"))) {
       console.log(`  ${rule.id}  not ready: match text not taken from the live application yet`);
@@ -149,16 +166,13 @@ if (args.check) {
       console.log(`  ${rule.id}  ${ok ? "ok" : "NOT OK"}  found ${hits.join(" + ")} time(s) in the reply to ${rule.probe.method ?? "POST"} ${rule.probe.path} (${r.res.statusCode})  ${rule.change}`);
       continue;
     }
-    let paths = rule.probe ? [rule.probe] : [];
-    if (!paths.length) {
-      const entry = await fetchUpstream(rule.entry ?? "/");
-      const html = entry.body.toString("utf8");
-      paths = [...html.matchAll(/(?:src|href)="([^"]+)"/g)]
-        .map((m) => new URL(m[1], upstream).pathname)
-        .filter((p) => new RegExp(rule.path).test(p));
-    }
-    const texts = [];
-    for (const p of paths) texts.push((await fetchUpstream(p)).body.toString("utf8"));
+    loaded ??= await crawl(planEntries ?? ["/"]);
+    const paths = rule.probe
+      ? [rule.probe]
+      : [...loaded.files.keys()].filter((p) => new RegExp(rule.path).test(p));
+    const texts = rule.probe
+      ? [(await fetchUpstream(rule.probe)).body.toString("utf8")]
+      : paths.map((p) => loaded.files.get(p).toString("utf8"));
     const hits = editsOf(rule).map((e) => texts.reduce((n, t) => n + count(t, e.find), 0));
     const ok = hits.every((h) => h === 1);
     if (!ok) bad++;
