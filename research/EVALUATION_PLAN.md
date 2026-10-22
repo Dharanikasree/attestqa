@@ -1,6 +1,11 @@
 # Evaluation plan — attestqa v1.0.0 and Paper I
 
 Status: agreed 13 Oct 2026. Feature freeze 17 Oct; evaluation 19 Oct – 14 Nov; release 15 Nov.
+Evaluation build (22 Oct 2026): attestqa 2.0.1 at commit 8f59bc0, run from the local build
+(`npm link`), not released. Every run's ledger records the commit it ran; a fix during the
+evaluation is committed, rebuilt and logged as a finding, and the release follows the evaluation.
+Start state, resets and archiving: `EVAL_START_STATE.md`; approvals: `APPROVAL_CHECKLIST.md`;
+seeded faults: `SEEDED_FAULTS.md`.
 During the evaluation only fixes go into the engine, each as a patch with its finding logged, so
 every result can be traced to the engine version that produced it.
 

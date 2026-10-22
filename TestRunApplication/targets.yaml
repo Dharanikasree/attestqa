@@ -11,14 +11,15 @@ defaults:
 targets:
   - id: juice-shop
     tier: L
-    url: http://localhost:3000
+    url: http://localhost:3100
     kind: e-commerce (intentionally vulnerable)
-    run: docker run -p 3000:3000 bkimminich/juice-shop
+    version: 20.2.0  # pinned for the evaluation; faults and seed confirmed against it
+    run: docker run -d --name juice-shop -p 3100:3000 bkimminich/juice-shop:v20.2.0
     types: [web, api, security]
     security_checks_allowed: true
-    active_scan_authorised: {by: self (local instance), date: null, scope: "localhost:3000"}
-    permission_basis: runs locally from the public image
-    checked: null
+    active_scan_authorised: {by: self (local instance), date: 2026-10-22, scope: "localhost:3100"}
+    permission_basis: runs locally from the public image (bkimminich/juice-shop:v20.2.0, MIT)
+    checked: 2026-10-22
   - id: saucedemo
     tier: H
     url: https://www.saucedemo.com
