@@ -27,6 +27,14 @@ Restart Booker before starting attestqa, never during a run: pressing Enter in
 its window stops every `java.exe` and every `node.exe` on the machine, attestqa
 included.
 
+Runs 2 and 3 of a story each get their own ledger, `.aqa-eval-r2` and `.aqa-eval-r3`,
+holding exactly the runs that were in `.aqa-eval` before run 1 of that story. Claude
+prepares them before each repeat. Without this, a repeat finds run 1 in the ledger and
+reuses its approved design instead of designing again (route B, "story unchanged"), so it
+measures nothing new: the first attempt at run 2 of SCRUM-6, 20261022T171911Z-a0749b09,
+did exactly that and is kept in `runs/_excluded/`. Run 1 of every story stays in
+`.aqa-eval`, so later stories still see the earlier stories' run 1, as planned.
+
 The run's working files are reset by git: runs 2 and 3 of a story start from
 the commit made before run 1 (`git stash` or `git checkout -- TestRunApplication/<app>`
 after archiving run 1's ledger and files).

@@ -47,3 +47,4 @@ _to_delete/
 # local editor settings (the attestqa extension reads aqa.* from here)
 .vscode/
 .aqa-eval/
+.aqa-eval-r*/
