@@ -29,12 +29,13 @@ it reached the approver. "Route" A = tests written, B = existing tests run.
 | Juice Shop | SCRUM-10 | | 3 | 20261023T133811Z-deac53cb | B | 6 | 3/3 | 2 | 19/19 | 0 | 0 | done |
 | Juice Shop | SCRUM-18 search | new area (tests written) | 1 | 20261023T135910Z-e690e135 | A | 4 | 3/3 | 2 | 3/4 (a11y fails: real defect) | 0 (5 refused) | 0 | **blocked** (F-0089) |
 | Juice Shop | SCRUM-18 | | 1 (2nd attempt, 6d04950) | 20261023T143449Z-d157e355 | A | 5 | 3/3 | 2 | 4/5 (a11y fails: real defect) | 0 (5 refused) | 0 | **blocked** (F-0091) |
+| Juice Shop | SCRUM-18 | | **1 (counted, 010ec25)** | 20261023T145501Z-dc4ce24a | A | 5 | 3/3 | 1 | 5/5 | 0 | 0 | **blocked** by verifier (F-0092) |
 
 Suite counts are for the whole epic spec (19 tests), not only the story's own.
 One of the 19 is the expected failure for open bug SCRUM-12, which reproduced
 in every run and counts as passed.
 
-Progress: 10 of 144 story runs (SCRUM-18 run 1 attempted twice, both blocked by engine defects; to be run again on the fixed build).
+Progress: 10 of 144 story runs. SCRUM-18 run 1 took three attempts: the first two were blocked by engine defects (F-0089, F-0091) and are kept as evidence; the third is the counted run.
 
 ## 2. Excluded runs
 
@@ -44,8 +45,9 @@ Not counted. Kept in `runs/_excluded/` with a manifest row marked `eval-excluded
 |---|---|---|
 | 20261022T171911Z-a0749b09 | SCRUM-6 | Meant as run 2, but used the same ledger as run 1, so it reused run 1's approved design (route B, "story unchanged") instead of designing again (F-0084). |
 | 20261022T185532Z-1552136a | SCRUM-6 | A second start after run 3 had already finished in the same ledger; reused run 3's design for the same reason. |
+| 20261023T165205Z-c56cab94 | SCRUM-18 | Run 2 on build 010ec25: a real accessibility bug from a correctly scoped scan was dropped at the end by a check that read the spec from before the edit (F-0094). Repeated on the fixed build. |
 
-Both are still evidence of something: an unchanged story is re-run without a
+The SCRUM-6 pair are still evidence of something: an unchanged story is re-run without a
 new approval, which is the intended behaviour in real use.
 
 ## 3. What is working
@@ -75,6 +77,9 @@ a real defect from being filed; the others wait for the release after the evalua
 | W7 | A real defect (search input with no label, low contrast) was found, proposed as a bug five times with evidence, and refused each time by a gate that still counted a locator failure fixed earlier in the run. The run blocked. | F-0089 | open | The governance that stops false bugs also stopped a true one: a cost of the rules, and the first blocked run. |
 | W8 | The first tests written are weaker than the approved design: AC-1 never checks that non-matching products are absent; AC-2's assertion is satisfied by a product name. | F-0090 | open | The central measurement of the paper: does a governed agent write tests as strong as its design? |
 | W9 | Second block on the same real defect: after the agent scoped the axe scan through an edit, the scope gate still read the spec from before the edit and refused the bug four more times. | F-0091 | fixed locally | Two blocks in a row came from rules judging stale evidence, not from wrong rules: worth its own paragraph on how a governed agent fails. |
+| W10 | First new-tests run without an engine fault: 5/5 green, but the verifier refused it because the AC-2 test never uses the search box. Correct refusal. The verifier missed a test that passes whatever the product does (asserts that the words "product cards" are absent) and a design item with no test at all. | F-0092 | open | Shows both what the end-of-run check catches and what it does not. |
+| W11 | A real accessibility defect in the story's own search box was scoped out of the scan by the "main content only" rule, so it went unreported. | F-0093 | open | A scope rule meant to protect stories from site-wide noise also hides defects in controls that live in the header. |
+| W12 | A third check that read a test file from before the agent's edits dropped a true accessibility bug at the end of SCRUM-18 run 2. Same fault as W9 in a different reader; both fixed by making the readers apply in-place edits. In the same run the agent kept editing a test the repair cap had closed, five times, and the run blocked. | F-0094 | fixed locally | Two of the three engine faults so far share one root cause: how the runtime rebuilds a file from its own history. The third (W7) also came from reading old evidence: a failure already repaired. |
 | W5 | Until SCRUM-18 every story already had tests (route B). | — | shown from SCRUM-18 | Authoring, repair, weakening and real bug finding are measured from Juice Shop story 4 onward and in the other three apps. |
 
 ## 5. Threats to keep in the paper

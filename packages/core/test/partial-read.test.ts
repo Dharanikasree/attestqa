@@ -207,3 +207,44 @@ describe("the diff baseline", () => {
     expect(why ?? "").not.toContain("drops the claim");
   });
 });
+
+function edit(old: string, next: string, all = false): AnyRunEvent[] {
+  const callId = ++id;
+  return [
+    {
+      ...base,
+      eventId: callId,
+      kind: "call",
+      payload: {
+        server: "fs",
+        toolName: "replace_in_file",
+        args: { path: SPEC, old, new: next, ...(all ? { all: true } : {}) },
+        startedAt: 0,
+      },
+    },
+    {
+      ...base,
+      eventId: ++id,
+      kind: "observation",
+      payload: { eventIdOfCall: callId, ok: true, result: { replaced: 1 }, artefacts: [], durationMs: 1 },
+    },
+  ] as unknown as AnyRunEvent[];
+}
+
+describe("an edit is part of the file as this run left it (20261023T165205Z)", () => {
+  it("replays edits made after the last full read, even when later reads were ranges", () => {
+    const events = [
+      ...read(WHOLE),
+      ...edit("Story-a — logout", "Story-a — sign out"),
+      ...read(FRAGMENT, { fromLine: 1, toLine: 4 }),
+    ];
+    const text = fileTextFromEvents(events, SPEC);
+    expect(text).toContain("Story-a — sign out");
+    expect(text).toContain("Story-c — protected route redirects");
+  });
+
+  it("gives up rather than answer about a file an edit no longer fits", () => {
+    const events = [...read(WHOLE), ...edit("not in the file", "x")];
+    expect(fileTextFromEvents(events, SPEC)).toBeUndefined();
+  });
+});

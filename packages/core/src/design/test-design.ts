@@ -1190,10 +1190,34 @@ export function storyTestTitles(spec: string, storyId: TrackerId): Set<string> {
 /** The last content this run has for a path, from what it wrote or read. */
 export function fileTextFromEvents(events: AnyRunEvent[], path: string): string | undefined {
   const calls = completedCalls(events);
+  // In-place edits made after the last full view, newest first, replayed onto
+  // that view. Without them the "file as this run saw it" was the file before
+  // the edits: in 20261023T165205Z the accessibility scan was scoped with
+  // .include("mat-toolbar") by an edit, and the bug from that scoped scan was
+  // dropped at the end of the run for claiming a scope "the spec does not"
+  // have. An edit that no longer fits the text it is replayed onto means the
+  // view is not this file any more, and nothing is better than a wrong answer.
+  const edits: Array<{ old: string; new: string; all: boolean }> = [];
+  const replay = (base: string): string | undefined => {
+    let text = base;
+    for (let k = edits.length - 1; k >= 0; k--) {
+      const e = edits[k]!;
+      if (!text.includes(e.old)) return undefined;
+      text = e.all ? text.split(e.old).join(e.new) : text.replace(e.old, e.new);
+    }
+    return text;
+  };
   for (let i = calls.length - 1; i >= 0; i--) {
     const c = calls[i];
     if (!c || !c.ok || String(c.args["path"] ?? "") !== path) continue;
-    if (c.toolName === "fs.write_file") return String(c.args["content"] ?? "");
+    if (c.toolName === "fs.replace_in_file") {
+      const o = c.args["old"];
+      const n = c.args["new"];
+      if (typeof o === "string" && typeof n === "string")
+        edits.push({ old: o, new: n, all: c.args["all"] === true });
+      continue;
+    }
+    if (c.toolName === "fs.write_file") return replay(String(c.args["content"] ?? ""));
     if (c.toolName === "fs.read_file") {
       // A RANGE is not the file.
       //
@@ -1211,7 +1235,7 @@ export function fileTextFromEvents(events: AnyRunEvent[], path: string): string 
       // to the last COMPLETE view of the file.
       if (isPartialRead(c.args, c.result)) continue;
       const content = asRecord(c.result)?.["content"];
-      if (typeof content === "string") return content;
+      if (typeof content === "string") return replay(content);
     }
   }
   return undefined;
