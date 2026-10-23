@@ -1234,13 +1234,16 @@ const BUG_NOISE = new Set([
  *
  * "A control you cannot find is a test problem" was instruction, and the run
  * that filed four bugs for a visible menu item had read that instruction. So
- * the check is mechanical instead: if the latest run holds a failure whose
- * error is a locator that matched nothing, and `aqa.heal_locator` was never
- * called for it, the page has not been consulted and no bug may be proposed.
+ * the check is mechanical instead: if a test's latest result is a failure
+ * whose error is a locator that matched nothing, and `aqa.heal_locator` was
+ * never called for it, the page has not been consulted and no bug may be proposed.
  *
  * The gap is closeable in one call, and the tool answers the question the bug
  * would otherwise guess at: was the control there?
  */
+/** Arguments that make a pw.run_tests call run less than the whole spec. */
+const FILTER_KEYS = ["grep", "shard", "project", "lastFailed"] as const;
+
 function unhealedLocator(
   call: { toolName: string; args: Record<string, unknown> },
   events: AnyRunEvent[],
@@ -1253,18 +1256,33 @@ function unhealedLocator(
       String(c.args["test"] ?? "").toLowerCase(),
     ),
   );
-  const unexplained: string[] = [];
+  // Only a locator failure that is still there counts. A test whose locator
+  // failed in an early run, was repaired, and has passed since has nothing left
+  // to explain: asking for the page "at that failure" sends the agent to heal a
+  // passing test, which it never thinks to do, and the true bug waits behind it
+  // (20261023T135910Z: AC-2's selector failed once and was fixed; the
+  // accessibility bug on the same page was refused five times and the run
+  // blocked). So each test's state is its LATEST record: an unfiltered run
+  // replaces the whole picture (a test it does not list as failing passed), and
+  // a filtered run updates only the tests it lists.
+  const stuckNow = new Map<string, boolean>();
   for (const run of successful(completedCalls(events), "pw.run_tests")) {
+    const filtered = FILTER_KEYS.some((k) => run.args[k] !== undefined && run.args[k] !== "");
+    if (!filtered) stuckNow.clear();
     for (const raw of asArray(asRecord(run.result)?.["failures"])) {
       const f = asRecord(raw);
       const title = typeof f?.["title"] === "string" ? f["title"] : "";
       const message = typeof f?.["message"] === "string" ? f["message"] : "";
-      if (!title || !stuckAction(message)) continue;
-      const seen = [...healed].some(
-        (h) => h && (title.toLowerCase().includes(h) || h.includes(title.toLowerCase())),
-      );
-      if (!seen && !unexplained.includes(title)) unexplained.push(title);
+      if (title) stuckNow.set(title, stuckAction(message));
     }
+  }
+  const unexplained: string[] = [];
+  for (const [title, stuck] of stuckNow) {
+    if (!stuck) continue;
+    const seen = [...healed].some(
+      (h) => h && (title.toLowerCase().includes(h) || h.includes(title.toLowerCase())),
+    );
+    if (!seen) unexplained.push(title);
   }
   if (unexplained.length === 0) return;
   return (

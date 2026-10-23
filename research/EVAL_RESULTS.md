@@ -1,6 +1,8 @@
 # Evaluation results (running record)
 
-Started 22 Oct 2026. Build `attestqa 2.0.1 @8f59bc0`, model claude-sonnet-4-6,
+Started 22 Oct 2026. Build `attestqa 2.0.1 @8f59bc0` for SCRUM-6, 8, 10 and SCRUM-18 run 1;
+from the SCRUM-18 rerun on, a local patch build (F-0089), not published to npm; each
+run's manifest row names its commit. Common settings: model claude-sonnet-4-6,
 approvals by Vijay against `APPROVAL_CHECKLIST.md`. Plan: `EVALUATION_PLAN.md`;
 start state and resets: `EVAL_START_STATE.md`. Every number below comes from a
 ledger archived in `runs/<runId>/` and its row in `runs-manifest.csv`; the
@@ -22,12 +24,16 @@ it reached the approver. "Route" A = tests written, B = existing tests run.
 | Juice Shop | SCRUM-8 sign out | linked bug (existing tests) | 1 | 20261022T213317Z-dad48298 | B | 5 | 2/2 | 1 | 19/19 | 0 | 0 | done |
 | Juice Shop | SCRUM-8 | | 2 | 20261022T231215Z-bf40f6cb | B | 5 | 2/2 | 1 | 19/19 | 0 | 0 | done |
 | Juice Shop | SCRUM-8 | | 3 | 20261023T012618Z-ad277a1d | B | 5 | 2/2 | 2 | 19/19 | 0 | 0 | done |
+| Juice Shop | SCRUM-10 register | ui-change (existing tests) | 1 | 20261023T125939Z-41853627 | B | 6 | 3/3 | 2 | 19/19 | 0 | 0 | done |
+| Juice Shop | SCRUM-10 | | 2 | 20261023T130632Z-64c7c55d | B | 6 | 3/3 | 2 (+1 refused early suite run) | 19/19 | 0 | 0 | done |
+| Juice Shop | SCRUM-10 | | 3 | 20261023T133811Z-deac53cb | B | 6 | 3/3 | 2 | 19/19 | 0 | 0 | done |
+| Juice Shop | SCRUM-18 search | new area (tests written) | 1 | 20261023T135910Z-e690e135 | A | 4 | 3/3 | 2 | 3/4 (a11y fails: real defect) | 0 (5 refused) | 0 | **blocked** (F-0089) |
 
 Suite counts are for the whole epic spec (19 tests), not only the story's own.
 One of the 19 is the expected failure for open bug SCRUM-12, which reproduced
 in every run and counts as passed.
 
-Progress: 6 of 144 story runs.
+Progress: 10 of 144 story runs.
 
 ## 2. Excluded runs
 
@@ -55,8 +61,8 @@ new approval, which is the intended behaviour in real use.
 
 ## 4. What is not working, or not yet shown
 
-Each item names the finding and whether it is fixed. None was patched during
-the evaluation: the engine stays at 8f59bc0 until the evaluation ends.
+Each item names the finding and whether it is fixed. One (F-0089) was patched during the evaluation, as a local build, because it blocked
+a real defect from being filed; the others wait for the release after the evaluation.
 
 | # | What | Finding | Status | Matters for the paper because |
 |---|---|---|---|---|
@@ -64,7 +70,10 @@ the evaluation: the engine stays at 8f59bc0 until the evaluation ends.
 | W2 | The accessibility item scans the page the existing test scans (login page), not a page the story is about. Same in 3 of 3 SCRUM-8 runs; the approver passed it too. | F-0087 | open | On existing-tests stories the agent adopts the existing test's scope rather than checking it. A limit of the design review, and of the checklist. |
 | W3 | The source check accepts "task SCRUM-9" but refuses "SCRUM-9" and "SCRUM-9 sub-task"; the agent dropped the true source to get past it. | F-0086 | open | A rule that is right in aim but too strict in form can push the agent to a less accurate design. |
 | W4 | On Jira runs the start-up line says results are not posted to the issue; they are posted to the QA sub-task. | F-0085 | open | Cosmetic; reported for completeness. |
-| W5 | Every story so far already had tests (route B). No test has yet been written in the evaluation. | — | not yet shown | Authoring, repair, weakening and real bug finding are measured from Juice Shop story 4 onward and in the other three apps. |
+| W6 | A security item (D19) cites AC-1 for AC-3's duplicate-email case and expects things the story does not say, copying the existing test's label. The source rule checks that a source is named, not that it supports the item. Approved in all three SCRUM-10 runs (approver misses). | F-0088 | open | Same anchoring as W2; also shows the human approver does not catch every unsupported item. |
+| W7 | A real defect (search input with no label, low contrast) was found, proposed as a bug five times with evidence, and refused each time by a gate that still counted a locator failure fixed earlier in the run. The run blocked. | F-0089 | open | The governance that stops false bugs also stopped a true one: a cost of the rules, and the first blocked run. |
+| W8 | The first tests written are weaker than the approved design: AC-1 never checks that non-matching products are absent; AC-2's assertion is satisfied by a product name. | F-0090 | open | The central measurement of the paper: does a governed agent write tests as strong as its design? |
+| W5 | Until SCRUM-18 every story already had tests (route B). | — | shown from SCRUM-18 | Authoring, repair, weakening and real bug finding are measured from Juice Shop story 4 onward and in the other three apps. |
 
 ## 5. Threats to keep in the paper
 

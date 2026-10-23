@@ -218,6 +218,42 @@ describe("a bug may not be proposed while a locator failure is unexplained", () 
     expect(storyRefusal(bug, events)).toBeUndefined();
   });
 
+  it("forgets a locator failure the run has since repaired (20261023T135910Z)", () => {
+    // First run: AC-4 stuck on a selector. Repaired; the next full run lists
+    // only an accessibility failure, so AC-4 passed. The bug is about that
+    // accessibility failure and must not wait on healing a passing test.
+    const a11y = {
+      title: "AC-story Accessibility scan of the search results page",
+      file: "tests/epic-42-login.spec.ts",
+      message: "Error: axe violations — label (critical) on 1 element(s): input",
+    };
+    const events = ledgerOf([
+      ...red,
+      { tool: "pw.run_tests", result: { ...RED(), passed: 4, failed: 1, failures: [a11y] } },
+    ]).read();
+    expect(storyRefusal(bug, events)).toBeUndefined();
+  });
+
+  it("still refuses while the latest full run has the locator failure", () => {
+    const events = ledgerOf([
+      { tool: "pw.run_tests", result: RED({ message: "expected 200, received 500" }) },
+      ...red,
+    ]).read();
+    expect(storyRefusal(bug, events)).toContain("aqa.heal_locator");
+  });
+
+  it("a filtered rerun of another test does not clear a stuck one", () => {
+    const events = ledgerOf([
+      ...red,
+      {
+        tool: "pw.run_tests",
+        args: { grep: "AC-1" },
+        result: { ...RED(), passed: 1, failed: 0, failures: [] },
+      },
+    ]).read();
+    expect(storyRefusal(bug, events)).toContain("AC-4: the session token is cleared on logout");
+  });
+
   it("says nothing about a failure that is not a locator timeout", () => {
     const events = ledgerOf([
       { tool: "pw.run_tests", result: RED({ message: "expected 200, received 500" }) },

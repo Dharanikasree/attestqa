@@ -3,6 +3,11 @@
 Read before answering any approval in a measured run, so all 144 runs are judged
 the same way. A denial is recorded with its reason, in the reviewer's words.
 
+The approver decides alone, during the run. After each run Claude reviews the
+approved design against this checklist and the story; an item that should have
+been denied is recorded as an approver miss in `findings.jsonl` and
+`EVAL_RESULTS.md`, and the run's outcome is not changed (decided 23 Oct 2026).
+
 ## Test design
 
 Approve only if every line is true; otherwise deny and say which line failed.
