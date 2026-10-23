@@ -1830,6 +1830,24 @@ function specTextsFromEvents(events: AnyRunEvent[]): Array<{ path: string; text:
     else if (c.toolName === "fs.read_file" && !isPartialRead(c.args, c.result)) {
       const content = asRecord(c.result)?.["content"];
       if (typeof content === "string") out.set(path, content);
+    } else if (c.toolName === "fs.replace_in_file") {
+      // An edit changes the file as surely as a write does. Ignoring it judged
+      // a test by the text it had BEFORE the edit: in 20261023T143449Z the scan
+      // was scoped with .include("mat-toolbar") through this tool, re-run, and
+      // the bug from the scoped scan was still refused five times as "no
+      // .include(...)" — the gate was reading the last full read, from before.
+      // Applied the same way the tool applies it; if the text the edit replaced
+      // is not where we last saw the file, what the file holds now is unknown,
+      // and a stale copy is worse than none.
+      const text = out.get(path);
+      const before = c.args["old"];
+      const after = c.args["new"];
+      if (text === undefined || typeof before !== "string" || typeof after !== "string") continue;
+      const hits = text.split(before).length - 1;
+      if (hits === 0) out.delete(path);
+      else if (c.args["all"] === true) out.set(path, text.split(before).join(after));
+      else if (hits === 1) out.set(path, text.replace(before, after));
+      else out.delete(path);
     }
   }
   return [...out].map(([path, text]) => ({ path, text }));

@@ -28,12 +28,13 @@ it reached the approver. "Route" A = tests written, B = existing tests run.
 | Juice Shop | SCRUM-10 | | 2 | 20261023T130632Z-64c7c55d | B | 6 | 3/3 | 2 (+1 refused early suite run) | 19/19 | 0 | 0 | done |
 | Juice Shop | SCRUM-10 | | 3 | 20261023T133811Z-deac53cb | B | 6 | 3/3 | 2 | 19/19 | 0 | 0 | done |
 | Juice Shop | SCRUM-18 search | new area (tests written) | 1 | 20261023T135910Z-e690e135 | A | 4 | 3/3 | 2 | 3/4 (a11y fails: real defect) | 0 (5 refused) | 0 | **blocked** (F-0089) |
+| Juice Shop | SCRUM-18 | | 1 (2nd attempt, 6d04950) | 20261023T143449Z-d157e355 | A | 5 | 3/3 | 2 | 4/5 (a11y fails: real defect) | 0 (5 refused) | 0 | **blocked** (F-0091) |
 
 Suite counts are for the whole epic spec (19 tests), not only the story's own.
 One of the 19 is the expected failure for open bug SCRUM-12, which reproduced
 in every run and counts as passed.
 
-Progress: 10 of 144 story runs.
+Progress: 10 of 144 story runs (SCRUM-18 run 1 attempted twice, both blocked by engine defects; to be run again on the fixed build).
 
 ## 2. Excluded runs
 
@@ -73,6 +74,7 @@ a real defect from being filed; the others wait for the release after the evalua
 | W6 | A security item (D19) cites AC-1 for AC-3's duplicate-email case and expects things the story does not say, copying the existing test's label. The source rule checks that a source is named, not that it supports the item. Approved in all three SCRUM-10 runs (approver misses). | F-0088 | open | Same anchoring as W2; also shows the human approver does not catch every unsupported item. |
 | W7 | A real defect (search input with no label, low contrast) was found, proposed as a bug five times with evidence, and refused each time by a gate that still counted a locator failure fixed earlier in the run. The run blocked. | F-0089 | open | The governance that stops false bugs also stopped a true one: a cost of the rules, and the first blocked run. |
 | W8 | The first tests written are weaker than the approved design: AC-1 never checks that non-matching products are absent; AC-2's assertion is satisfied by a product name. | F-0090 | open | The central measurement of the paper: does a governed agent write tests as strong as its design? |
+| W9 | Second block on the same real defect: after the agent scoped the axe scan through an edit, the scope gate still read the spec from before the edit and refused the bug four more times. | F-0091 | fixed locally | Two blocks in a row came from rules judging stale evidence, not from wrong rules: worth its own paragraph on how a governed agent fails. |
 | W5 | Until SCRUM-18 every story already had tests (route B). | — | shown from SCRUM-18 | Authoring, repair, weakening and real bug finding are measured from Juice Shop story 4 onward and in the other three apps. |
 
 ## 5. Threats to keep in the paper

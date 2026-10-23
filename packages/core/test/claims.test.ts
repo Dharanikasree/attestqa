@@ -141,6 +141,52 @@ describe("an accessibility bug needs a scoped scan", () => {
     expect(why ?? "").not.toContain("scans the WHOLE page");
   });
 
+  it("sees a scope added by an edit, not only by a full write (20261023T143449Z)", () => {
+    const events = ledgerOf([
+      { tool: "fs.read_file", args: { path: "tests/epic-42.spec.ts" }, result: { content: SPEC } },
+      {
+        tool: "fs.replace_in_file",
+        args: {
+          path: "tests/epic-42.spec.ts",
+          old: "new AxeBuilder({ page })",
+          new: 'new AxeBuilder({ page }).include("#navbarAccount")',
+        },
+        result: { replaced: 1 },
+      },
+      {
+        tool: "pw.run_tests",
+        result: { passed: 8, failed: 1, skipped: 0, flaky: 0, green: false, failures: [A11Y_FAILURE] },
+      },
+    ]);
+    expect(
+      storyRefusal(
+        bug("Logout flow has WCAG A/AA violations", "axe reported a label violation."),
+        events,
+      ),
+    ).toBeUndefined();
+  });
+
+  it("still refuses when the edit did not touch the scan", () => {
+    const events = ledgerOf([
+      { tool: "fs.read_file", args: { path: "tests/epic-42.spec.ts" }, result: { content: SPEC } },
+      {
+        tool: "fs.replace_in_file",
+        args: { path: "tests/epic-42.spec.ts", old: "new AxeBuilder({ page })", new: "new AxeBuilder({ page })" },
+        result: { replaced: 1 },
+      },
+      {
+        tool: "pw.run_tests",
+        result: { passed: 8, failed: 1, skipped: 0, flaky: 0, green: false, failures: [A11Y_FAILURE] },
+      },
+    ]);
+    expect(
+      storyRefusal(
+        bug("Logout flow has WCAG A/AA violations", "axe reported a label violation."),
+        events,
+      ),
+    ).toContain("scans the WHOLE page");
+  });
+
   it("allows it once the scan is scoped", () => {
     const scoped = SPEC.replace(
       "new AxeBuilder({ page })",
