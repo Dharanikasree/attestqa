@@ -32,12 +32,13 @@ it reached the approver. "Route" A = tests written, B = existing tests run.
 | Juice Shop | SCRUM-18 | | **1 (counted, 010ec25)** | 20261023T145501Z-dc4ce24a | A | 5 | 3/3 | 1 | 5/5 | 0 | 0 | **blocked** by verifier (F-0092) |
 | Juice Shop | SCRUM-18 | | 2 (cb946a9) | 20261023T173121Z-2fc20316 | A | 4 | 3/3 | 2 | 3/4 (a11y fails: real defect) | **1 (SCRUM-31)** | 0 | done |
 | Juice Shop | SCRUM-18 | | 3 (cb946a9) | 20261023T174611Z-623f33cf | A | 4 | 3/3 | 2 | 3/4 (AC-1 passes but reported "not implemented"; a11y fails: real defects) | **1 (SCRUM-32)** | 0 | done |
+| Juice Shop | SCRUM-19 basket | shared epic (tests appended) | 1 (cb946a9) | 20261023T190916Z-89ae28ad | A2 | 4 | 3/3 | 2 | 5/9 | 0 | 0 | **budget** (F-0097) |
 
 Suite counts are for the whole epic spec (19 tests), not only the story's own.
 One of the 19 is the expected failure for open bug SCRUM-12, which reproduced
 in every run and counts as passed.
 
-Progress: 12 of 144 story runs. SCRUM-18 run 1 took three attempts: the first two were blocked by engine defects (F-0089, F-0091) and are kept as evidence; the third is the counted run.
+Progress: 13 of 144 story runs. SCRUM-18 run 1 took three attempts: the first two were blocked by engine defects (F-0089, F-0091) and are kept as evidence; the third is the counted run.
 
 ## 2. Excluded runs
 
@@ -47,7 +48,10 @@ Not counted. Kept in `runs/_excluded/` with a manifest row marked `eval-excluded
 |---|---|---|
 | 20261022T171911Z-a0749b09 | SCRUM-6 | Meant as run 2, but used the same ledger as run 1, so it reused run 1's approved design (route B, "story unchanged") instead of designing again (F-0084). |
 | 20261022T185532Z-1552136a | SCRUM-6 | A second start after run 3 had already finished in the same ledger; reused run 3's design for the same reason. |
+| 20261023T135910Z-e690e135 | SCRUM-18 | Run 1, first attempt: blocked by an engine fault (F-0089). Kept in `runs/`, marked `eval-excluded` in the manifest. |
+| 20261023T143449Z-d157e355 | SCRUM-18 | Run 1, second attempt: blocked by an engine fault (F-0091). Kept in `runs/`, marked `eval-excluded` in the manifest. |
 | 20261023T165205Z-c56cab94 | SCRUM-18 | Run 2 on build 010ec25: a real accessibility bug from a correctly scoped scan was dropped at the end by a check that read the spec from before the edit (F-0094). Repeated on the fixed build. |
+| 20261023T200016Z-80680779 | SCRUM-19 | Run 2 on build cb946a9: blocked by a rule deadlock before any test was written (F-0098). Repeated on the fixed build. |
 
 The SCRUM-6 pair are still evidence of something: an unchanged story is re-run without a
 new approval, which is the intended behaviour in real use.
@@ -84,6 +88,8 @@ a real defect from being filed; the others wait for the release after the evalua
 | W12 | A third check that read a test file from before the agent's edits dropped a true accessibility bug at the end of SCRUM-18 run 2. Same fault as W9 in a different reader; both fixed by making the readers apply in-place edits. In the same run the agent kept editing a test the repair cap had closed, five times, and the run blocked. | F-0094 | fixed locally | Two of the three engine faults so far share one root cause: how the runtime rebuilds a file from its own history. The third (W7) also came from reading old evidence: a failure already repaired. |
 | W13 | First completed new-tests run and first bug filed (SCRUM-31, a real contrast defect). But two of four tests run on the home page: bdd2pw binds "I navigate to <path>" to a goto() that drops the path, so AC-1 passes without a search and the bug names the wrong page. The verifier accepted it. | F-0095 | open (bdd2pw handoff) | A completed run with a real bug can still contain tests that check nothing; the generator, not the agent, introduced it. |
 | W14 | Run 3 filed the search-box label defect at last (SCRUM-32), from a scan scoped to the story's own toolbar and product grid, and wrote the strongest AC-1 of the story. The report still called AC-1 "not implemented" because a generator comment says TODO, and dropped it from the pass count. | F-0096 | open | Reports must count what the code does, not what a marker says. Repeats also file overlapping bugs in the tracker (SCRUM-31, SCRUM-32). |
+| W15 | First stateful story ran out of budget: tests share one account's basket, collide (HTTP 500) and the agent repaired locators instead of isolating the tests. It proposed no bug for the 500s, correctly, and governance refused a scaffold that would have wiped the previous story's passing tests. | F-0097 | open | Stateful stories are where the agent is weakest; also the costliest run so far. |
+| W16 | Two correct rules left the agent no visible way forward on a shared epic file: the scaffold was refused (it would wipe the earlier story's tests), and rewording the feature was refused as churn with advice to run a suite that could not run the new scenarios. | F-0098 | fixed locally | Rule interaction, not a single bad rule: governance has to be tested as a set. |
 | W5 | Until SCRUM-18 every story already had tests (route B). | — | shown from SCRUM-18 | Authoring, repair, weakening and real bug finding are measured from Juice Shop story 4 onward and in the other three apps. |
 
 ## 5. Threats to keep in the paper
@@ -94,3 +100,24 @@ a real defect from being filed; the others wait for the release after the evalua
   affected runs are excluded and listed above, not silently dropped.
 - The evaluation started on 22 Oct rather than 26 Oct; nothing else in the
   protocol changed.
+
+## 6. Cost per run (Anthropic list prices, from the ledger's usage)
+
+Input $3, output $15, cache read $0.30, cache write $3.75 per million tokens
+(claude-sonnet-4-6). Computed from `inference.usage` in each archived ledger.
+
+| Kind of run | Runs | Cost per run |
+|---|---|---|
+| Existing tests (SCRUM-6, 8, 10) | 9 | $0.27 to $0.47 |
+| New tests, search (SCRUM-18, counted and excluded) | 5 | $1.51 to $2.67 |
+| New tests, basket, budget exhausted (SCRUM-19 run 1) | 1 | $5.98 |
+
+Per-run detail, including time, the time spent waiting for approvals, the cost
+of turns the rules refused, and cost per passing design item and per filed bug:
+`runs-cost.csv`, regenerated from the ledgers by `python tools/cost.py --print`.
+Runs that were not counted (engine faults, repeats that reused a design) are kept
+there with `excluded` or `study = eval-excluded`, so their cost is reported, not hidden.
+
+So far (18 runs, 13 counted): total $24.08; runs not counted $9.22; turns the
+rules refused $5.70 (about a quarter of all spend), which is the price of the
+send-backs and refusals, paid before a human saw anything.

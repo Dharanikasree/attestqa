@@ -138,6 +138,7 @@ All counted from ledgers and files; nothing is taken from the model's own accoun
 | Completion: done / blocked / budget, per story and per run | `end` event |
 | Human interventions: hand edits, restarts, approvals denied | run notes + ledger |
 | Time and tokens per run | ledger timestamps, `inference.usage` |
+| Cost (added 23 Oct): dollars per run, per passing design item and per filed bug; time waiting for approvals vs. agent time; cost of turns the rules refused; cost of runs not counted | `tools/cost.py` → `runs-cost.csv` |
 | Design: items per story, refusals before approval, items edited or denied by the reviewer | `policy`, `approval_*` |
 | Coverage: criteria with a test, items with a passing or expected-failing test | `aqa coverage --json` |
 | Governance: refusals by rule; refusals judged correct / incorrect (two-person review of a sample) | `policy` + review sheet |

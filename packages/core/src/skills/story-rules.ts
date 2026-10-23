@@ -663,16 +663,43 @@ function noChangeWrite(
 
 /** How many times a path has been written since the last scaffold or test run. */
 function writesSinceProgress(path: string, events: AnyRunEvent[]): number {
+  return churnOf(path, events).unchecked;
+}
+
+/**
+ * Writes of one file since the last suite run or scaffold: all of them, and
+ * those no check has looked at since.
+ *
+ * For a feature file the check is `bdd2pw.analyze`, not the suite. Before the
+ * scaffold the suite cannot run the new scenarios at all, and the scaffold is
+ * refused while any step is unbound, so a feature is rewritten and analysed
+ * until every step binds. Counting only suite runs as progress refused the
+ * fourth rewrite of such a loop and blocked the run with "run the suite", which
+ * would have changed nothing (20261023T200016Z: three writes, each followed by
+ * an analysis, then four refusals and a block).
+ */
+function churnOf(path: string, events: AnyRunEvent[]): { total: number; unchecked: number } {
   const calls = completedCalls(events);
-  let n = 0;
+  const feature = /\.feature$/i.test(path);
+  let total = 0;
+  let unchecked = 0;
+  let checkedSince = false;
   for (let i = calls.length - 1; i >= 0; i--) {
     const c = calls[i];
     if (!c || !c.ok) continue;
     if (c.toolName === "pw.run_tests" || c.toolName === "bdd2pw.scaffold") break;
-    if (c.toolName === "fs.write_file" && String(c.args["path"] ?? "") === path) n += 1;
+    if (feature && c.toolName === "bdd2pw.analyze" && String(c.args["feature"] ?? "") === path)
+      checkedSince = true;
+    if (c.toolName === "fs.write_file" && String(c.args["path"] ?? "") === path) {
+      total += 1;
+      if (!checkedSince) unchecked += 1;
+    }
   }
-  return n;
+  return { total, unchecked };
 }
+
+/** A feature analysed after every rewrite still has a ceiling: six rewrites. */
+const MAX_CHECKED_FEATURE_WRITES = 6;
 
 /**
  * A file rewritten over and over, with nothing run in between, is a loop.
@@ -689,7 +716,25 @@ function writeChurn(
 ): string | undefined {
   const path = specOrAnyWrite(call);
   if (!path) return;
-  const n = writesSinceProgress(path, events);
+  const { total, unchecked } = churnOf(path, events);
+  if (/\.feature$/i.test(path)) {
+    if (unchecked >= MAX_WRITES_BEFORE_RUNNING)
+      return (
+        `you have written ${path} ${unchecked} times without checking it in between. Call ` +
+        "bdd2pw.analyze on it (same feature, same url): it says which steps still do not bind. " +
+        "Running the suite cannot tell you that: the suite runs the spec, and the new scenarios " +
+        "are not in it until they are scaffolded or written there."
+      );
+    if (total >= MAX_CHECKED_FEATURE_WRITES)
+      return (
+        `you have rewritten ${path} ${total} times this run. Stop rewording it and implement its ` +
+        "new scenarios: if the epic's spec does not exist yet, scaffold it with bdd2pw.scaffold " +
+        "(steps it cannot bind come back as TODO for you to fill in); if the spec exists, add the " +
+        "new tests to it with fs.replace_in_file. Then run the suite."
+      );
+    return;
+  }
+  const n = unchecked;
   if (n < MAX_WRITES_BEFORE_RUNNING) return;
   return (
     `you have written ${path} ${n} times without running anything in between. Editing it again ` +

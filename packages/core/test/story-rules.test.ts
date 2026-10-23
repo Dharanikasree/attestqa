@@ -539,3 +539,29 @@ describe("a heal changes the locator, not the claim", () => {
     expect(storyRefusal(write("// nothing left\n"), events)).toContain("this write removes it");
   });
 });
+
+describe("a feature file is checked by analysis, not by the suite (20261023T200016Z)", () => {
+  const F = "features/epic-scrum-15-finding-and-buying-products.feature";
+  const write = (content: string) => ({ toolName: "fs.write_file", args: { path: F, content } });
+  const wrote = (content: string) =>
+    pair("fs", "write_file", { path: F, content }, { path: F, bytes: content.length });
+  const analysed = () =>
+    pair("bdd2pw", "analyze", { feature: F, url: "http://localhost:3100" }, { exitCode: 0 });
+
+  it("allows a fourth rewrite when every earlier one was analysed", () => {
+    const events = [1, 2, 3].flatMap((i) => [...wrote(`v${i}`), ...analysed()]);
+    expect(storyRefusal(write("v4"), events) ?? "").not.toContain("without");
+  });
+
+  it("asks for an analysis, not a suite run, after three unchecked rewrites", () => {
+    const events = [1, 2, 3].flatMap((i) => wrote(`v${i}`));
+    const why = storyRefusal(write("v4"), events) ?? "";
+    expect(why).toContain("bdd2pw.analyze");
+    expect(why).not.toContain("Run the suite with pw.run_tests");
+  });
+
+  it("still stops a feature rewritten six times, analysed or not", () => {
+    const events = [1, 2, 3, 4, 5, 6].flatMap((i) => [...wrote(`v${i}`), ...analysed()]);
+    expect(storyRefusal(write("v7"), events)).toContain("Stop rewording it");
+  });
+});
