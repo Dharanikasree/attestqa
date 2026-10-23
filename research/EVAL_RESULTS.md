@@ -30,12 +30,14 @@ it reached the approver. "Route" A = tests written, B = existing tests run.
 | Juice Shop | SCRUM-18 search | new area (tests written) | 1 | 20261023T135910Z-e690e135 | A | 4 | 3/3 | 2 | 3/4 (a11y fails: real defect) | 0 (5 refused) | 0 | **blocked** (F-0089) |
 | Juice Shop | SCRUM-18 | | 1 (2nd attempt, 6d04950) | 20261023T143449Z-d157e355 | A | 5 | 3/3 | 2 | 4/5 (a11y fails: real defect) | 0 (5 refused) | 0 | **blocked** (F-0091) |
 | Juice Shop | SCRUM-18 | | **1 (counted, 010ec25)** | 20261023T145501Z-dc4ce24a | A | 5 | 3/3 | 1 | 5/5 | 0 | 0 | **blocked** by verifier (F-0092) |
+| Juice Shop | SCRUM-18 | | 2 (cb946a9) | 20261023T173121Z-2fc20316 | A | 4 | 3/3 | 2 | 3/4 (a11y fails: real defect) | **1 (SCRUM-31)** | 0 | done |
+| Juice Shop | SCRUM-18 | | 3 (cb946a9) | 20261023T174611Z-623f33cf | A | 4 | 3/3 | 2 | 3/4 (AC-1 passes but reported "not implemented"; a11y fails: real defects) | **1 (SCRUM-32)** | 0 | done |
 
 Suite counts are for the whole epic spec (19 tests), not only the story's own.
 One of the 19 is the expected failure for open bug SCRUM-12, which reproduced
 in every run and counts as passed.
 
-Progress: 10 of 144 story runs. SCRUM-18 run 1 took three attempts: the first two were blocked by engine defects (F-0089, F-0091) and are kept as evidence; the third is the counted run.
+Progress: 12 of 144 story runs. SCRUM-18 run 1 took three attempts: the first two were blocked by engine defects (F-0089, F-0091) and are kept as evidence; the third is the counted run.
 
 ## 2. Excluded runs
 
@@ -80,6 +82,8 @@ a real defect from being filed; the others wait for the release after the evalua
 | W10 | First new-tests run without an engine fault: 5/5 green, but the verifier refused it because the AC-2 test never uses the search box. Correct refusal. The verifier missed a test that passes whatever the product does (asserts that the words "product cards" are absent) and a design item with no test at all. | F-0092 | open | Shows both what the end-of-run check catches and what it does not. |
 | W11 | A real accessibility defect in the story's own search box was scoped out of the scan by the "main content only" rule, so it went unreported. | F-0093 | open | A scope rule meant to protect stories from site-wide noise also hides defects in controls that live in the header. |
 | W12 | A third check that read a test file from before the agent's edits dropped a true accessibility bug at the end of SCRUM-18 run 2. Same fault as W9 in a different reader; both fixed by making the readers apply in-place edits. In the same run the agent kept editing a test the repair cap had closed, five times, and the run blocked. | F-0094 | fixed locally | Two of the three engine faults so far share one root cause: how the runtime rebuilds a file from its own history. The third (W7) also came from reading old evidence: a failure already repaired. |
+| W13 | First completed new-tests run and first bug filed (SCRUM-31, a real contrast defect). But two of four tests run on the home page: bdd2pw binds "I navigate to <path>" to a goto() that drops the path, so AC-1 passes without a search and the bug names the wrong page. The verifier accepted it. | F-0095 | open (bdd2pw handoff) | A completed run with a real bug can still contain tests that check nothing; the generator, not the agent, introduced it. |
+| W14 | Run 3 filed the search-box label defect at last (SCRUM-32), from a scan scoped to the story's own toolbar and product grid, and wrote the strongest AC-1 of the story. The report still called AC-1 "not implemented" because a generator comment says TODO, and dropped it from the pass count. | F-0096 | open | Reports must count what the code does, not what a marker says. Repeats also file overlapping bugs in the tracker (SCRUM-31, SCRUM-32). |
 | W5 | Until SCRUM-18 every story already had tests (route B). | — | shown from SCRUM-18 | Authoring, repair, weakening and real bug finding are measured from Juice Shop story 4 onward and in the other three apps. |
 
 ## 5. Threats to keep in the paper
