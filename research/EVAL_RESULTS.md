@@ -43,12 +43,13 @@ it reached the approver. "Route" A = tests written, B = existing tests run.
 | Juice Shop | SCRUM-22 feedback | new area (new epic) | 1 (b14f27e) | 20261024T163453Z-12a0896d | A | 5 | 4/4 | 1 | 3/5 (a11y fails: real defect; AC-2 test fault) | **1 (SCRUM-36)** | 0 | **budget** (F-0107) |
 | SauceDemo | AB#109 | | 3 (b14f27e) | 20261024T174107Z-3ab2dfc4 | A | 5 | 3/3 | 1 | 5/5 | 0 | 0 | **done**, no review items |
 | Juice Shop | SCRUM-22 | | 2 (b14f27e) | 20261024T174531Z-c2e558ab | A | 5 | 4/4 | 2 | none run | 0 | 0 | **blocked** (agent loop, F-0109) |
+| Juice Shop | SCRUM-22 | | 3 (b14f27e) | 20261024T181310Z-4499b9c2 | A | 5 | 4/4 | 1 | 2/5 | 0 | 0 | **blocked** (agent loop, F-0111) |
 
 Suite counts are for the whole epic spec (19 tests), not only the story's own.
 One of the 19 is the expected failure for open bug SCRUM-12, which reproduced
 in every run and counts as passed.
 
-Progress: 23 of 144 story runs (Juice Shop 20, SauceDemo 3). SCRUM-18 run 1 took three attempts: the first two were blocked by engine defects (F-0089, F-0091) and are kept as evidence; the third is the counted run.
+Progress: 24 of 144 story runs (Juice Shop 21, SauceDemo 3). SCRUM-18 run 1 took three attempts: the first two were blocked by engine defects (F-0089, F-0091) and are kept as evidence; the third is the counted run.
 
 ## 2. Excluded runs
 
@@ -110,6 +111,7 @@ a real defect from being filed; the others wait for the release after the evalua
 | W21 | SCRUM-21: 3 of 3 runs on budget; the review confirmation text was never read from the page in any run, and a candidate real defect (icon button without a name in the product dialog, seen in 2 runs) went unreported because its test never passed. | F-0104 | open | A second stateful story with no completed run: the agent's weakness on state and on reading the page is consistent, and the "never passed" rule hides defects found by a test that is otherwise wrong. |
 | W22 | A completed run can still be weaker than its design: run 2 of AB#109 passed 5/5 with an unscoped scan and a half-asserted transition, both demoted to "for your review" instead of blocking. Repeats on Azure DevOps also reuse the first run's test cases, so tracker records are not independent across repeats. | F-0106 | open (design) | "Completed" needs qualifying in the results: count review items per completed run. |
 | W23 | The two halves of one rule disagreed: the design check accepted "navigates" as a state-transition action, the test check counted only clicks and fills, and a 9/9 green redirect test blocked the run as "performs no action". | F-0110 | fixed locally | Rules that judge the design and the test must share one vocabulary. |
+| W24 | Two of SCRUM-22's three runs ended in the same way: the agent, stuck on a failing test, proposed the same file read three cycles running until the no-progress guard stopped it. The guard works; the model's response to being stuck is to re-read, not to act. | F-0109, F-0111 | open | A failure mode of the agent, not of the rules; worth its own category in the results. |
 | W5 | Until SCRUM-18 every story already had tests (route B). | — | shown from SCRUM-18 | Authoring, repair, weakening and real bug finding are measured from Juice Shop story 4 onward and in the other three apps. |
 
 ## 5. Threats to keep in the paper
