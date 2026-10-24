@@ -1034,3 +1034,30 @@ describe("an API origin outside scope.urls is reported once, to the person", () 
     expect(blockedOriginLine(obs("### Page\n- Console: 0 errors"), new Set())).toBe("");
   });
 });
+
+describe("an edit may name a masked value by its token (20261024T182800Z)", () => {
+  it("resolves [EMAIL] in old against the address in the file, and keeps it through new", async () => {
+    const ws = mkdtempSync(join(tmpdir(), "aqa-fs-"));
+    mkdirSync(join(ws, "features"));
+    const feature =
+      'Scenario: A\n  When I enter "jim@juice-sh.op"\n  Then x\n\nScenario: B\n  When I enter "jim@juice-sh.op"\n  Then y\n';
+    writeFileSync(join(ws, "features", "f.feature"), feature);
+    const fs = new FsTools(ws);
+    const r = await fs.call("fs", "replace_in_file", {
+      path: "features/f.feature",
+      old: 'Scenario: B\n  When I enter "[EMAIL]"\n  Then y\n',
+      new: 'Scenario: B\n  When I enter "[EMAIL]"\n  Then z\n',
+    });
+    expect(r.ok).toBe(true);
+    const now = readFileSync(join(ws, "features", "f.feature"), "utf8");
+    expect(now).toContain('When I enter "jim@juice-sh.op"\n  Then z');
+    expect(now).not.toContain("[EMAIL]");
+    // Ambiguous: the token alone matches both scenarios.
+    const amb = await fs.call("fs", "replace_in_file", {
+      path: "features/f.feature",
+      old: 'When I enter "[EMAIL]"',
+      new: "When I enter nothing",
+    });
+    expect(amb.ok).toBe(false);
+  });
+});

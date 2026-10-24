@@ -1,0 +1,1086 @@
+[
+  {
+    "story": 1,
+    "acceptanceCriteria": [],
+    "items": [],
+    "uncoveredCriteria": [],
+    "outsideDesign": [
+      "AC-1: Registered user signs in with correct email and password",
+      "AC-1: Authentication token is written to localStorage after successful login",
+      "AC-2: Wrong password shows generic error and keeps user on login page",
+      "AC-3a: Log in button is disabled when both fields are empty",
+      "AC-3b: Log in button is disabled when only one field is filled; validation messages shown on touched empty fields",
+      "AC-4: Unregistered email produces same generic error as wrong password",
+      "AC-2 security: Wrong credentials show the same message regardless of which field is wrong",
+      "story: Login page passes axe-core WCAG A/AA scan",
+      "Bug 49: Login with leading whitespace in password fails with standard error"
+    ],
+    "bugs": []
+  },
+  {
+    "story": "SCRUM-6",
+    "title": "Customer signs in with email and password",
+    "acceptanceCriteria": [
+      "AC-1",
+      "AC-2",
+      "AC-3"
+    ],
+    "designRun": "20261022T161640Z-45bd8a63",
+    "items": [
+      {
+        "id": "D6",
+        "covers": "AC-1",
+        "type": "functional",
+        "technique": "state-transition",
+        "expectFail": false,
+        "scenario": {
+          "title": "AC-1: A registered customer with correct credentials is signed in and taken to the product list",
+          "file": "features/epic-scrum-5-customer-account-access.feature"
+        },
+        "test": {
+          "title": "AC-1: A registered customer with correct credentials is signed in and taken to the product list",
+          "file": "tests/epic-scrum-5-customer-account-access.spec.ts"
+        },
+        "result": {
+          "status": "passed",
+          "runId": "20261023T125939Z-41853627"
+        },
+        "state": "passing"
+      },
+      {
+        "id": "D7",
+        "covers": "AC-2",
+        "type": "functional",
+        "technique": "equivalence-partitioning",
+        "expectFail": false,
+        "scenario": {
+          "title": "AC-2: A wrong password shows an error message and the customer stays on the login page",
+          "file": "features/epic-scrum-5-customer-account-access.feature"
+        },
+        "test": {
+          "title": "AC-2: A wrong password shows an error message and the customer stays on the login page",
+          "file": "tests/epic-scrum-5-customer-account-access.spec.ts"
+        },
+        "result": {
+          "status": "passed",
+          "runId": "20261023T125939Z-41853627"
+        },
+        "state": "passing"
+      },
+      {
+        "id": "D8",
+        "covers": "AC-3",
+        "type": "functional",
+        "technique": "boundary-value-analysis",
+        "expectFail": false,
+        "scenario": {
+          "title": "AC-3a: Log in button is disabled when only the email field is filled",
+          "file": "features/epic-scrum-5-customer-account-access.feature"
+        },
+        "test": {
+          "title": "AC-3a: Log in button is disabled when only the email field is filled",
+          "file": "tests/epic-scrum-5-customer-account-access.spec.ts"
+        },
+        "result": {
+          "status": "passed",
+          "runId": "20261023T125939Z-41853627"
+        },
+        "state": "passing"
+      },
+      {
+        "id": "D9",
+        "covers": "AC-3",
+        "type": "functional",
+        "technique": "boundary-value-analysis",
+        "expectFail": false,
+        "scenario": {
+          "title": "AC-3b: Log in button is disabled when only the password field is filled",
+          "file": "features/epic-scrum-5-customer-account-access.feature"
+        },
+        "test": {
+          "title": "AC-3b: Log in button is disabled when only the password field is filled",
+          "file": "tests/epic-scrum-5-customer-account-access.spec.ts"
+        },
+        "result": {
+          "status": "passed",
+          "runId": "20261023T125939Z-41853627"
+        },
+        "state": "passing"
+      },
+      {
+        "id": "D10",
+        "covers": "AC-3",
+        "type": "functional",
+        "technique": "boundary-value-analysis",
+        "expectFail": false,
+        "scenario": {
+          "title": "AC-3c: Log in button is disabled when both fields are empty",
+          "file": "features/epic-scrum-5-customer-account-access.feature"
+        },
+        "test": {
+          "title": "AC-3c: Log in button is disabled when both fields are empty",
+          "file": "tests/epic-scrum-5-customer-account-access.spec.ts"
+        },
+        "result": {
+          "status": "passed",
+          "runId": "20261023T125939Z-41853627"
+        },
+        "state": "passing"
+      },
+      {
+        "id": "D11",
+        "covers": "AC-3",
+        "type": "functional",
+        "technique": "boundary-value-analysis",
+        "expectFail": false,
+        "scenario": {
+          "title": "AC-3d: Log in button is enabled when both email and password are filled",
+          "file": "features/epic-scrum-5-customer-account-access.feature"
+        },
+        "test": {
+          "title": "AC-3d: Log in button is enabled when both email and password are filled",
+          "file": "tests/epic-scrum-5-customer-account-access.spec.ts"
+        },
+        "result": {
+          "status": "passed",
+          "runId": "20261023T125939Z-41853627"
+        },
+        "state": "passing"
+      },
+      {
+        "id": "D12",
+        "covers": "AC-2",
+        "type": "security",
+        "technique": "state-transition",
+        "expectFail": false,
+        "scenario": {
+          "title": "AC-2 (security): Wrong credentials show the same message regardless of which field is wrong",
+          "file": "features/epic-scrum-5-customer-account-access.feature"
+        },
+        "test": {
+          "title": "AC-2 (security): Wrong credentials show the same message regardless of which field is wrong",
+          "file": "tests/epic-scrum-5-customer-account-access.spec.ts"
+        },
+        "result": {
+          "status": "passed",
+          "runId": "20261023T125939Z-41853627"
+        },
+        "state": "passing"
+      },
+      {
+        "id": "D13",
+        "covers": "story",
+        "type": "accessibility",
+        "technique": "checklist-based",
+        "expectFail": false,
+        "scenario": {
+          "title": "AC-story: Login page passes axe-core WCAG A/AA scan",
+          "file": "features/epic-scrum-5-customer-account-access.feature"
+        },
+        "test": {
+          "title": "AC-story: Login page passes axe-core WCAG A/AA scan",
+          "file": "tests/epic-scrum-5-customer-account-access.spec.ts"
+        },
+        "result": {
+          "status": "passed",
+          "runId": "20261023T125939Z-41853627"
+        },
+        "state": "passing"
+      }
+    ],
+    "uncoveredCriteria": [],
+    "outsideDesign": [],
+    "bugs": [
+      {
+        "id": "SCRUM-28",
+        "state": "In Progress",
+        "title": "Order tracking shows any order to anyone who has its number, signed in or not"
+      },
+      {
+        "id": "SCRUM-12",
+        "state": "In Progress",
+        "title": "Session token is still accepted after logout"
+      }
+    ]
+  },
+  {
+    "story": "SCRUM-8",
+    "title": "Customer signs out",
+    "acceptanceCriteria": [
+      "AC-1",
+      "AC-2"
+    ],
+    "designRun": "20261022T213317Z-dad48298",
+    "items": [
+      {
+        "id": "D1",
+        "covers": "AC-1",
+        "type": "functional",
+        "technique": "state-transition",
+        "expectFail": false,
+        "scenario": {
+          "title": "AC-1: Choosing Account > Logout signs the customer out and Account menu offers Login again",
+          "file": "features/epic-scrum-5-customer-account-access.feature"
+        },
+        "test": {
+          "title": "AC-1: Choosing Account > Logout signs the customer out and Account menu offers Login again",
+          "file": "tests/epic-scrum-5-customer-account-access.spec.ts"
+        },
+        "result": {
+          "status": "passed",
+          "runId": "20261023T125939Z-41853627"
+        },
+        "state": "passing"
+      },
+      {
+        "id": "D2",
+        "covers": "AC-2",
+        "type": "functional",
+        "technique": "state-transition",
+        "expectFail": false,
+        "scenario": {
+          "title": "AC-2: After logout the browser returns to the storefront home page",
+          "file": "features/epic-scrum-5-customer-account-access.feature"
+        },
+        "test": {
+          "title": "AC-2: After logout the browser returns to the storefront home page",
+          "file": "tests/epic-scrum-5-customer-account-access.spec.ts"
+        },
+        "result": {
+          "status": "passed",
+          "runId": "20261023T125939Z-41853627"
+        },
+        "state": "passing"
+      },
+      {
+        "id": "D3",
+        "covers": "AC-1",
+        "type": "security",
+        "technique": "state-transition",
+        "expectFail": false,
+        "scenario": {
+          "title": "AC-1: After logout the authentication token is removed from the browser",
+          "file": "features/epic-scrum-5-customer-account-access.feature"
+        },
+        "test": {
+          "title": "AC-1: After logout the authentication token is removed from the browser",
+          "file": "tests/epic-scrum-5-customer-account-access.spec.ts"
+        },
+        "result": {
+          "status": "passed",
+          "runId": "20261023T125939Z-41853627"
+        },
+        "state": "passing"
+      },
+      {
+        "id": "D4",
+        "covers": "story",
+        "type": "accessibility",
+        "technique": "checklist-based",
+        "expectFail": false,
+        "scenario": {
+          "title": "AC-1: Storefront pages involved in sign-out pass axe-core WCAG A/AA scan",
+          "file": "features/epic-scrum-5-customer-account-access.feature"
+        },
+        "test": {
+          "title": "AC-1: Storefront pages involved in sign-out pass axe-core WCAG A/AA scan",
+          "file": "tests/epic-scrum-5-customer-account-access.spec.ts"
+        },
+        "result": {
+          "status": "passed",
+          "runId": "20261023T125939Z-41853627"
+        },
+        "state": "passing"
+      },
+      {
+        "id": "D5",
+        "covers": "bug #SCRUM-12",
+        "type": "confirmation",
+        "technique": "state-transition",
+        "expectFail": true,
+        "scenario": {
+          "title": "Bug SCRUM-12: Session token is still accepted by the server after logout",
+          "file": "features/epic-scrum-5-customer-account-access.feature"
+        },
+        "test": {
+          "title": "Bug SCRUM-12: Session token is still accepted by the server after logout",
+          "file": "tests/epic-scrum-5-customer-account-access.spec.ts"
+        },
+        "result": {
+          "status": "expected-failure",
+          "runId": "20261023T125939Z-41853627"
+        },
+        "state": "known bug reproduced"
+      }
+    ],
+    "uncoveredCriteria": [],
+    "outsideDesign": [],
+    "bugs": [
+      {
+        "id": "SCRUM-28",
+        "state": "In Progress",
+        "title": "Order tracking shows any order to anyone who has its number, signed in or not"
+      },
+      {
+        "id": "SCRUM-12",
+        "state": "In Progress",
+        "title": "Session token is still accepted after logout"
+      }
+    ]
+  },
+  {
+    "story": "SCRUM-10",
+    "title": "New customer registers an account",
+    "acceptanceCriteria": [
+      "AC-1",
+      "AC-2",
+      "AC-3"
+    ],
+    "designRun": "20261023T125939Z-41853627",
+    "items": [
+      {
+        "id": "D14",
+        "covers": "AC-1",
+        "type": "functional",
+        "technique": "state-transition",
+        "expectFail": false,
+        "scenario": {
+          "title": "AC-1: A new customer who fills in all registration fields is sent to the login page",
+          "file": "features/epic-scrum-5-customer-account-access.feature"
+        },
+        "test": {
+          "title": "AC-1: A new customer who fills in all registration fields is sent to the login page",
+          "file": "tests/epic-scrum-5-customer-account-access.spec.ts"
+        },
+        "result": {
+          "status": "passed",
+          "runId": "20261023T125939Z-41853627"
+        },
+        "state": "passing"
+      },
+      {
+        "id": "D15",
+        "covers": "AC-2",
+        "type": "functional",
+        "technique": "boundary-value-analysis",
+        "expectFail": false,
+        "scenario": {
+          "title": "AC-2: Register button is disabled when password and repeat password differ",
+          "file": "features/epic-scrum-5-customer-account-access.feature"
+        },
+        "test": {
+          "title": "AC-2: Register button is disabled when password and repeat password differ",
+          "file": "tests/epic-scrum-5-customer-account-access.spec.ts"
+        },
+        "result": {
+          "status": "passed",
+          "runId": "20261023T125939Z-41853627"
+        },
+        "state": "passing"
+      },
+      {
+        "id": "D16",
+        "covers": "AC-2",
+        "type": "functional",
+        "technique": "boundary-value-analysis",
+        "expectFail": false,
+        "scenario": {
+          "title": "AC-2: Register button is enabled when password and repeat password match",
+          "file": "features/epic-scrum-5-customer-account-access.feature"
+        },
+        "test": {
+          "title": "AC-2: Register button is enabled when password and repeat password match",
+          "file": "tests/epic-scrum-5-customer-account-access.spec.ts"
+        },
+        "result": {
+          "status": "passed",
+          "runId": "20261023T125939Z-41853627"
+        },
+        "state": "passing"
+      },
+      {
+        "id": "D17",
+        "covers": "AC-3",
+        "type": "functional",
+        "technique": "equivalence-partitioning",
+        "expectFail": false,
+        "scenario": {
+          "title": "AC-3: Registering with an email that already has an account is refused with a message",
+          "file": "features/epic-scrum-5-customer-account-access.feature"
+        },
+        "test": {
+          "title": "AC-3: Registering with an email that already has an account is refused with a message",
+          "file": "tests/epic-scrum-5-customer-account-access.spec.ts"
+        },
+        "result": {
+          "status": "passed",
+          "runId": "20261023T125939Z-41853627"
+        },
+        "state": "passing"
+      },
+      {
+        "id": "D18",
+        "covers": "story",
+        "type": "accessibility",
+        "technique": "checklist-based",
+        "expectFail": false,
+        "scenario": {
+          "title": "AC-story: Registration page passes axe-core WCAG A/AA scan",
+          "file": "features/epic-scrum-5-customer-account-access.feature"
+        },
+        "test": {
+          "title": "AC-story: Registration page passes axe-core WCAG A/AA scan",
+          "file": "tests/epic-scrum-5-customer-account-access.spec.ts"
+        },
+        "result": {
+          "status": "passed",
+          "runId": "20261023T125939Z-41853627"
+        },
+        "state": "passing"
+      },
+      {
+        "id": "D19",
+        "covers": "AC-1",
+        "type": "security",
+        "technique": "error-guessing",
+        "expectFail": false,
+        "scenario": {
+          "title": "AC-1 (security): Duplicate email registration error does not reveal extra account details",
+          "file": "features/epic-scrum-5-customer-account-access.feature"
+        },
+        "test": {
+          "title": "AC-1 (security): Duplicate email registration error does not reveal extra account details",
+          "file": "tests/epic-scrum-5-customer-account-access.spec.ts"
+        },
+        "result": {
+          "status": "passed",
+          "runId": "20261023T125939Z-41853627"
+        },
+        "state": "passing"
+      }
+    ],
+    "uncoveredCriteria": [],
+    "outsideDesign": [],
+    "bugs": [
+      {
+        "id": "SCRUM-28",
+        "state": "In Progress",
+        "title": "Order tracking shows any order to anyone who has its number, signed in or not"
+      },
+      {
+        "id": "SCRUM-12",
+        "state": "In Progress",
+        "title": "Session token is still accepted after logout"
+      }
+    ]
+  },
+  {
+    "story": "SCRUM-18",
+    "title": "Customer searches the product list",
+    "acceptanceCriteria": [
+      "AC-1",
+      "AC-2",
+      "AC-3"
+    ],
+    "designRun": "20261023T145501Z-dc4ce24a",
+    "items": [
+      {
+        "id": "D1",
+        "covers": "AC-1",
+        "type": "functional",
+        "technique": "equivalence-partitioning",
+        "expectFail": false,
+        "scenario": {
+          "title": "AC-1 – Searching for part of a product name lists only matching products",
+          "file": "features/epic-scrum-15-finding-and-buying-products.feature"
+        },
+        "test": {
+          "title": "AC-1 – Searching for part of a product name lists only matching products",
+          "file": "tests/epic-scrum-15-finding-and-buying-products.spec.ts"
+        },
+        "result": {
+          "status": "passed",
+          "runId": "20261024T122142Z-721a2cd2"
+        },
+        "state": "passing"
+      },
+      {
+        "id": "D2",
+        "covers": "AC-1",
+        "type": "functional",
+        "technique": "boundary-value-analysis",
+        "expectFail": false,
+        "scenario": {
+          "title": "AC-1 – Searching for a term that matches no product shows no product cards",
+          "file": "features/epic-scrum-15-finding-and-buying-products.feature"
+        },
+        "test": {
+          "title": "AC-1 – Searching for a term that matches no product shows no product cards",
+          "file": "tests/epic-scrum-15-finding-and-buying-products.spec.ts"
+        },
+        "result": {
+          "status": "passed",
+          "runId": "20261024T122142Z-721a2cd2"
+        },
+        "state": "passing"
+      },
+      {
+        "id": "D3",
+        "covers": "AC-2",
+        "type": "functional",
+        "technique": "state-transition",
+        "expectFail": false,
+        "scenario": {
+          "title": "AC-2 – After searching the results page displays the search term",
+          "file": "features/epic-scrum-15-finding-and-buying-products.feature"
+        },
+        "test": {
+          "title": "AC-2 – After searching the results page displays the search term",
+          "file": "tests/epic-scrum-15-finding-and-buying-products.spec.ts"
+        },
+        "result": {
+          "status": "passed",
+          "runId": "20261024T122142Z-721a2cd2"
+        },
+        "state": "passing"
+      },
+      {
+        "id": "D4",
+        "covers": "AC-3",
+        "type": "functional",
+        "technique": "error-guessing",
+        "expectFail": false,
+        "scenario": {
+          "title": "AC-3 – Searching for a term with no matches shows a not-found message",
+          "file": "features/epic-scrum-15-finding-and-buying-products.feature"
+        },
+        "test": {
+          "title": "AC-3 – Searching for a term with no matches shows a not-found message",
+          "file": "tests/epic-scrum-15-finding-and-buying-products.spec.ts"
+        },
+        "result": {
+          "status": "passed",
+          "runId": "20261024T122142Z-721a2cd2"
+        },
+        "state": "passing"
+      },
+      {
+        "id": "D5",
+        "covers": "story",
+        "type": "accessibility",
+        "technique": "checklist-based",
+        "expectFail": false,
+        "scenario": {
+          "title": "story – Search page passes axe accessibility checks",
+          "file": "features/epic-scrum-15-finding-and-buying-products.feature"
+        },
+        "test": {
+          "title": "story – Search page passes axe accessibility checks",
+          "file": "tests/epic-scrum-15-finding-and-buying-products.spec.ts"
+        },
+        "result": {
+          "status": "passed",
+          "runId": "20261024T122142Z-721a2cd2"
+        },
+        "state": "passing"
+      }
+    ],
+    "uncoveredCriteria": [],
+    "outsideDesign": [],
+    "bugs": [
+      {
+        "id": "SCRUM-28",
+        "state": "In Progress",
+        "title": "Order tracking shows any order to anyone who has its number, signed in or not"
+      },
+      {
+        "id": "SCRUM-12",
+        "state": "In Progress",
+        "title": "Session token is still accepted after logout"
+      }
+    ]
+  },
+  {
+    "story": "SCRUM-19",
+    "title": "Customer adds products to the basket and changes quantities",
+    "acceptanceCriteria": [
+      "AC-1",
+      "AC-2",
+      "AC-3"
+    ],
+    "designRun": "20261023T190916Z-89ae28ad",
+    "items": [
+      {
+        "id": "D6",
+        "covers": "AC-1",
+        "type": "functional",
+        "technique": "state-transition",
+        "expectFail": false,
+        "scenario": {
+          "title": "AC-1 – Adding a product from the product list increments the basket count",
+          "file": "features/epic-scrum-15-finding-and-buying-products.feature"
+        },
+        "test": {
+          "title": "AC-1 – Adding a product from the product list increments the basket count",
+          "file": "tests/epic-scrum-15-finding-and-buying-products.spec.ts"
+        },
+        "result": {
+          "status": "failed",
+          "runId": "20261024T122142Z-721a2cd2"
+        },
+        "state": "failing"
+      },
+      {
+        "id": "D7",
+        "covers": "AC-2",
+        "type": "functional",
+        "technique": "state-transition",
+        "expectFail": false,
+        "scenario": {
+          "title": "AC-2 – Increasing and decreasing a product quantity updates the line price and total",
+          "file": "features/epic-scrum-15-finding-and-buying-products.feature"
+        },
+        "test": {
+          "title": "AC-2 – Increasing and decreasing a product quantity updates the line price and total",
+          "file": "tests/epic-scrum-15-finding-and-buying-products.spec.ts"
+        },
+        "result": {
+          "status": "failed",
+          "runId": "20261024T122142Z-721a2cd2"
+        },
+        "state": "failing"
+      },
+      {
+        "id": "D8",
+        "covers": "AC-3",
+        "type": "functional",
+        "technique": "state-transition",
+        "expectFail": false,
+        "scenario": {
+          "title": "AC-3 – Removing a product takes it out of the basket and the total drops to zero",
+          "file": "features/epic-scrum-15-finding-and-buying-products.feature"
+        },
+        "test": {
+          "title": "AC-3 – Removing a product takes it out of the basket and the total drops to zero",
+          "file": "tests/epic-scrum-15-finding-and-buying-products.spec.ts"
+        },
+        "result": {
+          "status": "failed",
+          "runId": "20261024T122142Z-721a2cd2"
+        },
+        "state": "failing"
+      },
+      {
+        "id": "D9",
+        "covers": "AC-1",
+        "type": "accessibility",
+        "technique": "checklist-based",
+        "expectFail": false,
+        "scenario": {
+          "title": "AC-1 – Product list page passes axe accessibility checks",
+          "file": "features/epic-scrum-15-finding-and-buying-products.feature"
+        },
+        "test": {
+          "title": "AC-1 – Product list page passes axe accessibility checks",
+          "file": "tests/epic-scrum-15-finding-and-buying-products.spec.ts"
+        },
+        "result": {
+          "status": "failed",
+          "runId": "20261024T122142Z-721a2cd2"
+        },
+        "state": "failing"
+      }
+    ],
+    "uncoveredCriteria": [],
+    "outsideDesign": [],
+    "bugs": [
+      {
+        "id": "SCRUM-28",
+        "state": "In Progress",
+        "title": "Order tracking shows any order to anyone who has its number, signed in or not"
+      },
+      {
+        "id": "SCRUM-12",
+        "state": "In Progress",
+        "title": "Session token is still accepted after logout"
+      }
+    ]
+  },
+  {
+    "story": "SCRUM-21",
+    "title": "Customer writes a review of a product",
+    "acceptanceCriteria": [
+      "AC-1",
+      "AC-2",
+      "AC-3"
+    ],
+    "designRun": "20261024T122142Z-721a2cd2",
+    "items": [
+      {
+        "id": "D10",
+        "covers": "AC-1",
+        "type": "functional",
+        "technique": "state-transition",
+        "expectFail": false,
+        "scenario": {
+          "title": "AC-1 – Signed-in customer submits a review and a confirmation is shown",
+          "file": "features/epic-scrum-15-finding-and-buying-products.feature"
+        },
+        "test": {
+          "title": "AC-1 – Signed-in customer submits a review and a confirmation is shown",
+          "file": "tests/epic-scrum-15-finding-and-buying-products.spec.ts"
+        },
+        "result": {
+          "status": "failed",
+          "runId": "20261024T122142Z-721a2cd2"
+        },
+        "state": "failing"
+      },
+      {
+        "id": "D11",
+        "covers": "AC-2",
+        "type": "functional",
+        "technique": "state-transition",
+        "expectFail": false,
+        "scenario": {
+          "title": "AC-2 – Submitted review is listed with the customer's email as author",
+          "file": "features/epic-scrum-15-finding-and-buying-products.feature"
+        },
+        "test": {
+          "title": "AC-2 – Submitted review is listed with the customer's email as author",
+          "file": "tests/epic-scrum-15-finding-and-buying-products.spec.ts"
+        },
+        "result": {
+          "status": "failed",
+          "runId": "20261024T122142Z-721a2cd2"
+        },
+        "state": "failing"
+      },
+      {
+        "id": "D12",
+        "covers": "AC-3",
+        "type": "functional",
+        "technique": "boundary-value-analysis",
+        "expectFail": false,
+        "scenario": {
+          "title": "AC-3 – Submit button is disabled when the review text is empty",
+          "file": "features/epic-scrum-15-finding-and-buying-products.feature"
+        },
+        "test": {
+          "title": "AC-3 – Submit button is disabled when the review text is empty",
+          "file": "tests/epic-scrum-15-finding-and-buying-products.spec.ts"
+        },
+        "result": {
+          "status": "passed",
+          "runId": "20261024T122142Z-721a2cd2"
+        },
+        "state": "passing"
+      },
+      {
+        "id": "D13",
+        "covers": "AC-1",
+        "type": "security",
+        "technique": "equivalence-partitioning",
+        "expectFail": false,
+        "scenario": {
+          "title": "AC-1a – A customer who is not signed in cannot write a review",
+          "file": "features/epic-scrum-15-finding-and-buying-products.feature"
+        },
+        "test": {
+          "title": "AC-1a – A customer who is not signed in cannot write a review",
+          "file": "tests/epic-scrum-15-finding-and-buying-products.spec.ts"
+        },
+        "result": {
+          "status": "passed",
+          "runId": "20261024T122142Z-721a2cd2"
+        },
+        "state": "passing"
+      },
+      {
+        "id": "D14",
+        "covers": "story",
+        "type": "accessibility",
+        "technique": "checklist-based",
+        "expectFail": false,
+        "scenario": {
+          "title": "story – Product detail page passes axe accessibility checks",
+          "file": "features/epic-scrum-15-finding-and-buying-products.feature"
+        },
+        "test": {
+          "title": "story – Product detail page passes axe accessibility checks",
+          "file": "tests/epic-scrum-15-finding-and-buying-products.spec.ts"
+        },
+        "result": {
+          "status": "failed",
+          "runId": "20261024T122142Z-721a2cd2"
+        },
+        "state": "failing"
+      },
+      {
+        "id": "D15",
+        "covers": "bug #SCRUM-12",
+        "type": "confirmation",
+        "technique": "state-transition",
+        "expectFail": true,
+        "scenario": {
+          "title": "bug #SCRUM-12 – Session token is no longer accepted after logout",
+          "file": "features/epic-scrum-15-finding-and-buying-products.feature"
+        },
+        "test": {
+          "title": "bug #SCRUM-12 – Session token is no longer accepted after logout",
+          "file": "tests/epic-scrum-15-finding-and-buying-products.spec.ts"
+        },
+        "result": {
+          "status": "expected-failure",
+          "runId": "20261024T122142Z-721a2cd2"
+        },
+        "state": "known bug reproduced"
+      }
+    ],
+    "uncoveredCriteria": [],
+    "outsideDesign": [],
+    "bugs": [
+      {
+        "id": "SCRUM-28",
+        "state": "In Progress",
+        "title": "Order tracking shows any order to anyone who has its number, signed in or not"
+      },
+      {
+        "id": "SCRUM-12",
+        "state": "In Progress",
+        "title": "Session token is still accepted after logout"
+      }
+    ]
+  },
+  {
+    "story": "SCRUM-22",
+    "title": "Customer sends feedback with the feedback form",
+    "acceptanceCriteria": [
+      "AC-1",
+      "AC-2",
+      "AC-3",
+      "AC-4"
+    ],
+    "designRun": "20261024T163453Z-12a0896d",
+    "items": [
+      {
+        "id": "D1",
+        "covers": "AC-1",
+        "type": "functional",
+        "technique": "checklist-based",
+        "expectFail": false,
+        "scenario": {
+          "title": "AC-1 — Feedback form asks for comment, rating and CAPTCHA answer",
+          "file": "features/epic-scrum-16-customer-support.feature"
+        },
+        "test": {
+          "title": "AC-1 — Feedback form asks for comment, rating and CAPTCHA answer",
+          "file": "tests/epic-scrum-16-customer-support.spec.ts"
+        },
+        "result": {
+          "status": "passed",
+          "runId": "20261024T182800Z-cd681210"
+        },
+        "state": "passing"
+      },
+      {
+        "id": "D2",
+        "covers": "AC-2",
+        "type": "functional",
+        "technique": "boundary-value-analysis",
+        "expectFail": false,
+        "scenario": {
+          "title": "AC-2 — Submit stays disabled until all fields are filled",
+          "file": "features/epic-scrum-16-customer-support.feature"
+        },
+        "test": {
+          "title": "AC-2 — Submit stays disabled until all fields are filled",
+          "file": "tests/epic-scrum-16-customer-support.spec.ts"
+        },
+        "result": {
+          "status": "failed",
+          "runId": "20261024T182800Z-cd681210"
+        },
+        "state": "failing"
+      },
+      {
+        "id": "D3",
+        "covers": "AC-3",
+        "type": "functional",
+        "technique": "state-transition",
+        "expectFail": false,
+        "scenario": {
+          "title": "AC-3 — Submitting with the correct CAPTCHA answer thanks the customer and clears the form",
+          "file": "features/epic-scrum-16-customer-support.feature"
+        },
+        "test": {
+          "title": "AC-3 — Submitting with the correct CAPTCHA answer thanks the customer and clears the form",
+          "file": "tests/epic-scrum-16-customer-support.spec.ts"
+        },
+        "result": {
+          "status": "failed",
+          "runId": "20261024T182800Z-cd681210"
+        },
+        "state": "failing"
+      },
+      {
+        "id": "D4",
+        "covers": "AC-4",
+        "type": "functional",
+        "technique": "equivalence-partitioning",
+        "expectFail": false,
+        "scenario": {
+          "title": "AC-4 — Submitting with a wrong CAPTCHA answer is refused with a message",
+          "file": "features/epic-scrum-16-customer-support.feature"
+        },
+        "test": {
+          "title": "AC-4 — Submitting with a wrong CAPTCHA answer is refused with a message",
+          "file": "tests/epic-scrum-16-customer-support.spec.ts"
+        },
+        "result": {
+          "status": "passed",
+          "runId": "20261024T182800Z-cd681210"
+        },
+        "state": "passing"
+      },
+      {
+        "id": "D5",
+        "covers": "story",
+        "type": "accessibility",
+        "technique": "checklist-based",
+        "expectFail": false,
+        "scenario": {
+          "title": "AC-5 — Customer Feedback page passes accessibility checks",
+          "file": "features/epic-scrum-16-customer-support.feature"
+        },
+        "test": {
+          "title": "AC-5 — Customer Feedback page passes accessibility checks",
+          "file": "tests/epic-scrum-16-customer-support.spec.ts"
+        },
+        "result": {
+          "status": "failed",
+          "runId": "20261024T182800Z-cd681210"
+        },
+        "state": "failing"
+      }
+    ],
+    "uncoveredCriteria": [],
+    "outsideDesign": [],
+    "bugs": [
+      {
+        "id": "SCRUM-28",
+        "state": "In Progress",
+        "title": "Order tracking shows any order to anyone who has its number, signed in or not"
+      },
+      {
+        "id": "SCRUM-12",
+        "state": "In Progress",
+        "title": "Session token is still accepted after logout"
+      }
+    ]
+  },
+  {
+    "story": "SCRUM-23",
+    "title": "Customer resets a forgotten password with the security question",
+    "acceptanceCriteria": [
+      "AC-1",
+      "AC-2",
+      "AC-3",
+      "AC-4"
+    ],
+    "designRun": "20261024T182800Z-cd681210",
+    "items": [
+      {
+        "id": "D6",
+        "covers": "AC-1",
+        "type": "functional",
+        "technique": "state-transition",
+        "expectFail": false,
+        "scenario": {
+          "title": "AC-1 — After entering a registered email the security question is shown",
+          "file": "features/epic-scrum-16-customer-support.feature"
+        },
+        "state": "no test"
+      },
+      {
+        "id": "D7",
+        "covers": "AC-2",
+        "type": "functional",
+        "technique": "state-transition",
+        "expectFail": false,
+        "scenario": {
+          "title": "AC-2 — Correct answer and matching new passwords changes the password and shows confirmation",
+          "file": "features/epic-scrum-16-customer-support.feature"
+        },
+        "state": "no test"
+      },
+      {
+        "id": "D8",
+        "covers": "AC-3",
+        "type": "functional",
+        "technique": "equivalence-partitioning",
+        "expectFail": false,
+        "scenario": {
+          "title": "AC-3 — Wrong answer leaves the password unchanged and shows an error",
+          "file": "features/epic-scrum-16-customer-support.feature"
+        },
+        "state": "no test"
+      },
+      {
+        "id": "D9",
+        "covers": "AC-4",
+        "type": "functional",
+        "technique": "equivalence-partitioning",
+        "expectFail": false,
+        "scenario": {
+          "title": "AC-4a — A non-existent email leaves the security question field empty and disabled",
+          "file": "features/epic-scrum-16-customer-support.feature"
+        },
+        "state": "no test"
+      },
+      {
+        "id": "D10",
+        "covers": "AC-4",
+        "type": "security",
+        "technique": "equivalence-partitioning",
+        "expectFail": false,
+        "scenario": {
+          "title": "AC-4b — The form gives no sign of whether an email has an account before the question is answered",
+          "file": "features/epic-scrum-16-customer-support.feature"
+        },
+        "state": "no test"
+      },
+      {
+        "id": "D11",
+        "covers": "story",
+        "type": "accessibility",
+        "technique": "checklist-based",
+        "expectFail": false,
+        "scenario": {
+          "title": "AC-6 — Forgot Password page passes accessibility checks",
+          "file": "features/epic-scrum-16-customer-support.feature"
+        },
+        "state": "no test"
+      }
+    ],
+    "uncoveredCriteria": [
+      "AC-1",
+      "AC-2",
+      "AC-3",
+      "AC-4"
+    ],
+    "outsideDesign": [],
+    "bugs": [
+      {
+        "id": "SCRUM-28",
+        "state": "In Progress",
+        "title": "Order tracking shows any order to anyone who has its number, signed in or not"
+      },
+      {
+        "id": "SCRUM-12",
+        "state": "In Progress",
+        "title": "Session token is still accepted after logout"
+      }
+    ]
+  }
+]
