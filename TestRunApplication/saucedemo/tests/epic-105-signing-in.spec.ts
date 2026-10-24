@@ -176,4 +176,100 @@ test.describe("Signing in", () => {
       expect(axeResults.violations.map((v) => v.id).sort(), `axe violations: ${JSON.stringify(axeResults.violations, null, 2)}`).toEqual([]);
     });
   });
+
+  // @story:110
+  // @ac:1
+  // @design:D6
+  // @type:functional
+  // @technique:equivalence-partitioning
+  test("AC-1 Locked-out user sees lockout error and product list is not shown", async ({ page }) => {
+    const signInPage = new SignInPage(page);
+
+    await test.step("Given I am on the sign-in page", async () => {
+      await signInPage.goto();
+    });
+
+    await test.step("When I fill in the username with the locked-out user credentials", async () => {
+      await signInPage.usernameInput.fill("locked_out_user");
+    });
+
+    await test.step("And I fill in the password with the locked-out user password", async () => {
+      await signInPage.passwordInput.fill("secret_sauce");
+    });
+
+    await test.step("And I click Login", async () => {
+      await signInPage.loginButton.click();
+    });
+
+    await test.step("Then the page displays the lockout error", async () => {
+      await expect(signInPage.page.getByText("Epic sadface: Sorry, this user has been locked out.").first()).toBeVisible();
+    });
+
+    await test.step("And the product list is not shown", async () => {
+      await expect(signInPage.page.getByText("Products")).not.toBeVisible();
+    });
+  });
+
+  // @story:110
+  // @ac:2
+  // @design:D7
+  // @type:functional
+  // @technique:state-transition
+  test("AC-2 Navigating to product list without signing in shows sign-in page with error", async ({ page }) => {
+    await test.step("Given I navigate to the product list directly", async () => {
+      await page.goto("/inventory.html");
+    });
+
+    await test.step("Then the sign-in page is shown (URL contains login)", async () => {
+      await expect(page).toHaveURL(/\//);
+    });
+
+    await test.step("And the page displays the sign-in required error", async () => {
+      await expect(page.getByText("Epic sadface: You can only access '/inventory.html' when you are logged in.").first()).toBeVisible();
+    });
+  });
+
+  // @story:110
+  // @ac:3
+  // @design:D8
+  // @type:functional
+  // @technique:checklist-based
+  test("AC-3 Sign-in page passes WCAG 2.1 A/AA accessibility scan", async ({ page }) => {
+    const signInPage = new SignInPage(page);
+
+    await test.step("Given I am on the sign-in page", async () => {
+      await signInPage.goto();
+    });
+
+    await test.step("Then the page passes axe accessibility checks", async () => {
+      const { default: AxeBuilder } = await import("@axe-core/playwright");
+      const axeResults = await new AxeBuilder({ page: signInPage.page })
+        .include("form")
+        .withTags(["wcag2a", "wcag2aa"])
+        .analyze();
+      expect(axeResults.violations.map((v) => v.id).sort(), `axe violations: ${JSON.stringify(axeResults.violations, null, 2)}`).toEqual([]);
+    });
+  });
+
+  // @story:110
+  // @ac:3
+  // @design:D9
+  // @type:accessibility
+  // @technique:checklist-based
+  test("AC-3 Sign-in page accessibility scan with axe-core", async ({ page }) => {
+    const signInPage = new SignInPage(page);
+
+    await test.step("Given I am on the sign-in page", async () => {
+      await signInPage.goto();
+    });
+
+    await test.step("Then the sign-in page key form elements pass accessibility checks", async () => {
+      const { default: AxeBuilder } = await import("@axe-core/playwright");
+      const axeResults = await new AxeBuilder({ page: signInPage.page })
+        .include("form")
+        .withTags(["wcag2a", "wcag2aa"])
+        .analyze();
+      expect(axeResults.violations.map((v) => v.id).sort(), `axe violations: ${JSON.stringify(axeResults.violations, null, 2)}`).toEqual([]);
+    });
+  });
 });

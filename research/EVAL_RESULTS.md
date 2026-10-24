@@ -45,12 +45,15 @@ it reached the approver. "Route" A = tests written, B = existing tests run.
 | Juice Shop | SCRUM-22 | | 2 (b14f27e) | 20261024T174531Z-c2e558ab | A | 5 | 4/4 | 2 | none run | 0 | 0 | **blocked** (agent loop, F-0109) |
 | Juice Shop | SCRUM-22 | | 3 (b14f27e) | 20261024T181310Z-4499b9c2 | A | 5 | 4/4 | 1 | 2/5 | 0 | 0 | **blocked** (agent loop, F-0111) |
 | SauceDemo | AB#110 locked out | a11y/security (shared epic) | 1 (885977c) | 20261024T182021Z-1a5fdca4 | A2 | 4 | 3/3 | 4 | 9/9 | 0 | 0 | **done**; D8 duplicate scan (F-0112) |
+| SauceDemo | AB#110 | | 2 (885977c) | 20261024T222706Z-b770554f | A2 | 4 | 3/3 | 3 | 9/9 | 0 | 0 | **done**; 2 weakening attempts refused (F-0114) |
+| Juice Shop | SCRUM-23 forgot password | a11y/security (shared epic) | 1 (755c270) | 20261024T224232Z-c54b85dd | A2 | 6 | 4/4 | 2 | 9/11 (AC-2 text; SCRUM-22 slider) | 0 (1 duplicate refused) | 0 | **done**; AC-2 to reviewer (F-0115) |
+| SauceDemo | AB#110 | | 3 (755c270) | 20261024T225139Z-7b3661c2 | A2 | 4 | 3/3 | 3 | 9/9 | 0 | 0 | **done** |
 
 Suite counts are for the whole epic spec (19 tests), not only the story's own.
 One of the 19 is the expected failure for open bug SCRUM-12, which reproduced
 in every run and counts as passed.
 
-Progress: 25 of 144 story runs (Juice Shop 21, SauceDemo 4). SCRUM-18 run 1 took three attempts: the first two were blocked by engine defects (F-0089, F-0091) and are kept as evidence; the third is the counted run.
+Progress: 28 of 144 story runs (Juice Shop 22, SauceDemo 6). SCRUM-18 run 1 took three attempts: the first two were blocked by engine defects (F-0089, F-0091) and are kept as evidence; the third is the counted run.
 
 ## 2. Excluded runs
 

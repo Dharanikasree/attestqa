@@ -37,3 +37,27 @@ Feature: Signing in
   Scenario: AC-story Sign-in page passes accessibility checks
     Given I am on the sign-in page
     Then the page passes axe accessibility checks
+
+  @story:110 @ac:1 @design:D6 @type:functional @technique:equivalence-partitioning
+  Scenario: AC-1 Locked-out user sees lockout error and product list is not shown
+    Given I am on the sign-in page
+    When I fill in the username with the locked-out user credentials
+    And I fill in the password with the locked-out user password
+    And I click "Login"
+    Then the page displays "Epic sadface: Sorry, this user has been locked out."
+
+  @story:110 @ac:2 @design:D7 @type:functional @technique:state-transition
+  Scenario: AC-2 Navigating to product list without signing in shows sign-in page with error
+    Given I navigate to the product list directly
+    Then the URL contains "/"
+    And the page displays "Epic sadface: You can only access '/inventory.html' when you are logged in."
+
+  @story:110 @ac:3 @design:D8 @type:functional @technique:checklist-based
+  Scenario: AC-3 Sign-in page passes WCAG 2.1 A/AA accessibility scan
+    Given I am on the sign-in page
+    Then the page passes axe accessibility checks
+
+  @story:110 @ac:3 @design:D9 @type:accessibility @technique:checklist-based
+  Scenario: AC-3 Sign-in page accessibility scan with axe-core
+    Given I am on the sign-in page
+    Then the page passes axe accessibility checks
