@@ -668,6 +668,27 @@ describe("a new story in a spec other stories already fill (20261012T192216Z)", 
     expect(appendOnlySpec(write(OLD.replace("    expect(1).toBe(1);\n", "")), events)).toMatch(
       /lose an assertion/,
     );
+    // 20261024T124403Z: the run's own new test may be corrected; the old one may not.
+    const mine = added("  // @story:SCRUM-6\n  // @design:D6");
+    const withMine = [
+      ...events,
+      {
+        eventId: 3,
+        kind: "call",
+        payload: { server: "fs", toolName: "write_file", args: { path: PATH, content: mine }, startedAt: 0 },
+      },
+      {
+        eventId: 4,
+        kind: "observation",
+        payload: { eventIdOfCall: 3, ok: true, result: {}, artefacts: [], durationMs: 1 },
+      },
+    ] as unknown as AnyRunEvent[];
+    expect(
+      appendOnlySpec(write(mine.replace("expect(2).toBe(2)", "expect(3).toBe(3)")), withMine),
+    ).toBeUndefined();
+    expect(
+      appendOnlySpec(write(mine.replace("    expect(1).toBe(1);\n", "")), withMine),
+    ).toMatch(/lose an assertion/);
   });
 });
 

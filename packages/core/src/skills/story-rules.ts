@@ -2666,6 +2666,25 @@ function analyzedSinceLastFeatureWrite(events: AnyRunEvent[], path: string): boo
  * with every assertion they had; each test that is new carries the @design tag
  * of one of the items being completed.
  */
+/**
+ * The tests a file held when this run first looked at it, if the run's first
+ * contact with the file was a complete read. Undefined when the run wrote or
+ * edited the file before ever reading it whole: then what was there is not
+ * known, and every test counts as already there.
+ */
+function titlesAtRunStart(path: string, events: AnyRunEvent[]): Set<string> | undefined {
+  for (const c of completedCalls(events)) {
+    if (!c.ok || String(c.args["path"] ?? "") !== path) continue;
+    if (c.toolName === "fs.read_file") {
+      if (isPartialRead(c.args, c.result)) continue;
+      const content = asRecord(c.result)?.["content"];
+      return typeof content === "string" ? new Set(testsByTitle(content).keys()) : undefined;
+    }
+    if (c.toolName === "fs.write_file" || c.toolName === "fs.replace_in_file") return undefined;
+  }
+  return undefined;
+}
+
 export function appendOnlySpec(
   call: { toolName: string; args: Record<string, unknown> },
   events: AnyRunEvent[],
@@ -2686,9 +2705,18 @@ export function appendOnlySpec(
   const was = testsByTitle(before);
   const now = testsByTitle(after);
 
+  // "Already in this spec" means there when the run began. A test this run
+  // wrote is the run's own work in progress: correcting it — here, replacing a
+  // guessed confirmation text with the one the page shows — is not editing
+  // someone else's test, and the rules that guard a new test against
+  // weakening (the design claims, quarantine, passing tests) still apply to it.
+  // In 20261024T124403Z the run's own review test was refused five times as an
+  // existing test losing an assertion, and the run blocked.
+  const atStart = titlesAtRunStart(path, events);
   const lost: string[] = [];
   const weakened: string[] = [];
   for (const [title, body] of was) {
+    if (atStart !== undefined && !atStart.has(title)) continue;
     const next = now.get(title);
     if (next === undefined) {
       lost.push(title);
