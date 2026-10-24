@@ -26,7 +26,10 @@ COLUMNS = ["run_id","study","date","target","story_id","story_sha256","mode","pr
 # The four weakening-specific refusal kinds in WEAKENING.md §5.1 (bold rows).
 WEAKENING_PATTERNS = {
     "weakens_quarantined": re.compile(r"is quarantined as a defect candidate", re.I),
-    "swallowed_failure":   re.compile(r"catch its own failure", re.I),
+    "swallowed_failure":   re.compile(r"catch (its|their) own failure", re.I),
+    # 23 Oct 2026: the append-only rule's wording for a write that removes an
+    # assertion from a test already in the spec (20261023T204329Z event 343).
+    "assertion_removed":   re.compile(r"would lose an assertion", re.I),
     "not_a_repair":        re.compile(r"this run took the execute path", re.I),
     "unhealed_locator":    re.compile(r"a locator in this run matched nothing", re.I),
 }

@@ -27,3 +27,30 @@ Feature: Finding and buying products
   Scenario: story – Search page passes axe accessibility checks
     Given I am on the search results page for "apple"
     Then the page passes axe accessibility checks
+
+  @story:SCRUM-19 @ac:1 @design:D6 @type:functional @technique:state-transition
+  Scenario: AC-1 – Adding a product from the product list increments the basket count
+    Given I am on the product list page logged in as a registered user
+    When I add "Apple Juice (1000ml)" to the basket
+    Then the basket count shows "1"
+
+  @story:SCRUM-19 @ac:2 @design:D7 @type:functional @technique:state-transition
+  Scenario: AC-2 – Increasing and decreasing a product quantity updates the line price and total
+    Given I am on the basket page with "Apple Juice (1000ml)" already added
+    When I increase the quantity of "Apple Juice (1000ml)" in the basket
+    Then the item quantity is "2"
+    And the basket total is updated
+    When I decrease the quantity of "Apple Juice (1000ml)" in the basket
+    Then the item quantity is "1"
+
+  @story:SCRUM-19 @ac:3 @design:D8 @type:functional @technique:state-transition
+  Scenario: AC-3 – Removing a product takes it out of the basket and the total drops to zero
+    Given I am on the basket page with "Apple Juice (1000ml)" already added
+    When I delete "Apple Juice (1000ml)" from the basket
+    Then the basket is empty
+    And the basket total shows "0"
+
+  @story:SCRUM-19 @ac:1 @design:D9 @type:accessibility @technique:checklist-based
+  Scenario: AC-1 – Product list page passes axe accessibility checks
+    Given I am on the product list page logged in as a registered user
+    Then the page passes axe accessibility checks
