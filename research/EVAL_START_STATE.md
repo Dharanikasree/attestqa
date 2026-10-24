@@ -35,6 +35,16 @@ measures nothing new: the first attempt at run 2 of SCRUM-6, 20261022T171911Z-a0
 did exactly that and is kept in `runs/_excluded/`. Run 1 of every story stays in
 `.aqa-eval`, so later stories still see the earlier stories' run 1, as planned.
 
+From 24 Oct two applications run at the same time, in two terminals, to use the
+days better: Juice Shop with SauceDemo, then Toolshop with SauceDemo. Booker always
+runs alone, because its restart kills every java.exe and node.exe on the machine.
+Each application has its own ledgers so that nothing overlaps on disk:
+Juice Shop and Toolshop share `.aqa-eval` (one Jira history, as before),
+SauceDemo uses `.aqa-eval-sd` with repeats in `.aqa-eval-sd-r2` and `-r3`, and
+Booker will use `.aqa-eval-rb` the same way. Two runs at once share the machine's
+CPU and browser, which can affect timing (flakes, timeouts); the manifest's dates
+and `runs-cost.csv` wall times show which runs overlapped.
+
 The run's working files are reset by git: runs 2 and 3 of a story start from
 the commit made before run 1 (`git stash` or `git checkout -- TestRunApplication/<app>`
 after archiving run 1's ledger and files).

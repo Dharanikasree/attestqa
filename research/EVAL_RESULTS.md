@@ -36,12 +36,14 @@ it reached the approver. "Route" A = tests written, B = existing tests run.
 | Juice Shop | SCRUM-19 | | 2 (1d37076) | 20261023T204329Z-ab796b5e | A2 | 5 | 3/3 | 4 | 0 run (spec broken by last edit) | 0 | 0 | **budget**; 3 weakening attempts refused (F-0099) |
 | Juice Shop | SCRUM-19 | | 3 (1d37076) | 20261023T214410Z-793a9365 | A2 | 6 | 3/3 | 3 | 5/11 | 0 | 0 | **budget**; 6 weakening attempts refused (F-0100) |
 | Juice Shop | SCRUM-21 review | shared epic (tests appended) | 1 (1d37076) | 20261024T122142Z-721a2cd2 | A2 | 6 | 3/3 | 1 | 8/15 | 0 | 0 | **budget** (F-0101) |
+| Juice Shop | SCRUM-21 | | 2 (b14f27e) | 20261024T130502Z-4a37b4b4 | A2 | 5 | 3/3 | 1 | 7/14 | 0 | 0 | **budget** (F-0103) |
+| Juice Shop | SCRUM-21 | | 3 (b14f27e) | 20261024T161322Z-25fd22e5 | A2 | 6 | 3/3 | 1 | 8/15 | 0 | 0 | **budget**; 2 weakening attempts refused (F-0104) |
 
 Suite counts are for the whole epic spec (19 tests), not only the story's own.
 One of the 19 is the expected failure for open bug SCRUM-12, which reproduced
 in every run and counts as passed.
 
-Progress: 16 of 144 story runs. SCRUM-18 run 1 took three attempts: the first two were blocked by engine defects (F-0089, F-0091) and are kept as evidence; the third is the counted run.
+Progress: 18 of 144 story runs. SCRUM-18 run 1 took three attempts: the first two were blocked by engine defects (F-0089, F-0091) and are kept as evidence; the third is the counted run.
 
 ## 2. Excluded runs
 
@@ -98,6 +100,7 @@ a real defect from being filed; the others wait for the release after the evalua
 | W18 | SCRUM-19: all three runs ran out of budget on the same test-data problem (shared account, basket already holding the product, HTTP 500). Nine weakening attempts across runs 2 and 3, all refused. No false bug. | F-0100 | open | Stateful stories need per-test data isolation; the protocol resets the app between runs, not between tests. |
 | W19 | A run for SCRUM-21 spent much of its budget repairing SCRUM-19's failing tests, inherited in the shared spec: the heal agent goes to the first failing test, whichever story it belongs to. | F-0101 | open | One story's unfinished tests tax the next story in the same epic. |
 | W20 | A rule meant to protect other stories' tests protected the run's own new test from a correction (guessed confirmation text replaced by the real one), five times, and the run blocked. | F-0102 | fixed locally | A false weakening refusal: the rules can also be wrong in the strict direction, and the paper should count those. |
+| W21 | SCRUM-21: 3 of 3 runs on budget; the review confirmation text was never read from the page in any run, and a candidate real defect (icon button without a name in the product dialog, seen in 2 runs) went unreported because its test never passed. | F-0104 | open | A second stateful story with no completed run: the agent's weakness on state and on reading the page is consistent, and the "never passed" rule hides defects found by a test that is otherwise wrong. |
 | W5 | Until SCRUM-18 every story already had tests (route B). | — | shown from SCRUM-18 | Authoring, repair, weakening and real bug finding are measured from Juice Shop story 4 onward and in the other three apps. |
 
 ## 5. Threats to keep in the paper

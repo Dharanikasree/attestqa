@@ -155,7 +155,7 @@ test.describe("Finding and buying products", () => {
     // After click: assert the basket count in the top bar shows "1"
     // The shopping cart button text updates to "Your Basket 1" after adding
     await expect(
-      page.getByRole("button", { name: /Your Basket/ })
+      page.getByRole("button", { name: "Show the shopping cart" })
     ).toContainText("1");
   });
 
@@ -256,10 +256,27 @@ test.describe("Finding and buying products", () => {
     const token = loginBody?.authentication?.token;
     expect(token, "Precondition: token must be present").toBeTruthy();
 
+    const bid = loginBody?.authentication?.bid;
+    expect(bid, "Precondition: basket ID must be present in login response").toBeTruthy();
+
+    // Clear the basket first to avoid 500 from duplicate items
+    const basketResp = await apiContext.get(`/rest/basket/${bid}`, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    if (basketResp.status() < 300) {
+      const basketBody = await basketResp.json();
+      const existingItems: Array<{ id: number }> = basketBody?.data?.Products?.map((p: { BasketItem: { id: number } }) => ({ id: p.BasketItem.id })) ?? [];
+      for (const item of existingItems) {
+        await apiContext.delete(`/api/BasketItems/${item.id}`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+      }
+    }
+
     // Add Apple Juice (product id=1) to basket via API
     const addResp = await apiContext.post("/api/BasketItems/", {
       headers: { Authorization: `Bearer ${token}` },
-      data: { ProductId: 1, BasketId: loginBody?.authentication?.bid, quantity: 1 },
+      data: { ProductId: 1, BasketId: bid, quantity: 1 },
     });
     expect(addResp.status(), "Precondition: adding Apple Juice to basket via API must succeed").toBeLessThan(300);
     await apiContext.dispose();
@@ -289,6 +306,316 @@ test.describe("Finding and buying products", () => {
 
     // Total price should be 0
     await expect(page.getByText(/Total Price:\s*0/)).toBeVisible();
+  });
+
+  // @story:SCRUM-21
+  // @ac:1
+  // @design:D10
+  // @type:functional
+  // @technique:state-transition
+  test("AC-1 – Signed-in customer submits a review and a confirmation is shown", async ({ page }) => {
+    const baseURL = process.env["AQA_APP_URL"] || "http://localhost:3100";
+
+    // Precondition: sign in via API and confirm authentication succeeded
+    const apiContext = await playwrightRequest.newContext({ baseURL });
+    const loginResp = await apiContext.post("/rest/user/login", {
+      data: { email: process.env["AQA_APP_USER"], password: process.env["AQA_APP_PASS"] },
+    });
+    expect(loginResp.status(), "Precondition: login must succeed (200) — check AQA_APP_USER / AQA_APP_PASS").toBe(200);
+    const loginBody = await loginResp.json();
+    const token = loginBody?.authentication?.token;
+    expect(token, "Precondition: authentication token must be present in login response").toBeTruthy();
+    await apiContext.dispose();
+
+    // Authenticate the browser session
+    await page.goto("/#/");
+    await page.evaluate((t) => { localStorage.setItem("token", t); }, token);
+
+    // Navigate to the product list
+    await page.goto("/#/");
+
+    // Dismiss cookie banner if present
+    const cookieBtn = page.getByRole("button", { name: "Me want it!" });
+    if (await cookieBtn.isVisible()) await cookieBtn.click();
+
+    // Wait for products to load
+    await expect(page.locator("mat-card").first()).toBeVisible();
+
+    // Open the product detail for the first product
+    const firstProductBtn = page.getByRole("button", { name: "Click for more information about the product" }).first();
+    await expect(firstProductBtn, "Precondition: product detail button must be visible").toBeVisible();
+    await firstProductBtn.click();
+
+    // Wait for the product detail dialog to open
+    await expect(page.locator("mat-dialog-container")).toBeVisible();
+
+    // Find the review text area and enter a review
+    const reviewField = page.locator("mat-dialog-container").locator("textarea");
+    await expect(reviewField, "Precondition: review text area must be visible in product detail").toBeVisible();
+    await reviewField.fill("This is a great product!");
+
+    // Click Submit
+    const submitBtn = page.locator("mat-dialog-container").getByRole("button", { name: "Send the review" });
+    await expect(submitBtn).toBeEnabled();
+    await submitBtn.click();
+
+    // Assert: confirmation is shown (state after action)
+    await expect(page.getByText("Thank you for your review")).toBeVisible();
+  });
+
+  // @story:SCRUM-21
+  // @ac:2
+  // @design:D11
+  // @type:functional
+  // @technique:state-transition
+  test("AC-2 – Submitted review is listed with the customer's email as author", async ({ page }) => {
+    const baseURL = process.env["AQA_APP_URL"] || "http://localhost:3100";
+
+    // Precondition: sign in via API
+    const apiContext = await playwrightRequest.newContext({ baseURL });
+    const loginResp = await apiContext.post("/rest/user/login", {
+      data: { email: process.env["AQA_APP_USER"], password: process.env["AQA_APP_PASS"] },
+    });
+    expect(loginResp.status(), "Precondition: login must succeed (200) — check AQA_APP_USER / AQA_APP_PASS").toBe(200);
+    const loginBody = await loginResp.json();
+    const token = loginBody?.authentication?.token;
+    expect(token, "Precondition: authentication token must be present in login response").toBeTruthy();
+    await apiContext.dispose();
+
+    // Record email for author check
+    const email = process.env["AQA_APP_USER"];
+    expect(email, "Precondition: AQA_APP_USER must be set").toBeTruthy();
+
+    // Authenticate the browser session
+    await page.goto("/#/");
+    await page.evaluate((t) => { localStorage.setItem("token", t); }, token);
+
+    // Navigate to the product list
+    await page.goto("/#/");
+
+    // Dismiss cookie banner if present
+    const cookieBtn = page.getByRole("button", { name: "Me want it!" });
+    if (await cookieBtn.isVisible()) await cookieBtn.click();
+
+    // Wait for products to load
+    await expect(page.locator("mat-card").first()).toBeVisible();
+
+    // Open the product detail for the first product
+    const firstProductBtn = page.getByRole("button", { name: "Click for more information about the product" }).first();
+    await expect(firstProductBtn, "Precondition: product detail button must be visible").toBeVisible();
+    await firstProductBtn.click();
+
+    // Wait for the product detail dialog to open
+    await expect(page.locator("mat-dialog-container")).toBeVisible();
+
+    // Find the review text area and enter a unique review
+    const reviewField = page.locator("mat-dialog-container").locator("textarea");
+    await expect(reviewField, "Precondition: review text area must be visible in product detail").toBeVisible();
+    const uniqueReview = "Review for author check " + Date.now();
+    await reviewField.fill(uniqueReview);
+
+    // Click Submit
+    const submitBtn = page.locator("mat-dialog-container").getByRole("button", { name: "Send the review" });
+    await expect(submitBtn).toBeEnabled();
+    await submitBtn.click();
+
+    // Assert: confirmation shown (action took effect)
+    await expect(page.getByText("Thank you for your review")).toBeVisible();
+
+    // Now verify: the submitted review is listed with the customer's email as author
+    // Expand the reviews section
+    const reviewsExpander = page.locator("mat-dialog-container").locator("mat-expansion-panel");
+    if (await reviewsExpander.isVisible()) {
+      await reviewsExpander.click();
+    }
+
+    // Assert the review text and author email are visible
+    await expect(page.locator("mat-dialog-container").getByText(uniqueReview)).toBeVisible();
+    await expect(page.locator("mat-dialog-container").getByText(email!)).toBeVisible();
+  });
+
+  // @story:SCRUM-21
+  // @ac:3
+  // @design:D12
+  // @type:functional
+  // @technique:boundary-value-analysis
+  test("AC-3 – Submit button is disabled when the review text is empty", async ({ page }) => {
+    const baseURL = process.env["AQA_APP_URL"] || "http://localhost:3100";
+
+    // Precondition: sign in via API
+    const apiContext = await playwrightRequest.newContext({ baseURL });
+    const loginResp = await apiContext.post("/rest/user/login", {
+      data: { email: process.env["AQA_APP_USER"], password: process.env["AQA_APP_PASS"] },
+    });
+    expect(loginResp.status(), "Precondition: login must succeed (200) — check AQA_APP_USER / AQA_APP_PASS").toBe(200);
+    const loginBody = await loginResp.json();
+    const token = loginBody?.authentication?.token;
+    expect(token, "Precondition: authentication token must be present in login response").toBeTruthy();
+    await apiContext.dispose();
+
+    // Authenticate the browser session
+    await page.goto("/#/");
+    await page.evaluate((t) => { localStorage.setItem("token", t); }, token);
+
+    // Navigate to the product list
+    await page.goto("/#/");
+
+    // Dismiss cookie banner if present
+    const cookieBtn = page.getByRole("button", { name: "Me want it!" });
+    if (await cookieBtn.isVisible()) await cookieBtn.click();
+
+    // Wait for products to load
+    await expect(page.locator("mat-card").first()).toBeVisible();
+
+    // Open the product detail for the first product
+    const firstProductBtn = page.getByRole("button", { name: "Click for more information about the product" }).first();
+    await expect(firstProductBtn, "Precondition: product detail button must be visible").toBeVisible();
+    await firstProductBtn.click();
+
+    // Wait for the product detail dialog to open
+    await expect(page.locator("mat-dialog-container")).toBeVisible();
+
+    // Assert the review field is visible and empty
+    const reviewField = page.locator("mat-dialog-container").locator("textarea");
+    await expect(reviewField, "Precondition: review text area must be visible").toBeVisible();
+
+    // Assert: Submit button is disabled when review text is empty (boundary: empty input)
+    const submitBtn = page.locator("mat-dialog-container").getByRole("button", { name: "Send the review" });
+    await expect(submitBtn, "Submit button must be disabled when review text is empty").toBeDisabled();
+  });
+
+  // @story:SCRUM-21
+  // @ac:1
+  // @design:D13
+  // @type:security
+  // @technique:equivalence-partitioning
+  test("AC-1a – A customer who is not signed in cannot write a review", async ({ page }) => {
+    // Navigate to the product list as a guest (no login)
+    await page.goto("/#/");
+
+    // Dismiss cookie banner if present
+    const cookieBtn = page.getByRole("button", { name: "Me want it!" });
+    if (await cookieBtn.isVisible()) await cookieBtn.click();
+
+    // Wait for products to load
+    await expect(page.locator("mat-card").first()).toBeVisible();
+
+    // Open the product detail for the first product
+    const firstProductBtn = page.getByRole("button", { name: "Click for more information about the product" }).first();
+    await expect(firstProductBtn, "Precondition: product detail button must be visible").toBeVisible();
+    await firstProductBtn.click();
+
+    // Wait for the product detail dialog to open
+    await expect(page.locator("mat-dialog-container")).toBeVisible();
+
+    // Assert: review textarea is not visible to a guest user
+    const reviewField = page.locator("mat-dialog-container").locator("textarea");
+    await expect(reviewField, "Review field must not be visible to a guest (unauthenticated) user").not.toBeVisible();
+  });
+
+  // @story:SCRUM-21
+  // @design:D14
+  // @type:accessibility
+  // @technique:checklist-based
+  test("story – Product detail page passes axe accessibility checks", async ({ page }) => {
+    const baseURL = process.env["AQA_APP_URL"] || "http://localhost:3100";
+
+    // Precondition: sign in via API
+    const apiContext = await playwrightRequest.newContext({ baseURL });
+    const loginResp = await apiContext.post("/rest/user/login", {
+      data: { email: process.env["AQA_APP_USER"], password: process.env["AQA_APP_PASS"] },
+    });
+    expect(loginResp.status(), "Precondition: login must succeed (200) — check AQA_APP_USER / AQA_APP_PASS").toBe(200);
+    const loginBody = await loginResp.json();
+    const token = loginBody?.authentication?.token;
+    expect(token, "Precondition: authentication token must be present in login response").toBeTruthy();
+    await apiContext.dispose();
+
+    // Authenticate the browser session
+    await page.goto("/#/");
+    await page.evaluate((t) => { localStorage.setItem("token", t); }, token);
+
+    // Navigate to the product list
+    await page.goto("/#/");
+
+    // Dismiss cookie banner if present
+    const cookieBtn = page.getByRole("button", { name: "Me want it!" });
+    if (await cookieBtn.isVisible()) await cookieBtn.click();
+
+    // Wait for products to load
+    await expect(page.locator("mat-card").first()).toBeVisible();
+
+    // Open the product detail for the first product
+    const firstProductBtn = page.getByRole("button", { name: "Click for more information about the product" }).first();
+    await expect(firstProductBtn, "Precondition: product detail button must be visible").toBeVisible();
+    await firstProductBtn.click();
+
+    // Wait for the product detail dialog to open
+    await expect(page.locator("mat-dialog-container")).toBeVisible();
+
+    // Run axe scan scoped to the product detail dialog
+    const { default: AxeBuilder } = await import("@axe-core/playwright");
+    const axeResults = await new AxeBuilder({ page })
+      .include("mat-dialog-container")
+      .withTags(["wcag2a", "wcag2aa"])
+      .analyze();
+    expect(
+      axeResults.violations.map((v) => v.id).sort(),
+      `axe violations: ${JSON.stringify(axeResults.violations, null, 2)}`
+    ).toEqual([]);
+  });
+
+  // @story:SCRUM-21
+  // @bug:SCRUM-12
+  // @design:D15
+  // @type:confirmation
+  // @technique:state-transition
+  test("bug #SCRUM-12 – Session token is no longer accepted after logout", async ({ page }) => {
+    test.fail(true, "Bug #SCRUM-12 Active: Session token is still accepted after logout");
+
+    const baseURL = process.env["AQA_APP_URL"] || "http://localhost:3100";
+
+    // Precondition: sign in via API
+    const apiContext = await playwrightRequest.newContext({ baseURL });
+    const loginResp = await apiContext.post("/rest/user/login", {
+      data: { email: process.env["AQA_APP_USER"], password: process.env["AQA_APP_PASS"] },
+    });
+    expect(loginResp.status(), "Precondition: login must succeed (200) — check AQA_APP_USER / AQA_APP_PASS").toBe(200);
+    const loginBody = await loginResp.json();
+    const token = loginBody?.authentication?.token;
+    expect(token, "Precondition: authentication token must be present in login response").toBeTruthy();
+    await apiContext.dispose();
+
+    // Authenticate the browser session
+    await page.goto("/#/");
+    await page.evaluate((t) => { localStorage.setItem("token", t); }, token);
+    await page.goto("/#/");
+
+    // Dismiss cookie banner if present
+    const cookieBtn = page.getByRole("button", { name: "Me want it!" });
+    if (await cookieBtn.isVisible()) await cookieBtn.click();
+
+    // Verify we are signed in (account menu visible)
+    await expect(page.getByRole("button", { name: /Show\/hide account menu|Account/i })).toBeVisible();
+
+    // Perform logout via the account menu
+    await page.getByRole("button", { name: /Show\/hide account menu|Account/i }).click();
+    const logoutItem = page.getByRole("menuitem", { name: /Logout/i });
+    await expect(logoutItem, "Logout menu item must be visible after opening account menu").toBeVisible();
+    await logoutItem.click();
+
+    // Confirm logout took effect: account menu should show login option, not account
+    await expect(page.getByRole("button", { name: /Show\/hide account menu|Account/i })).toBeVisible();
+
+    // Assert: the session token is no longer accepted by the API after logout
+    const apiContext2 = await playwrightRequest.newContext({ baseURL });
+    const whoamiResp = await apiContext2.get("/rest/user/whoami", {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    await apiContext2.dispose();
+
+    // The token should be rejected (not 200) after logout
+    expect(whoamiResp.status(), "Session token must be rejected after logout (bug #SCRUM-12 expects this to fail)").not.toBe(200);
   });
 
   // @story:SCRUM-19
