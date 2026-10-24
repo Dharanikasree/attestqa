@@ -42,12 +42,13 @@ it reached the approver. "Route" A = tests written, B = existing tests run.
 | SauceDemo | AB#109 | | 2 (b14f27e) | 20261024T172058Z-b8a75b25 | A | 5 | 3/3 | 1 | 5/5 | 0 | 0 | done; 2 review items (F-0106) |
 | Juice Shop | SCRUM-22 feedback | new area (new epic) | 1 (b14f27e) | 20261024T163453Z-12a0896d | A | 5 | 4/4 | 1 | 3/5 (a11y fails: real defect; AC-2 test fault) | **1 (SCRUM-36)** | 0 | **budget** (F-0107) |
 | SauceDemo | AB#109 | | 3 (b14f27e) | 20261024T174107Z-3ab2dfc4 | A | 5 | 3/3 | 1 | 5/5 | 0 | 0 | **done**, no review items |
+| Juice Shop | SCRUM-22 | | 2 (b14f27e) | 20261024T174531Z-c2e558ab | A | 5 | 4/4 | 2 | none run | 0 | 0 | **blocked** (agent loop, F-0109) |
 
 Suite counts are for the whole epic spec (19 tests), not only the story's own.
 One of the 19 is the expected failure for open bug SCRUM-12, which reproduced
 in every run and counts as passed.
 
-Progress: 22 of 144 story runs (Juice Shop 19, SauceDemo 3). SCRUM-18 run 1 took three attempts: the first two were blocked by engine defects (F-0089, F-0091) and are kept as evidence; the third is the counted run.
+Progress: 23 of 144 story runs (Juice Shop 20, SauceDemo 3). SCRUM-18 run 1 took three attempts: the first two were blocked by engine defects (F-0089, F-0091) and are kept as evidence; the third is the counted run.
 
 ## 2. Excluded runs
 
@@ -62,6 +63,8 @@ Not counted. Kept in `runs/_excluded/` with a manifest row marked `eval-excluded
 | 20261023T165205Z-c56cab94 | SCRUM-18 | Run 2 on build 010ec25: a real accessibility bug from a correctly scoped scan was dropped at the end by a check that read the spec from before the edit (F-0094). Repeated on the fixed build. |
 | 20261023T200016Z-80680779 | SCRUM-19 | Run 2 on build cb946a9: blocked by a rule deadlock before any test was written (F-0098). Repeated on the fixed build. |
 | 20261024T124403Z-c5afa13c | SCRUM-21 | Run 2 on build 1d37076: the append-only rule refused the run's correction of its own new test as an existing test losing an assertion (F-0102). Repeated on the fixed build. |
+| 20261024T175135Z-5e568372 | SCRUM-22 | Started again after run 2 blocked, without a reset: resumed from the feature file run 2 left behind (route A2) and reached 4/5. Not an independent run; kept as evidence of resume behaviour (F-0109). |
+| 20261024T175506Z-1b101475 | AB#110 | Run 1 on build b14f27e: 9/9 green, then blocked because the verifier did not count a navigation as the test's action while the design check had (F-0110). Repeated on the fixed build. |
 
 The SCRUM-6 pair are still evidence of something: an unchanged story is re-run without a
 new approval, which is the intended behaviour in real use.
@@ -106,6 +109,7 @@ a real defect from being filed; the others wait for the release after the evalua
 | W20 | A rule meant to protect other stories' tests protected the run's own new test from a correction (guessed confirmation text replaced by the real one), five times, and the run blocked. | F-0102 | fixed locally | A false weakening refusal: the rules can also be wrong in the strict direction, and the paper should count those. |
 | W21 | SCRUM-21: 3 of 3 runs on budget; the review confirmation text was never read from the page in any run, and a candidate real defect (icon button without a name in the product dialog, seen in 2 runs) went unreported because its test never passed. | F-0104 | open | A second stateful story with no completed run: the agent's weakness on state and on reading the page is consistent, and the "never passed" rule hides defects found by a test that is otherwise wrong. |
 | W22 | A completed run can still be weaker than its design: run 2 of AB#109 passed 5/5 with an unscoped scan and a half-asserted transition, both demoted to "for your review" instead of blocking. Repeats on Azure DevOps also reuse the first run's test cases, so tracker records are not independent across repeats. | F-0106 | open (design) | "Completed" needs qualifying in the results: count review items per completed run. |
+| W23 | The two halves of one rule disagreed: the design check accepted "navigates" as a state-transition action, the test check counted only clicks and fills, and a 9/9 green redirect test blocked the run as "performs no action". | F-0110 | fixed locally | Rules that judge the design and the test must share one vocabulary. |
 | W5 | Until SCRUM-18 every story already had tests (route B). | — | shown from SCRUM-18 | Authoring, repair, weakening and real bug finding are measured from Juice Shop story 4 onward and in the other three apps. |
 
 ## 5. Threats to keep in the paper

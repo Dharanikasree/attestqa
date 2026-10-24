@@ -448,6 +448,25 @@ describe("state transition means an action (20261019T155404Z)", () => {
     expect(shapeProblems(item, body).join(" ")).toContain("performs no action");
   });
 
+  it("counts navigation as the action when the design names navigation and nothing else (20261024T175506Z)", async () => {
+    const { shapeProblems } = await import("../src/design/test-design.js");
+    const item = {
+      id: "D7",
+      covers: "AC-2",
+      type: "functional" as const,
+      technique: "state-transition" as const,
+      conditions: ["User is not signed in", "User navigates directly to the product list URL"],
+      expected: "The browser is redirected to the sign-in page; an error saying sign-in is needed is shown",
+      source: "AC-2",
+    };
+    const body =
+      "await page.goto('/inventory.html'); await expect(page).toHaveURL(/\\/$/); await expect(page.getByText('logged in')).toBeVisible();";
+    expect(shapeProblems(item, body)).toEqual([]);
+    // Still a gap when the test asserts only one half after the navigation.
+    const half = "await page.goto('/inventory.html'); await expect(page).toHaveURL(/\\/$/);";
+    expect(shapeProblems(item, half).join(" ")).toContain("needs an assertion");
+  });
+
   it("quotes the design's expectation and never suggests an address check", async () => {
     const { shapeProblems } = await import("../src/design/test-design.js");
     const item = {

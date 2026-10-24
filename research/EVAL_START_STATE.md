@@ -45,6 +45,12 @@ Booker will use `.aqa-eval-rb` the same way. Two runs at once share the machine'
 CPU and browser, which can affect timing (flakes, timeouts); the manifest's dates
 and `runs-cost.csv` wall times show which runs overlapped.
 
+A run that ends blocked, on budget, or in any other way is not started again on the
+same workspace: its files are archived and the workspace is reset first, by Claude,
+so that the next run begins from the story's run-1 state. A second start on the
+files a stopped run left behind resumes that run (attestqa reads the feature file
+and continues) and is excluded from the counted runs (24 Oct, SCRUM-22).
+
 The run's working files are reset by git: runs 2 and 3 of a story start from
 the commit made before run 1 (`git stash` or `git checkout -- TestRunApplication/<app>`
 after archiving run 1's ledger and files).

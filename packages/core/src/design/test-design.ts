@@ -1095,7 +1095,21 @@ export function shapeProblems(item: DesignItem, body: string): string[] {
         /\.(click|dblclick|fill|press|check|uncheck|selectOption|setInputFiles|tap|hover)\s*\(/g,
       ),
     ];
-    const last = actions[actions.length - 1];
+    // Navigation is the action when the design says so and names no other:
+    // "user navigates directly to the product list URL" → redirected to sign-in
+    // (20261024T175506Z, a 9/9 run blocked for "performs no action" because
+    // the only verb in the test was page.goto). A goto before a click is setup,
+    // not the action, so it counts only when the conditions name navigation
+    // and nothing a hand would do on the page.
+    const conditionsText = (item.conditions ?? []).join(" ");
+    const navigationIsTheAction =
+      actions.length === 0 &&
+      /\b(navigat\w*|go(es)? to|went to|open\w*|visit\w*|load\w*|reload\w*)\b/i.test(conditionsText) &&
+      !/\b(click\w*|fill\w*|enter\w*|typ(e|es|ed|ing)|press\w*|select\w*|submit\w*|check\w*|toggl\w*|hover\w*)\b/i.test(
+        conditionsText,
+      );
+    const gotos = navigationIsTheAction ? [...body.matchAll(/\.(goto|reload|goBack|goForward)\s*\(/g)] : [];
+    const last = actions[actions.length - 1] ?? gotos[gotos.length - 1];
     // No action at all, though a state-transition item names one (the design
     // check makes sure it does). 20261019T200105Z passed a "page 2 control is
     // marked after clicking page 2" item with a test that never clicked and
