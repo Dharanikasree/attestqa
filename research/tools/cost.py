@@ -114,7 +114,9 @@ def one_run(run_dir: Path, manifest: dict):
     cov = run_dir / "coverage.json"
     if cov.exists() and story:
         try:
-            s = next((x for x in json.load(open(cov, encoding="utf-8")) if str(x.get("story")) == story), None)
+            # Azure DevOps stories are "AB#109" in the request and 109 in coverage.
+            want = story.replace("AB#", "")
+            s = next((x for x in json.load(open(cov, encoding="utf-8")) if str(x.get("story")) == want), None)
         except ValueError:
             s = None
         if s:

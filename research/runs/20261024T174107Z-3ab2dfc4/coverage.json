@@ -1,0 +1,128 @@
+[
+  {
+    "story": 109,
+    "title": "Customer signs in with a valid user",
+    "acceptanceCriteria": [
+      "AC-1",
+      "AC-2",
+      "AC-3"
+    ],
+    "designRun": "20261024T174107Z-3ab2dfc4",
+    "items": [
+      {
+        "id": "D1",
+        "covers": "AC-1",
+        "type": "functional",
+        "technique": "state-transition",
+        "expectFail": false,
+        "scenario": {
+          "title": "AC-1 Standard user signs in with correct password and sees the product list",
+          "file": "features/epic-105-signing-in.feature"
+        },
+        "test": {
+          "title": "AC-1 Standard user signs in with correct password and sees the product list",
+          "file": "tests/epic-105-signing-in.spec.ts"
+        },
+        "result": {
+          "status": "passed",
+          "runId": "20261024T174107Z-3ab2dfc4"
+        },
+        "state": "passing"
+      },
+      {
+        "id": "D2",
+        "covers": "AC-2",
+        "type": "functional",
+        "technique": "equivalence-partitioning",
+        "expectFail": false,
+        "scenario": {
+          "title": "AC-2 Wrong password shows credentials do not match error and no product list",
+          "file": "features/epic-105-signing-in.feature"
+        },
+        "test": {
+          "title": "AC-2 Wrong password shows credentials do not match error and no product list",
+          "file": "tests/epic-105-signing-in.spec.ts"
+        },
+        "result": {
+          "status": "passed",
+          "runId": "20261024T174107Z-3ab2dfc4"
+        },
+        "state": "passing"
+      },
+      {
+        "id": "D3",
+        "covers": "AC-3",
+        "type": "functional",
+        "technique": "boundary-value-analysis",
+        "expectFail": false,
+        "scenario": {
+          "title": "AC-3 Signing in with username empty shows an error saying the username is required",
+          "file": "features/epic-105-signing-in.feature"
+        },
+        "test": {
+          "title": "AC-3 Signing in with username empty shows an error saying the username is required",
+          "file": "tests/epic-105-signing-in.spec.ts"
+        },
+        "result": {
+          "status": "passed",
+          "runId": "20261024T174107Z-3ab2dfc4"
+        },
+        "state": "passing"
+      },
+      {
+        "id": "D4",
+        "covers": "bug #121",
+        "type": "confirmation",
+        "technique": "state-transition",
+        "expectFail": true,
+        "scenario": {
+          "title": "Bug 121 Problem user product images are distinct after sign-in",
+          "file": "features/epic-105-signing-in.feature"
+        },
+        "test": {
+          "title": "Bug 121 Problem user product images are distinct after sign-in",
+          "file": "tests/epic-105-signing-in.spec.ts"
+        },
+        "result": {
+          "status": "expected-failure",
+          "runId": "20261024T174107Z-3ab2dfc4"
+        },
+        "state": "known bug reproduced"
+      },
+      {
+        "id": "D5",
+        "covers": "story",
+        "type": "accessibility",
+        "technique": "checklist-based",
+        "expectFail": false,
+        "scenario": {
+          "title": "Story accessibility Sign-in page passes WCAG 2.1 A/AA automated scan",
+          "file": "features/epic-105-signing-in.feature"
+        },
+        "test": {
+          "title": "Story accessibility Sign-in page passes WCAG 2.1 A/AA automated scan",
+          "file": "tests/epic-105-signing-in.spec.ts"
+        },
+        "result": {
+          "status": "passed",
+          "runId": "20261024T174107Z-3ab2dfc4"
+        },
+        "state": "passing"
+      }
+    ],
+    "uncoveredCriteria": [],
+    "outsideDesign": [],
+    "bugs": [
+      {
+        "id": 121,
+        "state": "Active",
+        "title": "Problem user sees the same picture for every product"
+      },
+      {
+        "id": 122,
+        "state": "Active",
+        "title": "Error user cannot finish an order"
+      }
+    ]
+  }
+]
