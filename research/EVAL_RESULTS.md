@@ -55,12 +55,13 @@ it reached the approver. "Route" A = tests written, B = existing tests run.
 | SauceDemo | AB#111 | | 2 (755c270) | 20261025T013740Z-5e1b2f73 | A | 5 | 3/3 | 1 | none run | 0 | 0 | **blocked** (same-write loop, F-0121) |
 | Juice Shop | SCRUM-24 | | 2 (755c270) | 20261025T015928Z-3a10e0ff | A | 5 | 3/3 | 2 | 1/5 | 0 | 0 | **budget** (F-0122) |
 | SauceDemo | AB#111 | | 3 (755c270) | 20261025T020332Z-c558b3ea | A | 5 | 3/3 | 2 | 5/5 | 0 | 0 | **done** (F-0123) |
+| Juice Shop | SCRUM-24 | | 3 (755c270) | 20261025T180929Z-f224f55e | A | 4 | 3/3 | 3 | none run | 0 | 0 | **blocked** (re-read loop, F-0124) |
 
 Suite counts are for the whole epic spec (19 tests), not only the story's own.
 One of the 19 is the expected failure for open bug SCRUM-12, which reproduced
 in every run and counts as passed.
 
-Progress: 35 of 144 story runs (Juice Shop 26, SauceDemo 9). SCRUM-18 run 1 took three attempts: the first two were blocked by engine defects (F-0089, F-0091) and are kept as evidence; the third is the counted run.
+Progress: 36 of 144 story runs (Juice Shop 27, SauceDemo 9). SCRUM-18 run 1 took three attempts: the first two were blocked by engine defects (F-0089, F-0091) and are kept as evidence; the third is the counted run.
 
 ## 2. Excluded runs
 
@@ -124,7 +125,7 @@ a real defect from being filed; the others wait for the release after the evalua
 | W21 | SCRUM-21: 3 of 3 runs on budget; the review confirmation text was never read from the page in any run, and a candidate real defect (icon button without a name in the product dialog, seen in 2 runs) went unreported because its test never passed. | F-0104 | open | A second stateful story with no completed run: the agent's weakness on state and on reading the page is consistent, and the "never passed" rule hides defects found by a test that is otherwise wrong. |
 | W22 | A completed run can still be weaker than its design: run 2 of AB#109 passed 5/5 with an unscoped scan and a half-asserted transition, both demoted to "for your review" instead of blocking. Repeats on Azure DevOps also reuse the first run's test cases, so tracker records are not independent across repeats. | F-0106 | open (design) | "Completed" needs qualifying in the results: count review items per completed run. |
 | W23 | The two halves of one rule disagreed: the design check accepted "navigates" as a state-transition action, the test check counted only clicks and fills, and a 9/9 green redirect test blocked the run as "performs no action". | F-0110 | fixed locally | Rules that judge the design and the test must share one vocabulary. |
-| W24 | Five runs so far (SCRUM-22 runs 2 and 3, SCRUM-23 run 2, SCRUM-24 run 1, AB#111 run 2) ended in the same way: the agent, stuck on a failing test, proposed the same file read three cycles running until the no-progress guard stopped it. The guard works; the model's response to being stuck is to re-read, not to act. | F-0109, F-0111 | open | A failure mode of the agent, not of the rules; worth its own category in the results. |
+| W24 | Six runs so far (SCRUM-22 runs 2 and 3, SCRUM-23 run 2, SCRUM-24 runs 1 and 3, AB#111 run 2) ended in the same way: the agent, stuck on a failing test, proposed the same file read three cycles running until the no-progress guard stopped it. The guard works; the model's response to being stuck is to re-read, not to act. | F-0109, F-0111, F-0124 | open | A failure mode of the agent, not of the rules; worth its own category in the results. |
 | W25 | The "every criterion has a functional test" rule, applied to an accessibility criterion, made the agent add a functional item it then implemented as a second copy of the accessibility scan; the verifier accepted it. | F-0112 | open | A coverage rule can produce padding instead of coverage when a criterion's natural test type is not functional. |
 | W26 | Privacy masking in what the model sees made lines holding an e-mail address un-editable: the model copied the mask token into its edit, and the tool matched it literally. Eleven failed edits, then a block. | F-0113 | fixed locally | Two safety features (scrubbing and exact-match edits) conflicted; neither was wrong alone. |
 | W5 | Until SCRUM-18 every story already had tests (route B). | — | shown from SCRUM-18 | Authoring, repair, weakening and real bug finding are measured from Juice Shop story 4 onward and in the other three apps. |
@@ -155,6 +156,8 @@ of turns the rules refused, and cost per passing design item and per filed bug:
 Runs that were not counted (engine faults, repeats that reused a design) are kept
 there with `excluded` or `study = eval-excluded`, so their cost is reported, not hidden.
 
-So far (18 runs, 13 counted): total $24.08; runs not counted $9.22; turns the
-rules refused $5.70 (about a quarter of all spend), which is the price of the
-send-backs and refusals, paid before a human saw anything.
+So far (47 runs, 36 counted): total $118.94; runs not counted $20.45; turns the
+rules refused $20.12 (about a sixth of all spend), which is the price of the
+send-backs and refusals, paid before a human saw anything. Blocked runs that never
+ran a test (SCRUM-24 runs 1 and 3: $1.3 and $3.6) are the other cost governance
+does not recover: the guard stops the loop, but only after three idle cycles.
