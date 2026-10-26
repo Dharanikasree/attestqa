@@ -1,0 +1,99 @@
+Feature: Product list
+  As a customer I want to sort the products by name or price.
+
+  @story:111 @ac:1 @design:D1 @type:functional @technique:state-transition
+  Scenario: AC-1 Product list is sorted A to Z by name when it first opens
+    Given I am on the sign-in page
+    When I find the Username field and enter "standard_user"
+    And I find the Password field and enter "secret_sauce"
+    And I click "Login"
+    Then the page displays "Products"
+    And the sort dropdown shows "Name (A to Z)"
+    And the first product name comes before the last product name alphabetically
+
+  @story:111 @ac:2 @design:D2 @type:functional @technique:state-transition
+  Scenario: AC-2 Sorting by name Z to A reverses the order
+    Given I am on the sign-in page
+    When I find the Username field and enter "standard_user"
+    And I find the Password field and enter "secret_sauce"
+    And I click "Login"
+    Then the page displays "Products"
+    When I select "Name (Z to A)" from the sort dropdown
+    Then the sort dropdown shows "Name (Z to A)"
+    And the first product name comes after the last product name alphabetically
+
+  @story:111 @ac:3 @design:D3 @type:functional @technique:state-transition
+  Scenario: AC-3a Sorting by price low to high lists the cheapest product first
+    Given I am on the sign-in page
+    When I find the Username field and enter "standard_user"
+    And I find the Password field and enter "secret_sauce"
+    And I click "Login"
+    Then the page displays "Products"
+    When I select "Price (low to high)" from the sort dropdown
+    Then the sort dropdown shows "Price (low to high)"
+    And the first product price is less than or equal to the last product price
+
+  @story:111 @ac:3 @design:D4 @type:functional @technique:state-transition
+  Scenario: AC-3b Sorting by price high to low lists the most expensive product first
+    Given I am on the sign-in page
+    When I find the Username field and enter "standard_user"
+    And I find the Password field and enter "secret_sauce"
+    And I click "Login"
+    Then the page displays "Products"
+    When I select "Price (high to low)" from the sort dropdown
+    Then the sort dropdown shows "Price (high to low)"
+    And the first product price is greater than or equal to the last product price
+
+  @story:111 @design:D5 @type:accessibility @technique:checklist-based
+  Scenario: AC-story Product list page passes accessibility checks
+    Given I am on the sign-in page
+    When I find the Username field and enter "standard_user"
+    And I find the Password field and enter "secret_sauce"
+    And I click "Login"
+    Then the page displays "Products"
+    Then the page passes axe accessibility checks
+
+  @story:112 @ac:1 @design:D6 @type:functional @technique:state-transition
+  Scenario: AC-1 Choosing a product name opens its page with matching name, description and price
+    Given I am on the sign-in page
+    When I find the Username field and enter "standard_user"
+    And I find the Password field and enter "secret_sauce"
+    And I click "Login"
+    Then the page displays "Products"
+    When I click the first product name in the list
+    Then the product detail page shows the same name as the list item
+    And the product detail page shows the same description as the list item
+    And the product detail page shows the same price as the list item
+
+  @story:112 @ac:2 @design:D7 @type:functional @technique:state-transition
+  Scenario: AC-2 Adding a product from its page changes the button to Remove and the cart shows 1
+    Given I am on the sign-in page
+    When I find the Username field and enter "standard_user"
+    And I find the Password field and enter "secret_sauce"
+    And I click "Login"
+    Then the page displays "Products"
+    When I click the first product name in the list
+    And I click "Add to cart"
+    Then the page displays "Remove"
+    And the cart badge shows 1
+
+  @story:112 @ac:3 @design:D8 @type:functional @technique:state-transition
+  Scenario: AC-3 Back to products returns to the product list
+    Given I am on the sign-in page
+    When I find the Username field and enter "standard_user"
+    And I find the Password field and enter "secret_sauce"
+    And I click "Login"
+    Then the page displays "Products"
+    When I click the first product name in the list
+    And I click "Back to products"
+    Then the page displays "Products"
+
+  @story:112 @design:D9 @type:accessibility @technique:checklist-based
+  Scenario: AC-story Product detail page passes accessibility checks
+    Given I am on the sign-in page
+    When I find the Username field and enter "standard_user"
+    And I find the Password field and enter "secret_sauce"
+    And I click "Login"
+    Then the page displays "Products"
+    When I click the first product name in the list
+    Then the page passes axe accessibility checks

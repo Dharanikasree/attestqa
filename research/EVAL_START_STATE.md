@@ -55,6 +55,36 @@ The run's working files are reset by git: runs 2 and 3 of a story start from
 the commit made before run 1 (`git stash` or `git checkout -- TestRunApplication/<app>`
 after archiving run 1's ledger and files).
 
+Reset check (added 26 Oct, after SCRUM-25 run 2 was lost twice): a reset is not
+done until `git status -- TestRunApplication/<app>` shows only the story's base
+files and the generated spec, page objects, `artefacts/` and `test-results/`
+from the previous run are deleted, not moved (a move on this mount leaves a
+copy behind). One terminal per app: a second start on the same ledger while a
+run is open produces two runs editing the same workspace, and both are excluded
+(F-0127).
+
+## 2b. Phase 2: the driver does steps 2 and 3 (from 26 Oct)
+
+One command per story, one window per application:
+
+    cd packages\core
+    node ..\..\TestRunApplication\_reset\eval-driver.mjs --app saucedemo --story AB#113 --runs 1,2,3
+
+The driver refuses to start unless `git status -- TestRunApplication/<app>` is clean
+(the committed base) and no scenario for the story is on disk; resets the application
+before every run (Juice Shop: docker restart + juice-shop-ready.mjs, checked; Toolshop:
+migrate:fresh --seed; Booker: it waits for you to restart it; SauceDemo: nothing);
+makes `-r2`/`-r3` hold exactly the main ledger's runs from before run 1 of the story;
+runs `aqa run … --approval file` and answers each approval as
+"auto-approver (evaluation phase 2)" (log: `research/runs/_auto-approvals.log`);
+archives the ledger folder, the console output, `coverage.json` and the test project's
+files into `research/runs/<runId>/` and `_attempts/eval-<date>-<story>-run<n>/`; restores
+the test project with git after each run; saves run 1's files as
+`_attempts/eval-base-<story>-run1/` and installs them after the last run. It then
+stops: the manifest row, findings and results are still written from the archive by
+hand, and the commit is still yours. Runs done by hand (phase 1) keep their place in the
+same ledgers and folders.
+
 ## 3. After every run (archive)
 
 Copy the run's ledger folder from `packages/core/.aqa-eval/runs/<runId>/` and

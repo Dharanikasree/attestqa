@@ -163,6 +163,21 @@ All counted from ledgers and files; nothing is taken from the model's own accoun
    one line in `research/runs-manifest.csv`.
 5. Runs 2 and 3 of a story start from the same state as run 1.
 
+Phase 2 (decided 26 Oct, after 40 counted story runs): from run 41 the approvals are
+answered automatically. Each run uses `--approval file`, and the driver script
+(`TestRunApplication/_reset/eval-driver.mjs`) sets every request to approved with
+`by: "auto-approver (evaluation phase 2)"`, so the ledger tells the two phases apart.
+Nothing in the engine changes: every rule, refusal, verifier check and repair cap runs
+as in phase 1; only the "y" at the prompt is given by a script. The reason is time:
+in phase 1 the approver denied nothing in 40 runs, the approver's misses were all found
+by the after-run checklist review, and approval wait was most of the wall time (up to
+seven hours on one comment). The after-run review continues unchanged, so the design
+quality data has the same source in both phases. What phase 2 cannot show is a human
+denial changing an outcome; the cost table reports approval wait for phase 1 only.
+The driver also does the reset, the repeat-ledger preparation, the run and the archive
+in one window, which removes the two protocol faults of 26 Oct (a second start on the
+same ledger, and a run on an application that had not been reset; F-0127, F-0130).
+
 ## 8. Schedule
 
 | Dates | Work |

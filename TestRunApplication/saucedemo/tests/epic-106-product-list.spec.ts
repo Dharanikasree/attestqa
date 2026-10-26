@@ -244,4 +244,182 @@ test.describe("Product list", () => {
       expect(axeResults.violations.map((v) => v.id).sort(), `axe violations: ${JSON.stringify(axeResults.violations, null, 2)}`).toEqual([]);
     });
   });
+
+  // @story:112
+  // @ac:1
+  // @design:D6
+  // @type:functional
+  // @technique:state-transition
+  test("AC-1 Clicking a product name opens its detail page with matching name, description and price", async ({ page }) => {
+    const productListPage = new ProductListPage(page);
+
+    await test.step("Given I am on the sign-in page", async () => {
+      await productListPage.goto();
+    });
+
+    await test.step("When I sign in as standard_user", async () => {
+      await productListPage.usernameInput.fill(process.env["AQA_APP_USER"] ?? "standard_user");
+      await productListPage.passwordInput.fill(process.env["AQA_APP_PASS"] ?? "secret_sauce");
+      await productListPage.loginButton.click();
+    });
+
+    let listName: string;
+    let listDescription: string;
+    let listPrice: string;
+
+    await test.step("Then the product list is shown", async () => {
+      await expect(page.getByText("Products").first()).toBeVisible();
+    });
+
+    await test.step("And I record the first product's name, description and price from the list", async () => {
+      listName = (await page.getByTestId("inventory-item-name").first().textContent()) ?? "";
+      listDescription = (await page.getByTestId("inventory-item-desc").first().textContent()) ?? "";
+      listPrice = (await page.getByTestId("inventory-item-price").first().textContent()) ?? "";
+      expect(listName, "Precondition: first product name should not be empty").not.toBe("");
+      expect(listPrice, "Precondition: first product price should not be empty").not.toBe("");
+    });
+
+    await test.step("When I click the first product name in the list", async () => {
+      await page.getByTestId("inventory-item-name").first().click();
+    });
+
+    await test.step("Then the product detail page is shown", async () => {
+      await expect(page.getByTestId("inventory-item-name")).toBeVisible();
+    });
+
+    await test.step("And the product name on the detail page matches the name from the list", async () => {
+      await expect(page.getByTestId("inventory-item-name")).toHaveText(listName!);
+    });
+
+    await test.step("And the product description on the detail page matches the description from the list", async () => {
+      await expect(page.getByTestId("inventory-item-desc")).toHaveText(listDescription!);
+    });
+
+    await test.step("And the product price on the detail page matches the price from the list", async () => {
+      await expect(page.getByTestId("inventory-item-price")).toHaveText(listPrice!);
+    });
+  });
+
+  // @story:112
+  // @ac:2
+  // @design:D7
+  // @type:functional
+  // @technique:state-transition
+  test("AC-2 Adding a product from its detail page changes button to Remove and cart shows 1", async ({ page }) => {
+    const productListPage = new ProductListPage(page);
+
+    await test.step("Given I am on the sign-in page", async () => {
+      await productListPage.goto();
+    });
+
+    await test.step("When I sign in as standard_user", async () => {
+      await productListPage.usernameInput.fill(process.env["AQA_APP_USER"] ?? "standard_user");
+      await productListPage.passwordInput.fill(process.env["AQA_APP_PASS"] ?? "secret_sauce");
+      await productListPage.loginButton.click();
+    });
+
+    await test.step("Then the product list is shown", async () => {
+      await expect(page.getByText("Products").first()).toBeVisible();
+    });
+
+    await test.step("When I click the first product name to open its detail page", async () => {
+      await page.getByTestId("inventory-item-name").first().click();
+    });
+
+    await test.step("Then the product detail page is shown", async () => {
+      await expect(page.getByTestId("add-to-cart")).toBeVisible();
+    });
+
+    await test.step("When I click 'Add to cart'", async () => {
+      await page.getByTestId("add-to-cart").click();
+    });
+
+    await test.step("Then the button changes to Remove", async () => {
+      await expect(page.getByTestId("remove")).toBeVisible();
+    });
+
+    await test.step("And the cart badge shows 1", async () => {
+      await expect(page.getByTestId("shopping-cart-badge")).toHaveText("1");
+    });
+  });
+
+  // @story:112
+  // @ac:3
+  // @design:D8
+  // @type:functional
+  // @technique:state-transition
+  test("AC-3 Back to products returns to the product list", async ({ page }) => {
+    const productListPage = new ProductListPage(page);
+
+    await test.step("Given I am on the sign-in page", async () => {
+      await productListPage.goto();
+    });
+
+    await test.step("When I sign in as standard_user", async () => {
+      await productListPage.usernameInput.fill(process.env["AQA_APP_USER"] ?? "standard_user");
+      await productListPage.passwordInput.fill(process.env["AQA_APP_PASS"] ?? "secret_sauce");
+      await productListPage.loginButton.click();
+    });
+
+    await test.step("Then the product list is shown", async () => {
+      await expect(page.getByText("Products").first()).toBeVisible();
+    });
+
+    await test.step("When I click the first product name to open its detail page", async () => {
+      await page.getByTestId("inventory-item-name").first().click();
+    });
+
+    await test.step("Then the product detail page is shown", async () => {
+      await expect(page.getByTestId("back-to-products")).toBeVisible();
+    });
+
+    await test.step("When I click 'Back to products'", async () => {
+      await page.getByTestId("back-to-products").click();
+    });
+
+    await test.step("Then the product list page is shown", async () => {
+      await expect(page.getByText("Products").first()).toBeVisible();
+    });
+  });
+
+  // @story:112
+  // @design:D9
+  // @type:accessibility
+  // @technique:checklist-based
+  test("AC-story Product detail page passes accessibility checks", async ({ page }) => {
+    const productListPage = new ProductListPage(page);
+
+    await test.step("Given I am on the sign-in page", async () => {
+      await productListPage.goto();
+    });
+
+    await test.step("When I sign in as standard_user", async () => {
+      await productListPage.usernameInput.fill(process.env["AQA_APP_USER"] ?? "standard_user");
+      await productListPage.passwordInput.fill(process.env["AQA_APP_PASS"] ?? "secret_sauce");
+      await productListPage.loginButton.click();
+    });
+
+    await test.step("Then the product list is shown", async () => {
+      await expect(page.getByText("Products").first()).toBeVisible();
+    });
+
+    await test.step("When I click the first product name to open its detail page", async () => {
+      await page.getByTestId("inventory-item-name").first().click();
+    });
+
+    await test.step("Then the product detail page is shown", async () => {
+      await expect(page.getByTestId("inventory-item-name")).toBeVisible();
+    });
+
+    await test.step("Then the product detail page passes axe accessibility checks", async () => {
+      const { default: AxeBuilder } = await import("@axe-core/playwright");
+      const axeResults = await new AxeBuilder({ page })
+        .withTags(["wcag2a", "wcag2aa"])
+        .analyze();
+      expect(
+        axeResults.violations.map((v) => v.id).sort(),
+        `axe violations: ${JSON.stringify(axeResults.violations, null, 2)}`
+      ).toEqual([]);
+    });
+  });
 });

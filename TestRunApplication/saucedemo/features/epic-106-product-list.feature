@@ -52,3 +52,52 @@ Feature: Product list
     And I click "Login"
     Then the page displays "Products"
     Then the page passes axe accessibility checks
+
+  @story:112 @ac:1 @design:D6 @type:functional @technique:state-transition
+  Scenario: AC-1 Clicking a product name opens its detail page with matching name, description and price
+    Given I am on the sign-in page
+    When I find the Username field and enter "standard_user"
+    And I find the Password field and enter "secret_sauce"
+    And I click "Login"
+    Then the page displays "Products"
+    When I click the first product name in the list
+    Then the product detail page is shown
+    And the product name on the detail page matches the name from the list
+    And the product description on the detail page matches the description from the list
+    And the product price on the detail page matches the price from the list
+
+  @story:112 @ac:2 @design:D7 @type:functional @technique:state-transition
+  Scenario: AC-2 Adding a product from its detail page changes button to Remove and cart shows 1
+    Given I am on the sign-in page
+    When I find the Username field and enter "standard_user"
+    And I find the Password field and enter "secret_sauce"
+    And I click "Login"
+    Then the page displays "Products"
+    When I click the first product name in the list
+    Then the product detail page is shown
+    When I click "Add to cart"
+    Then the page displays "Remove"
+    And the cart badge shows "1"
+
+  @story:112 @ac:3 @design:D8 @type:functional @technique:state-transition
+  Scenario: AC-3 Back to products returns to the product list
+    Given I am on the sign-in page
+    When I find the Username field and enter "standard_user"
+    And I find the Password field and enter "secret_sauce"
+    And I click "Login"
+    Then the page displays "Products"
+    When I click the first product name in the list
+    Then the product detail page is shown
+    When I click "Back to products"
+    Then the page displays "Products"
+
+  @story:112 @design:D9 @type:accessibility @technique:checklist-based
+  Scenario: AC-story Product detail page passes accessibility checks
+    Given I am on the sign-in page
+    When I find the Username field and enter "standard_user"
+    And I find the Password field and enter "secret_sauce"
+    And I click "Login"
+    Then the page displays "Products"
+    When I click the first product name in the list
+    Then the product detail page is shown
+    Then the page passes axe accessibility checks

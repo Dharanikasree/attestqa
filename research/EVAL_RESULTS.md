@@ -56,12 +56,17 @@ it reached the approver. "Route" A = tests written, B = existing tests run.
 | Juice Shop | SCRUM-24 | | 2 (755c270) | 20261025T015928Z-3a10e0ff | A | 5 | 3/3 | 2 | 1/5 | 0 | 0 | **budget** (F-0122) |
 | SauceDemo | AB#111 | | 3 (755c270) | 20261025T020332Z-c558b3ea | A | 5 | 3/3 | 2 | 5/5 | 0 | 0 | **done** (F-0123) |
 | Juice Shop | SCRUM-24 | | 3 (755c270) | 20261025T180929Z-f224f55e | A | 4 | 3/3 | 3 | none run | 0 | 0 | **blocked** (re-read loop, F-0124) |
+| SauceDemo | AB#112 detail page | same epic as AB#111 | 1 (755c270) | 20261025T181355Z-8ef975e3 | A2 | 4 | 3/3 | 2 | 9/9 (4 own) | 0 | 0 | **done**; unscoped scan reported for review, .env read refused (F-0125) |
+| Juice Shop | SCRUM-25 change password | same epic as SCRUM-24 | 1 (755c270) | 20261025T183138Z-55885357 | A2 | 5 | 3/3 | 1 | 0/16 (0 of 5 own; 11 TODO) | 0 | 0 | **budget**; sign-in locator strict-mode on every test, heal spent on SCRUM-24 leftovers (F-0126) |
+| SauceDemo | AB#112 | | 2 (755c270) | 20261026T143843Z-ed5e2139 | A2 | 4 | 3/3 | 3 | 9/9 (4 own) | 0 | 0 | **done**; same design and same unscoped-scan note as run 1; ADO cases from run 1 reused (F-0129) |
+| SauceDemo | AB#112 | | 3 (755c270) | 20261026T145348Z-d55e279a | A2 | 4 | 3/3 | 2 | 8/9 (3 of 4 own) | 0 | 0 | **done**; scoped scan stuck after 3 repairs, left for the reviewer, "NOT green" posted (F-0131) |
+| SauceDemo | AB#113 cart from list | same epic | 1 (755c270) | 20261026T224846Z-bd625f5f | A2 | 5 | 3/3 | 3 | 14/14 (5 own) | 0 | 0 | **done**; weakening refusal protected AB#112's test; scan scoped (F-0132) |
 
 Suite counts are for the whole epic spec (19 tests), not only the story's own.
 One of the 19 is the expected failure for open bug SCRUM-12, which reproduced
 in every run and counts as passed.
 
-Progress: 36 of 144 story runs (Juice Shop 27, SauceDemo 9). SCRUM-18 run 1 took three attempts: the first two were blocked by engine defects (F-0089, F-0091) and are kept as evidence; the third is the counted run.
+Progress: 41 of 144 story runs (Juice Shop 28, SauceDemo 13). Runs 1-41 had a human approver (phase 1); from run 42 approvals are automatic (phase 2, EVALUATION_PLAN §7). SCRUM-18 run 1 took three attempts: the first two were blocked by engine defects (F-0089, F-0091) and are kept as evidence; the third is the counted run.
 
 ## 2. Excluded runs
 
@@ -80,6 +85,13 @@ Not counted. Kept in `runs/_excluded/` with a manifest row marked `eval-excluded
 | 20261024T175506Z-1b101475 | AB#110 | Run 1 on build b14f27e: 9/9 green, then blocked because the verifier did not count a navigation as the test's action while the design check had (F-0110). Repeated on the fixed build. |
 | 20261024T182800Z-cd681210 | SCRUM-23 | Run 1 on build 885977c: the model sees e-mail addresses as [EMAIL] and its edits of lines holding one never matched the file; eleven refused edits, then blocked (F-0113). Repeated on the fixed build. |
 | 20261025T010446Z-d2e3cccc | AB#111 | Started again on the same ledger before run 1 was archived; reused run 1's design (route B). Excluded (F-0118). |
+| 20261026T124053Z-aea53b5d | SCRUM-25 | Run 2, first start: the workspace still held run 1's generated spec and page object (the reset's move left copies behind), and a second start five minutes later shared its workspace. Budget at 3/6 own. Excluded (F-0127). |
+| 20261026T124548Z-88236186 | SCRUM-25 | Run 2, second start on the same ledger and workspace, concurrent with the first: matched four design items to the first run's freshly written tests as already tested. Blocked. Excluded (F-0127). |
+| 20261026T131841Z-59929d86 | SCRUM-25 | Run 2, third start: a fourth start 80 s later shared its ledger and workspace and wrote the feature while this run's suite ran. Blocked at the output cap (W29, F-0128). Excluded. |
+| 20261026T132001Z-58227c24 | SCRUM-25 | Run 2, fourth start, concurrent with the third; design approved 32 min in, blocked in a feature-write loop. Excluded (F-0127). |
+| 20261026T140704Z-91137bce | SCRUM-25 | Run 2, fifth start; a sixth start 80 s later shared its ledger and workspace. Budget. Excluded (F-0127). |
+| 20261026T140825Z-21487b40 | SCRUM-25 | Run 2, sixth start, concurrent with the fifth; all five items matched the fifth run's fresh tests as already tested. Blocked. Excluded (F-0127). |
+| 20261026T143742Z-8ca35396 | SCRUM-25 | Run 2, seventh start, single and clean, but the application had not been reset: an earlier excluded attempt had changed the test account's password and the first sign-in returned 401. Budget at 1/5. Excluded (F-0130). |
 
 The SCRUM-6 pair are still evidence of something: an unchanged story is re-run without a
 new approval, which is the intended behaviour in real use.
@@ -128,6 +140,10 @@ a real defect from being filed; the others wait for the release after the evalua
 | W24 | Six runs so far (SCRUM-22 runs 2 and 3, SCRUM-23 run 2, SCRUM-24 runs 1 and 3, AB#111 run 2) ended in the same way: the agent, stuck on a failing test, proposed the same file read three cycles running until the no-progress guard stopped it. The guard works; the model's response to being stuck is to re-read, not to act. | F-0109, F-0111, F-0124 | open | A failure mode of the agent, not of the rules; worth its own category in the results. |
 | W25 | The "every criterion has a functional test" rule, applied to an accessibility criterion, made the agent add a functional item it then implemented as a second copy of the accessibility scan; the verifier accepted it. | F-0112 | open | A coverage rule can produce padding instead of coverage when a criterion's natural test type is not functional. |
 | W26 | Privacy masking in what the model sees made lines holding an e-mail address un-editable: the model copied the mask token into its edit, and the tool matched it literally. Eleven failed edits, then a block. | F-0113 | fixed locally | Two safety features (scrubbing and exact-match edits) conflicted; neither was wrong alone. |
+| W27 | The built-in triage labels test faults (axe "No elements found for include", strict-mode violations, a locator that matched nothing) as category "flake" at 0.9 confidence, while its own rationale text says it is the test's fault and not a flake; the end-of-run report then counts them as "flaky". The outcome is unaffected (the agent still fixes them), the word is wrong in every report. | F-0125, F-0126 | open | Add a test-fault category to the built-in triage patterns; keep the rationale. |
+| W28 | Stories in one epic share a feature file, so a story whose run blocked before scaffold leaves scenarios that the next story's scaffold turns into TODO tests; those tests then fail in the next story's suite, the heal agent is handed one of them first, and the next story's budget goes on the previous story's leftovers (SCRUM-25 run 1). | F-0126 | open | Scaffold and heal should be limited to the scenarios tagged with the current story; leftovers from another story belong in the report, not in the repair queue. |
+| W29 | A whole-file write larger than the inference's 8192 output-token cap arrives as a tool call with no content; the fs tool's reply ("content must be a string") does not say why, so the agent repeats the identical write until the no-progress guard stops it, paying the full cap each time (SCRUM-25 run 2 attempt 59929d86, four times; the run is excluded for another reason, the evidence stands). | F-0128 | open | Say in the observation that the call was cut off at the output limit and name replace_in_file; consider a higher cap for file writes. |
+| W30 | When the fixture account cannot sign in (401 at the test's precondition), the built-in triage holds every failing test as a possible product defect at 0.5; an environment fault is not a category it knows. The opposite mislabel is W27. | F-0130 | open | Add an environment/precondition category: a failure in a step marked as precondition, or an auth failure of the configured account, is neither a defect nor the test's fault. |
 | W5 | Until SCRUM-18 every story already had tests (route B). | — | shown from SCRUM-18 | Authoring, repair, weakening and real bug finding are measured from Juice Shop story 4 onward and in the other three apps. |
 
 ## 5. Threats to keep in the paper
@@ -138,6 +154,14 @@ a real defect from being filed; the others wait for the release after the evalua
   affected runs are excluded and listed above, not silently dropped.
 - The evaluation started on 22 Oct rather than 26 Oct; nothing else in the
   protocol changed.
+- One model (claude-sonnet-4-6) at one price throughout; no other model was
+  run.
+- The trackers are not reset between repeats: Azure DevOps keeps run 1's test
+  cases, Jira's QA sub-task keeps every attempt's records, so a repeat is
+  independent in what it designs and checks, not in what it records (F-0129).
+- A story that changes the fixture account's password (SCRUM-25) breaks later
+  runs unless the application is reset; one run was lost to this and excluded
+  (F-0130).
 
 ## 6. Cost per run (Anthropic list prices, from the ledger's usage)
 
@@ -156,8 +180,8 @@ of turns the rules refused, and cost per passing design item and per filed bug:
 Runs that were not counted (engine faults, repeats that reused a design) are kept
 there with `excluded` or `study = eval-excluded`, so their cost is reported, not hidden.
 
-So far (47 runs, 36 counted): total $118.94; runs not counted $20.45; turns the
-rules refused $20.12 (about a sixth of all spend), which is the price of the
+So far (59 runs, 41 counted): total $164.71; runs not counted $50.88; turns the
+rules refused $25.38 (about a sixth of all spend), which is the price of the
 send-backs and refusals, paid before a human saw anything. Blocked runs that never
 ran a test (SCRUM-24 runs 1 and 3: $1.3 and $3.6) are the other cost governance
 does not recover: the guard stops the loop, but only after three idle cycles.
