@@ -1,0 +1,94 @@
+{
+  "approvalId": "apr-0001",
+  "summary": "Approve 1 call: aqa.test_design(items=[{\"id\":\"D6\",\"covers\":\"AC-1\",\"type\":\"f…, excluded=[{\"what\":\"bug #SCRUM-28\",\"reason\":\"Or…)",
+  "calls": [
+    {
+      "toolName": "aqa.test_design",
+      "args": {
+        "items": [
+          {
+            "id": "D6",
+            "covers": "AC-1",
+            "type": "functional",
+            "technique": "state-transition",
+            "conditions": [
+              "User is signed in",
+              "Current password is correct",
+              "New password entered (5-40 chars)",
+              "New password repeated identically"
+            ],
+            "expected": "Password is changed and a confirmation message is shown",
+            "source": "AC-1"
+          },
+          {
+            "id": "D7",
+            "covers": "AC-2",
+            "type": "functional",
+            "technique": "equivalence-partitioning",
+            "conditions": [
+              "User is signed in",
+              "Current password entered is wrong",
+              "New password and repeat match"
+            ],
+            "expected": "Change is refused and an error message is shown",
+            "source": "AC-2"
+          },
+          {
+            "id": "D8",
+            "covers": "AC-3",
+            "type": "functional",
+            "technique": "equivalence-partitioning",
+            "conditions": [
+              "User is signed in",
+              "Current password is correct",
+              "New password and repeat password differ"
+            ],
+            "expected": "Change is refused (Change button remains disabled or error shown)",
+            "source": "AC-3"
+          },
+          {
+            "id": "D9",
+            "covers": "AC-1",
+            "type": "security",
+            "technique": "error-guessing",
+            "conditions": [
+              "Unauthenticated user navigates directly to /#/privacy-security/change-password"
+            ],
+            "expected": "The change password page requires authentication; the form is not usable without being signed in",
+            "source": "AC-1"
+          },
+          {
+            "id": "D10",
+            "covers": "story",
+            "type": "accessibility",
+            "technique": "checklist-based",
+            "conditions": [
+              "User is signed in and on the Change Password page",
+              "Axe-core scan of the change-password form with WCAG 2 A/AA rules"
+            ],
+            "expected": "No axe violations reported (violations.map(v=>v.id).sort() equals [])",
+            "source": "agent.test_types (WCAG A/AA)"
+          }
+        ],
+        "excluded": [
+          {
+            "what": "bug #SCRUM-28",
+            "reason": "Order tracking shows orders to unauthenticated users — unrelated to the change-password flow tested here"
+          },
+          {
+            "what": "bug #SCRUM-12",
+            "reason": "Session token surviving logout is a logout/session concern, not a change-password concern — belongs to a different story"
+          },
+          {
+            "what": "confirmation",
+            "reason": "Both open bugs (SCRUM-28 and SCRUM-12) are Active and unrelated to this story's change-password behaviour; no resolved bug touches this story"
+          }
+        ]
+      }
+    }
+  ],
+  "requestedAt": "2026-10-26T23:35:57.332Z",
+  "decision": "approved",
+  "by": "auto-approver (evaluation phase 2)",
+  "at": "2026-10-26T23:35:57.746Z"
+}

@@ -51,3 +51,54 @@ Feature: Customer profile and orders
     Given I am logged in as a registered customer
     When I navigate to "/#/address/select"
     Then I only see addresses belonging to the current user
+
+  @story:SCRUM-25 @ac:1 @design:D6 @type:functional @technique:state-transition
+  Scenario: AC-1 Correct current password and matching new password changes the password and shows confirmation
+    Given I am logged in as a registered customer
+    When I navigate to "/#/privacy-security/change-password"
+    And I find the Current Password field and enter "currentPass"
+    And I find the New Password field and enter "newPass123"
+    And I find the Repeat New Password field and enter "newPass123"
+    And I click "Change"
+    Then the page displays "Password successfully changed"
+
+  @story:SCRUM-25 @ac:2 @design:D7 @type:functional @technique:equivalence-partitioning
+  Scenario: AC-2 Wrong current password causes the change to be refused with a message
+    Given I am logged in as a registered customer
+    When I navigate to "/#/privacy-security/change-password"
+    And I find the Current Password field and enter "wrongPassword!"
+    And I find the New Password field and enter "newPass123"
+    And I find the Repeat New Password field and enter "newPass123"
+    And I click "Change"
+    Then the page displays "Current password is not correct"
+
+  @story:SCRUM-25 @ac:3 @design:D8 @type:functional @technique:equivalence-partitioning
+  Scenario: AC-3 New password and repeat that differ causes the Change button to be disabled
+    Given I am logged in as a registered customer
+    When I navigate to "/#/privacy-security/change-password"
+    And I find the Current Password field and enter "currentPass"
+    And I find the New Password field and enter "newPass123"
+    And I find the Repeat New Password field and enter "differentPass!"
+    Then the Change button is disabled
+
+  @story:SCRUM-25 @ac:1 @design:D9 @type:security @technique:state-transition
+  Scenario: AC-1b After password change the old password no longer works
+    Given I am logged in as a registered customer
+    When I navigate to "/#/privacy-security/change-password"
+    And I find the Current Password field and enter "currentPass"
+    And I find the New Password field and enter "newPass123"
+    And I find the Repeat New Password field and enter "newPass123"
+    And I click "Change"
+    Then the page displays "Password successfully changed"
+    When I navigate to "/#/logout"
+    And I navigate to "/#/login"
+    And I find the Email field and enter "testuser@example.com"
+    And I find the Password field and enter "currentPass"
+    And I click "Log in"
+    Then the page displays "Invalid email or password"
+
+  @story:SCRUM-25 @design:D10 @type:accessibility @technique:checklist-based
+  Scenario: AC-story Accessibility of the Change Password form
+    Given I am logged in as a registered customer
+    When I navigate to "/#/privacy-security/change-password"
+    Then the page passes axe accessibility checks

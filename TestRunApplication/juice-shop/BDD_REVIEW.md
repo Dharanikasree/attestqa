@@ -1,20 +1,111 @@
 # bdd2pw — Conversion Review
 
-> **Source feature:** `E:\EB1A_Research\Application\attestqa\TestRunApplication\juice-shop\features\epic-scrum-15-finding-and-buying-products.feature`
-> **Target URL:** http://localhost:3100/#/search?q=apple
-> **Generated:** 2026-10-23T14:57:49.902Z
+> **Source feature:** `E:\EB1A_Research\Application\attestqa\TestRunApplication\juice-shop\features\epic-scrum-17-customer-profile-and-orders.feature`
+> **Target URL:** http://localhost:3100/#/login
+> **Generated:** 2026-10-25T18:41:36.704Z
 
 ## Summary
 
-0 errors · 0 warnings · 8 info
+0 errors · 44 warnings · 8 info
+
+## Warnings
+
+- [AC-1 Adding a new address saves it and confirmation names the city] No credentials are specified in the step; placeholder values used for email and password — update to match a real registered customer account.
+  - Suggestion: Add a custom step rule, enable --llm fallback, or hand-edit the spec.
+- [AC-1 Adding a new address saves it and confirmation names the city] No address form fields (country, name, mobile, zip, address, city, state) exist in the POM for ChangePasswordPage; this step requires address form locators that are not present — add them to the POM before generating this binding.
+  - Suggestion: Add a custom step rule, enable --llm fallback, or hand-edit the spec.
+- [AC-1 Adding a new address saves it and confirmation names the city] No Submit button exists in the POM; synthesised a getByRole locator — verify this matches the correct element on the address form page.
+  - Suggestion: Add a custom step rule, enable --llm fallback, or hand-edit the spec.
+- [AC-2 The saved address is listed among the customer's addresses] No credentials are specified in the step; placeholder values used for email and password — update to match a real registered customer account.
+  - Suggestion: Add a custom step rule, enable --llm fallback, or hand-edit the spec.
+- [AC-2 The saved address is listed among the customer's addresses] No address form fields (country, name, mobile, zip, address, city, state) exist in the POM for ChangePasswordPage; this step requires address form locators that are not present — add them to the POM before generating this binding.
+  - Suggestion: Add a custom step rule, enable --llm fallback, or hand-edit the spec.
+- [AC-2 The saved address is listed among the customer's addresses] No Submit button exists in the POM; synthesised a getByRole locator — verify this matches the correct element on the address form page.
+  - Suggestion: Add a custom step rule, enable --llm fallback, or hand-edit the spec.
+- [AC-3 Address cannot be submitted while any required field is empty [field=Country]] No credentials are specified in the step; placeholder values used for email and password — update to match a real registered customer account.
+  - Suggestion: Add a custom step rule, enable --llm fallback, or hand-edit the spec.
+- [AC-3 Address cannot be submitted while any required field is empty [field=Country]] The step references a 'Country' field and 'other required fields' that do not exist in the POM for ChangePasswordPage (which is a login page with only Email, Password, and Remember Me fields). Cannot determine which fields to fill or leave empty without a matching POM or DOM context.
+  - Suggestion: Add a custom step rule, enable --llm fallback, or hand-edit the spec.
+- [AC-3 Address cannot be submitted while any required field is empty [field=Name]] No credentials are specified in the step; placeholder values used for email and password — update to match a real registered customer account.
+  - Suggestion: Add a custom step rule, enable --llm fallback, or hand-edit the spec.
+- [AC-3 Address cannot be submitted while any required field is empty [field=Name]] The step references a 'Name field' and 'other required fields' that do not correspond to any POM fields on ChangePasswordPage (which only has Email, Password, and related login fields). Cannot determine which fields to fill or leave empty without additional POM context or a DOM snapshot.
+  - Suggestion: Add a custom step rule, enable --llm fallback, or hand-edit the spec.
+- [AC-3 Address cannot be submitted while any required field is empty [field=Mobile Number]] No credentials are specified in the step; placeholder values used for email and password — update to match a real registered customer account.
+  - Suggestion: Add a custom step rule, enable --llm fallback, or hand-edit the spec.
+- [AC-3 Address cannot be submitted while any required field is empty [field=Mobile Number]] The step references a 'Mobile Number' field and 'all other required fields', but no such fields exist in the POM — the POM only contains Email and Password inputs for a login page. Cannot determine which fields to fill or leave empty without a matching POM or DOM snapshot.
+  - Suggestion: Add a custom step rule, enable --llm fallback, or hand-edit the spec.
+- [AC-3 Address cannot be submitted while any required field is empty [field=ZIP Code]] No credentials are specified in the step; placeholder values used for email and password — update to match a real registered customer account.
+  - Suggestion: Add a custom step rule, enable --llm fallback, or hand-edit the spec.
+- [AC-3 Address cannot be submitted while any required field is empty [field=ZIP Code]] The step references a ZIP Code field and other required fields, but none of these fields exist in the current POM (which is scoped to a Login/ChangePassword page with no registration or address form fields). Cannot determine which locators to use without a matching POM or DOM snapshot.
+  - Suggestion: Add a custom step rule, enable --llm fallback, or hand-edit the spec.
+- [AC-3 Address cannot be submitted while any required field is empty [field=Address]] No credentials are specified in the step; placeholder values used for email and password — update to match a real registered customer account.
+  - Suggestion: Add a custom step rule, enable --llm fallback, or hand-edit the spec.
+- [AC-3 Address cannot be submitted while any required field is empty [field=Address]] The step references an 'Address field' and 'all other required fields' but no address-related POM fields exist on ChangePasswordPage (which is a login page). Cannot determine which fields to fill or leave empty without a matching POM or DOM snapshot.
+  - Suggestion: Add a custom step rule, enable --llm fallback, or hand-edit the spec.
+- [AC-3 Address cannot be submitted while any required field is empty [field=City]] No credentials are specified in the step; placeholder values used for email and password — update to match a real registered customer account.
+  - Suggestion: Add a custom step rule, enable --llm fallback, or hand-edit the spec.
+- [AC-3 Address cannot be submitted while any required field is empty [field=City]] No 'City' field or related POM fields exist in the ChangePasswordPage POM; this step references a registration/address form that is not represented here and cannot be deterministically mapped without the correct POM and DOM context.
+  - Suggestion: Add a custom step rule, enable --llm fallback, or hand-edit the spec.
+- [AC-3 Address cannot be submitted while any required field is empty [field=State]] No credentials are specified in the step; placeholder values used for email and password — update to match a real registered customer account.
+  - Suggestion: Add a custom step rule, enable --llm fallback, or hand-edit the spec.
+- [AC-3 Address cannot be submitted while any required field is empty [field=State]] No 'State' field or equivalent POM locator exists in the ChangePasswordPage POM, and the step does not specify which 'other required fields' to fill or with what values. Manual implementation required.
+  - Suggestion: Add a custom step rule, enable --llm fallback, or hand-edit the spec.
+- [AC-story Accessibility of the Create Address form] No credentials are specified in the step; placeholder values used for email and password — update to match a real registered customer account.
+  - Suggestion: Add a custom step rule, enable --llm fallback, or hand-edit the spec.
+- [AC-2 security A customer cannot access another customer's saved addresses] No credentials are specified in the step; placeholder values used for email and password — update to match a real registered customer account.
+  - Suggestion: Add a custom step rule, enable --llm fallback, or hand-edit the spec.
+- [AC-2 security A customer cannot access another customer's saved addresses] Cannot determine a specific locator or assertion for 'addresses belonging to the current user' — no address-related POM fields exist on ChangePasswordPage and no quoted text is provided to match against. Hand-edit this step to add the appropriate locator and assertion.
+  - Suggestion: Add a custom step rule, enable --llm fallback, or hand-edit the spec.
+- [AC-1 Correct current password and matching new password changes the password and shows confirmation] No credentials are specified in the step; placeholder values used for email and password — update to match a real registered customer account.
+  - Suggestion: Add a custom step rule, enable --llm fallback, or hand-edit the spec.
+- [AC-1 Correct current password and matching new password changes the password and shows confirmation] No POM field for a 'Current Password' input exists on ChangePasswordPage (the page only has login-page fields). A change-password form field locator cannot be resolved without a DOM snapshot or POM entry for the current-password input.
+  - Suggestion: Add a custom step rule, enable --llm fallback, or hand-edit the spec.
+- [AC-1 Correct current password and matching new password changes the password and shows confirmation] No POM field for a 'New Password' input exists on ChangePasswordPage. A change-password form field locator cannot be resolved without a DOM snapshot or POM entry for the new-password input.
+  - Suggestion: Add a custom step rule, enable --llm fallback, or hand-edit the spec.
+- [AC-1 Correct current password and matching new password changes the password and shows confirmation] No POM field for a 'Repeat New Password' input exists on ChangePasswordPage. A change-password form field locator cannot be resolved without a DOM snapshot or POM entry for the repeat-new-password input.
+  - Suggestion: Add a custom step rule, enable --llm fallback, or hand-edit the spec.
+- [AC-1 Correct current password and matching new password changes the password and shows confirmation] No POM field for a 'Change' button exists on ChangePasswordPage; the available buttons are Login, dismiss cookie message, Open Sidenav, etc. A locator for the Change button cannot be resolved without a DOM snapshot or POM entry.
+  - Suggestion: Add a custom step rule, enable --llm fallback, or hand-edit the spec.
+- [AC-2 Wrong current password causes the change to be refused with a message] No credentials are specified in the step; placeholder values used for email and password — update to match a real registered customer account.
+  - Suggestion: Add a custom step rule, enable --llm fallback, or hand-edit the spec.
+- [AC-2 Wrong current password causes the change to be refused with a message] No dedicated 'Current Password' POM field found; mapped to the generic 'password' label field. Verify this targets the correct input on the Change Password page.
+  - Suggestion: Add a custom step rule, enable --llm fallback, or hand-edit the spec.
+- [AC-2 Wrong current password causes the change to be refused with a message] No POM field for a 'New Password' input exists on ChangePasswordPage. A change-password form field locator cannot be resolved without a DOM snapshot or POM entry for the new-password input.
+  - Suggestion: Add a custom step rule, enable --llm fallback, or hand-edit the spec.
+- [AC-2 Wrong current password causes the change to be refused with a message] No POM field for a 'Repeat New Password' input exists on ChangePasswordPage. A change-password form field locator cannot be resolved without a DOM snapshot or POM entry for the repeat-new-password input.
+  - Suggestion: Add a custom step rule, enable --llm fallback, or hand-edit the spec.
+- [AC-2 Wrong current password causes the change to be refused with a message] No POM field for a 'Change' button exists on ChangePasswordPage; the available buttons are Login, dismiss cookie message, Open Sidenav, etc. A locator for the Change button cannot be resolved without a DOM snapshot or POM entry.
+  - Suggestion: Add a custom step rule, enable --llm fallback, or hand-edit the spec.
+- [AC-3 New password and repeat that differ causes the Change button to be disabled] No credentials are specified in the step; placeholder values used for email and password — update to match a real registered customer account.
+  - Suggestion: Add a custom step rule, enable --llm fallback, or hand-edit the spec.
+- [AC-3 New password and repeat that differ causes the Change button to be disabled] No POM field for a 'Current Password' input exists on ChangePasswordPage (the page only has login-page fields). A change-password form field locator cannot be resolved without a DOM snapshot or POM entry for the current-password input.
+  - Suggestion: Add a custom step rule, enable --llm fallback, or hand-edit the spec.
+- [AC-3 New password and repeat that differ causes the Change button to be disabled] No POM field for a 'New Password' input exists on ChangePasswordPage. A change-password form field locator cannot be resolved without a DOM snapshot or POM entry for the new-password input.
+  - Suggestion: Add a custom step rule, enable --llm fallback, or hand-edit the spec.
+- [AC-3 New password and repeat that differ causes the Change button to be disabled] No POM field for a 'Repeat New Password' input exists on ChangePasswordPage; the page URL points to the login page and no repeat-password locator is available. Hand-edit to supply the correct locator and fill call.
+  - Suggestion: Add a custom step rule, enable --llm fallback, or hand-edit the spec.
+- [AC-3 New password and repeat that differ causes the Change button to be disabled] No POM field for a 'Change' button exists on ChangePasswordPage; cannot assert it is disabled without a locator. Hand-edit to supply the correct locator and a toHaveAttribute assertion for the disabled state.
+  - Suggestion: Add a custom step rule, enable --llm fallback, or hand-edit the spec.
+- [AC-1b After password change the old password no longer works] No credentials are specified in the step; placeholder values used for email and password — update to match a real registered customer account.
+  - Suggestion: Add a custom step rule, enable --llm fallback, or hand-edit the spec.
+- [AC-1b After password change the old password no longer works] No POM field for a 'Current Password' input exists on ChangePasswordPage (the page only has login-page fields). A change-password form field locator cannot be resolved without a DOM snapshot or POM entry for the current-password input.
+  - Suggestion: Add a custom step rule, enable --llm fallback, or hand-edit the spec.
+- [AC-1b After password change the old password no longer works] No POM field for a 'New Password' input exists on ChangePasswordPage. A change-password form field locator cannot be resolved without a DOM snapshot or POM entry for the new-password input.
+  - Suggestion: Add a custom step rule, enable --llm fallback, or hand-edit the spec.
+- [AC-1b After password change the old password no longer works] No POM field for a 'Repeat New Password' input exists on ChangePasswordPage. A change-password form field locator cannot be resolved without a DOM snapshot or POM entry for the repeat-new-password input.
+  - Suggestion: Add a custom step rule, enable --llm fallback, or hand-edit the spec.
+- [AC-1b After password change the old password no longer works] No POM field for a 'Change' button exists on ChangePasswordPage; the available buttons are Login, dismiss cookie message, Open Sidenav, etc. A locator for the Change button cannot be resolved without a DOM snapshot or POM entry.
+  - Suggestion: Add a custom step rule, enable --llm fallback, or hand-edit the spec.
+- [AC-story Accessibility of the Change Password form] No credentials are specified in the step; placeholder values used for email and password — update to match a real registered customer account.
+  - Suggestion: Add a custom step rule, enable --llm fallback, or hand-edit the spec.
 
 ## Info
 
-- Parsed feature "Finding and buying products" — 5 scenario(s)
+- Parsed feature "Customer profile and orders" — 10 scenario(s) + Background
 - `E:\EB1A_Research\Application\attestqa\TestRunApplication\juice-shop\package.json` — package.json already exists — left untouched.
 - `E:\EB1A_Research\Application\attestqa\TestRunApplication\juice-shop\playwright.config.ts` — playwright.config.ts already exists — left untouched.
 - `E:\EB1A_Research\Application\attestqa\TestRunApplication\juice-shop\tsconfig.json` — tsconfig.json already exists — left untouched.
 - `E:\EB1A_Research\Application\attestqa\TestRunApplication\juice-shop\.gitignore` — .gitignore already exists — left untouched.
-- Discovered 48 element(s); picked 41 unique locator(s)
-- POM decision for SearchPage: CREATE
-- LLM fallback: 0 successful / 0 attempted, max 50. Cache hits counted as 0.
+- Discovered 46 element(s); picked 45 unique locator(s)
+- POM decision for ChangePasswordPage: CREATE (missing fields: loginButton)
+- LLM fallback: 14 successful / 14 attempted, max 50. Cache hits counted as 0.

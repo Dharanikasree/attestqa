@@ -1,0 +1,90 @@
+{
+  "approvalId": "apr-0001",
+  "summary": "Approve 1 call: aqa.test_design(items=[{\"id\":\"D1\",\"covers\":\"AC-1\",\"type\":\"f…, excluded=[{\"what\":\"confirmation — bug #121 (Ac…)",
+  "calls": [
+    {
+      "toolName": "aqa.test_design",
+      "args": {
+        "items": [
+          {
+            "id": "D1",
+            "covers": "AC-1",
+            "type": "functional",
+            "technique": "state-transition",
+            "conditions": [
+              "User is signed in",
+              "One or more products have been added to the cart",
+              "User navigates to the cart page"
+            ],
+            "expected": "The cart page is shown (navigation to cart URL occurred); each added product appears in the cart list with its quantity, name and price visible",
+            "source": "AC-1"
+          },
+          {
+            "id": "D2",
+            "covers": "AC-2",
+            "type": "functional",
+            "technique": "state-transition",
+            "conditions": [
+              "User is signed in",
+              "At least one product is in the cart",
+              "User clicks Remove on a product"
+            ],
+            "expected": "The removed product disappears from the cart list (list is now shorter); the cart badge count decreases by one",
+            "source": "AC-2"
+          },
+          {
+            "id": "D3",
+            "covers": "AC-3",
+            "type": "functional",
+            "technique": "state-transition",
+            "conditions": [
+              "User is signed in",
+              "One product is in the cart",
+              "User clicks Continue Shopping from the cart"
+            ],
+            "expected": "The user is taken back to the product list page (URL changes to product list); the cart badge still shows the same count as before",
+            "source": "AC-3"
+          },
+          {
+            "id": "D4",
+            "covers": "AC-1",
+            "type": "accessibility",
+            "technique": "checklist-based",
+            "conditions": [
+              "Cart page with at least one product in the cart",
+              "axe-core scan of the cart form/container",
+              "Rules: wcag2a, wcag2aa"
+            ],
+            "expected": "No axe-core violations (violations.map(v => v.id).sort() equals [])",
+            "source": "agent.test_types (WCAG A/AA)"
+          },
+          {
+            "id": "D5",
+            "covers": "AC-1",
+            "type": "security",
+            "technique": "equivalence-partitioning",
+            "conditions": [
+              "Unauthenticated user navigates directly to the cart URL"
+            ],
+            "expected": "The cart page is not shown; user is redirected away (e.g. back to login)",
+            "source": "AC-1"
+          }
+        ],
+        "excluded": [
+          {
+            "what": "confirmation — bug #121 (Active: problem user sees same picture for every product)",
+            "reason": "Bug #121 is about the product list page image rendering, not the cart review behaviour covered by story #114"
+          },
+          {
+            "what": "confirmation — bug #122 (Active: error user cannot finish an order)",
+            "reason": "Bug #122 is about checkout completion (story #117/#120 territory), not the cart review behaviour covered by story #114"
+          }
+        ]
+      }
+    }
+  ],
+  "requestedAt": "2026-10-26T23:39:32.673Z",
+  "decision": "approved",
+  "by": "auto-approver (evaluation phase 2)",
+  "at": "2026-10-26T23:39:32.942Z"
+}

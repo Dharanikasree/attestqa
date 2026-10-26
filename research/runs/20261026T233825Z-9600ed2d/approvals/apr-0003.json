@@ -1,0 +1,43 @@
+{
+  "approvalId": "apr-0003",
+  "summary": "Approve 3 calls: ado.testplan_test_case_write(action=create, project=attestqa-saucedemo, title=AC-1: Cart lists each added product w…, …); ado.testplan_test_case_write(action=create, project=attestqa-saucedemo, title=AC-2: Removing a product in the cart …, …); ado.testplan_test_case_write(action=create, project=attestqa-saucedemo, title=AC-3: Continue shopping returns to th…, …)",
+  "calls": [
+    {
+      "toolName": "ado.testplan_test_case_write",
+      "args": {
+        "action": "create",
+        "project": "attestqa-saucedemo",
+        "title": "AC-1: Cart lists each added product with its quantity, name and price",
+        "steps": "1. Sign in as standard_user|Sign-in succeeds and the product list is shown\n2. Click the first Add to cart button in the product list|Cart badge shows \"1\"\n3. Click the cart icon to navigate to the cart|The cart page displays \"Your Cart\"\n4. Inspect the cart contents|The cart item quantity shows \"1\", the product name is visible, and the product price is visible",
+        "testsWorkItemId": 114,
+        "priority": 2
+      }
+    },
+    {
+      "toolName": "ado.testplan_test_case_write",
+      "args": {
+        "action": "create",
+        "project": "attestqa-saucedemo",
+        "title": "AC-2: Removing a product in the cart takes it off the list and lowers the cart badge",
+        "steps": "1. Sign in as standard_user|Sign-in succeeds and the product list is shown\n2. Click the first Add to cart button in the product list|Cart badge shows \"1\"\n3. Click the cart icon to navigate to the cart|The cart page displays \"Your Cart\" and the cart item name is visible\n4. Click \"Remove\"|The cart item list is empty (no cart_item elements visible)\n5. Check the cart badge|The cart badge is not shown",
+        "testsWorkItemId": 114,
+        "priority": 2
+      }
+    },
+    {
+      "toolName": "ado.testplan_test_case_write",
+      "args": {
+        "action": "create",
+        "project": "attestqa-saucedemo",
+        "title": "AC-3: Continue shopping returns to the product list with the cart unchanged",
+        "steps": "1. Sign in as standard_user|Sign-in succeeds and the product list is shown\n2. Click the first Add to cart button in the product list|Cart badge shows \"1\"\n3. Click the cart icon to navigate to the cart|The cart page displays \"Your Cart\"\n4. Click \"Continue Shopping\"|The product list page is shown (\"Products\" heading is visible)\n5. Check the cart badge on the product list page|The cart badge still shows \"1\" (cart is unchanged)",
+        "testsWorkItemId": 114,
+        "priority": 2
+      }
+    }
+  ],
+  "requestedAt": "2026-10-26T23:50:07.349Z",
+  "decision": "approved",
+  "by": "auto-approver (evaluation phase 2)",
+  "at": "2026-10-26T23:50:08.251Z"
+}
