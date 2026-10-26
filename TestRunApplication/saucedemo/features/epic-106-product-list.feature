@@ -101,3 +101,65 @@ Feature: Product list
     When I click the first product name in the list
     Then the product detail page is shown
     Then the page passes axe accessibility checks
+
+  @story:113 @ac:1 @design:D10 @type:functional @technique:state-transition
+  Scenario: AC-1 Adding a product from the list changes its button to Remove and shows cart badge
+    Given I am on the sign-in page
+    When I find the Username field and enter "standard_user"
+    And I find the Password field and enter "secret_sauce"
+    And I click "Login"
+    Then the page displays "Products"
+    When I click the first Add to cart button in the product list
+    Then the first product button in the list shows "Remove"
+    And the cart badge shows "1"
+
+  @story:113 @ac:2 @design:D11 @type:functional @technique:state-transition
+  Scenario: AC-2 Removing the product changes the button back and hides the badge
+    Given I am on the sign-in page
+    When I find the Username field and enter "standard_user"
+    And I find the Password field and enter "secret_sauce"
+    And I click "Login"
+    Then the page displays "Products"
+    When I click the first Add to cart button in the product list
+    Then the first product button in the list shows "Remove"
+    And the cart badge shows "1"
+    When I click the first Remove button in the product list
+    Then the first product button in the list shows "Add to cart"
+    And the cart badge is not shown
+
+  @story:113 @ac:3 @design:D12 @type:functional @technique:state-transition
+  Scenario: AC-3 Products added stay in the cart after navigating away and back
+    Given I am on the sign-in page
+    When I find the Username field and enter "standard_user"
+    And I find the Password field and enter "secret_sauce"
+    And I click "Login"
+    Then the page displays "Products"
+    When I click the first Add to cart button in the product list
+    Then the cart badge shows "1"
+    When I click the first product name in the list
+    Then the product detail page is shown
+    When I click "Back to products"
+    Then the page displays "Products"
+    And the cart badge shows "1"
+
+  @story:113 @design:D13 @type:accessibility @technique:checklist-based
+  Scenario: AC-story Product list with cart items passes accessibility checks
+    Given I am on the sign-in page
+    When I find the Username field and enter "standard_user"
+    And I find the Password field and enter "secret_sauce"
+    And I click "Login"
+    Then the page displays "Products"
+    When I click the first Add to cart button in the product list
+    Then the page passes axe accessibility checks
+
+  @story:113 @ac:2 @design:D14 @type:functional @technique:boundary-value-analysis
+  Scenario: AC-2 Adding a second product increases the cart badge to 2
+    Given I am on the sign-in page
+    When I find the Username field and enter "standard_user"
+    And I find the Password field and enter "secret_sauce"
+    And I click "Login"
+    Then the page displays "Products"
+    When I click the first Add to cart button in the product list
+    Then the cart badge shows "1"
+    When I click the second Add to cart button in the product list
+    Then the cart badge shows "2"

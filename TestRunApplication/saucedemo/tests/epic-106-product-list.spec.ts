@@ -422,4 +422,233 @@ test.describe("Product list", () => {
       ).toEqual([]);
     });
   });
+
+  // @story:113
+  // @ac:1
+  // @design:D10
+  // @type:functional
+  // @technique:state-transition
+  test("AC-1 Adding a product from the list changes its button to Remove and shows cart badge", async ({ page }) => {
+    const productListPage = new ProductListPage(page);
+
+    await test.step("Given I am on the sign-in page", async () => {
+      await productListPage.goto();
+    });
+
+    await test.step("When I sign in as standard_user", async () => {
+      await productListPage.usernameInput.fill(process.env["AQA_APP_USER"] ?? "standard_user");
+      await productListPage.passwordInput.fill(process.env["AQA_APP_PASS"] ?? "secret_sauce");
+      await productListPage.loginButton.click();
+    });
+
+    await test.step("Then the product list is shown", async () => {
+      await expect(page.getByText("Products").first()).toBeVisible();
+    });
+
+    await test.step("Precondition: at least one Add to cart button is present", async () => {
+      await expect(page.locator("[data-test^='add-to-cart-']").first()).toBeVisible({
+        timeout: 10000,
+      });
+    });
+
+    await test.step("When I click the first Add to cart button in the product list", async () => {
+      await page.locator("[data-test^='add-to-cart-']").first().click();
+    });
+
+    await test.step("Then the first product button in the list shows Remove", async () => {
+      await expect(page.locator("[data-test^='remove-']").first()).toBeVisible();
+    });
+
+    await test.step("And the cart badge shows 1", async () => {
+      await expect(page.getByTestId("shopping-cart-badge")).toHaveText("1");
+    });
+  });
+
+  // @story:113
+  // @ac:2
+  // @design:D11
+  // @type:functional
+  // @technique:state-transition
+  test("AC-2 Removing the product changes the button back and hides the badge", async ({ page }) => {
+    const productListPage = new ProductListPage(page);
+
+    await test.step("Given I am on the sign-in page", async () => {
+      await productListPage.goto();
+    });
+
+    await test.step("When I sign in as standard_user", async () => {
+      await productListPage.usernameInput.fill(process.env["AQA_APP_USER"] ?? "standard_user");
+      await productListPage.passwordInput.fill(process.env["AQA_APP_PASS"] ?? "secret_sauce");
+      await productListPage.loginButton.click();
+    });
+
+    await test.step("Then the product list is shown", async () => {
+      await expect(page.getByText("Products").first()).toBeVisible();
+    });
+
+    await test.step("Precondition: at least one Add to cart button is present", async () => {
+      await expect(page.locator("[data-test^='add-to-cart-']").first()).toBeVisible({
+        timeout: 10000,
+      });
+    });
+
+    await test.step("When I click the first Add to cart button in the product list", async () => {
+      await page.locator("[data-test^='add-to-cart-']").first().click();
+    });
+
+    await test.step("Then the first product button shows Remove and cart badge shows 1", async () => {
+      await expect(page.locator("[data-test^='remove-']").first()).toBeVisible();
+      await expect(page.getByTestId("shopping-cart-badge")).toHaveText("1");
+    });
+
+    await test.step("When I click the first Remove button in the product list", async () => {
+      await page.locator("[data-test^='remove-']").first().click();
+    });
+
+    await test.step("Then the first product button in the list shows Add to cart", async () => {
+      await expect(page.locator("[data-test^='add-to-cart-']").first()).toBeVisible();
+    });
+
+    await test.step("And the cart badge is not shown", async () => {
+      await expect(page.getByTestId("shopping-cart-badge")).toHaveCount(0);
+    });
+  });
+
+  // @story:113
+  // @ac:3
+  // @design:D12
+  // @type:functional
+  // @technique:state-transition
+  test("AC-3 Products added stay in the cart after navigating away and back", async ({ page }) => {
+    const productListPage = new ProductListPage(page);
+
+    await test.step("Given I am on the sign-in page", async () => {
+      await productListPage.goto();
+    });
+
+    await test.step("When I sign in as standard_user", async () => {
+      await productListPage.usernameInput.fill(process.env["AQA_APP_USER"] ?? "standard_user");
+      await productListPage.passwordInput.fill(process.env["AQA_APP_PASS"] ?? "secret_sauce");
+      await productListPage.loginButton.click();
+    });
+
+    await test.step("Then the product list is shown", async () => {
+      await expect(page.getByText("Products").first()).toBeVisible();
+    });
+
+    await test.step("Precondition: at least one Add to cart button is present", async () => {
+      await expect(page.locator("[data-test^='add-to-cart-']").first()).toBeVisible({
+        timeout: 10000,
+      });
+    });
+
+    await test.step("When I click the first Add to cart button in the product list", async () => {
+      await page.locator("[data-test^='add-to-cart-']").first().click();
+    });
+
+    await test.step("Then the cart badge shows 1", async () => {
+      await expect(page.getByTestId("shopping-cart-badge")).toHaveText("1");
+    });
+
+    await test.step("When I click the first product name to navigate to its detail page", async () => {
+      await page.getByTestId("inventory-item-name").first().click();
+    });
+
+    await test.step("Then the product detail page is shown", async () => {
+      await expect(page.getByTestId("inventory-item-name")).toBeVisible();
+    });
+
+    await test.step("When I click Back to products", async () => {
+      await page.getByTestId("back-to-products").click();
+    });
+
+    await test.step("Then the product list is shown again", async () => {
+      await expect(page.getByText("Products").first()).toBeVisible();
+    });
+
+    await test.step("And the cart badge still shows 1", async () => {
+      await expect(page.getByTestId("shopping-cart-badge")).toHaveText("1");
+    });
+  });
+
+  // @story:113
+  // @design:D13
+  // @type:accessibility
+  // @technique:checklist-based
+  test("AC-story Product list with cart items passes accessibility checks", async ({ page }) => {
+    const productListPage = new ProductListPage(page);
+
+    await test.step("Given I am on the sign-in page", async () => {
+      await productListPage.goto();
+    });
+
+    await test.step("When I sign in as standard_user", async () => {
+      await productListPage.usernameInput.fill(process.env["AQA_APP_USER"] ?? "standard_user");
+      await productListPage.passwordInput.fill(process.env["AQA_APP_PASS"] ?? "secret_sauce");
+      await productListPage.loginButton.click();
+    });
+
+    await test.step("Then the product list is shown", async () => {
+      await expect(page.getByText("Products").first()).toBeVisible();
+    });
+
+    await test.step("When I click the first Add to cart button in the product list", async () => {
+      await page.locator("[data-test^='add-to-cart-']").first().click();
+    });
+
+    await test.step("Then the product list with cart item passes axe accessibility checks", async () => {
+      const { default: AxeBuilder } = await import("@axe-core/playwright");
+      const axeResults = await new AxeBuilder({ page })
+        .include("[data-test='inventory-container']")
+        .withTags(["wcag2a", "wcag2aa"])
+        .analyze();
+      expect(
+        axeResults.violations.map((v) => v.id).sort(),
+        `axe violations: ${JSON.stringify(axeResults.violations, null, 2)}`
+      ).toEqual([]);
+    });
+  });
+
+  // @story:113
+  // @ac:2
+  // @design:D14
+  // @type:functional
+  // @technique:boundary-value-analysis
+  test("AC-2 Adding a second product increases the cart badge to 2", async ({ page }) => {
+    const productListPage = new ProductListPage(page);
+
+    await test.step("Given I am on the sign-in page", async () => {
+      await productListPage.goto();
+    });
+
+    await test.step("When I sign in as standard_user", async () => {
+      await productListPage.usernameInput.fill(process.env["AQA_APP_USER"] ?? "standard_user");
+      await productListPage.passwordInput.fill(process.env["AQA_APP_PASS"] ?? "secret_sauce");
+      await productListPage.loginButton.click();
+    });
+
+    await test.step("Then the product list is shown", async () => {
+      await expect(page.getByText("Products").first()).toBeVisible();
+    });
+
+    await test.step("Precondition: at least two Add to cart buttons are present", async () => {
+      await expect(page.locator("[data-test^='add-to-cart-']")).toHaveCount(6);
+    });
+
+    await test.step("When I click the first Add to cart button in the product list", async () => {
+      await page.locator("[data-test^='add-to-cart-']").first().click();
+    });
+
+    await test.step("Then the cart badge shows 1", async () => {
+      await expect(page.getByTestId("shopping-cart-badge")).toHaveText("1");
+    });
+
+    await test.step("When I click the second Add to cart button in the product list", async () => {
+      await page.locator("[data-test^='add-to-cart-']").first().click();
+    });
+
+    await test.step("Then the cart badge shows 2", async () => {
+      await expect(page.getByTestId("shopping-cart-badge")).toHaveText("2");
+    });
+  });
 });

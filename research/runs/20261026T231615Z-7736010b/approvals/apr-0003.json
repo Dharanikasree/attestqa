@@ -1,0 +1,37 @@
+{
+  "approvalId": "apr-0003",
+  "summary": "Approve 3 calls: ado.testplan_test_case_write(action=update_steps, id=147, steps=1. Navigate to https://www.saucedemo.…, …); ado.testplan_test_case_write(action=update_steps, id=148, steps=1. Navigate to https://www.saucedemo.…, …); ado.testplan_test_case_write(action=update_steps, id=149, steps=1. Navigate to https://www.saucedemo.…, …)",
+  "calls": [
+    {
+      "toolName": "ado.testplan_test_case_write",
+      "args": {
+        "action": "update_steps",
+        "id": 147,
+        "steps": "1. Navigate to https://www.saucedemo.com and sign in as standard_user|Product list page (\"Products\") is displayed\n2. Verify the first product shows an \"Add to cart\" button (precondition)|\"Add to cart\" button is visible for the first product\n3. Click the first \"Add to cart\" button in the product list|Button click registers\n4. Verify the first product in the list now shows a \"Remove\" button|The button for the first product changes to \"Remove\"\n5. Verify the cart badge shows \"1\"|Cart badge is visible and displays \"1\"",
+        "project": "attestqa-saucedemo"
+      }
+    },
+    {
+      "toolName": "ado.testplan_test_case_write",
+      "args": {
+        "action": "update_steps",
+        "id": 148,
+        "steps": "1. Navigate to https://www.saucedemo.com and sign in as standard_user|Product list page (\"Products\") is displayed\n2. Click the first \"Add to cart\" button in the product list|Cart badge shows \"1\" (add confirmed)\n3. Click the first \"Remove\" button in the product list|Button click registers\n4. Verify the first product in the list shows \"Add to cart\" again|The button for the first product changes back to \"Add to cart\"\n5. Verify the cart badge is not shown (empty cart boundary case)|Cart badge is not visible — with nothing in the cart the badge disappears entirely",
+        "project": "attestqa-saucedemo"
+      }
+    },
+    {
+      "toolName": "ado.testplan_test_case_write",
+      "args": {
+        "action": "update_steps",
+        "id": 149,
+        "steps": "1. Navigate to https://www.saucedemo.com and sign in as standard_user|Product list page (\"Products\") is displayed\n2. Click the first \"Add to cart\" button in the product list|Cart badge shows \"1\" (add confirmed)\n3. Click the first product name to navigate to its detail page|Product detail page is displayed (back-to-products link visible)\n4. Click \"Back to products\"|Product list page (\"Products\") is displayed again\n5. Verify the cart badge still shows \"1\"|Cart badge is visible and displays \"1\" — cart state persisted across navigation\n6. Verify the first product in the list still shows \"Remove\"|The first product's button is \"Remove\" — cart state persisted across navigation",
+        "project": "attestqa-saucedemo"
+      }
+    }
+  ],
+  "requestedAt": "2026-10-26T23:35:41.487Z",
+  "decision": "approved",
+  "by": "auto-approver (evaluation phase 2)",
+  "at": "2026-10-26T23:35:42.497Z"
+}
