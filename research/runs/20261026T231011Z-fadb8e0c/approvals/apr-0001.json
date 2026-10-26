@@ -1,0 +1,85 @@
+{
+  "approvalId": "apr-0001",
+  "summary": "Approve 1 call: aqa.test_design(items=[{\"id\":\"D10\",\"covers\":\"AC-1\",\"type\":\"…, excluded=[{\"what\":\"confirmation\",\"reason\":\"Bug…)",
+  "calls": [
+    {
+      "toolName": "aqa.test_design",
+      "args": {
+        "items": [
+          {
+            "id": "D10",
+            "covers": "AC-1",
+            "type": "functional",
+            "technique": "state-transition",
+            "conditions": [
+              "standard_user is signed in",
+              "product list is shown",
+              "Add to cart button is clicked for one product"
+            ],
+            "expected": "The clicked product's button changes to 'Remove' and the cart badge shows '1'",
+            "source": "AC-1"
+          },
+          {
+            "id": "D11",
+            "covers": "AC-2",
+            "type": "functional",
+            "technique": "state-transition",
+            "conditions": [
+              "one product has been added to cart (Remove button shown, badge shows 1)",
+              "Remove button is clicked for that product"
+            ],
+            "expected": "The button changes back to 'Add to cart' and the cart badge disappears (is not shown)",
+            "source": "AC-2"
+          },
+          {
+            "id": "D12",
+            "covers": "AC-3",
+            "type": "functional",
+            "technique": "state-transition",
+            "conditions": [
+              "one product has been added from the list",
+              "user navigates to another page (e.g. product detail) and returns to the list"
+            ],
+            "expected": "The previously added product still shows 'Remove' and the cart badge still shows '1'",
+            "source": "AC-3"
+          },
+          {
+            "id": "D13",
+            "covers": "story",
+            "type": "accessibility",
+            "technique": "checklist-based",
+            "conditions": [
+              "standard_user is signed in",
+              "product list page is shown",
+              "axe-core scans the inventory list with WCAG A/AA rules"
+            ],
+            "expected": "No accessibility violations reported for the product list (violations array is empty)",
+            "source": "agent.test_types (WCAG A/AA)"
+          }
+        ],
+        "excluded": [
+          {
+            "what": "confirmation",
+            "reason": "Bug #121 (problem user pictures) touches story #119, not this story's cart behaviour. Bug #122 (error user checkout) touches the checkout flow, not add/remove from list. Neither Active bug touches AC-1, AC-2 or AC-3 of this story, so no confirmation item is warranted here."
+          },
+          {
+            "what": "bug #121",
+            "reason": "Active bug about problem user seeing the same picture for every product — this touches story #119 (product pictures), not this story's add/remove cart behaviour. Not relevant."
+          },
+          {
+            "what": "bug #122",
+            "reason": "Active bug about error user being unable to finish an order — this touches the checkout flow, not adding or removing products from the list. Not relevant."
+          },
+          {
+            "what": "security",
+            "reason": "This story is about adding/removing items from the cart on the product list. It implies no security-sensitive behaviour (no account enumeration, no session management, no data protection boundary). Security tests are not warranted."
+          }
+        ]
+      }
+    }
+  ],
+  "requestedAt": "2026-10-26T23:11:38.895Z",
+  "decision": "approved",
+  "by": "auto-approver (evaluation phase 2)",
+  "at": "2026-10-26T23:11:39.188Z"
+}

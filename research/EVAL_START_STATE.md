@@ -85,6 +85,13 @@ stops: the manifest row, findings and results are still written from the archive
 hand, and the commit is still yours. Runs done by hand (phase 1) keep their place in the
 same ledgers and folders.
 
+Commit only an application that has no run in progress (added 26 Oct): `git add
+TestRunApplication` while a run is open captures that run's half-written feature,
+spec and page object as if they were the base, and the next reset restores them
+from HEAD. The commit on 26 Oct 23:05 did this for Juice Shop (SCRUM-25 run 2 was
+open); the base was restored from the previous commit and committed again. Add
+the application's folder by name, and only after its run has been archived.
+
 ## 3. After every run (archive)
 
 Copy the run's ledger folder from `packages/core/.aqa-eval/runs/<runId>/` and

@@ -61,12 +61,13 @@ it reached the approver. "Route" A = tests written, B = existing tests run.
 | SauceDemo | AB#112 | | 2 (755c270) | 20261026T143843Z-ed5e2139 | A2 | 4 | 3/3 | 3 | 9/9 (4 own) | 0 | 0 | **done**; same design and same unscoped-scan note as run 1; ADO cases from run 1 reused (F-0129) |
 | SauceDemo | AB#112 | | 3 (755c270) | 20261026T145348Z-d55e279a | A2 | 4 | 3/3 | 2 | 8/9 (3 of 4 own) | 0 | 0 | **done**; scoped scan stuck after 3 repairs, left for the reviewer, "NOT green" posted (F-0131) |
 | SauceDemo | AB#113 cart from list | same epic | 1 (755c270) | 20261026T224846Z-bd625f5f | A2 | 5 | 3/3 | 3 | 14/14 (5 own) | 0 | 0 | **done**; weakening refusal protected AB#112's test; scan scoped (F-0132) |
+| Juice Shop | SCRUM-25 | | 2 (755c270) | 20261026T224650Z-9aae7035 | A2 | 5 | 3/3 | 1 | 0/18 (0 of 6 own; 12 TODO) | 0 | 0 | **budget**; same sign-in strict-mode failure as run 1; security excluded (F-0133) |
 
 Suite counts are for the whole epic spec (19 tests), not only the story's own.
 One of the 19 is the expected failure for open bug SCRUM-12, which reproduced
 in every run and counts as passed.
 
-Progress: 41 of 144 story runs (Juice Shop 28, SauceDemo 13). Runs 1-41 had a human approver (phase 1); from run 42 approvals are automatic (phase 2, EVALUATION_PLAN §7). SCRUM-18 run 1 took three attempts: the first two were blocked by engine defects (F-0089, F-0091) and are kept as evidence; the third is the counted run.
+Progress: 42 of 144 story runs (Juice Shop 29, SauceDemo 13). Runs 1-42 had a human approver (phase 1); from run 43 approvals are automatic (phase 2, EVALUATION_PLAN §7). SCRUM-18 run 1 took three attempts: the first two were blocked by engine defects (F-0089, F-0091) and are kept as evidence; the third is the counted run.
 
 ## 2. Excluded runs
 
@@ -180,8 +181,8 @@ of turns the rules refused, and cost per passing design item and per filed bug:
 Runs that were not counted (engine faults, repeats that reused a design) are kept
 there with `excluded` or `study = eval-excluded`, so their cost is reported, not hidden.
 
-So far (59 runs, 41 counted): total $164.71; runs not counted $50.88; turns the
-rules refused $25.38 (about a sixth of all spend), which is the price of the
+So far (60 runs, 42 counted): total $172.18; runs not counted $52.43; turns the
+rules refused $25.99 (about a sixth of all spend), which is the price of the
 send-backs and refusals, paid before a human saw anything. Blocked runs that never
 ran a test (SCRUM-24 runs 1 and 3: $1.3 and $3.6) are the other cost governance
 does not recover: the guard stops the loop, but only after three idle cycles.

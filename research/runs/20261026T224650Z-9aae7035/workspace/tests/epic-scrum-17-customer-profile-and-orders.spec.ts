@@ -416,70 +416,52 @@ test.describe("Customer profile and orders", () => {
   // @technique:state-transition
   // @llm-generated
   test("AC-1 Correct current password and matching new password changes the password and shows confirmation", async ({ page }, testInfo) => {
-    test.fixme(true, "bdd2pw: 2 step(s) not bound — And I click \"Change\" | And I click \"Change\"");
     const changePasswordPage = new ChangePasswordPage(page);
+    const currentPassword = process.env["AQA_APP_PASS"]!;
+    const tempPassword = "TempPass99!";
 
     await test.step("Given I am logged in as a registered customer", async () => {
-      // @bdd2pw lane=llm provider=anthropic model=claude-sonnet-4-6 cached=true governance=sanitised
       await changePasswordPage.goto();
-      await changePasswordPage.closeWelcomeBannerButton.click();
-      await changePasswordPage.email.fill("customer@example.com");
-      await changePasswordPage.password.fill("Customer1!");
+      const banner = page.getByRole("button", { name: "Close Welcome Banner" });
+      if (await banner.isVisible()) await banner.click();
+      await changePasswordPage.email.fill(process.env["AQA_APP_USER"]!);
+      await changePasswordPage.password.fill(currentPassword);
       await changePasswordPage.loginButton.click();
+      await expect(page.getByRole("button", { name: "Show/hide account menu" })).toBeVisible({ timeout: 10000 });
     });
 
     await test.step("When I navigate to \"/#/privacy-security/change-password\"", async () => {
-      // @bdd2pw lane=rule rule=rule-26
-      await changePasswordPage.goto();
+      await page.goto("/#/privacy-security/change-password");
     });
 
-    await test.step("And I find the \"Field to enter the current password\" field and enter \"current_password_placeholder\"", async () => {
-      // @bdd2pw lane=llm provider=anthropic model=claude-sonnet-4-6 cached=false governance=sanitised
-      await page.getByPlaceholder("Field to enter the current password").first().fill("current_password_placeholder");
+    await test.step("And I find the \"Field to enter the current password\" field and enter current password", async () => {
+      await page.getByLabel("Field to enter the current password").fill(currentPassword);
     });
 
-    await test.step("And I find the \"Field for the new password\" field and enter \"new_password_placeholder\"", async () => {
-      // @bdd2pw lane=llm provider=anthropic model=claude-sonnet-4-6 cached=false governance=sanitised
-      await page.getByPlaceholder("Field for the new password").first().fill("new_password_placeholder");
+    await test.step("And I find the \"Field for the new password\" field and enter new password", async () => {
+      await page.getByLabel("Field for the new password").fill(tempPassword);
     });
 
-    await test.step("And I find the \"Field to repeat the new password\" field and enter \"new_password_placeholder\"", async () => {
-      // @bdd2pw lane=llm provider=anthropic model=claude-sonnet-4-6 cached=false governance=sanitised
-      await page.getByPlaceholder("Field to repeat the new password").first().fill("new_password_placeholder");
+    await test.step("And I find the \"Field to repeat the new password\" field and enter new password", async () => {
+      await page.getByLabel("Field to repeat the new password").fill(tempPassword);
     });
 
-    await test.step("[SKIPPED] And I click \"Change\"", async () => {
-      // @bdd2pw lane=todo
-      // TODO: No POM field for a 'Change' button exists on ChangePasswordPage; the available buttons are Login, dismiss cookie message, Open Sidenav, etc. A locator for the Change button cannot be resolved without a DOM snapshot or POM entry.
+    await test.step("And I click \"Change\"", async () => {
+      await page.getByRole("button", { name: "Button to confirm the change" }).click();
     });
 
     await test.step("Then the page displays \"Password successfully changed\"", async () => {
-      // @bdd2pw lane=rule rule=rule-50
       await expect(changePasswordPage.page.getByText("Password successfully changed").first()).toBeVisible();
     });
 
-    await test.step("And I find the \"Field to enter the current password\" field and enter \"new_password_placeholder\"", async () => {
-      // @bdd2pw lane=llm provider=anthropic model=claude-sonnet-4-6 cached=false governance=sanitised
-      await page.getByPlaceholder("Field to enter the current password").first().fill("new_password_placeholder");
+    await test.step("And I restore the original password", async () => {
+      await page.getByLabel("Field to enter the current password").fill(tempPassword);
+      await page.getByLabel("Field for the new password").fill(currentPassword);
+      await page.getByLabel("Field to repeat the new password").fill(currentPassword);
+      await page.getByRole("button", { name: "Button to confirm the change" }).click();
     });
 
-    await test.step("And I find the \"Field for the new password\" field and enter \"current_password_placeholder\"", async () => {
-      // @bdd2pw lane=llm provider=anthropic model=claude-sonnet-4-6 cached=false governance=sanitised
-      await page.getByPlaceholder("Field for the new password").first().fill("current_password_placeholder");
-    });
-
-    await test.step("And I find the \"Field to repeat the new password\" field and enter \"current_password_placeholder\"", async () => {
-      // @bdd2pw lane=llm provider=anthropic model=claude-sonnet-4-6 cached=false governance=sanitised
-      await page.getByPlaceholder("Field to repeat the new password").first().fill("current_password_placeholder");
-    });
-
-    await test.step("[SKIPPED] And I click \"Change\"", async () => {
-      // @bdd2pw lane=todo
-      // TODO: No POM field for a 'Change' button exists on ChangePasswordPage; the available buttons are Login, dismiss cookie message, Open Sidenav, etc. A locator for the Change button cannot be resolved without a DOM snapshot or POM entry.
-    });
-
-    await test.step("Then the page displays \"Password successfully changed\"", async () => {
-      // @bdd2pw lane=rule rule=rule-50
+    await test.step("Then the page displays \"Password successfully changed\" again", async () => {
       await expect(changePasswordPage.page.getByText("Password successfully changed").first()).toBeVisible();
     });
   });
@@ -491,45 +473,39 @@ test.describe("Customer profile and orders", () => {
   // @technique:equivalence-partitioning
   // @llm-generated
   test("AC-2 Wrong current password is refused with an error message", async ({ page }, testInfo) => {
-    test.fixme(true, "bdd2pw: 1 step(s) not bound — And I click \"Change\"");
     const changePasswordPage = new ChangePasswordPage(page);
 
     await test.step("Given I am logged in as a registered customer", async () => {
-      // @bdd2pw lane=llm provider=anthropic model=claude-sonnet-4-6 cached=true governance=sanitised
       await changePasswordPage.goto();
-      await changePasswordPage.closeWelcomeBannerButton.click();
-      await changePasswordPage.email.fill("customer@example.com");
-      await changePasswordPage.password.fill("Customer1!");
+      const banner = page.getByRole("button", { name: "Close Welcome Banner" });
+      if (await banner.isVisible()) await banner.click();
+      await changePasswordPage.email.fill(process.env["AQA_APP_USER"]!);
+      await changePasswordPage.password.fill(process.env["AQA_APP_PASS"]!);
       await changePasswordPage.loginButton.click();
+      await expect(page.getByRole("button", { name: "Show/hide account menu" })).toBeVisible({ timeout: 10000 });
     });
 
     await test.step("When I navigate to \"/#/privacy-security/change-password\"", async () => {
-      // @bdd2pw lane=rule rule=rule-26
-      await changePasswordPage.goto();
+      await page.goto("/#/privacy-security/change-password");
     });
 
     await test.step("And I find the \"Field to enter the current password\" field and enter \"wrongpassword123\"", async () => {
-      // @bdd2pw lane=llm provider=anthropic model=claude-sonnet-4-6 cached=false governance=sanitised
-      await page.getByLabel('Field to enter the current password').first().fill('wrongpassword123');
+      await page.getByLabel("Field to enter the current password").fill("wrongpassword123");
     });
 
     await test.step("And I find the \"Field for the new password\" field and enter \"NewPass1!\"", async () => {
-      // @bdd2pw lane=llm provider=anthropic model=claude-sonnet-4-6 cached=false governance=sanitised
-      await page.getByLabel('Field for the new password').first().fill('NewPass1!');
+      await page.getByLabel("Field for the new password").fill("NewPass1!");
     });
 
     await test.step("And I find the \"Field to repeat the new password\" field and enter \"NewPass1!\"", async () => {
-      // @bdd2pw lane=llm provider=anthropic model=claude-sonnet-4-6 cached=false governance=sanitised
-      await page.getByLabel('Field to repeat the new password').first().fill('NewPass1!');
+      await page.getByLabel("Field to repeat the new password").fill("NewPass1!");
     });
 
-    await test.step("[SKIPPED] And I click \"Change\"", async () => {
-      // @bdd2pw lane=todo
-      // TODO: No POM field for a 'Change' button exists on ChangePasswordPage; the available buttons are Login, dismiss cookie message, Open Sidenav, etc. A locator for the Change button cannot be resolved without a DOM snapshot or POM entry.
+    await test.step("And I click \"Change\"", async () => {
+      await page.getByRole("button", { name: "Button to confirm the change" }).click();
     });
 
     await test.step("Then the page displays \"Current password is not correct\"", async () => {
-      // @bdd2pw lane=rule rule=rule-50
       await expect(changePasswordPage.page.getByText("Current password is not correct").first()).toBeVisible();
     });
   });
@@ -541,41 +517,36 @@ test.describe("Customer profile and orders", () => {
   // @technique:equivalence-partitioning
   // @llm-generated
   test("AC-3 Mismatched new password and repeat disables the Change button", async ({ page }, testInfo) => {
-    test.fixme(true, "bdd2pw: 2 step(s) not bound — And I find the \"Field to repeat the new password\" field and enter \"DifferentPass2@\" | Then the \"Button to confirm the change\" button is disabled");
     const changePasswordPage = new ChangePasswordPage(page);
 
     await test.step("Given I am logged in as a registered customer", async () => {
-      // @bdd2pw lane=llm provider=anthropic model=claude-sonnet-4-6 cached=true governance=sanitised
       await changePasswordPage.goto();
-      await changePasswordPage.closeWelcomeBannerButton.click();
-      await changePasswordPage.email.fill("customer@example.com");
-      await changePasswordPage.password.fill("Customer1!");
+      const banner = page.getByRole("button", { name: "Close Welcome Banner" });
+      if (await banner.isVisible()) await banner.click();
+      await changePasswordPage.email.fill(process.env["AQA_APP_USER"]!);
+      await changePasswordPage.password.fill(process.env["AQA_APP_PASS"]!);
       await changePasswordPage.loginButton.click();
+      await expect(page.getByRole("button", { name: "Show/hide account menu" })).toBeVisible({ timeout: 10000 });
     });
 
     await test.step("When I navigate to \"/#/privacy-security/change-password\"", async () => {
-      // @bdd2pw lane=rule rule=rule-26
-      await changePasswordPage.goto();
+      await page.goto("/#/privacy-security/change-password");
     });
 
-    await test.step("And I find the \"Field to enter the current password\" field and enter \"current_password_placeholder\"", async () => {
-      // @bdd2pw lane=llm provider=anthropic model=claude-sonnet-4-6 cached=true governance=sanitised
-      await page.getByPlaceholder("Field to enter the current password").first().fill("current_password_placeholder");
+    await test.step("And I find the \"Field to enter the current password\" field and enter current password", async () => {
+      await page.getByLabel("Field to enter the current password").fill(process.env["AQA_APP_PASS"]!);
     });
 
     await test.step("And I find the \"Field for the new password\" field and enter \"NewPass1!\"", async () => {
-      // @bdd2pw lane=llm provider=anthropic model=claude-sonnet-4-6 cached=true governance=sanitised
-      await page.getByLabel('Field for the new password').first().fill('NewPass1!');
+      await page.getByLabel("Field for the new password").fill("NewPass1!");
     });
 
-    await test.step("[SKIPPED] And I find the \"Field to repeat the new password\" field and enter \"DifferentPass2@\"", async () => {
-      // @bdd2pw lane=todo
-      // TODO: No POM field matches 'Field to repeat the new password' (a repeat/confirm password input on a change-password form). The POM only exposes login-page fields. Please add a confirmPassword or repeatPassword field to the POM and hand-edit this step.
+    await test.step("And I find the \"Field to repeat the new password\" field and enter \"DifferentPass2@\"", async () => {
+      await page.getByLabel("Field to repeat the new password").fill("DifferentPass2@");
     });
 
-    await test.step("[SKIPPED] Then the \"Button to confirm the change\" button is disabled", async () => {
-      // @bdd2pw lane=todo
-      // TODO: No POM field matches 'Button to confirm the change' and the matcher 'toBeDisabled' is not in the allowed matcher list; please add a POM field for the confirm-change button and assert expect(locator).toBeDisabled() manually.
+    await test.step("Then the \"Button to confirm the change\" button is disabled", async () => {
+      await expect(page.getByRole("button", { name: "Button to confirm the change" })).toBeDisabled();
     });
   });
 
@@ -586,41 +557,36 @@ test.describe("Customer profile and orders", () => {
   // @technique:boundary-value-analysis
   // @llm-generated
   test("AC-1 Password length boundary — <label> [label=4-character password refused, password=abcd, state=disabled]", async ({ page }, testInfo) => {
-    test.fixme(true, "bdd2pw: 1 step(s) not bound — Then the \"Button to confirm the change\" button is disabled");
     const changePasswordPage = new ChangePasswordPage(page);
 
     await test.step("Given I am logged in as a registered customer", async () => {
-      // @bdd2pw lane=llm provider=anthropic model=claude-sonnet-4-6 cached=true governance=sanitised
       await changePasswordPage.goto();
-      await changePasswordPage.closeWelcomeBannerButton.click();
-      await changePasswordPage.email.fill("customer@example.com");
-      await changePasswordPage.password.fill("Customer1!");
+      const banner = page.getByRole("button", { name: "Close Welcome Banner" });
+      if (await banner.isVisible()) await banner.click();
+      await changePasswordPage.email.fill(process.env["AQA_APP_USER"]!);
+      await changePasswordPage.password.fill(process.env["AQA_APP_PASS"]!);
       await changePasswordPage.loginButton.click();
+      await expect(page.getByRole("button", { name: "Show/hide account menu" })).toBeVisible({ timeout: 10000 });
     });
 
     await test.step("When I navigate to \"/#/privacy-security/change-password\"", async () => {
-      // @bdd2pw lane=rule rule=rule-26
-      await changePasswordPage.goto();
+      await page.goto("/#/privacy-security/change-password");
     });
 
-    await test.step("And I find the \"Field to enter the current password\" field and enter \"current_password_placeholder\"", async () => {
-      // @bdd2pw lane=llm provider=anthropic model=claude-sonnet-4-6 cached=true governance=sanitised
-      await page.getByPlaceholder("Field to enter the current password").first().fill("current_password_placeholder");
+    await test.step("And I find the \"Field to enter the current password\" field and enter current password", async () => {
+      await page.getByLabel("Field to enter the current password").fill(process.env["AQA_APP_PASS"]!);
     });
 
     await test.step("And I find the \"Field for the new password\" field and enter \"abcd\"", async () => {
-      // @bdd2pw lane=llm provider=anthropic model=claude-sonnet-4-6 cached=false governance=sanitised
-      await page.getByLabel("Field for the new password").first().fill("abcd");
+      await page.getByLabel("Field for the new password").fill("abcd");
     });
 
     await test.step("And I find the \"Field to repeat the new password\" field and enter \"abcd\"", async () => {
-      // @bdd2pw lane=llm provider=anthropic model=claude-sonnet-4-6 cached=false governance=sanitised
-      await page.getByLabel("Field to repeat the new password").first().fill("abcd");
+      await page.getByLabel("Field to repeat the new password").fill("abcd");
     });
 
-    await test.step("[SKIPPED] Then the \"Button to confirm the change\" button is disabled", async () => {
-      // @bdd2pw lane=todo
-      // TODO: No POM field matches 'Button to confirm the change' and the matcher 'toBeDisabled' is not in the allowed matcher list; please add a POM field for the confirm-change button and assert expect(locator).toBeDisabled() manually.
+    await test.step("Then the \"Button to confirm the change\" button is disabled", async () => {
+      await expect(page.getByRole("button", { name: "Button to confirm the change" })).toBeDisabled();
     });
   });
 
