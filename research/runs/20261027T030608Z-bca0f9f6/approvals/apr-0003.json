@@ -1,0 +1,37 @@
+{
+  "approvalId": "apr-0003",
+  "summary": "Approve 3 calls: ado.testplan_test_case_write(action=update_steps, id=163, steps=1. Sign in as standard_user|The produ…, …); ado.testplan_test_case_write(action=update_steps, id=164, steps=1. Sign in as standard_user|The produ…, …); ado.testplan_test_case_write(action=update_steps, id=165, steps=1. Sign in as standard_user|The produ…, …)",
+  "calls": [
+    {
+      "toolName": "ado.testplan_test_case_write",
+      "args": {
+        "action": "update_steps",
+        "id": 163,
+        "steps": "1. Sign in as standard_user|The product list page is shown (\"Products\" heading is visible)\n2. Click the first \"Add to cart\" button in the product list|The cart badge shows \"1\"\n3. Click the \"Open Menu\" button to open the side menu|The side menu opens\n4. Click \"Reset App State\" (data-test=\"reset-sidebar-link\")|The cart badge is no longer visible on the page",
+        "project": "attestqa-saucedemo"
+      }
+    },
+    {
+      "toolName": "ado.testplan_test_case_write",
+      "args": {
+        "action": "update_steps",
+        "id": 164,
+        "steps": "1. Sign in as standard_user|The product list page is shown (\"Products\" heading is visible)\n2. Click the \"Open Menu\" button to open the side menu|The side menu opens\n3. Click the \"Logout\" button in the side menu|The sign-in page is shown (\"Swag Labs\" is visible)\n4. (Security) Navigate directly to /inventory.html after logout|The sign-in page is shown (\"Swag Labs\" is visible), confirming the session is invalidated",
+        "project": "attestqa-saucedemo"
+      }
+    },
+    {
+      "toolName": "ado.testplan_test_case_write",
+      "args": {
+        "action": "update_steps",
+        "id": 165,
+        "steps": "1. Sign in as standard_user|The product list page is shown (\"Products\" heading is visible)\n2. Click the \"Open Menu\" button to open the side menu|The side menu opens\n3. Click the \"Logout\" button in the side menu|The sign-in page is shown (\"Swag Labs\" is visible)\n4. Click the browser back button|The sign-in page is still shown (\"Swag Labs\" is visible); the product list is not accessible after logout",
+        "project": "attestqa-saucedemo"
+      }
+    }
+  ],
+  "requestedAt": "2026-10-27T03:18:32.910Z",
+  "decision": "approved",
+  "by": "auto-approver (evaluation phase 2)",
+  "at": "2026-10-27T03:18:32.971Z"
+}

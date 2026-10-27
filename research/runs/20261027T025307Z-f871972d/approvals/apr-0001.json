@@ -1,0 +1,91 @@
+{
+  "approvalId": "apr-0001",
+  "summary": "Approve 1 call: aqa.test_design(items=[{\"id\":\"D1\",\"covers\":\"AC-1\",\"type\":\"f…, excluded=[{\"what\":\"bug #121\",\"reason\":\"Active …)",
+  "calls": [
+    {
+      "toolName": "aqa.test_design",
+      "args": {
+        "items": [
+          {
+            "id": "D1",
+            "covers": "AC-1",
+            "type": "functional",
+            "technique": "state-transition",
+            "conditions": [
+              "User is signed in with items in the cart",
+              "User opens the side menu and taps Reset App State"
+            ],
+            "expected": "The Reset App State menu item is clicked and the menu closes; the cart badge is no longer visible on the products page",
+            "source": "AC-1"
+          },
+          {
+            "id": "D2",
+            "covers": "AC-2",
+            "type": "functional",
+            "technique": "state-transition",
+            "conditions": [
+              "User is signed in",
+              "User opens the side menu and taps Logout"
+            ],
+            "expected": "The Logout menu item is clicked and the session ends; the sign-in page is displayed",
+            "source": "AC-2"
+          },
+          {
+            "id": "D3",
+            "covers": "AC-3",
+            "type": "functional",
+            "technique": "state-transition",
+            "conditions": [
+              "User has just logged out",
+              "User presses the browser back button to navigate to the product list"
+            ],
+            "expected": "The back navigation is attempted; the product list page is not shown and the sign-in page is displayed instead",
+            "source": "AC-3"
+          },
+          {
+            "id": "D4",
+            "covers": "story",
+            "type": "accessibility",
+            "technique": "checklist-based",
+            "conditions": [
+              "Side menu is open on the inventory page",
+              "axe-core scans the menu element for WCAG A and AA violations"
+            ],
+            "expected": "No axe-core violations are reported (violations.map(v => v.id).sort() equals [])",
+            "source": "agent.test_types (WCAG A/AA)"
+          },
+          {
+            "id": "D5",
+            "covers": "AC-2",
+            "type": "security",
+            "technique": "state-transition",
+            "conditions": [
+              "User has logged out",
+              "User attempts to access the product list URL directly"
+            ],
+            "expected": "The direct navigation attempt is made and the session is found invalid; the product list is not shown and the sign-in page is displayed",
+            "source": "AC-2"
+          }
+        ],
+        "excluded": [
+          {
+            "what": "bug #121",
+            "reason": "Active bug about problem user seeing same picture for every product — touches product image rendering, not the menu reset/logout behaviour of story 118"
+          },
+          {
+            "what": "bug #122",
+            "reason": "Active bug about error user unable to finish an order — touches checkout flow, not the menu reset/logout behaviour of story 118"
+          },
+          {
+            "what": "confirmation",
+            "reason": "No Resolved bugs touch this story's behaviour; bugs #121 and #122 are Active and excluded as unrelated to story 118"
+          }
+        ]
+      }
+    }
+  ],
+  "requestedAt": "2026-10-27T02:54:34.294Z",
+  "decision": "approved",
+  "by": "auto-approver (evaluation phase 2)",
+  "at": "2026-10-27T02:54:34.821Z"
+}

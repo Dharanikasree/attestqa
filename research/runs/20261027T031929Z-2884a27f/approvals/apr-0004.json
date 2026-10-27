@@ -1,0 +1,19 @@
+{
+  "approvalId": "apr-0004",
+  "summary": "Approve 1 call: ado.wit_work_item_comment_write(action=add, workItemId=119, text=## agentic-qa run `20261027T031929Z-2…, …)",
+  "calls": [
+    {
+      "toolName": "ado.wit_work_item_comment_write",
+      "args": {
+        "action": "add",
+        "workItemId": 119,
+        "text": "## agentic-qa run `20261027T031929Z-2884a27f`\n\n**Suite: green** for story 119 — 18 passed, 0 failed, 0 skipped.\n\n| Test | Result | Time |\n| --- | --- | --- |\n| AC-1 Product list is sorted A to Z by name when it first opens | pass | 883 ms |\n| AC-2 Sorting by name Z to A reverses the order | pass | 786 ms |\n| AC-3a Sorting by price low to high lists the cheapest product first | pass | 764 ms |\n| AC-3b Sorting by price high to low lists the most expensive product first | pass | 910 ms |\n| AC-story Product list page passes accessibility checks | pass | 1.6 s |\n| AC-1 Clicking a product name opens its detail page with matching name, description and price | pass | 1.0 s |\n| AC-2 Adding a product from its detail page changes button to Remove and cart shows 1 | pass | 1.0 s |\n| AC-3 Back to products returns to the product list | pass | 927 ms |\n| AC-story Product detail page passes accessibility checks | pass | 1.5 s |\n| AC-1 Adding a product from the list changes its button to Remove and shows cart badge | pass | 1.0 s |\n| AC-2 Removing the product changes the button back and hides the badge | pass | 989 ms |\n| AC-3 Products added stay in the cart after navigating away and back | pass | 1.1 s |\n| AC-story Product list with cart items passes accessibility checks | pass | 1.6 s |\n| AC-1 Each product in the list shows its own unique picture | pass | 1.1 s |\n| AC-1 Problem user sees each product's own picture not the same picture for all | fails as expected — known bug reproduced | 1.1 s |\n| AC-2 A product's picture on its detail page is the same as in the list | pass | 870 ms |\n| AC-story Product images pass accessibility checks | pass | 1.6 s |\n| AC-2 Adding a second product increases the cart badge to 2 | pass | 863 ms |\n\n**Test cases linked to work item 119: 3** (created this run: 166, 167, 168).\n\nSpec files written: `tests/epic-106-product-list.spec.ts`\n\n**Checks not made in this environment:**\n- test suite membership — this Azure DevOps account has no Test Plans access level, so the cases are linked to the story but no suite contains them\n\n_Counted from the run ledger (`20261027T031929Z-2884a27f`), not from the agent's account of its own work._",
+        "project": "attestqa-saucedemo"
+      }
+    }
+  ],
+  "requestedAt": "2026-10-27T03:24:11.783Z",
+  "decision": "approved",
+  "by": "auto-approver (evaluation phase 2)",
+  "at": "2026-10-27T03:24:12.768Z"
+}

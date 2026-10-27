@@ -609,6 +609,192 @@ test.describe("Product list", () => {
     });
   });
 
+  // @story:119
+  // @ac:1
+  // @design:D15
+  // @type:functional
+  // @technique:equivalence-partitioning
+  test("AC-1 Each product in the list shows its own unique picture", async ({ page }) => {
+    const productListPage = new ProductListPage(page);
+
+    await test.step("Given I am on the sign-in page", async () => {
+      await productListPage.goto();
+    });
+
+    await test.step("When I sign in as standard_user", async () => {
+      await productListPage.usernameInput.fill(process.env["AQA_APP_USER"] ?? "standard_user");
+      await productListPage.passwordInput.fill(process.env["AQA_APP_PASS"] ?? "secret_sauce");
+      await productListPage.loginButton.click();
+    });
+
+    await test.step("Then the product list is shown", async () => {
+      await expect(page.getByText("Products").first()).toBeVisible();
+    });
+
+    await test.step("Precondition: product images are present", async () => {
+      await expect(page.locator(".inventory_item img").first()).toBeVisible({ timeout: 10000 });
+    });
+
+    await test.step("Then every product image in the list is visible", async () => {
+      const images = page.locator(".inventory_item img");
+      const count = await images.count();
+      expect(count, "Expected at least one product image").toBeGreaterThan(0);
+      for (let i = 0; i < count; i++) {
+        await expect(images.nth(i)).toBeVisible();
+      }
+    });
+
+    await test.step("And all product images in the list have unique src values", async () => {
+      const images = page.locator(".inventory_item img");
+      const count = await images.count();
+      const srcs: string[] = [];
+      for (let i = 0; i < count; i++) {
+        const src = await images.nth(i).getAttribute("src");
+        expect(src, `Product image ${i} should have a src attribute`).toBeTruthy();
+        srcs.push(src!);
+      }
+      const uniqueSrcs = new Set(srcs);
+      expect(uniqueSrcs.size, `Expected all ${count} product images to have unique src values, but found ${uniqueSrcs.size} unique values. srcs: ${JSON.stringify(srcs)}`).toBe(count);
+    });
+  });
+
+  // @story:119
+  // @ac:1
+  // @bug:121
+  // @design:D16
+  // @type:confirmation
+  // @technique:equivalence-partitioning
+  test("AC-1 Problem user sees each product's own picture not the same picture for all", async ({ page }) => {
+    test.fail(true, "Bug #121 Active: Problem user sees the same picture for every product");
+
+    const productListPage = new ProductListPage(page);
+
+    await test.step("Given I am on the sign-in page", async () => {
+      await productListPage.goto();
+    });
+
+    await test.step("When I sign in as problem_user", async () => {
+      await productListPage.usernameInput.fill("problem_user");
+      await productListPage.passwordInput.fill("secret_sauce");
+      await productListPage.loginButton.click();
+    });
+
+    await test.step("Then the product list is shown", async () => {
+      await expect(page.getByText("Products").first()).toBeVisible();
+    });
+
+    await test.step("Precondition: product images are present", async () => {
+      await expect(page.locator(".inventory_item img").first()).toBeVisible({ timeout: 10000 });
+    });
+
+    await test.step("Then every product image in the list is visible", async () => {
+      const images = page.locator(".inventory_item img");
+      const count = await images.count();
+      expect(count, "Expected at least one product image").toBeGreaterThan(0);
+      for (let i = 0; i < count; i++) {
+        await expect(images.nth(i)).toBeVisible();
+      }
+    });
+
+    await test.step("And all product images in the list have unique src values", async () => {
+      const images = page.locator(".inventory_item img");
+      const count = await images.count();
+      const srcs: string[] = [];
+      for (let i = 0; i < count; i++) {
+        const src = await images.nth(i).getAttribute("src");
+        expect(src, `Product image ${i} should have a src attribute`).toBeTruthy();
+        srcs.push(src!);
+      }
+      const uniqueSrcs = new Set(srcs);
+      expect(uniqueSrcs.size, `Expected all ${count} product images to have unique src values, but found ${uniqueSrcs.size} unique values. srcs: ${JSON.stringify(srcs)}`).toBe(count);
+    });
+  });
+
+  // @story:119
+  // @ac:2
+  // @design:D17
+  // @type:functional
+  // @technique:state-transition
+  test("AC-2 A product's picture on its detail page is the same as in the list", async ({ page }) => {
+    const productListPage = new ProductListPage(page);
+
+    await test.step("Given I am on the sign-in page", async () => {
+      await productListPage.goto();
+    });
+
+    await test.step("When I sign in as standard_user", async () => {
+      await productListPage.usernameInput.fill(process.env["AQA_APP_USER"] ?? "standard_user");
+      await productListPage.passwordInput.fill(process.env["AQA_APP_PASS"] ?? "secret_sauce");
+      await productListPage.loginButton.click();
+    });
+
+    await test.step("Then the product list is shown", async () => {
+      await expect(page.getByText("Products").first()).toBeVisible();
+    });
+
+    let listImageSrc: string;
+
+    await test.step("Precondition: first product image is present in the list", async () => {
+      await expect(page.locator(".inventory_item img").first()).toBeVisible({ timeout: 10000 });
+    });
+
+    await test.step("When I record the first product image src from the list", async () => {
+      const src = await page.locator(".inventory_item img").first().getAttribute("src");
+      expect(src, "Precondition: first product image should have a src attribute").toBeTruthy();
+      listImageSrc = src!;
+    });
+
+    await test.step("And I click the first product name in the list", async () => {
+      await page.getByTestId("inventory-item-name").first().click();
+    });
+
+    await test.step("Then the product detail page is shown", async () => {
+      await expect(page.getByTestId("inventory-item-name")).toBeVisible();
+    });
+
+    await test.step("And the product detail image src matches the recorded list image src", async () => {
+      const detailImg = page.locator(".inventory_details_img");
+      await expect(detailImg).toBeVisible();
+      const detailSrc = await detailImg.getAttribute("src");
+      expect(detailSrc, "Detail page image should have a src attribute").toBeTruthy();
+      expect(detailSrc, `Detail page image src "${detailSrc}" should match list image src "${listImageSrc}"`).toBe(listImageSrc);
+    });
+  });
+
+  // @story:119
+  // @design:D18
+  // @type:accessibility
+  // @technique:checklist-based
+  test("AC-story Product images pass accessibility checks", async ({ page }) => {
+    const productListPage = new ProductListPage(page);
+
+    await test.step("Given I am on the sign-in page", async () => {
+      await productListPage.goto();
+    });
+
+    await test.step("When I sign in as standard_user", async () => {
+      await productListPage.usernameInput.fill(process.env["AQA_APP_USER"] ?? "standard_user");
+      await productListPage.passwordInput.fill(process.env["AQA_APP_PASS"] ?? "secret_sauce");
+      await productListPage.loginButton.click();
+    });
+
+    await test.step("Then the product list is shown", async () => {
+      await expect(page.getByText("Products").first()).toBeVisible();
+    });
+
+    await test.step("Then the product list passes axe accessibility checks", async () => {
+      const { default: AxeBuilder } = await import("@axe-core/playwright");
+      const axeResults = await new AxeBuilder({ page })
+        .include("[data-test='inventory-container']")
+        .withTags(["wcag2a", "wcag2aa"])
+        .analyze();
+      expect(
+        axeResults.violations.map((v) => v.id).sort(),
+        `axe violations: ${JSON.stringify(axeResults.violations, null, 2)}`
+      ).toEqual([]);
+    });
+  });
+
   // @story:113
   // @ac:2
   // @design:D14

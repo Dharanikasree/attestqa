@@ -1,0 +1,19 @@
+{
+  "approvalId": "apr-0004",
+  "summary": "Approve 1 call: ado.wit_work_item_comment_write(action=add, workItemId=116, text=## agentic-qa run `20261027T021248Z-6…, …)",
+  "calls": [
+    {
+      "toolName": "ado.wit_work_item_comment_write",
+      "args": {
+        "action": "add",
+        "workItemId": 116,
+        "text": "## agentic-qa run `20261027T021248Z-64ac9863`\n\n**Suite: green** for story 116 — 16 passed, 0 failed, 0 skipped.\n\n| Test | Result | Time |\n| --- | --- | --- |\n| AC-1 Cart lists added product with quantity, name and price | pass | 1.2 s |\n| AC-2 Removing a product from the cart takes it off the list and lowers the badge | pass | 1.1 s |\n| AC-3 Continue shopping returns to the product list with cart unchanged | pass | 1.5 s |\n| AC-story Cart page passes axe accessibility checks | pass | 2.3 s |\n| AC-1 Unauthenticated user navigating directly to the cart sees the sign-in page | pass | 1.4 s |\n| AC-1 Continuing with all fields filled in goes to the order overview | pass | 1.8 s |\n| AC-2a Empty first name shows an error saying the first name is required | pass | 1.4 s |\n| AC-2b Empty last name shows an error saying the last name is required | pass | 1.5 s |\n| AC-2c Empty postal code shows an error saying the postal code is required | pass | 1.6 s |\n| AC-3 Cancel returns to the cart with the cart unchanged | pass | 1.7 s |\n| AC-story Checkout information page passes axe accessibility checks | pass | 2.3 s |\n| AC-1 Overview lists the products in the cart with their prices | pass | 1.5 s |\n| AC-2 Item total equals the sum of the listed prices | pass | 1.6 s |\n| AC-3 Total equals the item total plus the tax shown | pass | 1.5 s |\n| AC-story Overview page passes axe accessibility checks | pass | 2.0 s |\n| AC-1 Unauthenticated user navigating directly to the overview sees the sign-in page | pass | 1.1 s |\n\n**Test cases linked to work item 116: 3** (created this run: 157, 158, 159).\n\nSpec files written: `tests/epic-107-cart-and-checkout.spec.ts`\n\n**Checks not made in this environment:**\n- test suite membership — this Azure DevOps account has no Test Plans access level, so the cases are linked to the story but no suite contains them\n\n_Counted from the run ledger (`20261027T021248Z-64ac9863`), not from the agent's account of its own work._",
+        "project": "attestqa-saucedemo"
+      }
+    }
+  ],
+  "requestedAt": "2026-10-27T02:19:42.080Z",
+  "decision": "approved",
+  "by": "auto-approver (evaluation phase 2)",
+  "at": "2026-10-27T02:19:42.701Z"
+}

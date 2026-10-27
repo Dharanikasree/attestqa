@@ -1,0 +1,40 @@
+{
+  "approvalId": "apr-0003",
+  "summary": "Approve 3 calls: ado.testplan_test_case_write(action=create, project=attestqa-saucedemo, title=AC-1: Finishing from the overview sho…, …); ado.testplan_test_case_write(action=create, project=attestqa-saucedemo, title=AC-2: After the order the cart is emp…, …); ado.testplan_test_case_write(action=create, project=attestqa-saucedemo, title=AC-3: Back home from the confirmation…, …)",
+  "calls": [
+    {
+      "toolName": "ado.testplan_test_case_write",
+      "args": {
+        "action": "create",
+        "project": "attestqa-saucedemo",
+        "title": "AC-1: Finishing from the overview shows a thank-you message",
+        "testsWorkItemId": 117,
+        "steps": "1. Sign in as standard_user with password secret_sauce|Login succeeds and the Products page is displayed\n2. Click the first Add to cart button in the product list|Cart badge shows \"1\"\n3. Click the cart icon|Your Cart page is displayed\n4. Click Checkout|Checkout: Your Information page is displayed\n5. Enter \"Jane\" in First Name, \"Doe\" in Last Name, \"12345\" in Zip/Postal Code|Fields are filled\n6. Click Continue|Checkout: Overview page is displayed\n7. Click Finish|The page displays \"Thank you for your order!\" (confirmation page shown)"
+      }
+    },
+    {
+      "toolName": "ado.testplan_test_case_write",
+      "args": {
+        "action": "create",
+        "project": "attestqa-saucedemo",
+        "title": "AC-2: After the order the cart is empty and the cart badge is not shown",
+        "testsWorkItemId": 117,
+        "steps": "1. Sign in as standard_user with password secret_sauce|Login succeeds and the Products page is displayed\n2. Click the first Add to cart button in the product list|Cart badge shows \"1\"\n3. Click the cart icon|Your Cart page is displayed\n4. Click Checkout|Checkout: Your Information page is displayed\n5. Enter \"Jane\" in First Name, \"Doe\" in Last Name, \"12345\" in Zip/Postal Code|Fields are filled\n6. Click Continue|Checkout: Overview page is displayed\n7. Click Finish|The page displays \"Thank you for your order!\"\n8. Observe the cart badge|The cart badge is not shown (cart is empty after order completion)"
+      }
+    },
+    {
+      "toolName": "ado.testplan_test_case_write",
+      "args": {
+        "action": "create",
+        "project": "attestqa-saucedemo",
+        "title": "AC-3: Back home from the confirmation returns to the product list",
+        "testsWorkItemId": 117,
+        "steps": "1. Sign in as standard_user with password secret_sauce|Login succeeds and the Products page is displayed\n2. Click the first Add to cart button in the product list|Cart badge shows \"1\"\n3. Click the cart icon|Your Cart page is displayed\n4. Click Checkout|Checkout: Your Information page is displayed\n5. Enter \"Jane\" in First Name, \"Doe\" in Last Name, \"12345\" in Zip/Postal Code|Fields are filled\n6. Click Continue|Checkout: Overview page is displayed\n7. Click Finish|The page displays \"Thank you for your order!\" (confirmation page shown)\n8. Click \"Back Home\"|The product list (Products page) is displayed"
+      }
+    }
+  ],
+  "requestedAt": "2026-10-27T02:36:27.119Z",
+  "decision": "approved",
+  "by": "auto-approver (evaluation phase 2)",
+  "at": "2026-10-27T02:36:27.131Z"
+}

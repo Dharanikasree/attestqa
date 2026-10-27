@@ -1,0 +1,85 @@
+{
+  "approvalId": "apr-0001",
+  "summary": "Approve 1 call: aqa.test_design(items=[{\"id\":\"D6\",\"covers\":\"AC-1\",\"type\":\"f…, excluded=[{\"what\":\"confirmation\",\"reason\":\"Bug…)",
+  "calls": [
+    {
+      "toolName": "aqa.test_design",
+      "args": {
+        "items": [
+          {
+            "id": "D6",
+            "covers": "AC-1",
+            "type": "functional",
+            "technique": "state-transition",
+            "conditions": [
+              "User is on the checkout information page with a product in the cart",
+              "First name, last name, and postal code are all filled in",
+              "User clicks Continue"
+            ],
+            "expected": "The Continue button is activated and accepted (form submission succeeds), and the page navigates to the order overview",
+            "source": "AC-1"
+          },
+          {
+            "id": "D7",
+            "covers": "AC-2",
+            "type": "functional",
+            "technique": "boundary-value-analysis",
+            "conditions": [
+              "First name is empty, last name and postal code filled — click Continue",
+              "Last name is empty, first name and postal code filled — click Continue",
+              "Postal code is empty, first name and last name filled — click Continue"
+            ],
+            "expected": "An error message appears indicating the specific required field; the page does not navigate away",
+            "source": "AC-2"
+          },
+          {
+            "id": "D8",
+            "covers": "AC-3",
+            "type": "functional",
+            "technique": "state-transition",
+            "conditions": [
+              "User is on the checkout information page with a product in the cart",
+              "User clicks Cancel without filling in any fields"
+            ],
+            "expected": "The Cancel action is accepted (no error shown), and the page returns to the cart with the cart contents unchanged",
+            "source": "AC-3"
+          },
+          {
+            "id": "D9",
+            "covers": "story",
+            "type": "accessibility",
+            "technique": "checklist-based",
+            "conditions": [
+              "Checkout information page is loaded and visible",
+              "axe-core scans the checkout form with WCAG 2.0 A/AA rules"
+            ],
+            "expected": "No axe-core violations are reported for the checkout information form",
+            "source": "agent.test_types (WCAG A/AA)"
+          }
+        ],
+        "excluded": [
+          {
+            "what": "confirmation",
+            "reason": "Bug #121 (problem user, product images) does not touch checkout information behaviour. Bug #122 (error user cannot finish an order) is about the Finish step in story #117, not about the checkout information form fields in story #115. No confirmation test applies to this story."
+          },
+          {
+            "what": "security",
+            "reason": "Story #115 covers a checkout form with name and postal code fields — no authentication, session management, or account-enumeration behaviour is implied. The unauthenticated redirect to sign-in is already covered under story #114 (AC-1 security scenario D5). No new security surface is introduced by this story."
+          },
+          {
+            "what": "bug #121",
+            "reason": "Active bug about product images on the product list page — does not touch the checkout information form or any AC of story #115."
+          },
+          {
+            "what": "bug #122",
+            "reason": "Active bug about the error user being unable to finish an order (the Finish step) — that behaviour belongs to story #117. Story #115 only covers the information entry step; the bug's symptom occurs after this story's scope ends."
+          }
+        ]
+      }
+    }
+  ],
+  "requestedAt": "2026-10-27T02:02:06.514Z",
+  "decision": "approved",
+  "by": "auto-approver (evaluation phase 2)",
+  "at": "2026-10-27T02:02:06.820Z"
+}

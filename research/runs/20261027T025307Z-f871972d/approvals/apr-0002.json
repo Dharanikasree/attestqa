@@ -1,0 +1,16 @@
+{
+  "approvalId": "apr-0002",
+  "summary": "Approve 1 call: pw.run_tests(spec=tests/epic-108-navigation-menu.spec.ts)",
+  "calls": [
+    {
+      "toolName": "pw.run_tests",
+      "args": {
+        "spec": "tests/epic-108-navigation-menu.spec.ts"
+      }
+    }
+  ],
+  "requestedAt": "2026-10-27T02:58:06.635Z",
+  "decision": "approved",
+  "by": "auto-approver (evaluation phase 2)",
+  "at": "2026-10-27T02:58:07.581Z"
+}

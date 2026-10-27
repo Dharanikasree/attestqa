@@ -1,0 +1,89 @@
+{
+  "approvalId": "apr-0001",
+  "summary": "Approve 1 call: aqa.test_design(items=[{\"id\":\"D13\",\"covers\":\"AC-1\",\"type\":\"…, excluded=[{\"what\":\"confirmation\",\"reason\":\"Bot…)",
+  "calls": [
+    {
+      "toolName": "aqa.test_design",
+      "args": {
+        "items": [
+          {
+            "id": "D13",
+            "covers": "AC-1",
+            "type": "functional",
+            "technique": "state-transition",
+            "conditions": [
+              "standard_user adds one product, proceeds through cart and checkout information, reaches the overview page"
+            ],
+            "expected": "The overview page (Checkout: Overview) is displayed; the product name and price are visible in the items list",
+            "source": "AC-1"
+          },
+          {
+            "id": "D14",
+            "covers": "AC-2",
+            "type": "functional",
+            "technique": "equivalence-partitioning",
+            "conditions": [
+              "one product in cart on the overview page",
+              "item total label shows a dollar amount"
+            ],
+            "expected": "The item total displayed equals the price of the single listed product (sum check with one addend)",
+            "source": "AC-2"
+          },
+          {
+            "id": "D15",
+            "covers": "AC-3",
+            "type": "functional",
+            "technique": "equivalence-partitioning",
+            "conditions": [
+              "one product in cart on the overview page",
+              "tax shown as its own line",
+              "total shown as its own line"
+            ],
+            "expected": "The total displayed equals the item total plus the tax amount shown; tax rate is not asserted",
+            "source": "AC-3, comment (product owner: tax is shown as its own line and is part of the total; testing the tax rate itself is out of scope)"
+          },
+          {
+            "id": "D16",
+            "covers": "story",
+            "type": "accessibility",
+            "technique": "checklist-based",
+            "conditions": [
+              "standard_user is on the Checkout: Overview page with one product in cart"
+            ],
+            "expected": "No axe-core WCAG A/AA violations on the overview page summary container",
+            "source": "agent.test_types (WCAG A/AA)"
+          },
+          {
+            "id": "D17",
+            "covers": "AC-1",
+            "type": "security",
+            "technique": "equivalence-partitioning",
+            "conditions": [
+              "unauthenticated user navigates directly to /checkout-step-two.html"
+            ],
+            "expected": "The application redirects to the sign-in page and shows 'Swag Labs'",
+            "source": "AC-1, task context (checkout requires authentication)"
+          }
+        ],
+        "excluded": [
+          {
+            "what": "confirmation",
+            "reason": "Both open bugs (#121 and #122) do not touch story #116's behaviour: #121 is about product images on the product list page, and #122 is about completing the order (story #117's Finish step), not about the overview totals. No Resolved bugs exist to regression-test."
+          },
+          {
+            "what": "bug #121",
+            "reason": "Active bug about product images on the product list page — does not touch the checkout overview or totals that story #116 tests."
+          },
+          {
+            "what": "bug #122",
+            "reason": "Active bug about the error user failing to finish an order (the Finish step) — belongs to story #117, not to story #116's overview totals behaviour."
+          }
+        ]
+      }
+    }
+  ],
+  "requestedAt": "2026-10-27T02:14:25.924Z",
+  "decision": "approved",
+  "by": "auto-approver (evaluation phase 2)",
+  "at": "2026-10-27T02:14:26.307Z"
+}

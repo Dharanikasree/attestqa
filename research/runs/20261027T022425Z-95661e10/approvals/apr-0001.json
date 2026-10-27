@@ -1,0 +1,84 @@
+{
+  "approvalId": "apr-0001",
+  "summary": "Approve 1 call: aqa.test_design(items=[{\"id\":\"D11\",\"covers\":\"AC-1\",\"type\":\"…, excluded=[{\"what\":\"bug #SCRUM-28\",\"reason\":\"SC…)",
+  "calls": [
+    {
+      "toolName": "aqa.test_design",
+      "args": {
+        "items": [
+          {
+            "id": "D11",
+            "covers": "AC-1",
+            "type": "functional",
+            "technique": "state-transition",
+            "conditions": [
+              "User is on the shop homepage with EN language active",
+              "User clicks the Language selection menu button",
+              "User selects German (DE) from the language menu"
+            ],
+            "expected": "The language menu closes and the language indicator shows 'DE'; the shop's UI labels (e.g., navigation and product section labels) appear in German",
+            "source": "AC-1"
+          },
+          {
+            "id": "D12",
+            "covers": "AC-2",
+            "type": "functional",
+            "technique": "state-transition",
+            "conditions": [
+              "User has selected German (DE) as the language",
+              "User reloads the page"
+            ],
+            "expected": "The language indicator still shows 'DE' after reload; the shop's UI labels remain in German and are not reset to English",
+            "source": "AC-2"
+          },
+          {
+            "id": "D13",
+            "covers": "AC-3",
+            "type": "functional",
+            "technique": "state-transition",
+            "conditions": [
+              "User is on the shop homepage with EN language active",
+              "User selects German (DE) from the language menu"
+            ],
+            "expected": "The language menu closes and 'DE' is shown in the language indicator; the HTML document's lang attribute changes to the German language code (e.g., 'de') and no longer reads 'en'",
+            "source": "AC-3"
+          },
+          {
+            "id": "D14",
+            "covers": "story",
+            "type": "accessibility",
+            "technique": "checklist-based",
+            "conditions": [
+              "User is on the shop homepage",
+              "axe-core scans the top navigation bar (language switcher area) with WCAG 2.x A and AA rules"
+            ],
+            "expected": "No axe-core violations are reported (violations.map(v => v.id).sort() equals [])",
+            "source": "agent.test_types (WCAG A/AA)"
+          }
+        ],
+        "excluded": [
+          {
+            "what": "bug #SCRUM-28",
+            "reason": "SCRUM-28 is about order tracking showing any order to unauthenticated users — it touches SCRUM-27 (order history), not this story's language-switching behaviour"
+          },
+          {
+            "what": "bug #SCRUM-12",
+            "reason": "SCRUM-12 is about session token surviving logout — it touches authentication/session behaviour, not this story's language-switching behaviour"
+          },
+          {
+            "what": "confirmation",
+            "reason": "Neither open bug (SCRUM-28, SCRUM-12) touches this story's language-switching behaviour, so no confirmation test is needed here"
+          },
+          {
+            "what": "security",
+            "reason": "The language-switching feature carries no security surface: it stores only a UI preference (language code) with no authentication, authorisation, or sensitive data involved"
+          }
+        ]
+      }
+    }
+  ],
+  "requestedAt": "2026-10-27T02:25:50.442Z",
+  "decision": "approved",
+  "by": "auto-approver (evaluation phase 2)",
+  "at": "2026-10-27T02:25:51.224Z"
+}

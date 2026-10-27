@@ -1,0 +1,114 @@
+aqa: env E:\EB1A_Research\Application\attestqa\packages\core\.env — 13 key(s) loaded; model anthropic claude-sonnet-4-6 (credential: ANTHROPIC_API_KEY); ANTHROPIC_API_KEY sk-a… from .env
+aqa: Jira https://jvijayprasad.atlassian.net (REST v3), jvijayprasad@gmail.com, API token ATAT…
+aqa: bdd2pw 4.6.5 (attestqa's own dependency)
+aqa: bdd2pw LLM fallback anthropic, governed by the sidecar
+aqa run 20261027T030727Z-d4e65e24: "Write tests for SCRUM-27"
+aqa: skill story-to-tests, Jira issue SCRUM-27, model claude-sonnet-4-6, approval file
+aqa: Jira keeps no test cases — the feature file's @story tags are the record; the run report stays with the run and is not posted to the issue
+aqa: ledger .aqa-eval-r2\runs\20261027T030727Z-d4e65e24
+aqa: framework — 6 existing spec(s) in this project's layout
+aqa: context — story read, 0 existing test case(s), epic read, 3 sibling stories, 0 task(s), 0 comment(s) (0 run reports left out), 2 open bug(s) (3 agent-filed left out)
+aqa: route A2 — complete what is missing: the feature file exists but has no scenario tagged @story:SCRUM-27
+== Test cases: none yet for this story
+== Test design: started
+aqa: back to the full toolset
+aqa: the design was sent back to the agent — 4 thing(s) to fix
+       - D19: covers "AC-story" — name a criterion (AC-2), a bug (bug #48) or a task (task #46)
+       - AC-3 has no functional test in the design
+       - bug #SCRUM-28 [In Progress] is neither tested nor listed in "excluded" with a reason — either add an item covering "bug #SCRUM-28", or add {"what": "bug #SCRUM-28", "reason": "<why not>"} to "excluded"
+       - test type "confirmation" is in scope but has no item — add one, or add {"what": "confirmation", "reason": "<why not>"} to "excluded"
+aqa: the design was sent back to the agent — 2 thing(s) to fix
+       - D17: technique "state-transition" needs an action that changes the page's state, and this item names none in its conditions or expected result. If it checks what one page shows, use "equivalence-partitioning"; if there is an action, name it in the conditions (for example "page 2 control is clicked")
+       - D18: the expected result offers an alternative ("(or …") — "Order history page displays only the current user's own orders (or no orders if none place". One item, one expectation: pick the one that must hold, or split this into two items. A reviewer cannot approve a choice that is made after the approval.
+== Test design: ready — waiting for your approval
+== Test design: done — approved
+aqa: test design approved — 6 item(s); tests are written from it
+aqa: calling jira.record_qa itself — covered by approval apr-0001 (no model turn)
+== Execution: waiting for your approval to run the suite
+aqa: running the suite itself — nothing has run yet (no model turn)
+== Execution: started
+aqa: suite red — 2 passed, 7 failed, 11 skipped, 11 not implemented (steps still TODO — they ran but checked nothing)
+aqa: 7 failure(s) triaged — 3 new tests failing that have never passed — the agent checks the test first; not yet a defect; 4 may be flaky — re-running to find out
+== Defect analysis: started — 7 failure(s): 3 possible product defect(s), 4 flaky
+aqa: heal agent takes over — "AC-1 Correct current password and matching new password changes the password and shows confirmation" failed on an action that never completed — a locator that matched nothing; it may use 5 tool(s), nothing else
+== Self-healing: started — "AC-1 Correct current password and matching new password changes the password and shows confirmation" failed on an action that never complet
+aqa: running the suite itself — tests/epic-scrum-17-customer-profile-and-orders.spec.ts changed since the last full run (no model turn)
+aqa: suite red — 3 passed, 12 failed, 11 skipped (1 of the passed: known bug reproduced, failing as expected), 11 not implemented (steps still TODO — they ran but checked nothing)
+aqa: 12 failure(s) triaged — 4 new tests failing that have never passed — the agent checks the test first; not yet a defect; 4 matched no known failure pattern — held for you as possible defects, at low confidence (0.1); 4 may be flaky — re-running to find out
+   Defect analysis: 12 failure(s): 8 possible product defect(s), 4 flaky
+aqa: suite red — 0 passed, 1 failed, 0 skipped, 11 not implemented (steps still TODO — they ran but checked nothing)
+aqa: running the suite itself — tests/epic-scrum-17-customer-profile-and-orders.spec.ts changed since the last full run (no model turn)
+aqa: suite red — 4 passed, 11 failed, 11 skipped (1 of the passed: known bug reproduced, failing as expected), 11 not implemented (steps still TODO — they ran but checked nothing)
+aqa: 11 failure(s) triaged — 3 new tests failing that have never passed — the agent checks the test first; not yet a defect; 6 matched no known failure pattern — held for you as possible defects, at low confidence (0.1); 1 looks like the test's fault — the agent fixes it; 1 looks like a product defect — held for you
+   Defect analysis: 11 failure(s): 10 possible product defect(s), 1 flaky
+aqa: running the suite itself — tests/epic-scrum-17-customer-profile-and-orders.spec.ts changed since the last full run (no model turn)
+aqa: suite red — 3 passed, 12 failed, 11 skipped (1 of the passed: known bug reproduced, failing as expected), 11 not implemented (steps still TODO — they ran but checked nothing)
+aqa: 12 failure(s) triaged — 3 new tests failing that have never passed — the agent checks the test first; not yet a defect; 6 matched no known failure pattern — held for you as possible defects, at low confidence (0.1); 2 look like the test's fault — the agent fixes them; 1 looks like a product defect — held for you
+   Defect analysis: 12 failure(s): 10 possible product defect(s), 2 flaky
+aqa: running the suite itself — tests/epic-scrum-17-customer-profile-and-orders.spec.ts changed since the last full run (no model turn)
+aqa: suite red — 4 passed, 11 failed, 11 skipped (1 of the passed: known bug reproduced, failing as expected), 11 not implemented (steps still TODO — they ran but checked nothing)
+aqa: 11 failure(s) triaged — 3 new tests failing that have never passed — the agent checks the test first; not yet a defect; 5 matched no known failure pattern — held for you as possible defects, at low confidence (0.1); 2 look like the test's fault — the agent fixes them; 1 looks like a product defect — held for you
+   Defect analysis: 11 failure(s): 9 possible product defect(s), 2 flaky
+aqa: running the suite itself — tests/epic-scrum-17-customer-profile-and-orders.spec.ts changed since the last full run (no model turn)
+aqa: suite red — 3 passed, 12 failed, 11 skipped (1 of the passed: known bug reproduced, failing as expected), 11 not implemented (steps still TODO — they ran but checked nothing)
+aqa: 12 failure(s) triaged — 3 new tests failing that have never passed — the agent checks the test first; not yet a defect; 5 matched no known failure pattern — held for you as possible defects, at low confidence (0.1); 3 look like the test's fault — the agent fixes them; 1 looks like a product defect — held for you
+   Defect analysis: 12 failure(s): 9 possible product defect(s), 3 flaky
+aqa: running the suite itself — tests/epic-scrum-17-customer-profile-and-orders.spec.ts changed since the last full run (no model turn)
+aqa: suite red — 4 passed, 11 failed, 11 skipped (1 of the passed: known bug reproduced, failing as expected), 11 not implemented (steps still TODO — they ran but checked nothing)
+aqa: 11 failure(s) triaged — 4 new tests failing that have never passed — the agent checks the test first; not yet a defect; 2 may be flaky — re-running to find out; 1 matched no known failure pattern — held for you as possible defect, at low confidence (0.1); 4 look like the test's fault — the agent fixes them
+   Defect analysis: 11 failure(s): 5 possible product defect(s), 6 flaky
+aqa: suite red — 0 passed, 1 failed, 0 skipped, 11 not implemented (steps still TODO — they ran but checked nothing)
+aqa: running the suite itself — tests/epic-scrum-17-customer-profile-and-orders.spec.ts changed since the last full run (no model turn)
+aqa: suite red — 5 passed, 10 failed, 11 skipped (1 of the passed: known bug reproduced, failing as expected), 11 not implemented (steps still TODO — they ran but checked nothing)
+aqa: 10 failure(s) triaged — 4 new tests failing that have never passed — the agent checks the test first; not yet a defect; 3 matched no known failure pattern — held for you as possible defects, at low confidence (0.1); 3 look like the test's fault — the agent fixes them
+   Defect analysis: 10 failure(s): 7 possible product defect(s), 3 flaky
+aqa: suite red — 0 passed, 1 failed, 0 skipped, 11 not implemented (steps still TODO — they ran but checked nothing)
+aqa: calling jira.record_qa itself — covered by approval apr-0001 (no model turn)
+== Execution: done
+== Self-healing: done
+== Defect analysis: done — last result — 10 failure(s): 7 possible product defect(s), 3 flaky
+== Creating defects: none — no failure was put forward as a defect
+== Report
+     Total scripts : 26
+     Passed        : 5
+     Failed        : 10
+       - AC-story Accessibility of the Create Address form
+         screenshot: E:\EB1A_Research\Application\attestqa\TestRunApplication\juice-shop\test-results\epic-scrum-17-customer-pro-1125b--of-the-Create-Address-form-chrome\test-failed-1.png
+       - AC-1 Correct current password and matching new password changes the password and shows confirmation
+         screenshot: E:\EB1A_Research\Application\attestqa\TestRunApplication\juice-shop\test-results\epic-scrum-17-customer-pro-17234-word-and-shows-confirmation-chrome\test-failed-1.png
+       - AC-2 Wrong current password causes the change to be refused with a message
+         screenshot: E:\EB1A_Research\Application\attestqa\TestRunApplication\juice-shop\test-results\epic-scrum-17-customer-pro-8cbbb-o-be-refused-with-a-message-chrome\test-failed-1.png
+       - AC-story Accessibility of the Change Password form
+         screenshot: E:\EB1A_Research\Application\attestqa\TestRunApplication\juice-shop\test-results\epic-scrum-17-customer-pro-be055-of-the-Change-Password-form-chrome\test-failed-1.png
+       - AC-3 The page declares the chosen language to assistive technology
+         screenshot: E:\EB1A_Research\Application\attestqa\TestRunApplication\juice-shop\test-results\epic-scrum-17-customer-pro-9e2c3-age-to-assistive-technology-chrome\test-failed-1.png
+       - AC-story Accessibility of the language selection
+         screenshot: E:\EB1A_Research\Application\attestqa\TestRunApplication\juice-shop\test-results\epic-scrum-17-customer-pro-e6a04-y-of-the-language-selection-chrome\test-failed-1.png
+       - AC-1 Order history lists each order with its order number and total
+         screenshot: E:\EB1A_Research\Application\attestqa\TestRunApplication\juice-shop\test-results\epic-scrum-17-customer-pro-3b741--its-order-number-and-total-chrome\test-failed-1.png
+       - AC-2 Tracking an order shows that order's status and its products
+         screenshot: E:\EB1A_Research\Application\attestqa\TestRunApplication\juice-shop\test-results\epic-scrum-17-customer-pro-1eb06-r-s-status-and-its-products-chrome\test-failed-1.png
+       - AC-3 A customer can only see their own orders on the order history page
+         screenshot: E:\EB1A_Research\Application\attestqa\TestRunApplication\juice-shop\test-results\epic-scrum-17-customer-pro-38be3-s-on-the-order-history-page-chrome\test-failed-1.png
+       - AC-3 Unauthenticated access to order history redirects away from the page
+         screenshot: E:\EB1A_Research\Application\attestqa\TestRunApplication\juice-shop\test-results\epic-scrum-17-customer-pro-461aa-edirects-away-from-the-page-chrome\test-failed-1.png
+     Skipped       : 11
+     Not implemented: 11 (steps left as TODO — they ran but checked nothing)
+       - AC-1 Adding a new address saves it and confirmation names the city
+       - AC-2 The saved address is listed among the customer's addresses
+       - AC-3 Address cannot be submitted while any required field is empty [field=Country]
+       - AC-3 Address cannot be submitted while any required field is empty [field=Name]
+       - AC-3 Address cannot be submitted while any required field is empty [field=Mobile Number]
+       - AC-3 Address cannot be submitted while any required field is empty [field=ZIP Code]
+       - AC-3 Address cannot be submitted while any required field is empty [field=Address]
+       - AC-3 Address cannot be submitted while any required field is empty [field=City]
+       - AC-3 Address cannot be submitted while any required field is empty [field=State]
+       - AC-2 security A customer cannot access another customer's saved addresses
+       - AC-1b After password change the old password no longer works
+     Defects found : 0 filed
+     Test cases    : SCRUM-41  https://jvijayprasad.atlassian.net/browse/SCRUM-41
+== Story SCRUM-27: stopped (budget) — token budget of 1500000 exhausted (1541948 used)
+
+budget: token budget of 1500000 exhausted (1541948 used)
+  348 events in .aqa-eval-r2\runs\20261027T030727Z-d4e65e24
+  replay: aqa replay .aqa-eval-r2\runs\20261027T030727Z-d4e65e24

@@ -1,0 +1,32 @@
+{
+  "approvalId": "apr-0003",
+  "summary": "Approve 2 calls: ado.testplan_test_case_write(action=create, project=attestqa-saucedemo, title=AC-1: Customer filling in details rea…, …); ado.testplan_test_case_write(action=create, project=attestqa-saucedemo, title=AC-2: Finishing from the overview sho…, …)",
+  "calls": [
+    {
+      "toolName": "ado.testplan_test_case_write",
+      "args": {
+        "action": "create",
+        "project": "attestqa-saucedemo",
+        "title": "AC-1: Customer filling in details reaches the overview with those details accepted",
+        "testsWorkItemId": 120,
+        "steps": "1. Navigate to the sign-in page|Sign-in page is displayed\n2. Sign in as standard_user with valid credentials|Products page is displayed (login succeeded)\n3. Click the first Add to cart button|Cart badge shows \"1\"\n4. Click the cart icon|Your Cart page is displayed\n5. Click Checkout|Checkout: Your Information page is displayed\n6. Enter first name \"Jane\", last name \"Doe\", postal code \"12345\"|Fields are filled in\n7. Click Continue|The page transitions to Checkout: Overview; the details are accepted and no error is shown",
+        "priority": 2
+      }
+    },
+    {
+      "toolName": "ado.testplan_test_case_write",
+      "args": {
+        "action": "create",
+        "project": "attestqa-saucedemo",
+        "title": "AC-2: Finishing from the overview shows the thank-you message for any demo customer",
+        "testsWorkItemId": 120,
+        "steps": "1. Navigate to the sign-in page|Sign-in page is displayed\n2. Sign in as performance_glitch_user with valid credentials|Products page is displayed (login succeeded)\n3. Click the first Add to cart button|Item is added to cart\n4. Click the cart icon|Your Cart page is displayed\n5. Click Checkout|Checkout: Your Information page is displayed\n6. Enter first name \"Jane\", last name \"Doe\", postal code \"12345\"|Fields are filled in\n7. Click Continue|Checkout: Overview page is displayed\n8. Click Finish|The page displays \"Thank you for your order!\"\nNote: Bug #122 (Active) — error_user cannot finish an order; a separate confirmation test (D25) covers that scenario and is expected to fail.",
+        "priority": 2
+      }
+    }
+  ],
+  "requestedAt": "2026-10-27T03:48:37.158Z",
+  "decision": "approved",
+  "by": "auto-approver (evaluation phase 2)",
+  "at": "2026-10-27T03:48:37.332Z"
+}

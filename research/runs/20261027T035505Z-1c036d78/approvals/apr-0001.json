@@ -1,0 +1,85 @@
+{
+  "approvalId": "apr-0001",
+  "summary": "Approve 1 call: aqa.test_design(items=[{\"id\":\"D26\",\"covers\":\"AC-1\",\"type\":\"…, excluded=[{\"what\":\"security\",\"reason\":\"Unauthe…)",
+  "calls": [
+    {
+      "toolName": "aqa.test_design",
+      "args": {
+        "items": [
+          {
+            "id": "D26",
+            "covers": "AC-1",
+            "type": "functional",
+            "technique": "state-transition",
+            "conditions": [
+              "standard_user is signed in",
+              "One product has been added to the cart",
+              "User is on the Checkout: Your Information page",
+              "First name, last name and postal code are all filled in",
+              "User clicks Continue"
+            ],
+            "expected": "The Continue button is accepted (no error message shown); the page transitions to 'Checkout: Overview'",
+            "source": "AC-1"
+          },
+          {
+            "id": "D27",
+            "covers": "AC-2",
+            "type": "functional",
+            "technique": "state-transition",
+            "conditions": [
+              "standard_user is signed in",
+              "One product has been added to the cart",
+              "User has filled in details and reached the overview",
+              "User clicks Finish"
+            ],
+            "expected": "The Finish button is accepted (overview leaves); the page displays 'Thank you for your order!'",
+            "source": "AC-2"
+          },
+          {
+            "id": "D28",
+            "covers": "bug #122",
+            "type": "confirmation",
+            "technique": "state-transition",
+            "conditions": [
+              "error_user is signed in",
+              "One product has been added to the cart",
+              "User has filled in details and reached the overview",
+              "User clicks Finish"
+            ],
+            "expected": "The Finish button is accepted; the page displays 'Thank you for your order!' — expected to fail while bug #122 is Active",
+            "source": "bug #122",
+            "expectFail": true
+          },
+          {
+            "id": "D29",
+            "covers": "story",
+            "type": "accessibility",
+            "technique": "checklist-based",
+            "conditions": [
+              "standard_user is signed in",
+              "One product in cart",
+              "Checkout completed to the confirmation/thank-you page",
+              "axe-core scan scoped to the confirmation page content, tags wcag2a and wcag2aa"
+            ],
+            "expected": "No axe violations reported (violations.map(v => v.id).sort() equals [])",
+            "source": "agent.test_types (WCAG A/AA)"
+          }
+        ],
+        "excluded": [
+          {
+            "what": "security",
+            "reason": "Unauthenticated direct navigation to the overview is already covered by story #116 design item D17 in the same epic feature file — story #120 adds no new security surface beyond what is already tested"
+          },
+          {
+            "what": "bug #121",
+            "reason": "Active bug about the product list showing the same picture for every product — this is a product-list display defect, not related to story #120's checkout completion behaviour"
+          }
+        ]
+      }
+    }
+  ],
+  "requestedAt": "2026-10-27T03:56:38.153Z",
+  "decision": "approved",
+  "by": "auto-approver (evaluation phase 2)",
+  "at": "2026-10-27T03:56:38.432Z"
+}

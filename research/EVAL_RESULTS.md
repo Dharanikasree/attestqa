@@ -70,12 +70,34 @@ it reached the approver. "Route" A = tests written, B = existing tests run.
 | SauceDemo | AB#114 | | 2 (755c270, auto) | 20261026T235030Z-95b887b5 | A | 4 | 3/3 | 4 | 0/4 | 0 | 0 | **blocked**; sign-in field never appeared, repair cap then no-progress (F-0138) |
 | SauceDemo | AB#114 | | 3 (755c270, auto) | 20261027T000634Z-5cd88b8f | A | 4 | 3/3 | 3 | 5/5 | 0 | 0 | **done**; verifier caught an absolute URL (F-0138) |
 | SauceDemo | AB#115 checkout form | same epic | 1 (755c270, auto) | 20261027T013358Z-db8071ec | A2 | 6 | 3/3 | 2 | 11/11 (6 own) | 0 | 0 | **done**; green first time, $1.55 (F-0140) |
+| SauceDemo | AB#115 |  | 2 (c57f731, auto) | 20261027T020040Z-c85e1f6e | A2 | 4 | 3/3 | 1 | 11/11 (4 own) | 0 | 0 | **done** (F-0141) |
+| SauceDemo | AB#115 |  | 3 (c57f731, auto) | 20261027T020746Z-56f611ea | A2 | 4 | 3/3 | 2 | 11/11 (4 own) | 0 | 0 | **done** (F-0141) |
+| SauceDemo | AB#116 order totals | same epic | 1 (c57f731, auto) | 20261027T021248Z-64ac9863 | A2 | 5 | 3/3 | 2 | 16/16 (5 own) | 0 | 0 | **done** (F-0142) |
+| SauceDemo | AB#116 |  | 2 (c57f731, auto) | 20261027T021950Z-dc75203f | A2 | 4 | 3/3 | 2 | 15/15 (4 own) | 0 | 0 | **done**; cheapest run, $0.95 (F-0142) |
+| SauceDemo | AB#116 |  | 3 (c57f731, auto) | 20261027T022457Z-9531cbd1 | A2 | 4 | 3/3 | 3 | 15/15 (4 own) | 0 | 0 | **done** (F-0142) |
+| SauceDemo | AB#117 complete order | same epic | 1 (c57f731, auto) | 20261027T023148Z-8b5a691e | A2 | 5 | 3/3 | 2 | 21/21 (5 own) | 0 | 0 | **done**; confirmation test for bug #122 as expected-fail (F-0143) |
+| SauceDemo | AB#117 |  | 2 (c57f731, auto) | 20261027T023655Z-ae67a7c1 | A2 | 5 | 3/3 | 2 | 21/21 (5 own) | 0 | 0 | **done** (F-0143) |
+| SauceDemo | AB#117 |  | 3 (c57f731, auto) | 20261027T024301Z-c21e7479 | A2 | 5 | 3/3 | 2 | 21/21 (5 own) | 0 | 0 | **done** (F-0143) |
+| SauceDemo | AB#118 reset and sign out | new epic 108 | 1 (c57f731, auto) | 20261027T024853Z-bad32051 | A | 5 | 3/3 | 3 | none run | 0 | 0 | **blocked**; same-write loop before the suite (F-0144) |
+| SauceDemo | AB#118 |  | 2 (c57f731, auto) | 20261027T025307Z-f871972d | A | 5 | 3/3 | 3 | 5/5 | 0 | 0 | **done**; verifier caught an absolute URL (F-0144) |
+| SauceDemo | AB#118 |  | 3 (c57f731, auto) | 20261027T030608Z-bca0f9f6 | A | 5 | 3/3 | 2 | 5/5 | 0 | 0 | **done**; verifier caught an absolute URL (F-0144) |
+| SauceDemo | AB#119 product pictures | same epic as AB#111 | 1 (c57f731, auto) | 20261027T031929Z-2884a27f | A2 | 4 | 3/3 | 1 | 18/18 (4 own) | 0 | 0 | **done**; confirmation test for bug #121 (F-0145) |
+| SauceDemo | AB#119 |  | 2 (c57f731, auto) | 20261027T032413Z-8bb78919 | A2 | 4 | 3/3 | 3 | 17/18 (3 of 4 own) | 0 | 0 | **done**; image test stuck after 3 repairs, left for the reviewer (F-0145) |
+| SauceDemo | AB#119 |  | 3 (c57f731, auto) | 20261027T033527Z-988777d7 | A2 | 4 | 3/3 | 3 | 18/18 (4 own) | 0 | 0 | **done** (F-0145) |
+| SauceDemo | AB#120 finish an order | same epic as AB#117 | 1 (c57f731, auto) | 20261027T034130Z-5ce6ff69 | A2 | 4 | 3/3 | 6 | 25/25 (4 own) | 0 | 0 | **done**; design sent back 6 times (F-0146) |
+| SauceDemo | AB#120 |  | 2 (c57f731, auto) | 20261027T034901Z-d820b5f9 | A2 | 5 | 3/3 | 2 | 26/26 (5 own) | 0 | 0 | **done** (F-0146) |
+| SauceDemo | AB#120 |  | 3 (c57f731, auto) | 20261027T035505Z-1c036d78 | A2 | 4 | 3/3 | 1 | 25/25 (4 own) | 0 | 0 | **done** (F-0146) |
+| Juice Shop | SCRUM-26 |  | 2 (c57f731, auto) | 20261027T020039Z-69a62de6 | A2 | 5 | 3/3 | 4 | 0/21 (0 of 5 own; 11 TODO) | 0 | 0 | **budget**; all own tests timed out; swallowed-failure refusal (F-0147) |
+| Juice Shop | SCRUM-26 |  | 3 (c57f731, auto) | 20261027T022425Z-95661e10 | A2 | 4 | 3/3 | 2 | 0/20 (0 of 4 own; 11 TODO) | 0 | 0 | **budget**; all own tests timed out (F-0147) |
+| Juice Shop | SCRUM-27 order history | same epic | 1 (c57f731, auto) | 20261027T023556Z-68602794 | A2 | 6 | 3/3 | 4 | 4/26 (1 of 5 own; 11 TODO) | 0 | 0 | **blocked**; repair cap then loop; 3 unfiled candidates (F-0148) |
+| Juice Shop | SCRUM-27 |  | 2 (c57f731, auto) | 20261027T030727Z-d4e65e24 | A2 | 6 | 3/3 | 2 | 5/26 (1 of 5 own; 11 TODO) | 0 | 0 | **budget** (F-0148) |
+| Juice Shop | SCRUM-27 |  | 3 (c57f731, auto) | 20261027T034307Z-1f532404 | A2 | 7 | 3/3 | 3 | 3/27 (0 of 6 own; 11 TODO) | 0 | 0 | **budget**; order-history API 500 (0.5), passing-test protection fired twice (F-0148) |
 
 Suite counts are for the whole epic spec (19 tests), not only the story's own.
 One of the 19 is the expected failure for open bug SCRUM-12, which reproduced
 in every run and counts as passed.
 
-Progress: 50 of 144 story runs (Juice Shop 31, SauceDemo 19). Runs 1-42 had a human approver (phase 1); from run 43 approvals are automatic (phase 2, EVALUATION_PLAN §7; "auto" in the Run column). SCRUM-18 run 1 took three attempts: the first two were blocked by engine defects (F-0089, F-0091) and are kept as evidence; the third is the counted run.
+Progress: 72 of 144 story runs (Juice Shop 36 — complete, SauceDemo 36 — complete). Toolshop and Booker remain. Runs 1-42 had a human approver (phase 1); from run 43 approvals are automatic (phase 2, EVALUATION_PLAN §7; "auto" in the Run column). SCRUM-18 run 1 took three attempts: the first two were blocked by engine defects (F-0089, F-0091) and are kept as evidence; the third is the counted run.
 
 ## 2. Excluded runs
 
@@ -197,8 +219,8 @@ of turns the rules refused, and cost per passing design item and per filed bug:
 Runs that were not counted (engine faults, repeats that reused a design) are kept
 there with `excluded` or `study = eval-excluded`, so their cost is reported, not hidden.
 
-So far (71 runs, 50 counted): total $214.69; runs not counted $63.13; turns the
-rules refused $32.82 (about a sixth of all spend), which is the price of the
+So far (93 runs, 72 counted): total $274.43; runs not counted $61.58; turns the
+rules refused $40.80 (about a sixth of all spend), which is the price of the
 send-backs and refusals, paid before a human saw anything. Blocked runs that never
 ran a test (SCRUM-24 runs 1 and 3: $1.3 and $3.6) are the other cost governance
 does not recover: the guard stops the loop, but only after three idle cycles.

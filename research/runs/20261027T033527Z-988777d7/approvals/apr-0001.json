@@ -1,0 +1,78 @@
+{
+  "approvalId": "apr-0001",
+  "summary": "Approve 1 call: aqa.test_design(items=[{\"id\":\"D15\",\"covers\":\"AC-1\",\"type\":\"…, excluded=[{\"what\":\"bug #122\",\"reason\":\"Active …)",
+  "calls": [
+    {
+      "toolName": "aqa.test_design",
+      "args": {
+        "items": [
+          {
+            "id": "D15",
+            "covers": "AC-1",
+            "type": "functional",
+            "technique": "state-transition",
+            "conditions": [
+              "standard_user is signed in",
+              "product list page is shown",
+              "all products are visible"
+            ],
+            "expected": "Each product card shows an image element; no two product cards share the same image src value",
+            "source": "AC-1"
+          },
+          {
+            "id": "D16",
+            "covers": "AC-2",
+            "type": "functional",
+            "technique": "state-transition",
+            "conditions": [
+              "standard_user is signed in",
+              "first product in the list is selected",
+              "product detail page is shown"
+            ],
+            "expected": "The detail page shows an image; the image src on the detail page matches the image src for that product in the list",
+            "source": "AC-2"
+          },
+          {
+            "id": "D17",
+            "covers": "bug #121",
+            "type": "confirmation",
+            "technique": "equivalence-partitioning",
+            "conditions": [
+              "problem_user is signed in",
+              "product list page is shown"
+            ],
+            "expected": "Each product card shows a different image src — the same-picture bug is still present so this test is expected to fail",
+            "source": "bug #121",
+            "expectFail": true
+          },
+          {
+            "id": "D18",
+            "covers": "story",
+            "type": "accessibility",
+            "technique": "checklist-based",
+            "conditions": [
+              "standard_user is signed in",
+              "product list page is shown with all products"
+            ],
+            "expected": "axe-core reports zero violations (wcag2a, wcag2aa rules) scoped to the product list container",
+            "source": "agent.test_types (WCAG A/AA)"
+          }
+        ],
+        "excluded": [
+          {
+            "what": "bug #122",
+            "reason": "Active bug about the error user not finishing an order — checkout completion is a different story and flow, not covered by AC-1 or AC-2 of this story"
+          },
+          {
+            "what": "security",
+            "reason": "This story is about product images being displayed correctly; it implies no authentication, session or data-protection behaviour beyond what is already covered by the signing-in epic"
+          }
+        ]
+      }
+    }
+  ],
+  "requestedAt": "2026-10-27T03:37:04.541Z",
+  "decision": "approved",
+  "by": "auto-approver (evaluation phase 2)",
+  "at": "2026-10-27T03:37:04.622Z"
+}

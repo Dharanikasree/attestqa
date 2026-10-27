@@ -1,0 +1,43 @@
+{
+  "approvalId": "apr-0003",
+  "summary": "Approve 3 calls: ado.testplan_test_case_write(action=create, project=attestqa-saucedemo, title=AC-1: Reset app state from the menu e…, …); ado.testplan_test_case_write(action=create, project=attestqa-saucedemo, title=AC-2: Logout from the menu shows the …, …); ado.testplan_test_case_write(action=create, project=attestqa-saucedemo, title=AC-3: After logout, going back in the…, …)",
+  "calls": [
+    {
+      "toolName": "ado.testplan_test_case_write",
+      "args": {
+        "action": "create",
+        "project": "attestqa-saucedemo",
+        "title": "AC-1: Reset app state from the menu empties the cart and the cart badge is not shown",
+        "testsWorkItemId": 118,
+        "steps": "1. Sign in as standard_user|The product list (\"Products\") is displayed\n2. Add the first product to the cart|The cart badge shows \"1\"\n3. Open the navigation menu|The menu opens\n4. Click \"Reset App State\"|The menu action completes\n5. Observe the cart badge|The cart badge is not shown",
+        "priority": 2
+      }
+    },
+    {
+      "toolName": "ado.testplan_test_case_write",
+      "args": {
+        "action": "create",
+        "project": "attestqa-saucedemo",
+        "title": "AC-2: Logout from the menu shows the sign-in page",
+        "testsWorkItemId": 118,
+        "steps": "1. Sign in as standard_user|The product list (\"Products\") is displayed\n2. Open the navigation menu|The menu opens\n3. Click \"Logout\"|The Logout action completes; the sign-in page (\"Swag Labs\") is displayed\n4. (Security extension) Navigate directly to /inventory.html|The sign-in page is shown — the session is invalidated and the product list is not accessible",
+        "priority": 2
+      }
+    },
+    {
+      "toolName": "ado.testplan_test_case_write",
+      "args": {
+        "action": "create",
+        "project": "attestqa-saucedemo",
+        "title": "AC-3: After logout, going back in the browser does not show the product list",
+        "testsWorkItemId": 118,
+        "steps": "1. Sign in as standard_user|The product list (\"Products\") is displayed\n2. Open the navigation menu|The menu opens\n3. Click \"Logout\"|The sign-in page (\"Swag Labs\") is displayed\n4. Click the browser Back button|The sign-in page is still shown — the product list is not displayed",
+        "priority": 2
+      }
+    }
+  ],
+  "requestedAt": "2026-10-27T03:05:19.532Z",
+  "decision": "approved",
+  "by": "auto-approver (evaluation phase 2)",
+  "at": "2026-10-27T03:05:20.044Z"
+}

@@ -1,0 +1,19 @@
+{
+  "approvalId": "apr-0004",
+  "summary": "Approve 1 call: ado.wit_work_item_comment_write(action=add, workItemId=118, text=## agentic-qa run `20261027T025307Z-f…, …)",
+  "calls": [
+    {
+      "toolName": "ado.wit_work_item_comment_write",
+      "args": {
+        "action": "add",
+        "workItemId": 118,
+        "text": "## agentic-qa run `20261027T025307Z-f871972d`\n\n**Suite: green** for story 118 — 5 passed, 0 failed, 0 skipped.\n\n| Test | Result | Time |\n| --- | --- | --- |\n| AC-1 Reset app state from the menu empties the cart and the cart badge is not shown | pass | 2.1 s |\n| AC-2 Logout from the menu shows the sign-in page | pass | 1.7 s |\n| AC-3 After logout, going back in the browser does not show the product list | pass | 1.9 s |\n| AC-story Navigation menu passes axe accessibility checks | pass | 1.7 s |\n| AC-2 After logout, navigating directly to the product list shows the sign-in page | pass | 2.2 s |\n\n**Test cases linked to work item 118: 3** (created this run: 163, 164, 165).\n\nSpec files written: `tests/epic-108-navigation-menu.spec.ts`\n\n**Checks not made in this environment:**\n- test suite membership — this Azure DevOps account has no Test Plans access level, so the cases are linked to the story but no suite contains them\n\n_Counted from the run ledger (`20261027T025307Z-f871972d`), not from the agent's account of its own work._",
+        "project": "attestqa-saucedemo"
+      }
+    }
+  ],
+  "requestedAt": "2026-10-27T03:06:07.093Z",
+  "decision": "approved",
+  "by": "auto-approver (evaluation phase 2)",
+  "at": "2026-10-27T03:06:07.398Z"
+}

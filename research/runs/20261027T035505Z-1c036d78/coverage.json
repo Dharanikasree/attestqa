@@ -1,0 +1,1416 @@
+[
+  {
+    "story": 109,
+    "title": "Customer signs in with a valid user",
+    "acceptanceCriteria": [
+      "AC-1",
+      "AC-2",
+      "AC-3"
+    ],
+    "designRun": "20261024T161659Z-d7978c9c",
+    "items": [
+      {
+        "id": "D1",
+        "covers": "AC-1",
+        "type": "functional",
+        "technique": "state-transition",
+        "expectFail": false,
+        "scenario": {
+          "title": "AC-1 Standard user signs in with correct password",
+          "file": "features/epic-105-signing-in.feature"
+        },
+        "test": {
+          "title": "AC-1 Standard user signs in with correct password",
+          "file": "tests/epic-105-signing-in.spec.ts"
+        },
+        "result": {
+          "status": "passed",
+          "runId": "20261024T182021Z-1a5fdca4"
+        },
+        "state": "passing"
+      },
+      {
+        "id": "D2",
+        "covers": "AC-2",
+        "type": "functional",
+        "technique": "equivalence-partitioning",
+        "expectFail": false,
+        "scenario": {
+          "title": "AC-2 Wrong password shows an error and the product list is not shown",
+          "file": "features/epic-105-signing-in.feature"
+        },
+        "test": {
+          "title": "AC-2 Wrong password shows an error and the product list is not shown",
+          "file": "tests/epic-105-signing-in.spec.ts"
+        },
+        "result": {
+          "status": "passed",
+          "runId": "20261024T182021Z-1a5fdca4"
+        },
+        "state": "passing"
+      },
+      {
+        "id": "D3",
+        "covers": "AC-3",
+        "type": "functional",
+        "technique": "boundary-value-analysis",
+        "expectFail": false,
+        "scenario": {
+          "title": "AC-3 Empty username shows a required-field error",
+          "file": "features/epic-105-signing-in.feature"
+        },
+        "test": {
+          "title": "AC-3 Empty username shows a required-field error",
+          "file": "tests/epic-105-signing-in.spec.ts"
+        },
+        "result": {
+          "status": "passed",
+          "runId": "20261024T182021Z-1a5fdca4"
+        },
+        "state": "passing"
+      },
+      {
+        "id": "D4",
+        "covers": "bug #121",
+        "type": "confirmation",
+        "technique": "state-transition",
+        "expectFail": true,
+        "scenario": {
+          "title": "AC-1 Problem user product images are distinct after sign-in",
+          "file": "features/epic-105-signing-in.feature"
+        },
+        "test": {
+          "title": "AC-1 Problem user product images are distinct after sign-in",
+          "file": "tests/epic-105-signing-in.spec.ts"
+        },
+        "result": {
+          "status": "expected-failure",
+          "runId": "20261024T182021Z-1a5fdca4"
+        },
+        "state": "known bug reproduced"
+      },
+      {
+        "id": "D5",
+        "covers": "story",
+        "type": "accessibility",
+        "technique": "checklist-based",
+        "expectFail": false,
+        "scenario": {
+          "title": "AC-story Sign-in page passes accessibility checks",
+          "file": "features/epic-105-signing-in.feature"
+        },
+        "test": {
+          "title": "AC-story Sign-in page passes accessibility checks",
+          "file": "tests/epic-105-signing-in.spec.ts"
+        },
+        "result": {
+          "status": "passed",
+          "runId": "20261024T182021Z-1a5fdca4"
+        },
+        "state": "passing"
+      }
+    ],
+    "uncoveredCriteria": [],
+    "outsideDesign": [],
+    "bugs": [
+      {
+        "id": 121,
+        "state": "Active",
+        "title": "Problem user sees the same picture for every product"
+      },
+      {
+        "id": 122,
+        "state": "Active",
+        "title": "Error user cannot finish an order"
+      }
+    ]
+  },
+  {
+    "story": 110,
+    "title": "A locked-out user cannot sign in",
+    "acceptanceCriteria": [
+      "AC-1",
+      "AC-2",
+      "AC-3"
+    ],
+    "designRun": "20261024T182021Z-1a5fdca4",
+    "items": [
+      {
+        "id": "D6",
+        "covers": "AC-1",
+        "type": "functional",
+        "technique": "equivalence-partitioning",
+        "expectFail": false,
+        "scenario": {
+          "title": "AC-1 Locked-out user sees lockout error and product list is not shown",
+          "file": "features/epic-105-signing-in.feature"
+        },
+        "test": {
+          "title": "AC-1 Locked-out user sees lockout error and product list is not shown",
+          "file": "tests/epic-105-signing-in.spec.ts"
+        },
+        "result": {
+          "status": "passed",
+          "runId": "20261024T182021Z-1a5fdca4"
+        },
+        "state": "passing"
+      },
+      {
+        "id": "D7",
+        "covers": "AC-2",
+        "type": "functional",
+        "technique": "state-transition",
+        "expectFail": false,
+        "scenario": {
+          "title": "AC-2 Navigating to product list without signing in shows sign-in page with error",
+          "file": "features/epic-105-signing-in.feature"
+        },
+        "test": {
+          "title": "AC-2 Navigating to product list without signing in shows sign-in page with error",
+          "file": "tests/epic-105-signing-in.spec.ts"
+        },
+        "result": {
+          "status": "passed",
+          "runId": "20261024T182021Z-1a5fdca4"
+        },
+        "state": "passing"
+      },
+      {
+        "id": "D8",
+        "covers": "AC-3",
+        "type": "functional",
+        "technique": "checklist-based",
+        "expectFail": false,
+        "scenario": {
+          "title": "AC-3 Sign-in page passes WCAG 2.1 A/AA accessibility scan",
+          "file": "features/epic-105-signing-in.feature"
+        },
+        "test": {
+          "title": "AC-3 Sign-in page passes WCAG 2.1 A/AA accessibility scan",
+          "file": "tests/epic-105-signing-in.spec.ts"
+        },
+        "result": {
+          "status": "passed",
+          "runId": "20261024T182021Z-1a5fdca4"
+        },
+        "state": "passing"
+      },
+      {
+        "id": "D9",
+        "covers": "AC-3",
+        "type": "accessibility",
+        "technique": "checklist-based",
+        "expectFail": false,
+        "scenario": {
+          "title": "AC-3 Sign-in page accessibility scan with axe-core",
+          "file": "features/epic-105-signing-in.feature"
+        },
+        "test": {
+          "title": "AC-3 Sign-in page accessibility scan with axe-core",
+          "file": "tests/epic-105-signing-in.spec.ts"
+        },
+        "result": {
+          "status": "passed",
+          "runId": "20261024T182021Z-1a5fdca4"
+        },
+        "state": "passing"
+      }
+    ],
+    "uncoveredCriteria": [],
+    "outsideDesign": [],
+    "bugs": [
+      {
+        "id": 121,
+        "state": "Active",
+        "title": "Problem user sees the same picture for every product"
+      },
+      {
+        "id": 122,
+        "state": "Active",
+        "title": "Error user cannot finish an order"
+      }
+    ]
+  },
+  {
+    "story": 111,
+    "title": "Customer sorts the product list",
+    "acceptanceCriteria": [
+      "AC-1",
+      "AC-2",
+      "AC-3"
+    ],
+    "designRun": "20261024T231711Z-9395c059",
+    "items": [
+      {
+        "id": "D1",
+        "covers": "AC-1",
+        "type": "functional",
+        "technique": "state-transition",
+        "expectFail": false,
+        "scenario": {
+          "title": "AC-1 Product list is sorted A to Z by name when it first opens",
+          "file": "features/epic-106-product-list.feature"
+        },
+        "test": {
+          "title": "AC-1 Product list is sorted A to Z by name when it first opens",
+          "file": "tests/epic-106-product-list.spec.ts"
+        },
+        "result": {
+          "status": "passed",
+          "runId": "20261027T031929Z-2884a27f"
+        },
+        "state": "passing"
+      },
+      {
+        "id": "D2",
+        "covers": "AC-2",
+        "type": "functional",
+        "technique": "state-transition",
+        "expectFail": false,
+        "scenario": {
+          "title": "AC-2 Sorting by name Z to A reverses the order",
+          "file": "features/epic-106-product-list.feature"
+        },
+        "test": {
+          "title": "AC-2 Sorting by name Z to A reverses the order",
+          "file": "tests/epic-106-product-list.spec.ts"
+        },
+        "result": {
+          "status": "passed",
+          "runId": "20261027T031929Z-2884a27f"
+        },
+        "state": "passing"
+      },
+      {
+        "id": "D3",
+        "covers": "AC-3",
+        "type": "functional",
+        "technique": "state-transition",
+        "expectFail": false,
+        "scenario": {
+          "title": "AC-3a Sorting by price low to high lists the cheapest product first",
+          "file": "features/epic-106-product-list.feature"
+        },
+        "test": {
+          "title": "AC-3a Sorting by price low to high lists the cheapest product first",
+          "file": "tests/epic-106-product-list.spec.ts"
+        },
+        "result": {
+          "status": "passed",
+          "runId": "20261027T031929Z-2884a27f"
+        },
+        "state": "passing"
+      },
+      {
+        "id": "D4",
+        "covers": "AC-3",
+        "type": "functional",
+        "technique": "state-transition",
+        "expectFail": false,
+        "scenario": {
+          "title": "AC-3b Sorting by price high to low lists the most expensive product first",
+          "file": "features/epic-106-product-list.feature"
+        },
+        "test": {
+          "title": "AC-3b Sorting by price high to low lists the most expensive product first",
+          "file": "tests/epic-106-product-list.spec.ts"
+        },
+        "result": {
+          "status": "passed",
+          "runId": "20261027T031929Z-2884a27f"
+        },
+        "state": "passing"
+      },
+      {
+        "id": "D5",
+        "covers": "story",
+        "type": "accessibility",
+        "technique": "checklist-based",
+        "expectFail": false,
+        "scenario": {
+          "title": "AC-story Product list page passes accessibility checks",
+          "file": "features/epic-106-product-list.feature"
+        },
+        "test": {
+          "title": "AC-story Product list page passes accessibility checks",
+          "file": "tests/epic-106-product-list.spec.ts"
+        },
+        "result": {
+          "status": "passed",
+          "runId": "20261027T031929Z-2884a27f"
+        },
+        "state": "passing"
+      }
+    ],
+    "uncoveredCriteria": [],
+    "outsideDesign": [],
+    "bugs": [
+      {
+        "id": 121,
+        "state": "Active",
+        "title": "Problem user sees the same picture for every product"
+      },
+      {
+        "id": 122,
+        "state": "Active",
+        "title": "Error user cannot finish an order"
+      }
+    ]
+  },
+  {
+    "story": 112,
+    "title": "Customer opens a product's own page",
+    "acceptanceCriteria": [
+      "AC-1",
+      "AC-2",
+      "AC-3"
+    ],
+    "designRun": "20261025T181355Z-8ef975e3",
+    "items": [
+      {
+        "id": "D6",
+        "covers": "AC-1",
+        "type": "functional",
+        "technique": "state-transition",
+        "expectFail": false,
+        "scenario": {
+          "title": "AC-1 Clicking a product name opens its detail page with matching name, description and price",
+          "file": "features/epic-106-product-list.feature"
+        },
+        "test": {
+          "title": "AC-1 Clicking a product name opens its detail page with matching name, description and price",
+          "file": "tests/epic-106-product-list.spec.ts"
+        },
+        "result": {
+          "status": "passed",
+          "runId": "20261027T031929Z-2884a27f"
+        },
+        "state": "passing"
+      },
+      {
+        "id": "D7",
+        "covers": "AC-2",
+        "type": "functional",
+        "technique": "state-transition",
+        "expectFail": false,
+        "scenario": {
+          "title": "AC-2 Adding a product from its detail page changes button to Remove and cart shows 1",
+          "file": "features/epic-106-product-list.feature"
+        },
+        "test": {
+          "title": "AC-2 Adding a product from its detail page changes button to Remove and cart shows 1",
+          "file": "tests/epic-106-product-list.spec.ts"
+        },
+        "result": {
+          "status": "passed",
+          "runId": "20261027T031929Z-2884a27f"
+        },
+        "state": "passing"
+      },
+      {
+        "id": "D8",
+        "covers": "AC-3",
+        "type": "functional",
+        "technique": "state-transition",
+        "expectFail": false,
+        "scenario": {
+          "title": "AC-3 Back to products returns to the product list",
+          "file": "features/epic-106-product-list.feature"
+        },
+        "test": {
+          "title": "AC-3 Back to products returns to the product list",
+          "file": "tests/epic-106-product-list.spec.ts"
+        },
+        "result": {
+          "status": "passed",
+          "runId": "20261027T031929Z-2884a27f"
+        },
+        "state": "passing"
+      },
+      {
+        "id": "D9",
+        "covers": "story",
+        "type": "accessibility",
+        "technique": "checklist-based",
+        "expectFail": false,
+        "scenario": {
+          "title": "AC-story Product detail page passes accessibility checks",
+          "file": "features/epic-106-product-list.feature"
+        },
+        "test": {
+          "title": "AC-story Product detail page passes accessibility checks",
+          "file": "tests/epic-106-product-list.spec.ts"
+        },
+        "result": {
+          "status": "passed",
+          "runId": "20261027T031929Z-2884a27f"
+        },
+        "state": "passing"
+      }
+    ],
+    "uncoveredCriteria": [],
+    "outsideDesign": [],
+    "bugs": [
+      {
+        "id": 121,
+        "state": "Active",
+        "title": "Problem user sees the same picture for every product"
+      },
+      {
+        "id": 122,
+        "state": "Active",
+        "title": "Error user cannot finish an order"
+      }
+    ]
+  },
+  {
+    "story": 113,
+    "title": "Customer adds and removes products from the list",
+    "acceptanceCriteria": [
+      "AC-1",
+      "AC-2",
+      "AC-3"
+    ],
+    "designRun": "20261026T224846Z-bd625f5f",
+    "items": [
+      {
+        "id": "D10",
+        "covers": "AC-1",
+        "type": "functional",
+        "technique": "state-transition",
+        "expectFail": false,
+        "scenario": {
+          "title": "AC-1 Adding a product from the list changes its button to Remove and shows cart badge",
+          "file": "features/epic-106-product-list.feature"
+        },
+        "test": {
+          "title": "AC-1 Adding a product from the list changes its button to Remove and shows cart badge",
+          "file": "tests/epic-106-product-list.spec.ts"
+        },
+        "result": {
+          "status": "passed",
+          "runId": "20261027T031929Z-2884a27f"
+        },
+        "state": "passing"
+      },
+      {
+        "id": "D11",
+        "covers": "AC-2",
+        "type": "functional",
+        "technique": "state-transition",
+        "expectFail": false,
+        "scenario": {
+          "title": "AC-2 Removing the product changes the button back and hides the badge",
+          "file": "features/epic-106-product-list.feature"
+        },
+        "test": {
+          "title": "AC-2 Removing the product changes the button back and hides the badge",
+          "file": "tests/epic-106-product-list.spec.ts"
+        },
+        "result": {
+          "status": "passed",
+          "runId": "20261027T031929Z-2884a27f"
+        },
+        "state": "passing"
+      },
+      {
+        "id": "D12",
+        "covers": "AC-3",
+        "type": "functional",
+        "technique": "state-transition",
+        "expectFail": false,
+        "scenario": {
+          "title": "AC-3 Products added stay in the cart after navigating away and back",
+          "file": "features/epic-106-product-list.feature"
+        },
+        "test": {
+          "title": "AC-3 Products added stay in the cart after navigating away and back",
+          "file": "tests/epic-106-product-list.spec.ts"
+        },
+        "result": {
+          "status": "passed",
+          "runId": "20261027T031929Z-2884a27f"
+        },
+        "state": "passing"
+      },
+      {
+        "id": "D13",
+        "covers": "story",
+        "type": "accessibility",
+        "technique": "checklist-based",
+        "expectFail": false,
+        "scenario": {
+          "title": "AC-story Product list with cart items passes accessibility checks",
+          "file": "features/epic-106-product-list.feature"
+        },
+        "test": {
+          "title": "AC-story Product list with cart items passes accessibility checks",
+          "file": "tests/epic-106-product-list.spec.ts"
+        },
+        "result": {
+          "status": "passed",
+          "runId": "20261027T031929Z-2884a27f"
+        },
+        "state": "passing"
+      },
+      {
+        "id": "D14",
+        "covers": "AC-2",
+        "type": "functional",
+        "technique": "boundary-value-analysis",
+        "expectFail": false,
+        "scenario": {
+          "title": "AC-2 Adding a second product increases the cart badge to 2",
+          "file": "features/epic-106-product-list.feature"
+        },
+        "test": {
+          "title": "AC-2 Adding a second product increases the cart badge to 2",
+          "file": "tests/epic-106-product-list.spec.ts"
+        },
+        "result": {
+          "status": "passed",
+          "runId": "20261027T031929Z-2884a27f"
+        },
+        "state": "passing"
+      }
+    ],
+    "uncoveredCriteria": [],
+    "outsideDesign": [],
+    "bugs": [
+      {
+        "id": 121,
+        "state": "Active",
+        "title": "Problem user sees the same picture for every product"
+      },
+      {
+        "id": 122,
+        "state": "Active",
+        "title": "Error user cannot finish an order"
+      }
+    ]
+  },
+  {
+    "story": 114,
+    "title": "Customer reviews the cart",
+    "acceptanceCriteria": [
+      "AC-1",
+      "AC-2",
+      "AC-3"
+    ],
+    "designRun": "20261026T233825Z-9600ed2d",
+    "items": [
+      {
+        "id": "D1",
+        "covers": "AC-1",
+        "type": "functional",
+        "technique": "state-transition",
+        "expectFail": false,
+        "scenario": {
+          "title": "AC-1 Cart lists added product with quantity, name and price",
+          "file": "features/epic-107-cart-and-checkout.feature"
+        },
+        "test": {
+          "title": "AC-1 Cart lists added product with quantity, name and price",
+          "file": "tests/epic-107-cart-and-checkout.spec.ts"
+        },
+        "result": {
+          "status": "passed",
+          "runId": "20261027T035505Z-1c036d78"
+        },
+        "state": "passing"
+      },
+      {
+        "id": "D2",
+        "covers": "AC-2",
+        "type": "functional",
+        "technique": "state-transition",
+        "expectFail": false,
+        "scenario": {
+          "title": "AC-2 Removing a product from the cart takes it off the list and lowers the badge",
+          "file": "features/epic-107-cart-and-checkout.feature"
+        },
+        "test": {
+          "title": "AC-2 Removing a product from the cart takes it off the list and lowers the badge",
+          "file": "tests/epic-107-cart-and-checkout.spec.ts"
+        },
+        "result": {
+          "status": "passed",
+          "runId": "20261027T035505Z-1c036d78"
+        },
+        "state": "passing"
+      },
+      {
+        "id": "D3",
+        "covers": "AC-3",
+        "type": "functional",
+        "technique": "state-transition",
+        "expectFail": false,
+        "scenario": {
+          "title": "AC-3 Continue shopping returns to the product list with cart unchanged",
+          "file": "features/epic-107-cart-and-checkout.feature"
+        },
+        "test": {
+          "title": "AC-3 Continue shopping returns to the product list with cart unchanged",
+          "file": "tests/epic-107-cart-and-checkout.spec.ts"
+        },
+        "result": {
+          "status": "passed",
+          "runId": "20261027T035505Z-1c036d78"
+        },
+        "state": "passing"
+      },
+      {
+        "id": "D4",
+        "covers": "AC-1",
+        "type": "accessibility",
+        "technique": "checklist-based",
+        "expectFail": false,
+        "scenario": {
+          "title": "AC-story Cart page passes axe accessibility checks",
+          "file": "features/epic-107-cart-and-checkout.feature"
+        },
+        "test": {
+          "title": "AC-story Cart page passes axe accessibility checks",
+          "file": "tests/epic-107-cart-and-checkout.spec.ts"
+        },
+        "result": {
+          "status": "passed",
+          "runId": "20261027T035505Z-1c036d78"
+        },
+        "state": "passing"
+      },
+      {
+        "id": "D5",
+        "covers": "AC-1",
+        "type": "security",
+        "technique": "equivalence-partitioning",
+        "expectFail": false,
+        "scenario": {
+          "title": "AC-1 Unauthenticated user navigating directly to the cart sees the sign-in page",
+          "file": "features/epic-107-cart-and-checkout.feature"
+        },
+        "test": {
+          "title": "AC-1 Unauthenticated user navigating directly to the cart sees the sign-in page",
+          "file": "tests/epic-107-cart-and-checkout.spec.ts"
+        },
+        "result": {
+          "status": "passed",
+          "runId": "20261027T035505Z-1c036d78"
+        },
+        "state": "passing"
+      }
+    ],
+    "uncoveredCriteria": [],
+    "outsideDesign": [],
+    "bugs": [
+      {
+        "id": 121,
+        "state": "Active",
+        "title": "Problem user sees the same picture for every product"
+      },
+      {
+        "id": 122,
+        "state": "Active",
+        "title": "Error user cannot finish an order"
+      }
+    ]
+  },
+  {
+    "story": 115,
+    "title": "Customer gives their details at checkout",
+    "acceptanceCriteria": [
+      "AC-1",
+      "AC-2",
+      "AC-3"
+    ],
+    "designRun": "20261027T013358Z-db8071ec",
+    "items": [
+      {
+        "id": "D7",
+        "covers": "AC-1",
+        "type": "functional",
+        "technique": "state-transition",
+        "expectFail": false,
+        "scenario": {
+          "title": "AC-1 Continuing with all fields filled in goes to the order overview",
+          "file": "features/epic-107-cart-and-checkout.feature"
+        },
+        "test": {
+          "title": "AC-1 Continuing with all fields filled in goes to the order overview",
+          "file": "tests/epic-107-cart-and-checkout.spec.ts"
+        },
+        "result": {
+          "status": "passed",
+          "runId": "20261027T035505Z-1c036d78"
+        },
+        "state": "passing"
+      },
+      {
+        "id": "D8",
+        "covers": "AC-2",
+        "type": "functional",
+        "technique": "boundary-value-analysis",
+        "expectFail": false,
+        "scenario": {
+          "title": "AC-2a Empty first name shows an error saying the first name is required",
+          "file": "features/epic-107-cart-and-checkout.feature"
+        },
+        "test": {
+          "title": "AC-2a Empty first name shows an error saying the first name is required",
+          "file": "tests/epic-107-cart-and-checkout.spec.ts"
+        },
+        "result": {
+          "status": "passed",
+          "runId": "20261027T035505Z-1c036d78"
+        },
+        "state": "passing"
+      },
+      {
+        "id": "D9",
+        "covers": "AC-2",
+        "type": "functional",
+        "technique": "boundary-value-analysis",
+        "expectFail": false,
+        "scenario": {
+          "title": "AC-2b Empty last name shows an error saying the last name is required",
+          "file": "features/epic-107-cart-and-checkout.feature"
+        },
+        "test": {
+          "title": "AC-2b Empty last name shows an error saying the last name is required",
+          "file": "tests/epic-107-cart-and-checkout.spec.ts"
+        },
+        "result": {
+          "status": "passed",
+          "runId": "20261027T035505Z-1c036d78"
+        },
+        "state": "passing"
+      },
+      {
+        "id": "D10",
+        "covers": "AC-2",
+        "type": "functional",
+        "technique": "boundary-value-analysis",
+        "expectFail": false,
+        "scenario": {
+          "title": "AC-2c Empty postal code shows an error saying the postal code is required",
+          "file": "features/epic-107-cart-and-checkout.feature"
+        },
+        "test": {
+          "title": "AC-2c Empty postal code shows an error saying the postal code is required",
+          "file": "tests/epic-107-cart-and-checkout.spec.ts"
+        },
+        "result": {
+          "status": "passed",
+          "runId": "20261027T035505Z-1c036d78"
+        },
+        "state": "passing"
+      },
+      {
+        "id": "D11",
+        "covers": "AC-3",
+        "type": "functional",
+        "technique": "state-transition",
+        "expectFail": false,
+        "scenario": {
+          "title": "AC-3 Cancel returns to the cart with the cart unchanged",
+          "file": "features/epic-107-cart-and-checkout.feature"
+        },
+        "test": {
+          "title": "AC-3 Cancel returns to the cart with the cart unchanged",
+          "file": "tests/epic-107-cart-and-checkout.spec.ts"
+        },
+        "result": {
+          "status": "passed",
+          "runId": "20261027T035505Z-1c036d78"
+        },
+        "state": "passing"
+      },
+      {
+        "id": "D12",
+        "covers": "story",
+        "type": "accessibility",
+        "technique": "checklist-based",
+        "expectFail": false,
+        "scenario": {
+          "title": "AC-story Checkout information page passes axe accessibility checks",
+          "file": "features/epic-107-cart-and-checkout.feature"
+        },
+        "test": {
+          "title": "AC-story Checkout information page passes axe accessibility checks",
+          "file": "tests/epic-107-cart-and-checkout.spec.ts"
+        },
+        "result": {
+          "status": "passed",
+          "runId": "20261027T035505Z-1c036d78"
+        },
+        "state": "passing"
+      }
+    ],
+    "uncoveredCriteria": [],
+    "outsideDesign": [],
+    "bugs": [
+      {
+        "id": 121,
+        "state": "Active",
+        "title": "Problem user sees the same picture for every product"
+      },
+      {
+        "id": 122,
+        "state": "Active",
+        "title": "Error user cannot finish an order"
+      }
+    ]
+  },
+  {
+    "story": 116,
+    "title": "Customer checks the order totals before buying",
+    "acceptanceCriteria": [
+      "AC-1",
+      "AC-2",
+      "AC-3"
+    ],
+    "designRun": "20261027T021248Z-64ac9863",
+    "items": [
+      {
+        "id": "D13",
+        "covers": "AC-1",
+        "type": "functional",
+        "technique": "state-transition",
+        "expectFail": false,
+        "scenario": {
+          "title": "AC-1 Overview lists the products in the cart with their prices",
+          "file": "features/epic-107-cart-and-checkout.feature"
+        },
+        "test": {
+          "title": "AC-1 Overview lists the products in the cart with their prices",
+          "file": "tests/epic-107-cart-and-checkout.spec.ts"
+        },
+        "result": {
+          "status": "passed",
+          "runId": "20261027T035505Z-1c036d78"
+        },
+        "state": "passing"
+      },
+      {
+        "id": "D14",
+        "covers": "AC-2",
+        "type": "functional",
+        "technique": "equivalence-partitioning",
+        "expectFail": false,
+        "scenario": {
+          "title": "AC-2 Item total equals the sum of the listed prices",
+          "file": "features/epic-107-cart-and-checkout.feature"
+        },
+        "test": {
+          "title": "AC-2 Item total equals the sum of the listed prices",
+          "file": "tests/epic-107-cart-and-checkout.spec.ts"
+        },
+        "result": {
+          "status": "passed",
+          "runId": "20261027T035505Z-1c036d78"
+        },
+        "state": "passing"
+      },
+      {
+        "id": "D15",
+        "covers": "AC-3",
+        "type": "functional",
+        "technique": "equivalence-partitioning",
+        "expectFail": false,
+        "scenario": {
+          "title": "AC-3 Total equals the item total plus the tax shown",
+          "file": "features/epic-107-cart-and-checkout.feature"
+        },
+        "test": {
+          "title": "AC-3 Total equals the item total plus the tax shown",
+          "file": "tests/epic-107-cart-and-checkout.spec.ts"
+        },
+        "result": {
+          "status": "passed",
+          "runId": "20261027T035505Z-1c036d78"
+        },
+        "state": "passing"
+      },
+      {
+        "id": "D16",
+        "covers": "story",
+        "type": "accessibility",
+        "technique": "checklist-based",
+        "expectFail": false,
+        "scenario": {
+          "title": "AC-story Overview page passes axe accessibility checks",
+          "file": "features/epic-107-cart-and-checkout.feature"
+        },
+        "test": {
+          "title": "AC-story Overview page passes axe accessibility checks",
+          "file": "tests/epic-107-cart-and-checkout.spec.ts"
+        },
+        "result": {
+          "status": "passed",
+          "runId": "20261027T035505Z-1c036d78"
+        },
+        "state": "passing"
+      },
+      {
+        "id": "D17",
+        "covers": "AC-1",
+        "type": "security",
+        "technique": "equivalence-partitioning",
+        "expectFail": false,
+        "scenario": {
+          "title": "AC-1 Unauthenticated user navigating directly to the overview sees the sign-in page",
+          "file": "features/epic-107-cart-and-checkout.feature"
+        },
+        "test": {
+          "title": "AC-1 Unauthenticated user navigating directly to the overview sees the sign-in page",
+          "file": "tests/epic-107-cart-and-checkout.spec.ts"
+        },
+        "result": {
+          "status": "passed",
+          "runId": "20261027T035505Z-1c036d78"
+        },
+        "state": "passing"
+      }
+    ],
+    "uncoveredCriteria": [],
+    "outsideDesign": [],
+    "bugs": [
+      {
+        "id": 121,
+        "state": "Active",
+        "title": "Problem user sees the same picture for every product"
+      },
+      {
+        "id": 122,
+        "state": "Active",
+        "title": "Error user cannot finish an order"
+      }
+    ]
+  },
+  {
+    "story": 117,
+    "title": "Customer completes the order",
+    "acceptanceCriteria": [
+      "AC-1",
+      "AC-2",
+      "AC-3"
+    ],
+    "designRun": "20261027T023148Z-8b5a691e",
+    "items": [
+      {
+        "id": "D18",
+        "covers": "AC-1",
+        "type": "functional",
+        "technique": "state-transition",
+        "expectFail": false,
+        "scenario": {
+          "title": "AC-1 Finishing from the overview shows a thank-you message",
+          "file": "features/epic-107-cart-and-checkout.feature"
+        },
+        "test": {
+          "title": "AC-1 Finishing from the overview shows a thank-you message",
+          "file": "tests/epic-107-cart-and-checkout.spec.ts"
+        },
+        "result": {
+          "status": "passed",
+          "runId": "20261027T035505Z-1c036d78"
+        },
+        "state": "passing"
+      },
+      {
+        "id": "D19",
+        "covers": "AC-2",
+        "type": "functional",
+        "technique": "state-transition",
+        "expectFail": false,
+        "scenario": {
+          "title": "AC-2 After the order the cart is empty and the cart badge is not shown",
+          "file": "features/epic-107-cart-and-checkout.feature"
+        },
+        "test": {
+          "title": "AC-2 After the order the cart is empty and the cart badge is not shown",
+          "file": "tests/epic-107-cart-and-checkout.spec.ts"
+        },
+        "result": {
+          "status": "passed",
+          "runId": "20261027T035505Z-1c036d78"
+        },
+        "state": "passing"
+      },
+      {
+        "id": "D20",
+        "covers": "AC-3",
+        "type": "functional",
+        "technique": "state-transition",
+        "expectFail": false,
+        "scenario": {
+          "title": "AC-3 Back home from the confirmation returns to the product list",
+          "file": "features/epic-107-cart-and-checkout.feature"
+        },
+        "test": {
+          "title": "AC-3 Back home from the confirmation returns to the product list",
+          "file": "tests/epic-107-cart-and-checkout.spec.ts"
+        },
+        "result": {
+          "status": "passed",
+          "runId": "20261027T035505Z-1c036d78"
+        },
+        "state": "passing"
+      },
+      {
+        "id": "D21",
+        "covers": "story",
+        "type": "accessibility",
+        "technique": "checklist-based",
+        "expectFail": false,
+        "scenario": {
+          "title": "AC-story Confirmation page passes axe accessibility checks",
+          "file": "features/epic-107-cart-and-checkout.feature"
+        },
+        "test": {
+          "title": "AC-story Confirmation page passes axe accessibility checks",
+          "file": "tests/epic-107-cart-and-checkout.spec.ts"
+        },
+        "result": {
+          "status": "passed",
+          "runId": "20261027T035505Z-1c036d78"
+        },
+        "state": "passing"
+      },
+      {
+        "id": "D22",
+        "covers": "bug #122",
+        "type": "confirmation",
+        "technique": "state-transition",
+        "expectFail": true,
+        "scenario": {
+          "title": "AC-1 Error user cannot finish an order",
+          "file": "features/epic-107-cart-and-checkout.feature"
+        },
+        "test": {
+          "title": "AC-1 Error user cannot finish an order",
+          "file": "tests/epic-107-cart-and-checkout.spec.ts"
+        },
+        "result": {
+          "status": "expected-failure",
+          "runId": "20261027T035505Z-1c036d78"
+        },
+        "state": "known bug reproduced"
+      }
+    ],
+    "uncoveredCriteria": [],
+    "outsideDesign": [],
+    "bugs": [
+      {
+        "id": 121,
+        "state": "Active",
+        "title": "Problem user sees the same picture for every product"
+      },
+      {
+        "id": 122,
+        "state": "Active",
+        "title": "Error user cannot finish an order"
+      }
+    ]
+  },
+  {
+    "story": 118,
+    "title": "Customer resets the app state and signs out from the menu",
+    "acceptanceCriteria": [
+      "AC-1",
+      "AC-2",
+      "AC-3"
+    ],
+    "designRun": "20261027T024853Z-bad32051",
+    "items": [
+      {
+        "id": "D1",
+        "covers": "AC-1",
+        "type": "functional",
+        "technique": "state-transition",
+        "expectFail": false,
+        "scenario": {
+          "title": "AC-1 Reset app state from the menu empties the cart and hides the badge",
+          "file": "features/epic-108-navigation-menu.feature"
+        },
+        "state": "no test"
+      },
+      {
+        "id": "D2",
+        "covers": "AC-2",
+        "type": "functional",
+        "technique": "state-transition",
+        "expectFail": false,
+        "scenario": {
+          "title": "AC-2 Logout from the menu shows the sign-in page",
+          "file": "features/epic-108-navigation-menu.feature"
+        },
+        "state": "no test"
+      },
+      {
+        "id": "D3",
+        "covers": "AC-3",
+        "type": "functional",
+        "technique": "state-transition",
+        "expectFail": false,
+        "scenario": {
+          "title": "AC-3a After logout going back does not show the product list",
+          "file": "features/epic-108-navigation-menu.feature"
+        },
+        "state": "no test"
+      },
+      {
+        "id": "D4",
+        "covers": "AC-3",
+        "type": "security",
+        "technique": "state-transition",
+        "expectFail": false,
+        "scenario": {
+          "title": "AC-3b After logout the session is not active and inventory is not accessible",
+          "file": "features/epic-108-navigation-menu.feature"
+        },
+        "state": "no test"
+      },
+      {
+        "id": "D5",
+        "covers": "story",
+        "type": "accessibility",
+        "technique": "checklist-based",
+        "expectFail": false,
+        "scenario": {
+          "title": "AC-story Navigation menu passes axe accessibility checks",
+          "file": "features/epic-108-navigation-menu.feature"
+        },
+        "state": "no test"
+      }
+    ],
+    "uncoveredCriteria": [
+      "AC-1",
+      "AC-2",
+      "AC-3"
+    ],
+    "outsideDesign": [],
+    "bugs": [
+      {
+        "id": 121,
+        "state": "Active",
+        "title": "Problem user sees the same picture for every product"
+      },
+      {
+        "id": 122,
+        "state": "Active",
+        "title": "Error user cannot finish an order"
+      }
+    ]
+  },
+  {
+    "story": 119,
+    "title": "Every product shows its own picture",
+    "acceptanceCriteria": [
+      "AC-1",
+      "AC-2"
+    ],
+    "designRun": "20261027T031929Z-2884a27f",
+    "items": [
+      {
+        "id": "D15",
+        "covers": "AC-1",
+        "type": "functional",
+        "technique": "equivalence-partitioning",
+        "expectFail": false,
+        "scenario": {
+          "title": "AC-1 Each product in the list shows its own unique picture",
+          "file": "features/epic-106-product-list.feature"
+        },
+        "test": {
+          "title": "AC-1 Each product in the list shows its own unique picture",
+          "file": "tests/epic-106-product-list.spec.ts"
+        },
+        "result": {
+          "status": "passed",
+          "runId": "20261027T031929Z-2884a27f"
+        },
+        "state": "passing"
+      },
+      {
+        "id": "D16",
+        "covers": "bug #121",
+        "type": "confirmation",
+        "technique": "equivalence-partitioning",
+        "expectFail": true,
+        "scenario": {
+          "title": "AC-1 Problem user sees each product's own picture not the same picture for all",
+          "file": "features/epic-106-product-list.feature"
+        },
+        "test": {
+          "title": "AC-1 Problem user sees each product's own picture not the same picture for all",
+          "file": "tests/epic-106-product-list.spec.ts"
+        },
+        "result": {
+          "status": "expected-failure",
+          "runId": "20261027T031929Z-2884a27f"
+        },
+        "state": "known bug reproduced"
+      },
+      {
+        "id": "D17",
+        "covers": "AC-2",
+        "type": "functional",
+        "technique": "state-transition",
+        "expectFail": false,
+        "scenario": {
+          "title": "AC-2 A product's picture on its detail page is the same as in the list",
+          "file": "features/epic-106-product-list.feature"
+        },
+        "test": {
+          "title": "AC-2 A product's picture on its detail page is the same as in the list",
+          "file": "tests/epic-106-product-list.spec.ts"
+        },
+        "result": {
+          "status": "passed",
+          "runId": "20261027T031929Z-2884a27f"
+        },
+        "state": "passing"
+      },
+      {
+        "id": "D18",
+        "covers": "story",
+        "type": "accessibility",
+        "technique": "checklist-based",
+        "expectFail": false,
+        "scenario": {
+          "title": "AC-story Product images pass accessibility checks",
+          "file": "features/epic-106-product-list.feature"
+        },
+        "test": {
+          "title": "AC-story Product images pass accessibility checks",
+          "file": "tests/epic-106-product-list.spec.ts"
+        },
+        "result": {
+          "status": "passed",
+          "runId": "20261027T031929Z-2884a27f"
+        },
+        "state": "passing"
+      }
+    ],
+    "uncoveredCriteria": [],
+    "outsideDesign": [],
+    "bugs": [
+      {
+        "id": 121,
+        "state": "Active",
+        "title": "Problem user sees the same picture for every product"
+      },
+      {
+        "id": 122,
+        "state": "Active",
+        "title": "Error user cannot finish an order"
+      }
+    ]
+  },
+  {
+    "story": 120,
+    "title": "Every customer can finish an order",
+    "acceptanceCriteria": [
+      "AC-1",
+      "AC-2"
+    ],
+    "designRun": "20261027T035505Z-1c036d78",
+    "items": [
+      {
+        "id": "D26",
+        "covers": "AC-1",
+        "type": "functional",
+        "technique": "state-transition",
+        "expectFail": false,
+        "scenario": {
+          "title": "AC-1 Customer filling in details reaches the overview with those details accepted",
+          "file": "features/epic-107-cart-and-checkout.feature"
+        },
+        "test": {
+          "title": "AC-1 Customer filling in details reaches the overview with those details accepted",
+          "file": "tests/epic-107-cart-and-checkout.spec.ts"
+        },
+        "result": {
+          "status": "passed",
+          "runId": "20261027T035505Z-1c036d78"
+        },
+        "state": "passing"
+      },
+      {
+        "id": "D27",
+        "covers": "AC-2",
+        "type": "functional",
+        "technique": "state-transition",
+        "expectFail": false,
+        "scenario": {
+          "title": "AC-2 Finishing from the overview shows the thank-you message for a standard user",
+          "file": "features/epic-107-cart-and-checkout.feature"
+        },
+        "test": {
+          "title": "AC-2 Finishing from the overview shows the thank-you message for a standard user",
+          "file": "tests/epic-107-cart-and-checkout.spec.ts"
+        },
+        "result": {
+          "status": "passed",
+          "runId": "20261027T035505Z-1c036d78"
+        },
+        "state": "passing"
+      },
+      {
+        "id": "D28",
+        "covers": "bug #122",
+        "type": "confirmation",
+        "technique": "state-transition",
+        "expectFail": true,
+        "scenario": {
+          "title": "AC-2 Error user cannot finish an order (bug #122)",
+          "file": "features/epic-107-cart-and-checkout.feature"
+        },
+        "test": {
+          "title": "AC-2 Error user cannot finish an order (bug #122)",
+          "file": "tests/epic-107-cart-and-checkout.spec.ts"
+        },
+        "result": {
+          "status": "expected-failure",
+          "runId": "20261027T035505Z-1c036d78"
+        },
+        "state": "known bug reproduced"
+      },
+      {
+        "id": "D29",
+        "covers": "story",
+        "type": "accessibility",
+        "technique": "checklist-based",
+        "expectFail": false,
+        "scenario": {
+          "title": "AC-story Confirmation page for story 120 passes axe accessibility checks",
+          "file": "features/epic-107-cart-and-checkout.feature"
+        },
+        "test": {
+          "title": "AC-story Confirmation page for story 120 passes axe accessibility checks",
+          "file": "tests/epic-107-cart-and-checkout.spec.ts"
+        },
+        "result": {
+          "status": "passed",
+          "runId": "20261027T035505Z-1c036d78"
+        },
+        "state": "passing"
+      }
+    ],
+    "uncoveredCriteria": [],
+    "outsideDesign": [],
+    "bugs": [
+      {
+        "id": 121,
+        "state": "Active",
+        "title": "Problem user sees the same picture for every product"
+      },
+      {
+        "id": 122,
+        "state": "Active",
+        "title": "Error user cannot finish an order"
+      }
+    ]
+  }
+]

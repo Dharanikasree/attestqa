@@ -1,0 +1,19 @@
+{
+  "approvalId": "apr-0003",
+  "summary": "Approve 1 call: ado.wit_work_item_comment_write(action=add, workItemId=119, text=## agentic-qa run `20261027T032413Z-8…, …)",
+  "calls": [
+    {
+      "toolName": "ado.wit_work_item_comment_write",
+      "args": {
+        "action": "add",
+        "workItemId": 119,
+        "text": "## agentic-qa run `20261027T032413Z-8bb78919`\n\n**Suite: NOT green** for story 119 — 17 passed, 1 failed, 0 skipped.\n\n| Test | Result | Time |\n| --- | --- | --- |\n| AC-1 Product list is sorted A to Z by name when it first opens | pass | 948 ms |\n| AC-2 Sorting by name Z to A reverses the order | pass | 856 ms |\n| AC-3a Sorting by price low to high lists the cheapest product first | pass | 979 ms |\n| AC-3b Sorting by price high to low lists the most expensive product first | pass | 1.7 s |\n| AC-story Product list page passes accessibility checks | pass | 2.2 s |\n| AC-1 Clicking a product name opens its detail page with matching name, description and price | pass | 1.5 s |\n| AC-2 Adding a product from its detail page changes button to Remove and cart shows 1 | pass | 1.2 s |\n| AC-3 Back to products returns to the product list | pass | 923 ms |\n| AC-story Product detail page passes accessibility checks | pass | 1.5 s |\n| AC-1 Adding a product from the list changes its button to Remove and shows cart badge | pass | 935 ms |\n| AC-2 Removing the product changes the button back and hides the badge | pass | 985 ms |\n| AC-3 Products added stay in the cart after navigating away and back | pass | 1.0 s |\n| AC-story Product list with cart items passes accessibility checks | pass | 1.5 s |\n| AC-1 Each product in the list shows a picture and no two products show the same picture | pass | 892 ms |\n| AC-2 A product image on its detail page matches the image shown in the list | **FAIL** | 6.0 s |\n| AC-1 Problem user sees the same picture for every product | fails as expected — known bug reproduced | 987 ms |\n| AC-story Product images pass accessibility checks | pass | 1.4 s |\n| AC-2 Adding a second product increases the cart badge to 2 | pass | 917 ms |\n\nFailing tests:\n- **AC-2 A product image on its detail page matches the image shown in the list** — epic-106-product-list.spec.ts\n  `Error: expect(locator).toBeVisible() failed` · `Expected: visible`\n\n**Test cases linked to work item 119: 3** (already present: 166, 167, 168).\n\nSpec files written: `tests/epic-106-product-list.spec.ts`\n\n**Checks not made in this environment:**\n- test suite membership — this Azure DevOps account has no Test Plans access level, so the cases are linked to the story but no suite contains them\n\n_Counted from the run ledger (`20261027T032413Z-8bb78919`), not from the agent's account of its own work._",
+        "project": "attestqa-saucedemo"
+      }
+    }
+  ],
+  "requestedAt": "2026-10-27T03:35:24.770Z",
+  "decision": "approved",
+  "by": "auto-approver (evaluation phase 2)",
+  "at": "2026-10-27T03:35:25.773Z"
+}

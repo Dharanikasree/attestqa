@@ -102,3 +102,73 @@ Feature: Customer profile and orders
     Given I am logged in as a registered customer
     When I navigate to "/#/privacy-security/change-password"
     Then the page passes axe accessibility checks
+
+  @story:SCRUM-26 @ac:1 @design:D11 @type:functional @technique:equivalence-partitioning
+  Scenario: AC-1 Choosing another language from the menu shows the shop's labels in that language
+    Given I am on the home page
+    When I click "Language selection menu"
+    And I click "Deutsch"
+    Then the page displays "Alle Produkte"
+
+  @story:SCRUM-26 @ac:2 @design:D12 @type:functional @technique:state-transition
+  Scenario: AC-2 The chosen language is kept when the page is reloaded
+    Given I am on the home page
+    When I click "Language selection menu"
+    And I click "Deutsch"
+    Then the page displays "Alle Produkte"
+    When I reload the page
+    Then the page displays "Alle Produkte"
+
+  @story:SCRUM-26 @ac:3 @design:D13 @type:functional @technique:state-transition
+  Scenario: AC-3 The page declares the chosen language to assistive technology
+    Given I am on the home page
+    When I click "Language selection menu"
+    And I click "Deutsch"
+    Then the document language attribute is "de"
+
+  @story:SCRUM-26 @design:D14 @type:accessibility @technique:checklist-based
+  Scenario: AC-story Accessibility of the language selection
+    Given I am on the home page
+    Then the page passes axe accessibility checks
+
+  @story:SCRUM-27 @ac:1 @design:D15 @type:functional @technique:state-transition
+  Scenario: AC-1 Order history lists each order with its order number and total
+    Given I am logged in as a registered customer
+    When I navigate to "/#/order-history"
+    Then the page displays "Your Order History"
+    And the order list is visible
+
+  @story:SCRUM-27 @ac:2 @design:D16 @type:functional @technique:state-transition
+  Scenario: AC-2 Tracking an order shows that order's status and its products
+    Given I am logged in as a registered customer
+    When I navigate to "/#/order-history"
+    And I click the track order button for the first order
+    Then the order tracking details are visible
+    And the order status is displayed
+
+  @story:SCRUM-27 @ac:3 @design:D17 @type:functional @technique:equivalence-partitioning
+  Scenario: AC-3 A signed-in customer only sees their own orders on the order history page
+    Given I am logged in as a registered customer
+    When I navigate to "/#/order-history"
+    Then the orders shown belong to the current user only
+
+  @story:SCRUM-27 @ac:3 @design:D18 @type:security @technique:error-guessing
+  Scenario: AC-3 Unauthenticated access to order history is redirected to login
+    Given I am not logged in
+    When I navigate to "/#/order-history"
+    Then the URL contains "/#/login"
+
+  @story:SCRUM-27 @ac:3 @bug:SCRUM-28 @design:D19 @type:confirmation @technique:error-guessing
+  Scenario: AC-3 Order tracking by order number is restricted to the order owner
+    Given I am logged in as a registered customer
+    When I navigate to "/#/order-history"
+    And I note the order ID of the first order
+    And I log out
+    And I navigate to the order tracking page for that order ID
+    Then the order tracking page is not accessible without login
+
+  @story:SCRUM-27 @design:D20 @type:accessibility @technique:checklist-based
+  Scenario: AC-story Accessibility of the Order History page
+    Given I am logged in as a registered customer
+    When I navigate to "/#/order-history"
+    Then the page passes axe accessibility checks

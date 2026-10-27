@@ -287,4 +287,1091 @@ test.describe("Cart and checkout", () => {
       await expect(cartPage.page.getByText("Swag Labs").first()).toBeVisible();
     });
   });
+
+  // @story:115
+  // @ac:1
+  // @design:D7
+  // @type:functional
+  // @technique:state-transition
+  test("AC-1 Continuing with all fields filled in goes to the order overview", async ({ page }) => {
+    const cartPage = new CartPage(page);
+
+    await test.step("Given I am on the sign-in page", async () => {
+      await cartPage.goto();
+    });
+
+    await test.step("When I find the Username field and enter credentials", async () => {
+      await cartPage.usernameInput.fill(process.env["AQA_APP_USER"] ?? "standard_user");
+    });
+
+    await test.step("And I find the Password field and enter credentials", async () => {
+      await cartPage.passwordInput.fill(process.env["AQA_APP_PASS"] ?? "secret_sauce");
+    });
+
+    await test.step("And I click Login", async () => {
+      await cartPage.loginButton.click();
+    });
+
+    await test.step("Then the page displays Products (login succeeded)", async () => {
+      await expect(page.getByText("Products").first()).toBeVisible({ timeout: 10000 });
+    });
+
+    await test.step("When I click the first Add to cart button in the product list", async () => {
+      await page.locator(".inventory_item button").first().click();
+    });
+
+    await test.step("And I click the cart icon", async () => {
+      await page.locator(".shopping_cart_link").first().click();
+    });
+
+    await test.step("Then the page displays Your Cart", async () => {
+      await expect(page.getByText("Your Cart").first()).toBeVisible();
+    });
+
+    await test.step("When I click Checkout", async () => {
+      await page.getByTestId("checkout").click();
+    });
+
+    await test.step("Then the page displays Checkout: Your Information", async () => {
+      await expect(page.getByText("Checkout: Your Information").first()).toBeVisible();
+    });
+
+    await test.step("When I fill in the First Name field", async () => {
+      await page.getByTestId("firstName").fill("Jane");
+    });
+
+    await test.step("And I fill in the Last Name field", async () => {
+      await page.getByTestId("lastName").fill("Doe");
+    });
+
+    await test.step("And I fill in the Postal Code field", async () => {
+      await page.getByTestId("postalCode").fill("12345");
+    });
+
+    await test.step("And I click Continue", async () => {
+      await page.getByTestId("continue").click();
+    });
+
+    await test.step("Then the page displays Checkout: Overview", async () => {
+      await expect(page.getByText("Checkout: Overview").first()).toBeVisible();
+    });
+  });
+
+  // @story:115
+  // @ac:2
+  // @design:D8
+  // @type:functional
+  // @technique:boundary-value-analysis
+  test("AC-2a Empty first name shows an error saying the first name is required", async ({ page }) => {
+    const cartPage = new CartPage(page);
+
+    await test.step("Given I am on the sign-in page", async () => {
+      await cartPage.goto();
+    });
+
+    await test.step("When I find the Username field and enter credentials", async () => {
+      await cartPage.usernameInput.fill(process.env["AQA_APP_USER"] ?? "standard_user");
+    });
+
+    await test.step("And I find the Password field and enter credentials", async () => {
+      await cartPage.passwordInput.fill(process.env["AQA_APP_PASS"] ?? "secret_sauce");
+    });
+
+    await test.step("And I click Login", async () => {
+      await cartPage.loginButton.click();
+    });
+
+    await test.step("Then the page displays Products (login succeeded)", async () => {
+      await expect(page.getByText("Products").first()).toBeVisible({ timeout: 10000 });
+    });
+
+    await test.step("When I click the first Add to cart button in the product list", async () => {
+      await page.locator(".inventory_item button").first().click();
+    });
+
+    await test.step("And I click the cart icon", async () => {
+      await page.locator(".shopping_cart_link").first().click();
+    });
+
+    await test.step("Then the page displays Your Cart", async () => {
+      await expect(page.getByText("Your Cart").first()).toBeVisible();
+    });
+
+    await test.step("When I click Checkout", async () => {
+      await page.getByTestId("checkout").click();
+    });
+
+    await test.step("Then the page displays Checkout: Your Information", async () => {
+      await expect(page.getByText("Checkout: Your Information").first()).toBeVisible();
+    });
+
+    await test.step("When I leave the First Name field empty, fill Last Name and Postal Code, and click Continue", async () => {
+      // First Name left empty
+      await page.getByTestId("lastName").fill("Doe");
+      await page.getByTestId("postalCode").fill("12345");
+      await page.getByTestId("continue").click();
+    });
+
+    await test.step("Then the page displays 'First Name is required'", async () => {
+      await expect(page.getByTestId("error")).toBeVisible();
+      await expect(page.getByTestId("error")).toContainText("First Name is required");
+    });
+  });
+
+  // @story:115
+  // @ac:2
+  // @design:D9
+  // @type:functional
+  // @technique:boundary-value-analysis
+  test("AC-2b Empty last name shows an error saying the last name is required", async ({ page }) => {
+    const cartPage = new CartPage(page);
+
+    await test.step("Given I am on the sign-in page", async () => {
+      await cartPage.goto();
+    });
+
+    await test.step("When I find the Username field and enter credentials", async () => {
+      await cartPage.usernameInput.fill(process.env["AQA_APP_USER"] ?? "standard_user");
+    });
+
+    await test.step("And I find the Password field and enter credentials", async () => {
+      await cartPage.passwordInput.fill(process.env["AQA_APP_PASS"] ?? "secret_sauce");
+    });
+
+    await test.step("And I click Login", async () => {
+      await cartPage.loginButton.click();
+    });
+
+    await test.step("Then the page displays Products (login succeeded)", async () => {
+      await expect(page.getByText("Products").first()).toBeVisible({ timeout: 10000 });
+    });
+
+    await test.step("When I click the first Add to cart button in the product list", async () => {
+      await page.locator(".inventory_item button").first().click();
+    });
+
+    await test.step("And I click the cart icon", async () => {
+      await page.locator(".shopping_cart_link").first().click();
+    });
+
+    await test.step("Then the page displays Your Cart", async () => {
+      await expect(page.getByText("Your Cart").first()).toBeVisible();
+    });
+
+    await test.step("When I click Checkout", async () => {
+      await page.getByTestId("checkout").click();
+    });
+
+    await test.step("Then the page displays Checkout: Your Information", async () => {
+      await expect(page.getByText("Checkout: Your Information").first()).toBeVisible();
+    });
+
+    await test.step("When I fill First Name, leave Last Name empty, fill Postal Code, and click Continue", async () => {
+      await page.getByTestId("firstName").fill("Jane");
+      // Last Name left empty
+      await page.getByTestId("postalCode").fill("12345");
+      await page.getByTestId("continue").click();
+    });
+
+    await test.step("Then the page displays 'Last Name is required'", async () => {
+      await expect(page.getByTestId("error")).toBeVisible();
+      await expect(page.getByTestId("error")).toContainText("Last Name is required");
+    });
+  });
+
+  // @story:115
+  // @ac:2
+  // @design:D10
+  // @type:functional
+  // @technique:boundary-value-analysis
+  test("AC-2c Empty postal code shows an error saying the postal code is required", async ({ page }) => {
+    const cartPage = new CartPage(page);
+
+    await test.step("Given I am on the sign-in page", async () => {
+      await cartPage.goto();
+    });
+
+    await test.step("When I find the Username field and enter credentials", async () => {
+      await cartPage.usernameInput.fill(process.env["AQA_APP_USER"] ?? "standard_user");
+    });
+
+    await test.step("And I find the Password field and enter credentials", async () => {
+      await cartPage.passwordInput.fill(process.env["AQA_APP_PASS"] ?? "secret_sauce");
+    });
+
+    await test.step("And I click Login", async () => {
+      await cartPage.loginButton.click();
+    });
+
+    await test.step("Then the page displays Products (login succeeded)", async () => {
+      await expect(page.getByText("Products").first()).toBeVisible({ timeout: 10000 });
+    });
+
+    await test.step("When I click the first Add to cart button in the product list", async () => {
+      await page.locator(".inventory_item button").first().click();
+    });
+
+    await test.step("And I click the cart icon", async () => {
+      await page.locator(".shopping_cart_link").first().click();
+    });
+
+    await test.step("Then the page displays Your Cart", async () => {
+      await expect(page.getByText("Your Cart").first()).toBeVisible();
+    });
+
+    await test.step("When I click Checkout", async () => {
+      await page.getByTestId("checkout").click();
+    });
+
+    await test.step("Then the page displays Checkout: Your Information", async () => {
+      await expect(page.getByText("Checkout: Your Information").first()).toBeVisible();
+    });
+
+    await test.step("When I fill First Name and Last Name, leave Postal Code empty, and click Continue", async () => {
+      await page.getByTestId("firstName").fill("Jane");
+      await page.getByTestId("lastName").fill("Doe");
+      // Postal Code left empty
+      await page.getByTestId("continue").click();
+    });
+
+    await test.step("Then the page displays 'Postal Code is required'", async () => {
+      await expect(page.getByTestId("error")).toBeVisible();
+      await expect(page.getByTestId("error")).toContainText("Postal Code is required");
+    });
+  });
+
+  // @story:115
+  // @ac:3
+  // @design:D11
+  // @type:functional
+  // @technique:state-transition
+  test("AC-3 Cancel returns to the cart with the cart unchanged", async ({ page }) => {
+    const cartPage = new CartPage(page);
+
+    await test.step("Given I am on the sign-in page", async () => {
+      await cartPage.goto();
+    });
+
+    await test.step("When I find the Username field and enter credentials", async () => {
+      await cartPage.usernameInput.fill(process.env["AQA_APP_USER"] ?? "standard_user");
+    });
+
+    await test.step("And I find the Password field and enter credentials", async () => {
+      await cartPage.passwordInput.fill(process.env["AQA_APP_PASS"] ?? "secret_sauce");
+    });
+
+    await test.step("And I click Login", async () => {
+      await cartPage.loginButton.click();
+    });
+
+    await test.step("Then the page displays Products (login succeeded)", async () => {
+      await expect(page.getByText("Products").first()).toBeVisible({ timeout: 10000 });
+    });
+
+    await test.step("When I click the first Add to cart button in the product list", async () => {
+      await page.locator(".inventory_item button").first().click();
+    });
+
+    await test.step("And I click the cart icon", async () => {
+      await page.locator(".shopping_cart_link").first().click();
+    });
+
+    await test.step("Then the page displays Your Cart", async () => {
+      await expect(page.getByText("Your Cart").first()).toBeVisible();
+    });
+
+    await test.step("And the cart badge shows 1", async () => {
+      await expect(page.locator(".shopping_cart_badge").first()).toHaveText("1");
+    });
+
+    await test.step("When I click Checkout", async () => {
+      await page.getByTestId("checkout").click();
+    });
+
+    await test.step("Then the page displays Checkout: Your Information", async () => {
+      await expect(page.getByText("Checkout: Your Information").first()).toBeVisible();
+    });
+
+    await test.step("When I click Cancel", async () => {
+      await page.getByTestId("cancel").click();
+    });
+
+    await test.step("Then the page displays Your Cart", async () => {
+      await expect(page.getByText("Your Cart").first()).toBeVisible();
+    });
+
+    await test.step("And the cart badge still shows 1", async () => {
+      await expect(page.locator(".shopping_cart_badge").first()).toHaveText("1");
+    });
+  });
+
+  // @story:115
+  // @design:D12
+  // @type:accessibility
+  // @technique:checklist-based
+  test("AC-story Checkout information page passes axe accessibility checks", async ({ page }) => {
+    const cartPage = new CartPage(page);
+
+    await test.step("Given I am on the sign-in page", async () => {
+      await cartPage.goto();
+    });
+
+    await test.step("When I find the Username field and enter credentials", async () => {
+      await cartPage.usernameInput.fill(process.env["AQA_APP_USER"] ?? "standard_user");
+    });
+
+    await test.step("And I find the Password field and enter credentials", async () => {
+      await cartPage.passwordInput.fill(process.env["AQA_APP_PASS"] ?? "secret_sauce");
+    });
+
+    await test.step("And I click Login", async () => {
+      await cartPage.loginButton.click();
+    });
+
+    await test.step("Then the page displays Products (login succeeded)", async () => {
+      await expect(page.getByText("Products").first()).toBeVisible({ timeout: 10000 });
+    });
+
+    await test.step("When I click the first Add to cart button in the product list", async () => {
+      await page.locator(".inventory_item button").first().click();
+    });
+
+    await test.step("And I click the cart icon", async () => {
+      await page.locator(".shopping_cart_link").first().click();
+    });
+
+    await test.step("Then the page displays Your Cart", async () => {
+      await expect(page.getByText("Your Cart").first()).toBeVisible();
+    });
+
+    await test.step("When I click Checkout", async () => {
+      await page.getByTestId("checkout").click();
+    });
+
+    await test.step("Then the page displays Checkout: Your Information", async () => {
+      await expect(page.getByText("Checkout: Your Information").first()).toBeVisible();
+    });
+
+    await test.step("Then the checkout information form passes axe accessibility checks", async () => {
+      const { default: AxeBuilder } = await import("@axe-core/playwright");
+      const axeResults = await new AxeBuilder({ page })
+        .include(".checkout_info_container")
+        .withTags(["wcag2a", "wcag2aa"])
+        .analyze();
+      expect(
+        axeResults.violations.map((v) => v.id).sort(),
+        `axe violations: ${JSON.stringify(axeResults.violations, null, 2)}`
+      ).toEqual([]);
+    });
+  });
+
+  // @story:116
+  // @ac:1
+  // @design:D13
+  // @type:functional
+  // @technique:state-transition
+  test("AC-1 Overview lists the products in the cart with their prices", async ({ page }) => {
+    const cartPage = new CartPage(page);
+
+    await test.step("Given I am on the sign-in page", async () => {
+      await cartPage.goto();
+    });
+
+    await test.step("When I find the Username field and enter credentials", async () => {
+      await cartPage.usernameInput.fill(process.env["AQA_APP_USER"] ?? "standard_user");
+    });
+
+    await test.step("And I find the Password field and enter credentials", async () => {
+      await cartPage.passwordInput.fill(process.env["AQA_APP_PASS"] ?? "secret_sauce");
+    });
+
+    await test.step("And I click Login", async () => {
+      await cartPage.loginButton.click();
+    });
+
+    await test.step("Then the page displays Products (login succeeded — precondition)", async () => {
+      await expect(page.getByText("Products").first()).toBeVisible({ timeout: 10000 });
+    });
+
+    await test.step("When I click the first Add to cart button in the product list", async () => {
+      await page.locator(".inventory_item button").first().click();
+    });
+
+    await test.step("And I click the cart icon", async () => {
+      await page.locator(".shopping_cart_link").first().click();
+    });
+
+    await test.step("Then the page displays Your Cart", async () => {
+      await expect(page.getByText("Your Cart").first()).toBeVisible();
+    });
+
+    await test.step("When I click Checkout", async () => {
+      await page.getByTestId("checkout").click();
+    });
+
+    await test.step("Then the page displays Checkout: Your Information", async () => {
+      await expect(page.getByText("Checkout: Your Information").first()).toBeVisible();
+    });
+
+    await test.step("When I fill in checkout information and click Continue", async () => {
+      await page.getByTestId("firstName").fill("Jane");
+      await page.getByTestId("lastName").fill("Doe");
+      await page.getByTestId("postalCode").fill("12345");
+      await page.getByTestId("continue").click();
+    });
+
+    await test.step("Then the page displays Checkout: Overview (action took effect)", async () => {
+      await expect(page.getByText("Checkout: Overview").first()).toBeVisible();
+    });
+
+    await test.step("And the overview item name is visible", async () => {
+      await expect(page.getByTestId("inventory-item-name").first()).toBeVisible();
+    });
+
+    await test.step("And the overview item price is visible", async () => {
+      await expect(page.getByTestId("inventory-item-price").first()).toBeVisible();
+    });
+  });
+
+  // @story:116
+  // @ac:2
+  // @design:D14
+  // @type:functional
+  // @technique:equivalence-partitioning
+  test("AC-2 Item total equals the sum of the listed prices", async ({ page }) => {
+    const cartPage = new CartPage(page);
+
+    await test.step("Given I am on the sign-in page", async () => {
+      await cartPage.goto();
+    });
+
+    await test.step("When I find the Username field and enter credentials", async () => {
+      await cartPage.usernameInput.fill(process.env["AQA_APP_USER"] ?? "standard_user");
+    });
+
+    await test.step("And I find the Password field and enter credentials", async () => {
+      await cartPage.passwordInput.fill(process.env["AQA_APP_PASS"] ?? "secret_sauce");
+    });
+
+    await test.step("And I click Login", async () => {
+      await cartPage.loginButton.click();
+    });
+
+    await test.step("Then the page displays Products (login succeeded — precondition)", async () => {
+      await expect(page.getByText("Products").first()).toBeVisible({ timeout: 10000 });
+    });
+
+    await test.step("When I click the first Add to cart button in the product list", async () => {
+      await page.locator(".inventory_item button").first().click();
+    });
+
+    await test.step("And I click the cart icon", async () => {
+      await page.locator(".shopping_cart_link").first().click();
+    });
+
+    await test.step("Then the page displays Your Cart", async () => {
+      await expect(page.getByText("Your Cart").first()).toBeVisible();
+    });
+
+    await test.step("When I click Checkout", async () => {
+      await page.getByTestId("checkout").click();
+    });
+
+    await test.step("Then the page displays Checkout: Your Information", async () => {
+      await expect(page.getByText("Checkout: Your Information").first()).toBeVisible();
+    });
+
+    await test.step("When I fill in checkout information and click Continue", async () => {
+      await page.getByTestId("firstName").fill("Jane");
+      await page.getByTestId("lastName").fill("Doe");
+      await page.getByTestId("postalCode").fill("12345");
+      await page.getByTestId("continue").click();
+    });
+
+    await test.step("Then the page displays Checkout: Overview", async () => {
+      await expect(page.getByText("Checkout: Overview").first()).toBeVisible();
+    });
+
+    await test.step("And the item total equals the sum of the listed prices", async () => {
+      // Collect all item prices listed in the overview
+      const priceLocator = page.getByTestId("inventory-item-price");
+      await expect(priceLocator.first()).toBeVisible();
+      const priceTexts = await priceLocator.allTextContents();
+      const sumOfPrices = priceTexts.reduce((sum, t) => {
+        return sum + parseFloat(t.replace("$", ""));
+      }, 0);
+
+      // Read the displayed item total
+      const subtotalLabel = page.getByTestId("subtotal-label");
+      await expect(subtotalLabel).toBeVisible();
+      const subtotalText = await subtotalLabel.textContent();
+      const displayedSubtotal = parseFloat((subtotalText ?? "").replace(/[^0-9.]/g, ""));
+
+      expect(
+        Math.round(displayedSubtotal * 100),
+        `Item total (${displayedSubtotal}) should equal sum of prices (${sumOfPrices})`
+      ).toBe(Math.round(sumOfPrices * 100));
+    });
+  });
+
+  // @story:116
+  // @ac:3
+  // @design:D15
+  // @type:functional
+  // @technique:equivalence-partitioning
+  test("AC-3 Total equals the item total plus the tax shown", async ({ page }) => {
+    const cartPage = new CartPage(page);
+
+    await test.step("Given I am on the sign-in page", async () => {
+      await cartPage.goto();
+    });
+
+    await test.step("When I find the Username field and enter credentials", async () => {
+      await cartPage.usernameInput.fill(process.env["AQA_APP_USER"] ?? "standard_user");
+    });
+
+    await test.step("And I find the Password field and enter credentials", async () => {
+      await cartPage.passwordInput.fill(process.env["AQA_APP_PASS"] ?? "secret_sauce");
+    });
+
+    await test.step("And I click Login", async () => {
+      await cartPage.loginButton.click();
+    });
+
+    await test.step("Then the page displays Products (login succeeded — precondition)", async () => {
+      await expect(page.getByText("Products").first()).toBeVisible({ timeout: 10000 });
+    });
+
+    await test.step("When I click the first Add to cart button in the product list", async () => {
+      await page.locator(".inventory_item button").first().click();
+    });
+
+    await test.step("And I click the cart icon", async () => {
+      await page.locator(".shopping_cart_link").first().click();
+    });
+
+    await test.step("Then the page displays Your Cart", async () => {
+      await expect(page.getByText("Your Cart").first()).toBeVisible();
+    });
+
+    await test.step("When I click Checkout", async () => {
+      await page.getByTestId("checkout").click();
+    });
+
+    await test.step("Then the page displays Checkout: Your Information", async () => {
+      await expect(page.getByText("Checkout: Your Information").first()).toBeVisible();
+    });
+
+    await test.step("When I fill in checkout information and click Continue", async () => {
+      await page.getByTestId("firstName").fill("Jane");
+      await page.getByTestId("lastName").fill("Doe");
+      await page.getByTestId("postalCode").fill("12345");
+      await page.getByTestId("continue").click();
+    });
+
+    await test.step("Then the page displays Checkout: Overview", async () => {
+      await expect(page.getByText("Checkout: Overview").first()).toBeVisible();
+    });
+
+    await test.step("And the order total equals the item total plus the tax shown", async () => {
+      const subtotalLabel = page.getByTestId("subtotal-label");
+      const taxLabel = page.getByTestId("tax-label");
+      const totalLabel = page.getByTestId("total-label");
+
+      await expect(subtotalLabel).toBeVisible();
+      await expect(taxLabel).toBeVisible();
+      await expect(totalLabel).toBeVisible();
+
+      const subtotalText = await subtotalLabel.textContent();
+      const taxText = await taxLabel.textContent();
+      const totalText = await totalLabel.textContent();
+
+      const subtotal = parseFloat((subtotalText ?? "").replace(/[^0-9.]/g, ""));
+      const tax = parseFloat((taxText ?? "").replace(/[^0-9.]/g, ""));
+      const total = parseFloat((totalText ?? "").replace(/[^0-9.]/g, ""));
+
+      expect(
+        Math.round(total * 100),
+        `Total (${total}) should equal item total (${subtotal}) plus tax (${tax})`
+      ).toBe(Math.round((subtotal + tax) * 100));
+    });
+  });
+
+  // @story:116
+  // @design:D16
+  // @type:accessibility
+  // @technique:checklist-based
+  test("AC-story Overview page passes axe accessibility checks", async ({ page }) => {
+    const cartPage = new CartPage(page);
+
+    await test.step("Given I am on the sign-in page", async () => {
+      await cartPage.goto();
+    });
+
+    await test.step("When I find the Username field and enter credentials", async () => {
+      await cartPage.usernameInput.fill(process.env["AQA_APP_USER"] ?? "standard_user");
+    });
+
+    await test.step("And I find the Password field and enter credentials", async () => {
+      await cartPage.passwordInput.fill(process.env["AQA_APP_PASS"] ?? "secret_sauce");
+    });
+
+    await test.step("And I click Login", async () => {
+      await cartPage.loginButton.click();
+    });
+
+    await test.step("Then the page displays Products (login succeeded — precondition)", async () => {
+      await expect(page.getByText("Products").first()).toBeVisible({ timeout: 10000 });
+    });
+
+    await test.step("When I click the first Add to cart button in the product list", async () => {
+      await page.locator(".inventory_item button").first().click();
+    });
+
+    await test.step("And I click the cart icon", async () => {
+      await page.locator(".shopping_cart_link").first().click();
+    });
+
+    await test.step("Then the page displays Your Cart", async () => {
+      await expect(page.getByText("Your Cart").first()).toBeVisible();
+    });
+
+    await test.step("When I click Checkout", async () => {
+      await page.getByTestId("checkout").click();
+    });
+
+    await test.step("Then the page displays Checkout: Your Information", async () => {
+      await expect(page.getByText("Checkout: Your Information").first()).toBeVisible();
+    });
+
+    await test.step("When I fill in checkout information and click Continue", async () => {
+      await page.getByTestId("firstName").fill("Jane");
+      await page.getByTestId("lastName").fill("Doe");
+      await page.getByTestId("postalCode").fill("12345");
+      await page.getByTestId("continue").click();
+    });
+
+    await test.step("Then the page displays Checkout: Overview", async () => {
+      await expect(page.getByText("Checkout: Overview").first()).toBeVisible();
+    });
+
+    await test.step("Then the overview page passes axe accessibility checks", async () => {
+      const { default: AxeBuilder } = await import("@axe-core/playwright");
+      const axeResults = await new AxeBuilder({ page })
+        .include(".checkout_summary_container")
+        .withTags(["wcag2a", "wcag2aa"])
+        .analyze();
+      expect(
+        axeResults.violations.map((v) => v.id).sort(),
+        `axe violations: ${JSON.stringify(axeResults.violations, null, 2)}`
+      ).toEqual([]);
+    });
+  });
+
+  // @story:116
+  // @ac:1
+  // @design:D17
+  // @type:security
+  // @technique:equivalence-partitioning
+  test("AC-1 Unauthenticated user navigating directly to the overview sees the sign-in page", async ({ page }) => {
+    const cartPage = new CartPage(page);
+
+    await test.step("Given I navigate to the overview directly", async () => {
+      await page.goto("/checkout-step-two.html");
+    });
+
+    await test.step("Then the page displays Swag Labs (sign-in page shown)", async () => {
+      await expect(cartPage.page.getByText("Swag Labs").first()).toBeVisible();
+    });
+  });
+
+  // @story:117
+  // @ac:1
+  // @design:D18
+  // @type:functional
+  // @technique:state-transition
+  test("AC-1 Finishing from the overview shows a thank-you message", async ({ page }) => {
+    const cartPage = new CartPage(page);
+
+    await test.step("Given I am on the sign-in page", async () => {
+      await cartPage.goto();
+    });
+
+    await test.step("When I fill in credentials and log in (precondition: login succeeds)", async () => {
+      await cartPage.usernameInput.fill(process.env["AQA_APP_USER"] ?? "standard_user");
+      await cartPage.passwordInput.fill(process.env["AQA_APP_PASS"] ?? "secret_sauce");
+      await cartPage.loginButton.click();
+      await expect(page.getByText("Products").first()).toBeVisible({ timeout: 10000 });
+    });
+
+    await test.step("When I add a product and proceed through checkout to the overview", async () => {
+      await page.locator(".inventory_item button").first().click();
+      await page.locator(".shopping_cart_link").first().click();
+      await expect(page.getByText("Your Cart").first()).toBeVisible();
+      await page.getByTestId("checkout").click();
+      await expect(page.getByText("Checkout: Your Information").first()).toBeVisible();
+      await page.getByTestId("firstName").fill("Jane");
+      await page.getByTestId("lastName").fill("Doe");
+      await page.getByTestId("postalCode").fill("12345");
+      await page.getByTestId("continue").click();
+      await expect(page.getByText("Checkout: Overview").first()).toBeVisible();
+    });
+
+    await test.step("When I click Finish", async () => {
+      await page.getByTestId("finish").click();
+    });
+
+    await test.step("Then the Finish action took effect (confirmation page reached)", async () => {
+      await expect(page.getByText("Thank you for your order!").first()).toBeVisible();
+    });
+  });
+
+  // @story:117
+  // @ac:2
+  // @design:D19
+  // @type:functional
+  // @technique:equivalence-partitioning
+  test("AC-2 After the order the cart is empty and the cart badge is not shown", async ({ page }) => {
+    const cartPage = new CartPage(page);
+
+    await test.step("Given I am on the sign-in page", async () => {
+      await cartPage.goto();
+    });
+
+    await test.step("When I fill in credentials and log in (precondition: login succeeds)", async () => {
+      await cartPage.usernameInput.fill(process.env["AQA_APP_USER"] ?? "standard_user");
+      await cartPage.passwordInput.fill(process.env["AQA_APP_PASS"] ?? "secret_sauce");
+      await cartPage.loginButton.click();
+      await expect(page.getByText("Products").first()).toBeVisible({ timeout: 10000 });
+    });
+
+    await test.step("And I add a product to the cart (precondition: cart has 1 item)", async () => {
+      await page.locator(".inventory_item button").first().click();
+      await expect(page.locator(".shopping_cart_badge").first()).toHaveText("1");
+    });
+
+    await test.step("And I complete checkout through to the confirmation page", async () => {
+      await page.locator(".shopping_cart_link").first().click();
+      await expect(page.getByText("Your Cart").first()).toBeVisible();
+      await page.getByTestId("checkout").click();
+      await expect(page.getByText("Checkout: Your Information").first()).toBeVisible();
+      await page.getByTestId("firstName").fill("Jane");
+      await page.getByTestId("lastName").fill("Doe");
+      await page.getByTestId("postalCode").fill("12345");
+      await page.getByTestId("continue").click();
+      await expect(page.getByText("Checkout: Overview").first()).toBeVisible();
+      await page.getByTestId("finish").click();
+      await expect(page.getByText("Thank you for your order!").first()).toBeVisible();
+    });
+
+    await test.step("Then the cart badge is not shown", async () => {
+      await expect(page.locator(".shopping_cart_badge")).not.toBeVisible();
+    });
+  });
+
+  // @story:117
+  // @ac:3
+  // @design:D20
+  // @type:functional
+  // @technique:state-transition
+  test("AC-3 Back home from the confirmation returns to the product list", async ({ page }) => {
+    const cartPage = new CartPage(page);
+
+    await test.step("Given I am on the sign-in page", async () => {
+      await cartPage.goto();
+    });
+
+    await test.step("When I fill in credentials and log in (precondition: login succeeds)", async () => {
+      await cartPage.usernameInput.fill(process.env["AQA_APP_USER"] ?? "standard_user");
+      await cartPage.passwordInput.fill(process.env["AQA_APP_PASS"] ?? "secret_sauce");
+      await cartPage.loginButton.click();
+      await expect(page.getByText("Products").first()).toBeVisible({ timeout: 10000 });
+    });
+
+    await test.step("And I complete checkout through to the confirmation page", async () => {
+      await page.locator(".inventory_item button").first().click();
+      await page.locator(".shopping_cart_link").first().click();
+      await expect(page.getByText("Your Cart").first()).toBeVisible();
+      await page.getByTestId("checkout").click();
+      await expect(page.getByText("Checkout: Your Information").first()).toBeVisible();
+      await page.getByTestId("firstName").fill("Jane");
+      await page.getByTestId("lastName").fill("Doe");
+      await page.getByTestId("postalCode").fill("12345");
+      await page.getByTestId("continue").click();
+      await expect(page.getByText("Checkout: Overview").first()).toBeVisible();
+      await page.getByTestId("finish").click();
+      await expect(page.getByText("Thank you for your order!").first()).toBeVisible();
+    });
+
+    await test.step("When I click Back Home", async () => {
+      await page.getByTestId("back-to-products").click();
+    });
+
+    await test.step("Then the Back Home action took effect; product list is shown", async () => {
+      await expect(page.getByText("Products").first()).toBeVisible();
+    });
+  });
+
+  // @story:117
+  // @design:D21
+  // @type:accessibility
+  // @technique:checklist-based
+  test("AC-story Confirmation page passes axe accessibility checks", async ({ page }) => {
+    const cartPage = new CartPage(page);
+
+    await test.step("Given I am on the sign-in page", async () => {
+      await cartPage.goto();
+    });
+
+    await test.step("When I fill in credentials and log in (precondition: login succeeds)", async () => {
+      await cartPage.usernameInput.fill(process.env["AQA_APP_USER"] ?? "standard_user");
+      await cartPage.passwordInput.fill(process.env["AQA_APP_PASS"] ?? "secret_sauce");
+      await cartPage.loginButton.click();
+      await expect(page.getByText("Products").first()).toBeVisible({ timeout: 10000 });
+    });
+
+    await test.step("And I complete checkout through to the confirmation page", async () => {
+      await page.locator(".inventory_item button").first().click();
+      await page.locator(".shopping_cart_link").first().click();
+      await expect(page.getByText("Your Cart").first()).toBeVisible();
+      await page.getByTestId("checkout").click();
+      await expect(page.getByText("Checkout: Your Information").first()).toBeVisible();
+      await page.getByTestId("firstName").fill("Jane");
+      await page.getByTestId("lastName").fill("Doe");
+      await page.getByTestId("postalCode").fill("12345");
+      await page.getByTestId("continue").click();
+      await expect(page.getByText("Checkout: Overview").first()).toBeVisible();
+      await page.getByTestId("finish").click();
+      await expect(page.getByText("Thank you for your order!").first()).toBeVisible();
+    });
+
+    await test.step("Then the confirmation page passes axe accessibility checks", async () => {
+      const { default: AxeBuilder } = await import("@axe-core/playwright");
+      const axeResults = await new AxeBuilder({ page })
+        .include(".checkout_complete_container")
+        .withTags(["wcag2a", "wcag2aa"])
+        .analyze();
+      expect(
+        axeResults.violations.map((v) => v.id).sort(),
+        `axe violations: ${JSON.stringify(axeResults.violations, null, 2)}`
+      ).toEqual([]);
+    });
+  });
+
+  // @story:120
+  // @ac:1
+  // @design:D23
+  // @type:functional
+  // @technique:state-transition
+  test("AC-1 Customer filling in details reaches the overview with those details accepted", async ({ page }) => {
+    const cartPage = new CartPage(page);
+
+    await test.step("Given I am on the sign-in page", async () => {
+      await cartPage.goto();
+    });
+
+    await test.step("When I fill in credentials and log in (precondition: login succeeds)", async () => {
+      await cartPage.usernameInput.fill(process.env["AQA_APP_USER"] ?? "standard_user");
+      await cartPage.passwordInput.fill(process.env["AQA_APP_PASS"] ?? "secret_sauce");
+      await cartPage.loginButton.click();
+      await expect(page.getByText("Products").first()).toBeVisible({ timeout: 10000 });
+    });
+
+    await test.step("And I add a product and go to the cart", async () => {
+      await page.locator(".inventory_item button").first().click();
+      await page.locator(".shopping_cart_link").first().click();
+      await expect(page.getByText("Your Cart").first()).toBeVisible();
+    });
+
+    await test.step("And I click Checkout", async () => {
+      await page.getByTestId("checkout").click();
+      await expect(page.getByText("Checkout: Your Information").first()).toBeVisible();
+    });
+
+    await test.step("When I fill in first name, last name and postal code and click Continue", async () => {
+      await page.getByTestId("firstName").fill("Jane");
+      await page.getByTestId("lastName").fill("Doe");
+      await page.getByTestId("postalCode").fill("12345");
+      await page.getByTestId("continue").click();
+    });
+
+    await test.step("Then the Continue action took effect (overview page shown — details accepted)", async () => {
+      await expect(page.getByText("Checkout: Overview").first()).toBeVisible();
+    });
+
+    await test.step("And the overview shows the cart item (details were accepted)", async () => {
+      await expect(page.getByTestId("inventory-item-name").first()).toBeVisible();
+    });
+  });
+
+  // @story:120
+  // @ac:2
+  // @design:D24
+  // @type:functional
+  // @technique:equivalence-partitioning
+  test("AC-2 Finishing from the overview shows the thank-you message for a demo customer", async ({ page }) => {
+    const cartPage = new CartPage(page);
+
+    await test.step("Given I am on the sign-in page", async () => {
+      await cartPage.goto();
+    });
+
+    await test.step("When I fill in credentials as performance_glitch_user and log in (precondition: login succeeds)", async () => {
+      await cartPage.usernameInput.fill("performance_glitch_user");
+      await cartPage.passwordInput.fill(process.env["AQA_APP_PASS"] ?? "secret_sauce");
+      await cartPage.loginButton.click();
+      await expect(page.getByText("Products").first()).toBeVisible({ timeout: 30000 });
+    });
+
+    await test.step("And I add a product and proceed through checkout to the overview", async () => {
+      await page.locator(".inventory_item button").first().click();
+      await page.locator(".shopping_cart_link").first().click();
+      await expect(page.getByText("Your Cart").first()).toBeVisible();
+      await page.getByTestId("checkout").click();
+      await expect(page.getByText("Checkout: Your Information").first()).toBeVisible();
+      await page.getByTestId("firstName").fill("Jane");
+      await page.getByTestId("lastName").fill("Doe");
+      await page.getByTestId("postalCode").fill("12345");
+      await page.getByTestId("continue").click();
+      await expect(page.getByText("Checkout: Overview").first()).toBeVisible();
+    });
+
+    await test.step("When I click Finish", async () => {
+      await page.getByTestId("finish").click();
+    });
+
+    await test.step("Then the Finish action took effect; thank-you message is shown", async () => {
+      await expect(page.getByText("Thank you for your order!").first()).toBeVisible({ timeout: 30000 });
+    });
+  });
+
+  // @story:120
+  // @bug:122
+  // @design:D25
+  // @type:confirmation
+  // @technique:state-transition
+  test("AC-2 Error user cannot finish an order (bug #122)", async ({ page }) => {
+    test.fail(true, "Bug #122 Active: Error user cannot finish an order");
+    const cartPage = new CartPage(page);
+
+    await test.step("Given I am on the sign-in page", async () => {
+      await cartPage.goto();
+    });
+
+    await test.step("When I sign in as error_user (precondition: login succeeds)", async () => {
+      await cartPage.usernameInput.fill("error_user");
+      await cartPage.passwordInput.fill(process.env["AQA_APP_PASS"] ?? "secret_sauce");
+      await cartPage.loginButton.click();
+      await expect(page.getByText("Products").first()).toBeVisible({ timeout: 10000 });
+    });
+
+    await test.step("And I add a product and proceed through checkout to the overview", async () => {
+      await page.locator(".inventory_item button").first().click();
+      await page.locator(".shopping_cart_link").first().click();
+      await expect(page.getByText("Your Cart").first()).toBeVisible();
+      await page.getByTestId("checkout").click();
+      await expect(page.getByText("Checkout: Your Information").first()).toBeVisible();
+      await page.getByTestId("firstName").fill("Jane");
+      await page.getByTestId("lastName").fill("Doe");
+      await page.getByTestId("postalCode").fill("12345");
+      await page.getByTestId("continue").click();
+      await expect(page.getByText("Checkout: Overview").first()).toBeVisible();
+    });
+
+    await test.step("When I click Finish", async () => {
+      await page.getByTestId("finish").click();
+    });
+
+    await test.step("Then the Finish action took effect; thank-you message is shown (expected to fail: bug #122 Active)", async () => {
+      await expect(page.getByText("Thank you for your order!").first()).toBeVisible();
+    });
+  });
+
+  // @story:120
+  // @design:D26
+  // @type:accessibility
+  // @technique:checklist-based
+  test("AC-story Checkout completion page passes axe accessibility checks", async ({ page }) => {
+    const cartPage = new CartPage(page);
+
+    await test.step("Given I am on the sign-in page", async () => {
+      await cartPage.goto();
+    });
+
+    await test.step("When I fill in credentials and log in (precondition: login succeeds)", async () => {
+      await cartPage.usernameInput.fill(process.env["AQA_APP_USER"] ?? "standard_user");
+      await cartPage.passwordInput.fill(process.env["AQA_APP_PASS"] ?? "secret_sauce");
+      await cartPage.loginButton.click();
+      await expect(page.getByText("Products").first()).toBeVisible({ timeout: 10000 });
+    });
+
+    await test.step("And I complete checkout through to the confirmation page", async () => {
+      await page.locator(".inventory_item button").first().click();
+      await page.locator(".shopping_cart_link").first().click();
+      await expect(page.getByText("Your Cart").first()).toBeVisible();
+      await page.getByTestId("checkout").click();
+      await expect(page.getByText("Checkout: Your Information").first()).toBeVisible();
+      await page.getByTestId("firstName").fill("Jane");
+      await page.getByTestId("lastName").fill("Doe");
+      await page.getByTestId("postalCode").fill("12345");
+      await page.getByTestId("continue").click();
+      await expect(page.getByText("Checkout: Overview").first()).toBeVisible();
+      await page.getByTestId("finish").click();
+      await expect(page.getByText("Thank you for your order!").first()).toBeVisible();
+    });
+
+    await test.step("Then the checkout completion page passes axe accessibility checks", async () => {
+      const { default: AxeBuilder } = await import("@axe-core/playwright");
+      const axeResults = await new AxeBuilder({ page })
+        .include(".checkout_complete_container")
+        .withTags(["wcag2a", "wcag2aa"])
+        .analyze();
+      expect(
+        axeResults.violations.map((v) => v.id).sort(),
+        `axe violations: ${JSON.stringify(axeResults.violations, null, 2)}`
+      ).toEqual([]);
+    });
+  });
+
+  // @story:117
+  // @bug:122
+  // @design:D22
+  // @type:confirmation
+  // @technique:state-transition
+  test("AC-1 Error user cannot finish an order", async ({ page }) => {
+    test.fail(true, "Bug #122 Active: Error user cannot finish an order");
+    const cartPage = new CartPage(page);
+
+    await test.step("Given I am on the sign-in page", async () => {
+      await cartPage.goto();
+    });
+
+    await test.step("When I sign in as error_user (precondition: login succeeds)", async () => {
+      await cartPage.usernameInput.fill("error_user");
+      await cartPage.passwordInput.fill(process.env["AQA_APP_PASS"] ?? "secret_sauce");
+      await cartPage.loginButton.click();
+      await expect(page.getByText("Products").first()).toBeVisible({ timeout: 10000 });
+    });
+
+    await test.step("And I add a product and proceed through checkout to the overview", async () => {
+      await page.locator(".inventory_item button").first().click();
+      await page.locator(".shopping_cart_link").first().click();
+      await expect(page.getByText("Your Cart").first()).toBeVisible();
+      await page.getByTestId("checkout").click();
+      await expect(page.getByText("Checkout: Your Information").first()).toBeVisible();
+      await page.getByTestId("firstName").fill("Jane");
+      await page.getByTestId("lastName").fill("Doe");
+      await page.getByTestId("postalCode").fill("12345");
+      await page.getByTestId("continue").click();
+      await expect(page.getByText("Checkout: Overview").first()).toBeVisible();
+    });
+
+    await test.step("When I click Finish", async () => {
+      await page.getByTestId("finish").click();
+    });
+
+    await test.step("Then the Finish action took effect; thank-you message is shown", async () => {
+      await expect(page.getByText("Thank you for your order!").first()).toBeVisible();
+    });
+  });
 });

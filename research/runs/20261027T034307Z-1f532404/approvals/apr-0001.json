@@ -1,0 +1,111 @@
+{
+  "approvalId": "apr-0001",
+  "summary": "Approve 1 call: aqa.test_design(items=[{\"id\":\"D15\",\"covers\":\"AC-1\",\"type\":\"…, excluded=[{\"what\":\"bug #SCRUM-12\",\"reason\":\"Se…)",
+  "calls": [
+    {
+      "toolName": "aqa.test_design",
+      "args": {
+        "items": [
+          {
+            "id": "D15",
+            "covers": "AC-1",
+            "type": "functional",
+            "technique": "state-transition",
+            "conditions": [
+              "Customer is signed in and has placed at least one order",
+              "Customer navigates to the order history page (/#/order-history)"
+            ],
+            "expected": "Navigation to order history page completes (page heading 'Order History' is visible); the list shows each order with its order number and total price",
+            "source": "AC-1"
+          },
+          {
+            "id": "D16",
+            "covers": "AC-1",
+            "type": "functional",
+            "technique": "equivalence-partitioning",
+            "conditions": [
+              "Customer is signed in but has placed no orders",
+              "Customer navigates to the order history page"
+            ],
+            "expected": "Order history page shows an empty state message indicating no orders have been placed",
+            "source": "AC-1"
+          },
+          {
+            "id": "D17",
+            "covers": "AC-2",
+            "type": "functional",
+            "technique": "equivalence-partitioning",
+            "conditions": [
+              "Customer is signed in and has placed an order with a known order ID",
+              "Customer navigates to the track-result page for that order ID"
+            ],
+            "expected": "The tracking page shows the order's status (delivery stage) and its ordered products",
+            "source": "AC-2"
+          },
+          {
+            "id": "D18",
+            "covers": "AC-3",
+            "type": "functional",
+            "technique": "equivalence-partitioning",
+            "conditions": [
+              "Customer A is signed in",
+              "Customer A navigates to the order history page",
+              "Customer B has placed orders that Customer A has never placed"
+            ],
+            "expected": "Order history page shows only the orders belonging to the currently signed-in customer; no orders from other customers are visible",
+            "source": "AC-3"
+          },
+          {
+            "id": "D19",
+            "covers": "AC-3",
+            "type": "security",
+            "technique": "error-guessing",
+            "conditions": [
+              "An unauthenticated user (not signed in) navigates directly to the order tracking URL with a known order ID",
+              "No authentication token is present in the session"
+            ],
+            "expected": "The order tracking result is not accessible to unauthenticated users; the page does not display order details",
+            "source": "AC-3",
+            "expectFail": true
+          },
+          {
+            "id": "D20",
+            "covers": "bug #SCRUM-28",
+            "type": "confirmation",
+            "technique": "error-guessing",
+            "conditions": [
+              "An unauthenticated user navigates directly to /#/track-result?orderId=1 without logging in",
+              "No authentication token is present"
+            ],
+            "expected": "Order details are NOT shown to an unauthenticated user; the page redirects or shows an access-denied message",
+            "source": "bug #SCRUM-28",
+            "expectFail": true
+          },
+          {
+            "id": "D21",
+            "covers": "story",
+            "type": "accessibility",
+            "technique": "checklist-based",
+            "conditions": [
+              "Customer is signed in",
+              "Order history page (/#/order-history) is loaded",
+              "axe-core scans the main content area with WCAG A and AA rules"
+            ],
+            "expected": "No accessibility violations reported by axe-core (violations array is empty)",
+            "source": "agent.test_types (WCAG A/AA)"
+          }
+        ],
+        "excluded": [
+          {
+            "what": "bug #SCRUM-12",
+            "reason": "Session token surviving logout is a general session management defect not specific to order history or order tracking behaviour; it belongs to a cross-cutting authentication concern and is not exercised by AC-1, AC-2 or AC-3 of this story"
+          }
+        ]
+      }
+    }
+  ],
+  "requestedAt": "2026-10-27T03:45:14.959Z",
+  "decision": "approved",
+  "by": "auto-approver (evaluation phase 2)",
+  "at": "2026-10-27T03:45:15.163Z"
+}

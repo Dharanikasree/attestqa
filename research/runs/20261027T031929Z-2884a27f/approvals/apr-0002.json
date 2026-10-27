@@ -1,0 +1,16 @@
+{
+  "approvalId": "apr-0002",
+  "summary": "Approve 1 call: pw.run_tests(spec=tests/epic-106-product-list.spec.ts)",
+  "calls": [
+    {
+      "toolName": "pw.run_tests",
+      "args": {
+        "spec": "tests/epic-106-product-list.spec.ts"
+      }
+    }
+  ],
+  "requestedAt": "2026-10-27T03:20:36.340Z",
+  "decision": "approved",
+  "by": "auto-approver (evaluation phase 2)",
+  "at": "2026-10-27T03:20:37.126Z"
+}

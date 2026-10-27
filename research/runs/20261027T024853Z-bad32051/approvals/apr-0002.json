@@ -1,0 +1,19 @@
+{
+  "approvalId": "apr-0002",
+  "summary": "Approve 1 call: ado.wit_work_item_comment_write(action=add, workItemId=118, text=## agentic-qa run `20261027T024853Z-b…, …)",
+  "calls": [
+    {
+      "toolName": "ado.wit_work_item_comment_write",
+      "args": {
+        "action": "add",
+        "workItemId": 118,
+        "text": "## agentic-qa run `20261027T024853Z-bad32051`\n\n**Suite: not run.**\n\nNo test cases are linked to work item 118.\n\n**Checks not made in this environment:**\n- test suite membership — this Azure DevOps account has no Test Plans access level, so the cases are linked to the story but no suite contains them\n\n_Counted from the run ledger (`20261027T024853Z-bad32051`), not from the agent's account of its own work._",
+        "project": "attestqa-saucedemo"
+      }
+    }
+  ],
+  "requestedAt": "2026-10-27T02:53:05.460Z",
+  "decision": "approved",
+  "by": "auto-approver (evaluation phase 2)",
+  "at": "2026-10-27T02:53:06.022Z"
+}

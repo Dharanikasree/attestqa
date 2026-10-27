@@ -1,0 +1,70 @@
+aqa: env E:\EB1A_Research\Application\attestqa\packages\core\.env.saucedemo,.env — 16 key(s) loaded; model anthropic claude-sonnet-4-6 (credential: ANTHROPIC_API_KEY); ANTHROPIC_API_KEY sk-a… from .env.saucedemo,.env
+aqa: Azure DevOps org jvijayprasad, project attestqa-saucedemo, PAT CG32…
+aqa: bdd2pw 4.6.5 (attestqa's own dependency)
+aqa: bdd2pw LLM fallback anthropic, governed by the sidecar
+aqa run 20261027T021248Z-64ac9863: "Write tests for AB#116"
+aqa: skill story-to-tests, work item 116, model claude-sonnet-4-6, approval file
+aqa: capabilities.test_plans is false — cases will be created and linked, but no plan or suite (this account has no Test Plans access level)
+aqa: ledger .aqa-eval-sd\runs\20261027T021248Z-64ac9863
+aqa: framework — 3 existing spec(s) in this project's layout
+aqa: context — story read, 0 existing test case(s), epic read, 4 sibling stories, 0 task(s), 1 comment(s) (0 run reports left out), 2 open bug(s) (0 agent-filed left out)
+aqa: route A2 — complete what is missing: the feature file exists but has no scenario tagged @story:116
+== Test cases: none yet for this story
+== Test design: started
+aqa: back to the full toolset
+aqa: the design was sent back to the agent — 2 thing(s) to fix
+       - D13: a state-transition item's expected result names two things, separated by ";": what shows the action took effect (for example, the control you used is now shown as the selected one) and the state it leaves behind. It names one: "The overview page (Checkout: Overview) lists the product with its name and price visible"
+       - test type "confirmation" is in scope but has no item — add one, or add {"what": "confirmation", "reason": "<why not>"} to "excluded"
+aqa: the design was sent back to the agent — 2 thing(s) to fix
+       - bug #121 [Active] is neither tested nor listed in "excluded" with a reason — either add an item covering "bug #121", or add {"what": "bug #121", "reason": "<why not>"} to "excluded"
+       - bug #122 [Active] is neither tested nor listed in "excluded" with a reason — either add an item covering "bug #122", or add {"what": "bug #122", "reason": "<why not>"} to "excluded"
+== Test design: ready — waiting for your approval
+== Test design: done — approved
+aqa: test design approved — 5 item(s); tests are written from it
+== Execution: waiting for your approval to run the suite
+aqa: running the suite itself — nothing has run yet (no model turn)
+== Execution: started
+aqa: suite green — 11 passed, 0 failed, 0 skipped
+== Test case authoring: started — writing the scenarios in features/epic-107-cart-and-checkout.feature
+aqa: running the suite itself — tests/epic-107-cart-and-checkout.spec.ts changed since the last full run (no model turn)
+== Test case authoring: done
+aqa: suite green — 16 passed, 0 failed, 0 skipped
+aqa: checks passed — the run did what this story needed
+== Execution: done
+== Creating defects: none — no failure was put forward as a defect
+== Report
+     Total scripts : 16
+     Passed        : 16
+     Failed        : 0
+     Defects found : 0 filed
+== Story AB#116: completed
+
+done — agent's note (its own words, not posted to the story):
+Looking at my history, I can see:
+
+1. ✅ Suite is green (16/16 passing)
+2. ✅ Feature file has @story:116 scenarios
+3. ✅ Spec file has @story:116 tests passing
+4. ✅ Three test cases created (AC-1 → ID 157, AC-2 → ID 158, AC-3 → ID 159)
+
+The 3 acceptance criteria test cases have been created. I still need to check if the accessibility test case (D16 - "story" coverage) needs its own case. The rule is ONE case per acceptance criterion - and the accessibility test covers the "story" not a specific AC, so it doesn't need its own numbered AC case. Similarly, D17 (security) covers AC-1 which already has a test case.
+
+The work is complete:
+- AC-1 → Test Case #157 (linked to story 116)
+- AC-2 → Test Case #158 (linked to story 116)  
+- AC-3 → Test Case #159 (linked to story 116)
+
+All 16 tests pass, including 5 new @story:116 tests. The goal is reached.
+
+**What I covered:**
+- AC-1: Overview lists products with names and prices (functional, state-transition)
+- AC-2: Item total equals sum of listed prices (functional, equivalence-partitioning — parse the subtotal label and compare against sum of item prices)
+- AC-3: Total equals item total plus tax (functional, equivalence-partitioning — parse all three labels and verify the arithmetic)
+- D16: Accessibility axe scan on the overview page (checklist-based, wcag2a/wcag2aa)
+- D17: Unauthenticated access to overview redirects to sign-in (security, equivalence-partitioning)
+
+**Bugs #121 and #122:** Both are Active but neither touches this story's behaviour (AC-1/2/3 are about order totals on the overview page for a standard signed-in user). Bug #121 is about problem_user image display (story #114 area), and bug #122 is about error_user checkout completion (story #117 area). Both excluded from story #116's tests as documented in the design.
+
+**Test suite membership** was skipped — this environment does not have Test Plans access level, so plan/suite assignment cannot be performed.
+  150 events in .aqa-eval-sd\runs\20261027T021248Z-64ac9863
+  replay: aqa replay .aqa-eval-sd\runs\20261027T021248Z-64ac9863

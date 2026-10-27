@@ -1,0 +1,43 @@
+{
+  "approvalId": "apr-0003",
+  "summary": "Approve 3 calls: ado.testplan_test_case_write(action=create, project=attestqa-saucedemo, title=AC-1 Overview lists the products in t…, …); ado.testplan_test_case_write(action=create, project=attestqa-saucedemo, title=AC-2 Item total equals the sum of the…, …); ado.testplan_test_case_write(action=create, project=attestqa-saucedemo, title=AC-3 Total equals the item total plus…, …)",
+  "calls": [
+    {
+      "toolName": "ado.testplan_test_case_write",
+      "args": {
+        "action": "create",
+        "project": "attestqa-saucedemo",
+        "title": "AC-1 Overview lists the products in the cart with their prices",
+        "testsWorkItemId": 116,
+        "steps": "1. Sign in as standard_user with password secret_sauce|Login succeeds and Products page is shown\n2. Click the first Add to cart button in the product list|Cart badge shows \"1\"\n3. Click the cart icon|Your Cart page is displayed\n4. Click Checkout|Checkout: Your Information page is displayed\n5. Fill in First Name \"Jane\", Last Name \"Doe\", Postal Code \"12345\" and click Continue|Checkout: Overview page is displayed\n6. Observe the product listed on the overview page|The product name is visible\n7. Observe the product price listed on the overview page|The product price is visible",
+        "priority": 2
+      }
+    },
+    {
+      "toolName": "ado.testplan_test_case_write",
+      "args": {
+        "action": "create",
+        "project": "attestqa-saucedemo",
+        "title": "AC-2 Item total equals the sum of the listed prices",
+        "testsWorkItemId": 116,
+        "steps": "1. Sign in as standard_user with password secret_sauce|Login succeeds and Products page is shown\n2. Click the first Add to cart button in the product list|Cart badge shows \"1\"\n3. Click the cart icon|Your Cart page is displayed\n4. Click Checkout|Checkout: Your Information page is displayed\n5. Fill in First Name \"Jane\", Last Name \"Doe\", Postal Code \"12345\" and click Continue|Checkout: Overview page is displayed\n6. Read the price(s) listed for each item in the overview|Individual item prices are visible\n7. Read the Item total label on the overview page|Item total is displayed (e.g. \"Item total: $X.XX\")\n8. Verify that the item total equals the sum of all listed item prices|The item total matches the arithmetic sum of the individual prices shown",
+        "priority": 2
+      }
+    },
+    {
+      "toolName": "ado.testplan_test_case_write",
+      "args": {
+        "action": "create",
+        "project": "attestqa-saucedemo",
+        "title": "AC-3 Total equals the item total plus the tax shown",
+        "testsWorkItemId": 116,
+        "steps": "1. Sign in as standard_user with password secret_sauce|Login succeeds and Products page is shown\n2. Click the first Add to cart button in the product list|Cart badge shows \"1\"\n3. Click the cart icon|Your Cart page is displayed\n4. Click Checkout|Checkout: Your Information page is displayed\n5. Fill in First Name \"Jane\", Last Name \"Doe\", Postal Code \"12345\" and click Continue|Checkout: Overview page is displayed\n6. Read the Item total label|Item total is displayed (e.g. \"Item total: $X.XX\")\n7. Read the Tax label|Tax is displayed as its own line (e.g. \"Tax: $X.XX\")\n8. Read the Total label|Total is displayed (e.g. \"Total: $X.XX\")\n9. Verify that the Total equals the Item total plus the Tax|Total = Item total + Tax (testing the tax rate itself is out of scope)",
+        "priority": 2
+      }
+    }
+  ],
+  "requestedAt": "2026-10-27T02:19:18.933Z",
+  "decision": "approved",
+  "by": "auto-approver (evaluation phase 2)",
+  "at": "2026-10-27T02:19:19.920Z"
+}

@@ -1,0 +1,93 @@
+{
+  "approvalId": "apr-0001",
+  "summary": "Approve 1 call: aqa.test_design(items=[{\"id\":\"D15\",\"covers\":\"AC-1\",\"type\":\"…, excluded=[{\"what\":\"bug #SCRUM-12\",\"reason\":\"Se…)",
+  "calls": [
+    {
+      "toolName": "aqa.test_design",
+      "args": {
+        "items": [
+          {
+            "id": "D15",
+            "covers": "AC-1",
+            "type": "functional",
+            "technique": "equivalence-partitioning",
+            "conditions": [
+              "signed-in customer with no orders placed navigates to order history page"
+            ],
+            "expected": "Order history page loads and displays the heading 'Order History' with an empty state message",
+            "source": "AC-1"
+          },
+          {
+            "id": "D16",
+            "covers": "AC-2",
+            "type": "functional",
+            "technique": "equivalence-partitioning",
+            "conditions": [
+              "signed-in customer enters a valid order number into the track-order form and submits"
+            ],
+            "expected": "Track result page displays the order's status and product details",
+            "source": "AC-2"
+          },
+          {
+            "id": "D17",
+            "covers": "AC-3",
+            "type": "functional",
+            "technique": "equivalence-partitioning",
+            "conditions": [
+              "signed-in customer navigates directly to the order history page",
+              "customer has no orders"
+            ],
+            "expected": "Order history page shows only orders belonging to the current user (empty list when no orders placed)",
+            "source": "AC-3"
+          },
+          {
+            "id": "D18",
+            "covers": "AC-3",
+            "type": "security",
+            "technique": "error-guessing",
+            "conditions": [
+              "unauthenticated user navigates directly to the order history URL"
+            ],
+            "expected": "The order history page is not accessible without authentication; the user is redirected away or shown no order data",
+            "source": "AC-3"
+          },
+          {
+            "id": "D19",
+            "covers": "bug #SCRUM-28",
+            "type": "confirmation",
+            "technique": "error-guessing",
+            "conditions": [
+              "unauthenticated user navigates to track-order page and enters a known order number",
+              "no session/token present"
+            ],
+            "expected": "Order tracking requires authentication; an unauthenticated user cannot see order details by entering an order number",
+            "source": "bug #SCRUM-28",
+            "expectFail": true
+          },
+          {
+            "id": "D20",
+            "covers": "story",
+            "type": "accessibility",
+            "technique": "checklist-based",
+            "conditions": [
+              "signed-in customer is on the order history page",
+              "axe-core scans the mat-card or main content area with WCAG 2.1 A and AA rules"
+            ],
+            "expected": "No accessibility violations reported for rule IDs checked (violations array is empty)",
+            "source": "agent.test_types (WCAG A/AA)"
+          }
+        ],
+        "excluded": [
+          {
+            "what": "bug #SCRUM-12",
+            "reason": "Session token surviving logout is a session-lifecycle concern, not order history or order tracking behaviour. It touches login/logout flows tested under other stories."
+          }
+        ]
+      }
+    }
+  ],
+  "requestedAt": "2026-10-27T03:09:39.871Z",
+  "decision": "approved",
+  "by": "auto-approver (evaluation phase 2)",
+  "at": "2026-10-27T03:09:40.467Z"
+}

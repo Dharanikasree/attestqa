@@ -1,0 +1,92 @@
+{
+  "approvalId": "apr-0001",
+  "summary": "Approve 1 call: aqa.test_design(items=[{\"id\":\"D1\",\"covers\":\"AC-1\",\"type\":\"f…, excluded=[{\"what\":\"confirmation\",\"reason\":\"Bug…)",
+  "calls": [
+    {
+      "toolName": "aqa.test_design",
+      "args": {
+        "items": [
+          {
+            "id": "D1",
+            "covers": "AC-1",
+            "type": "functional",
+            "technique": "state-transition",
+            "conditions": [
+              "User has items in the cart (cart badge shows count)",
+              "User opens the menu and clicks Reset App State"
+            ],
+            "expected": "The Reset App State menu item is clicked and the menu closes; cart is emptied and the cart badge is no longer shown on the page",
+            "source": "AC-1"
+          },
+          {
+            "id": "D2",
+            "covers": "AC-2",
+            "type": "functional",
+            "technique": "state-transition",
+            "conditions": [
+              "User is signed in and on the product list page",
+              "User opens the menu and clicks Logout"
+            ],
+            "expected": "The Logout menu item is clicked and the session ends; the sign-in page is shown (login form is visible)",
+            "source": "AC-2"
+          },
+          {
+            "id": "D3",
+            "covers": "AC-3",
+            "type": "functional",
+            "technique": "state-transition",
+            "conditions": [
+              "User is signed in",
+              "User logs out via the menu",
+              "User presses the browser Back button"
+            ],
+            "expected": "The back navigation is triggered; the product list is NOT shown — the sign-in page or an access-denied message is displayed instead",
+            "source": "AC-3"
+          },
+          {
+            "id": "D4",
+            "covers": "AC-2",
+            "type": "security",
+            "technique": "state-transition",
+            "conditions": [
+              "User logs out via the menu",
+              "User navigates back to the product list URL directly"
+            ],
+            "expected": "The logout action clears the session; navigating to /inventory.html after logout does not show the product list — the sign-in page or access-denied message is shown",
+            "source": "AC-3"
+          },
+          {
+            "id": "D5",
+            "covers": "story",
+            "type": "accessibility",
+            "technique": "checklist-based",
+            "conditions": [
+              "Sign-in page rendered after logout",
+              "axe-core scans the login form with WCAG 2.1 A/AA rules (wcag2a, wcag2aa)"
+            ],
+            "expected": "No axe-core violations reported: expect(violations.map(v => v.id).sort()).toEqual([])",
+            "source": "agent.test_types (WCAG A/AA)"
+          }
+        ],
+        "excluded": [
+          {
+            "what": "confirmation",
+            "reason": "Bug #121 (problem user images) and Bug #122 (error user checkout) do not touch the menu reset/logout behaviour of story 118 — neither is relevant to this story's acceptance criteria"
+          },
+          {
+            "what": "bug #121",
+            "reason": "Bug #121 is about product images on the product list page for the problem user — it does not touch the menu reset or logout behaviour tested by story 118"
+          },
+          {
+            "what": "bug #122",
+            "reason": "Bug #122 is about the error user failing to complete an order at checkout — it does not touch the menu reset or logout behaviour tested by story 118"
+          }
+        ]
+      }
+    }
+  ],
+  "requestedAt": "2026-10-27T03:07:40.519Z",
+  "decision": "approved",
+  "by": "auto-approver (evaluation phase 2)",
+  "at": "2026-10-27T03:07:40.530Z"
+}

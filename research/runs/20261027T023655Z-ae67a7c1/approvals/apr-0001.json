@@ -1,0 +1,95 @@
+{
+  "approvalId": "apr-0001",
+  "summary": "Approve 1 call: aqa.test_design(items=[{\"id\":\"D18\",\"covers\":\"AC-1\",\"type\":\"…, excluded=[{\"what\":\"bug #121\",\"reason\":\"Active …)",
+  "calls": [
+    {
+      "toolName": "aqa.test_design",
+      "args": {
+        "items": [
+          {
+            "id": "D18",
+            "covers": "AC-1",
+            "type": "functional",
+            "technique": "state-transition",
+            "conditions": [
+              "signed in as standard_user",
+              "one product added to cart",
+              "checkout information filled in",
+              "Finish button clicked on the overview page"
+            ],
+            "expected": "The Finish button click is accepted (overview page navigates away); the confirmation page displays a thank-you message",
+            "source": "AC-1"
+          },
+          {
+            "id": "D19",
+            "covers": "AC-2",
+            "type": "functional",
+            "technique": "state-transition",
+            "conditions": [
+              "signed in as standard_user",
+              "one product added to cart",
+              "checkout completed by clicking Finish on the overview page"
+            ],
+            "expected": "The Finish button click is accepted (overview navigates to confirmation); the cart badge is not shown and the cart contains no items",
+            "source": "AC-2"
+          },
+          {
+            "id": "D20",
+            "covers": "AC-3",
+            "type": "functional",
+            "technique": "state-transition",
+            "conditions": [
+              "signed in as standard_user",
+              "order completed and confirmation page is shown",
+              "Back Home button clicked"
+            ],
+            "expected": "The Back Home button click is accepted (confirmation page navigates away); the product list page is displayed",
+            "source": "AC-3"
+          },
+          {
+            "id": "D21",
+            "covers": "AC-1",
+            "type": "accessibility",
+            "technique": "checklist-based",
+            "conditions": [
+              "signed in as standard_user",
+              "order completed",
+              "confirmation page displayed"
+            ],
+            "expected": "No axe-core WCAG A/AA violations on the confirmation page",
+            "source": "agent.test_types (WCAG A/AA)"
+          },
+          {
+            "id": "D22",
+            "covers": "bug #122",
+            "type": "confirmation",
+            "technique": "state-transition",
+            "conditions": [
+              "signed in as error_user",
+              "one product added to cart",
+              "checkout information filled in",
+              "Finish button clicked on the overview page"
+            ],
+            "expected": "The Finish button click is accepted (overview navigates away); the confirmation page displays the thank-you message — expected to fail (bug #122 Active: error user cannot finish an order)",
+            "source": "bug #122",
+            "expectFail": true
+          }
+        ],
+        "excluded": [
+          {
+            "what": "bug #121",
+            "reason": "Active bug about the problem user seeing the same picture for every product — touches product list display, not this story's checkout completion behaviour"
+          },
+          {
+            "what": "security",
+            "reason": "This story's completion page is reached only after authentication and a full checkout flow; unauthenticated direct navigation to the completion URL is covered by story #116's security test (overview redirect) and story #114's security test (cart redirect). No new security surface is introduced by the completion step alone."
+          }
+        ]
+      }
+    }
+  ],
+  "requestedAt": "2026-10-27T02:38:25.218Z",
+  "decision": "approved",
+  "by": "auto-approver (evaluation phase 2)",
+  "at": "2026-10-27T02:38:25.624Z"
+}

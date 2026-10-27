@@ -1,0 +1,93 @@
+{
+  "approvalId": "apr-0001",
+  "summary": "Approve 1 call: aqa.test_design(items=[{\"id\":\"D15\",\"covers\":\"AC-1\",\"type\":\"…, excluded=[{\"what\":\"bug #SCRUM-12\",\"reason\":\"Se…)",
+  "calls": [
+    {
+      "toolName": "aqa.test_design",
+      "args": {
+        "items": [
+          {
+            "id": "D15",
+            "covers": "AC-1",
+            "type": "functional",
+            "technique": "state-transition",
+            "conditions": [
+              "Signed-in customer navigates to Account > Orders & Payment > Order History (/#/order-history)"
+            ],
+            "expected": "The navigation succeeds and the order history page is displayed; each past order is listed with its order number and total amount",
+            "source": "AC-1"
+          },
+          {
+            "id": "D16",
+            "covers": "AC-2",
+            "type": "functional",
+            "technique": "state-transition",
+            "conditions": [
+              "Signed-in customer clicks the track order button for one of their past orders"
+            ],
+            "expected": "The tracking view opens and shows that order's status and its products",
+            "source": "AC-2"
+          },
+          {
+            "id": "D17",
+            "covers": "AC-3",
+            "type": "functional",
+            "technique": "equivalence-partitioning",
+            "conditions": [
+              "Signed-in customer views the order history page",
+              "Orders shown on the page belong only to the currently signed-in user (not orders from other accounts)"
+            ],
+            "expected": "Only orders placed by the signed-in customer are listed; no orders from other accounts appear",
+            "source": "AC-3"
+          },
+          {
+            "id": "D18",
+            "covers": "AC-3",
+            "type": "security",
+            "technique": "error-guessing",
+            "conditions": [
+              "Unauthenticated user (not signed in) attempts to navigate directly to /#/order-history"
+            ],
+            "expected": "Access is denied and the user is redirected away from the order history page; the page does not render order data",
+            "source": "AC-3"
+          },
+          {
+            "id": "D19",
+            "covers": "bug #SCRUM-28",
+            "type": "confirmation",
+            "technique": "error-guessing",
+            "conditions": [
+              "Unauthenticated user attempts to track an order by its number via the tracking URL",
+              "Signed-in customer A's order number is submitted in a tracking request by a different user or an unauthenticated session"
+            ],
+            "expected": "Order tracking is restricted: only the owning customer can track their own order; an unauthenticated or different-user request is denied",
+            "source": "bug #SCRUM-28",
+            "expectFail": true
+          },
+          {
+            "id": "D20",
+            "covers": "story",
+            "type": "accessibility",
+            "technique": "checklist-based",
+            "conditions": [
+              "Signed-in customer is on the order history page (/#/order-history)",
+              "axe-core scans the main content area with WCAG A and AA rules"
+            ],
+            "expected": "No accessibility violations are reported (violations.map(v => v.id).sort() equals [])",
+            "source": "agent.test_types (WCAG A/AA)"
+          }
+        ],
+        "excluded": [
+          {
+            "what": "bug #SCRUM-12",
+            "reason": "Session token surviving logout is a cross-cutting session-management concern not specific to order history or order tracking; SCRUM-27 covers only what a customer sees in their order history and when tracking an order, not what happens to their session after logout"
+          }
+        ]
+      }
+    }
+  ],
+  "requestedAt": "2026-10-27T02:38:05.232Z",
+  "decision": "approved",
+  "by": "auto-approver (evaluation phase 2)",
+  "at": "2026-10-27T02:38:05.536Z"
+}

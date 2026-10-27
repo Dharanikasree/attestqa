@@ -163,3 +163,44 @@ Feature: Product list
     Then the cart badge shows "1"
     When I click the second Add to cart button in the product list
     Then the cart badge shows "2"
+
+  @story:119 @ac:1 @design:D15 @type:functional @technique:equivalence-partitioning
+  Scenario: AC-1 Each product in the list shows its own unique picture
+    Given I am on the sign-in page
+    When I find the Username field and enter "standard_user"
+    And I find the Password field and enter "secret_sauce"
+    And I click "Login"
+    Then the page displays "Products"
+    Then every product image in the list is visible
+    And all product images in the list have unique src values
+
+  @story:119 @ac:1 @bug:121 @design:D16 @type:confirmation @technique:equivalence-partitioning
+  Scenario: AC-1 Problem user sees each product's own picture not the same picture for all
+    Given I am on the sign-in page
+    When I find the Username field and enter "problem_user"
+    And I find the Password field and enter "secret_sauce"
+    And I click "Login"
+    Then the page displays "Products"
+    Then every product image in the list is visible
+    And all product images in the list have unique src values
+
+  @story:119 @ac:2 @design:D17 @type:functional @technique:state-transition
+  Scenario: AC-2 A product's picture on its detail page is the same as in the list
+    Given I am on the sign-in page
+    When I find the Username field and enter "standard_user"
+    And I find the Password field and enter "secret_sauce"
+    And I click "Login"
+    Then the page displays "Products"
+    When I record the first product image src from the list
+    And I click the first product name in the list
+    Then the product detail page is shown
+    And the product detail image src matches the recorded list image src
+
+  @story:119 @design:D18 @type:accessibility @technique:checklist-based
+  Scenario: AC-story Product images pass accessibility checks
+    Given I am on the sign-in page
+    When I find the Username field and enter "standard_user"
+    And I find the Password field and enter "secret_sauce"
+    And I click "Login"
+    Then the page displays "Products"
+    Then the page passes axe accessibility checks
