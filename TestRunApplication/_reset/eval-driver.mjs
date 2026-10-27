@@ -30,7 +30,7 @@
 
 import { spawn, spawnSync } from "node:child_process";
 import { existsSync, mkdirSync, readdirSync, readFileSync, writeFileSync, cpSync, rmSync, renameSync, appendFileSync, statSync } from "node:fs";
-import { join, resolve, dirname } from "node:path";
+import { join, resolve, dirname, relative } from "node:path";
 import { fileURLToPath } from "node:url";
 import { createInterface } from "node:readline";
 import { approvePending } from "./auto-approve.mjs";
@@ -65,18 +65,27 @@ const ws = join(root, wsRel);
 const slug = app.slug(story);
 const today = new Date().toISOString().slice(0, 10);
 const log = (s) => console.log(`[driver ${new Date().toISOString().slice(11, 19)}] ${s}`);
-const sh = (cmd, args, opts = {}) => spawnSync(cmd, args, { cwd: root, encoding: "utf8", shell: process.platform === "win32", ...opts });
+// node itself is run without a shell (its path may contain a space); git and docker
+// go through the shell on Windows so that .cmd shims and PATH lookups work.
+const sh = (cmd, args, opts = {}) => spawnSync(cmd, args, { cwd: root, encoding: "utf8", shell: cmd !== process.execPath && process.platform === "win32", ...opts });
 
 // ---- preconditions -------------------------------------------------------
-if (!existsSync(cli)) fail(`no build at ${cli} — run the build first`);
 const lock = join(core, `.eval-driver-${appName}.lock`);
-if (existsSync(lock)) fail(`${lock} exists: another driver for ${appName} is running (or crashed; delete the lock if you are sure)`);
-writeFileSync(lock, `${process.pid} ${new Date().toISOString()} ${story}\n`);
-const unlock = () => { try { rmSync(lock); } catch {} };
+let locked = false;
+const unlock = () => { if (locked) { try { rmSync(lock); } catch {} locked = false; } };
+function fail(msg) { console.error(`driver: ${msg}`); unlock(); process.exit(1); }
+if (!existsSync(cli)) fail(`no build at ${cli} — run the build first`);
+if (existsSync(lock)) {
+  const [pid] = readFileSync(lock, "utf8").split(" ");
+  let alive = false;
+  try { process.kill(Number(pid), 0); alive = true; } catch {}
+  if (alive) fail(`${lock} exists and its driver (pid ${pid}) is still running — one driver per application`);
+  log(`stale lock from pid ${pid} removed`);
+  rmSync(lock);
+}
+writeFileSync(lock, `${process.pid} ${new Date().toISOString()} ${story}\n`); locked = true;
 process.on("exit", unlock);
 process.on("SIGINT", () => { unlock(); process.exit(130); });
-
-function fail(msg) { console.error(`driver: ${msg}`); unlock(); process.exit(1); }
 
 function gitStatus() {
   const r = sh("git", ["--no-optional-locks", "status", "--porcelain", "--", wsRel]);
@@ -84,10 +93,27 @@ function gitStatus() {
   return r.stdout.split(/\r?\n/).filter((l) => l.trim() && !/\.bak$/.test(l) && !/test-results\//.test(l) && !/artefacts\//.test(l));
 }
 function scrub() { for (const d of ["test-results", "artefacts"]) rmSync(join(ws, d), { recursive: true, force: true }); }
+// git checkout on Windows writes CRLF (core.autocrlf); the agent writes LF, and the
+// fs tool's replace_in_file matches bytes, so a CRLF feature file made every edit
+// fail in SCRUM-26 runs 2 and 3 (F-0137). Phase 1 files were always LF: keep it so.
+function toLF() {
+  let n = 0;
+  for (const d of ["features", "pages", "tests"]) {
+    const dir = join(ws, d); if (!existsSync(dir)) continue;
+    for (const f of readdirSync(dir)) {
+      const p = join(dir, f); if (!statSync(p).isFile()) continue;
+      const b = readFileSync(p); if (!b.includes("\r\n")) continue;
+      writeFileSync(p, b.toString("utf8").replace(/\r\n/g, "\n")); n++;
+    }
+  }
+  for (const f of ["BDD_REVIEW.md"]) { const p = join(ws, f); if (existsSync(p)) { const b = readFileSync(p); if (b.includes("\r\n")) { writeFileSync(p, b.toString("utf8").replace(/\r\n/g, "\n")); n++; } } }
+  if (n) log(`${n} file(s) converted from CRLF to LF`);
+}
 function restoreWorkspace() {
   scrub();
   let r = sh("git", ["checkout", "--", wsRel]); if (r.status !== 0) fail(`git checkout failed: ${r.stderr}`);
   r = sh("git", ["clean", "-fdq", "--", wsRel]); if (r.status !== 0) fail(`git clean failed: ${r.stderr}`);
+  toLF();
   const left = gitStatus(); if (left.length) fail(`test project not clean after restore:\n${left.join("\n")}`);
 }
 const tagId = story.startsWith("AB#") ? story.slice(3) : story;
@@ -179,7 +205,7 @@ function runOnce(ledger, n) {
 // ---- main ----------------------------------------------------------------
 (async () => {
   log(`${appName} ${story}: runs ${runs.join(", ")}; approver "${APPROVER}"`);
-  scrub();
+  scrub(); toLF();
   const dirty = gitStatus(); if (dirty.length) fail(`test project is not clean against git — archive and reset first:\n${dirty.join("\n")}`);
   if (storyOnDisk()) fail(`a scenario tagged for ${story} is already in ${wsRel}/features — a run from here would resume, not start`);
   const main = app.ledgers[0];
@@ -218,13 +244,14 @@ function runOnce(ledger, n) {
   }
   if (!has("dry-run")) {
     // the next story starts from this story's run 1
-    cpSync(basePath, ws, { recursive: true });
+    cpSync(basePath, ws, { recursive: true }); toLF();
     log(`base installed: ${wsRel} now holds ${story} run 1's files`);
   }
   console.log("\n==== driver summary ====");
   for (const r of results) console.log(`run ${r.n}: ${r.status}  ${r.runId ?? ""}`);
   console.log(`approvals log: research/runs/_auto-approvals.log`);
-  console.log(`next: send this summary to Claude for the manifest row, findings and results; then\n  git add research TestRunApplication/${appName} TestRunApplication/_attempts\n  git commit -m "${story} ${results.map((r) => r.status).join(", ")}; base = ${story} run 1"`);
+  const rel = (p) => { const r = relative(process.cwd(), join(root, p)); return r ? r : "."; };
+  console.log(`next: send this summary to Claude for the manifest row, findings and results; then\n  git add ${rel("research")} ${rel(wsRel)} ${rel("TestRunApplication/_attempts")}\n  git commit -m "${story} ${results.map((r) => r.status).join(", ")}; base = ${story} run 1"`);
   unlock();
   const worst = Math.max(...results.map((r) => r.code));
   process.exit(worst === 1 ? 1 : 0);

@@ -65,12 +65,16 @@ it reached the approver. "Route" A = tests written, B = existing tests run.
 | SauceDemo | AB#113 | | 2 (755c270, auto) | 20261026T231011Z-fadb8e0c | A2 | 4 | 3/3 | 2 | 13/13 (4 own) | 0 | 0 | **done**; first auto-approved run (F-0134) |
 | SauceDemo | AB#113 | | 3 (755c270, auto) | 20261026T231615Z-7736010b | A2 | 5 | 3/3 | 3 | 14/14 (5 own) | 0 | 0 | **done**; weakening refusal protected AB#112's test again; ADO cases updated, not created (F-0134) |
 | Juice Shop | SCRUM-25 | | 3 (755c270, auto) | 20261026T233420Z-3506fb32 | A2 | 5 | 3/3 | 1 | 0/16 (0 of 5 own; 11 TODO) | 0 | 0 | **budget**; 4 weakening refusals (try/catch on SCRUM-24's leftover test) (F-0135) |
+| Juice Shop | SCRUM-26 language | same epic | 1 (755c270, auto) | 20261026T235632Z-8f921a31 | A2 | 4 | 3/3 | 2 | 2/4 own (20 in suite, 11 TODO) | 0 | 0 | **budget**; 2 unfiled defect candidates (lang attribute, axe), 8 honesty refusals (F-0136) |
+| SauceDemo | AB#114 cart review | new epic 107 | 1 (755c270, auto) | 20261026T233825Z-9600ed2d | A | 5 | 3/3 | 1 | 5/5 | 0 | 0 | **done** (F-0138) |
+| SauceDemo | AB#114 | | 2 (755c270, auto) | 20261026T235030Z-95b887b5 | A | 4 | 3/3 | 4 | 0/4 | 0 | 0 | **blocked**; sign-in field never appeared, repair cap then no-progress (F-0138) |
+| SauceDemo | AB#114 | | 3 (755c270, auto) | 20261027T000634Z-5cd88b8f | A | 4 | 3/3 | 3 | 5/5 | 0 | 0 | **done**; verifier caught an absolute URL (F-0138) |
 
 Suite counts are for the whole epic spec (19 tests), not only the story's own.
 One of the 19 is the expected failure for open bug SCRUM-12, which reproduced
 in every run and counts as passed.
 
-Progress: 45 of 144 story runs (Juice Shop 30, SauceDemo 15). Runs 1-42 had a human approver (phase 1); from run 43 approvals are automatic (phase 2, EVALUATION_PLAN §7; "auto" in the Run column). SCRUM-18 run 1 took three attempts: the first two were blocked by engine defects (F-0089, F-0091) and are kept as evidence; the third is the counted run.
+Progress: 49 of 144 story runs (Juice Shop 31, SauceDemo 18). Runs 1-42 had a human approver (phase 1); from run 43 approvals are automatic (phase 2, EVALUATION_PLAN §7; "auto" in the Run column). SCRUM-18 run 1 took three attempts: the first two were blocked by engine defects (F-0089, F-0091) and are kept as evidence; the third is the counted run.
 
 ## 2. Excluded runs
 
@@ -96,6 +100,8 @@ Not counted. Kept in `runs/_excluded/` with a manifest row marked `eval-excluded
 | 20261026T140704Z-91137bce | SCRUM-25 | Run 2, fifth start; a sixth start 80 s later shared its ledger and workspace. Budget. Excluded (F-0127). |
 | 20261026T140825Z-21487b40 | SCRUM-25 | Run 2, sixth start, concurrent with the fifth; all five items matched the fifth run's fresh tests as already tested. Blocked. Excluded (F-0127). |
 | 20261026T143742Z-8ca35396 | SCRUM-25 | Run 2, seventh start, single and clean, but the application had not been reset: an earlier excluded attempt had changed the test account's password and the first sign-in returned 401. Budget at 1/5. Excluded (F-0130). |
+| 20261027T001918Z-3d04b8f1 | SCRUM-26 | Run 2: the driver's git checkout left the epic feature and spec with CRLF; the agent's LF edits never matched (10 failures), then blocked. Excluded (F-0137); repeated with LF files. |
+| 20261027T002601Z-4dd27668 | SCRUM-26 | Run 3: same CRLF files, 28 failed edits, budget before any scenario was written. Excluded (F-0137); repeated. |
 
 The SCRUM-6 pair are still evidence of something: an unchanged story is re-run without a
 new approval, which is the intended behaviour in real use.
@@ -148,6 +154,7 @@ a real defect from being filed; the others wait for the release after the evalua
 | W28 | Stories in one epic share a feature file, so a story whose run blocked before scaffold leaves scenarios that the next story's scaffold turns into TODO tests; those tests then fail in the next story's suite, the heal agent is handed one of them first, and the next story's budget goes on the previous story's leftovers (SCRUM-25 run 1). | F-0126 | open | Scaffold and heal should be limited to the scenarios tagged with the current story; leftovers from another story belong in the report, not in the repair queue. |
 | W29 | A whole-file write larger than the inference's 8192 output-token cap arrives as a tool call with no content; the fs tool's reply ("content must be a string") does not say why, so the agent repeats the identical write until the no-progress guard stops it, paying the full cap each time (SCRUM-25 run 2 attempt 59929d86, four times; the run is excluded for another reason, the evidence stands). | F-0128 | open | Say in the observation that the call was cut off at the output limit and name replace_in_file; consider a higher cap for file writes. |
 | W30 | When the fixture account cannot sign in (401 at the test's precondition), the built-in triage holds every failing test as a possible product defect at 0.5; an environment fault is not a category it knows. The opposite mislabel is W27. | F-0130 | open | Add an environment/precondition category: a failure in a step marked as precondition, or an auth failure of the configured account, is neither a defect nor the test's fault. |
+| W31 | replace_in_file matches bytes, so on a CRLF file an LF edit from the model never matches, and the error ("copy the text exactly") blames the model for a difference it cannot see. Two runs lost to it after a git checkout on Windows (F-0137); AB#113 run 3 lost 7 edits to it and still completed. | F-0137 | open | Match old text across CRLF/LF; write back in the file's own ending; say so in the error when the only difference is line endings. |
 | W5 | Until SCRUM-18 every story already had tests (route B). | — | shown from SCRUM-18 | Authoring, repair, weakening and real bug finding are measured from Juice Shop story 4 onward and in the other three apps. |
 
 ## 5. Threats to keep in the paper
@@ -166,6 +173,9 @@ a real defect from being filed; the others wait for the release after the evalua
 - A story that changes the fixture account's password (SCRUM-25) breaks later
   runs unless the application is reset; one run was lost to this and excluded
   (F-0130).
+- Phase 2's git restore wrote CRLF files for two runs (SCRUM-26 runs 2 and 3,
+  excluded and repeated) and one that completed (AB#113 run 3, kept); phase-1
+  files were always LF, and the driver now keeps them so (F-0137).
 
 ## 6. Cost per run (Anthropic list prices, from the ledger's usage)
 
@@ -184,8 +194,8 @@ of turns the rules refused, and cost per passing design item and per filed bug:
 Runs that were not counted (engine faults, repeats that reused a design) are kept
 there with `excluded` or `study = eval-excluded`, so their cost is reported, not hidden.
 
-So far (63 runs, 45 counted): total $185.77; runs not counted $54.83; turns the
-rules refused $28.21 (about a sixth of all spend), which is the price of the
+So far (69 runs, 49 counted): total $209.15; runs not counted $70.58; turns the
+rules refused $31.89 (about a sixth of all spend), which is the price of the
 send-backs and refusals, paid before a human saw anything. Blocked runs that never
 ran a test (SCRUM-24 runs 1 and 3: $1.3 and $3.6) are the other cost governance
 does not recover: the guard stops the loop, but only after three idle cycles.

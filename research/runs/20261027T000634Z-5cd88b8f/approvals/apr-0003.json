@@ -1,0 +1,19 @@
+{
+  "approvalId": "apr-0003",
+  "summary": "Approve 1 call: ado.wit_work_item_comment_write(action=add, workItemId=114, text=## agentic-qa run `20261027T000634Z-5…, …)",
+  "calls": [
+    {
+      "toolName": "ado.wit_work_item_comment_write",
+      "args": {
+        "action": "add",
+        "workItemId": 114,
+        "text": "## agentic-qa run `20261027T000634Z-5cd88b8f`\n\n**Suite: green** for story 114 — 5 passed, 0 failed, 0 skipped.\n\n| Test | Result | Time |\n| --- | --- | --- |\n| AC-1 Cart lists each added product with its quantity, name and price | pass | 1.1 s |\n| AC-2a Removing a product from the cart takes it off the list | pass | 953 ms |\n| AC-2b Removing a product from the cart lowers the cart badge | pass | 937 ms |\n| AC-3 Continue shopping returns to the product list with the cart unchanged | pass | 1.1 s |\n| AC-story Cart page passes accessibility checks | pass | 2.0 s |\n\n**Test cases linked to work item 114: 3** (already present: 150, 151, 152).\n\nSpec files written: `tests/epic-107-cart-and-checkout.spec.ts`\n\n**Checks not made in this environment:**\n- test suite membership — this Azure DevOps account has no Test Plans access level, so the cases are linked to the story but no suite contains them\n\n_Counted from the run ledger (`20261027T000634Z-5cd88b8f`), not from the agent's account of its own work._",
+        "project": "attestqa-saucedemo"
+      }
+    }
+  ],
+  "requestedAt": "2026-10-27T00:26:55.399Z",
+  "decision": "approved",
+  "by": "auto-approver (evaluation phase 2)",
+  "at": "2026-10-27T00:26:56.323Z"
+}

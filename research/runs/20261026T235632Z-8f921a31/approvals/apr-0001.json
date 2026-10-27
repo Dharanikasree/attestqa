@@ -1,0 +1,82 @@
+{
+  "approvalId": "apr-0001",
+  "summary": "Approve 1 call: aqa.test_design(items=[{\"id\":\"D11\",\"covers\":\"AC-1\",\"type\":\"…, excluded=[{\"what\":\"bug #SCRUM-28\",\"reason\":\"Or…)",
+  "calls": [
+    {
+      "toolName": "aqa.test_design",
+      "args": {
+        "items": [
+          {
+            "id": "D11",
+            "covers": "AC-1",
+            "type": "functional",
+            "technique": "equivalence-partitioning",
+            "conditions": [
+              "Shop is in English (default)",
+              "User opens the language menu and selects German (Deutsch)"
+            ],
+            "expected": "The shop's labels (e.g. navigation items, page headings) are displayed in German after selecting the language",
+            "source": "AC-1"
+          },
+          {
+            "id": "D12",
+            "covers": "AC-2",
+            "type": "functional",
+            "technique": "state-transition",
+            "conditions": [
+              "User selects German as the language",
+              "User reloads the page"
+            ],
+            "expected": "The language button shows the selected language code (e.g. 'DE') immediately after selection; after page reload, the shop's labels remain in German, not reverting to English",
+            "source": "AC-2"
+          },
+          {
+            "id": "D13",
+            "covers": "AC-3",
+            "type": "functional",
+            "technique": "state-transition",
+            "conditions": [
+              "Shop starts in English with lang='en'",
+              "User selects German from the language menu"
+            ],
+            "expected": "The language button shows the selected language code (e.g. 'DE') confirming the selection was applied; the document's lang attribute changes to the German language code (e.g. 'de')",
+            "source": "AC-3"
+          },
+          {
+            "id": "D14",
+            "covers": "story",
+            "type": "accessibility",
+            "technique": "checklist-based",
+            "conditions": [
+              "Shop home page loaded in default language"
+            ],
+            "expected": "No WCAG A/AA violations reported by axe-core on the top bar language selection area",
+            "source": "agent.test_types (WCAG A/AA)"
+          }
+        ],
+        "excluded": [
+          {
+            "what": "bug #SCRUM-28",
+            "reason": "Order tracking shows any order to anyone — this is about order tracking access control, which belongs to SCRUM-27, not this story's language-switching behaviour"
+          },
+          {
+            "what": "bug #SCRUM-12",
+            "reason": "Session token still accepted after logout — this is about session/authentication management, not language selection; it does not touch any AC of SCRUM-26"
+          },
+          {
+            "what": "confirmation",
+            "reason": "Both open bugs (SCRUM-28, SCRUM-12) are Active but touch other stories' behaviour, not language selection; no confirmation item is needed here"
+          },
+          {
+            "what": "security",
+            "reason": "Language preference is a UI-only setting stored client-side; the story and its context imply no authentication, account enumeration, or data-protection concern — there is no security surface to test here"
+          }
+        ]
+      }
+    }
+  ],
+  "requestedAt": "2026-10-26T23:58:01.663Z",
+  "decision": "approved",
+  "by": "auto-approver (evaluation phase 2)",
+  "at": "2026-10-26T23:58:02.598Z"
+}

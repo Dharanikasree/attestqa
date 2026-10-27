@@ -1,0 +1,84 @@
+{
+  "approvalId": "apr-0001",
+  "summary": "Approve 1 call: aqa.test_design(items=[{\"id\":\"D11\",\"covers\":\"AC-1\",\"type\":\"…, excluded=[{\"what\":\"security\",\"reason\":\"Languag…)",
+  "calls": [
+    {
+      "toolName": "aqa.test_design",
+      "args": {
+        "items": [
+          {
+            "id": "D11",
+            "covers": "AC-1",
+            "type": "functional",
+            "technique": "equivalence-partitioning",
+            "conditions": [
+              "User is on the shop page",
+              "User clicks the globe icon in the top bar",
+              "User selects a language different from the current one (e.g. Deutsch)"
+            ],
+            "expected": "Shop labels and navigation text change to the selected language",
+            "source": "AC-1"
+          },
+          {
+            "id": "D12",
+            "covers": "AC-2",
+            "type": "functional",
+            "technique": "state-transition",
+            "conditions": [
+              "User has selected a non-default language (e.g. Deutsch)",
+              "User reloads the page"
+            ],
+            "expected": "Language selector still shows the chosen language after reload; shop labels remain in the chosen language",
+            "source": "AC-2"
+          },
+          {
+            "id": "D13",
+            "covers": "AC-3",
+            "type": "functional",
+            "technique": "state-transition",
+            "conditions": [
+              "User selects a language from the globe menu (e.g. Deutsch)",
+              "The document's lang attribute is inspected before and after selection"
+            ],
+            "expected": "The globe menu closes and the chosen language is active; the document's lang attribute reflects the newly selected language code (e.g. 'de')",
+            "source": "AC-3"
+          },
+          {
+            "id": "D14",
+            "covers": "story",
+            "type": "accessibility",
+            "technique": "checklist-based",
+            "conditions": [
+              "User is on the shop home page",
+              "axe-core scans the language selector area with rules wcag2a and wcag2aa"
+            ],
+            "expected": "No accessibility violations reported by axe-core for the language selector",
+            "source": "agent.test_types (WCAG A/AA)"
+          }
+        ],
+        "excluded": [
+          {
+            "what": "security",
+            "reason": "Language selection is a UI preference with no account data, authentication or access-control implication; no security test is warranted by the story or its context"
+          },
+          {
+            "what": "confirmation",
+            "reason": "No resolved bugs touch this story's language-selection behaviour; nothing to confirm"
+          },
+          {
+            "what": "bug #SCRUM-28",
+            "reason": "Order tracking showing any order to anyone is a SCRUM-27 concern (order history), not related to language selection in SCRUM-26"
+          },
+          {
+            "what": "bug #SCRUM-12",
+            "reason": "Session token surviving logout is an authentication/session concern unrelated to the language preference feature in SCRUM-26"
+          }
+        ]
+      }
+    }
+  ],
+  "requestedAt": "2026-10-27T00:20:57.138Z",
+  "decision": "approved",
+  "by": "auto-approver (evaluation phase 2)",
+  "at": "2026-10-27T00:20:57.385Z"
+}

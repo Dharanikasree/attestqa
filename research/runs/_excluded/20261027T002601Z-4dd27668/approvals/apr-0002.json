@@ -1,0 +1,16 @@
+{
+  "approvalId": "apr-0002",
+  "summary": "Approve 1 call: pw.run_tests(spec=tests/epic-scrum-17-customer-profile-…)",
+  "calls": [
+    {
+      "toolName": "pw.run_tests",
+      "args": {
+        "spec": "tests/epic-scrum-17-customer-profile-and-orders.spec.ts"
+      }
+    }
+  ],
+  "requestedAt": "2026-10-27T00:27:33.573Z",
+  "decision": "approved",
+  "by": "auto-approver (evaluation phase 2)",
+  "at": "2026-10-27T00:27:34.416Z"
+}

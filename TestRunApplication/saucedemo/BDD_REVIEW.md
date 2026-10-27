@@ -1,39 +1,33 @@
 # bdd2pw — Conversion Review
 
-> **Source feature:** `E:\EB1A_Research\Application\attestqa\TestRunApplication\saucedemo\features\epic-106-product-list.feature`
-> **Target URL:** https://www.saucedemo.com/inventory.html
-> **Generated:** 2026-10-25T18:01:39.008Z
+> **Source feature:** `E:\EB1A_Research\Application\attestqa\TestRunApplication\saucedemo\features\epic-107-cart-and-checkout.feature`
+> **Target URL:** https://www.saucedemo.com
+> **Generated:** 2026-10-26T23:48:02.739Z
 
 ## Summary
 
-0 errors · 8 warnings · 8 info
+0 errors · 5 warnings · 8 info
 
 ## Warnings
 
-- [AC-1 Product list is sorted A to Z by name when it first opens] No product name locators exist in the POM (ProductListPage has no inventory item / product name fields). This step requires reading and comparing product name text from the DOM — hand-edit to add a product name locator (e.g., page.locator('.inventory_item_name')) and implement the alphabetical comparison logic manually.
+- [AC-1 Cart lists added product with quantity, name and price] no rule matched: "When I click the cart icon" (LLM fallback also failed: Could not parse binding for step 3 ("I click the cart icon"); slot was: {"step":{"keyword":"When","text":"I click the cart icon"},"pomCall":{"page":"cartPage","method":"locator(\".shopping_cart_link\").first().click","args":[]}})
   - Suggestion: Add a custom step rule, enable --llm fallback, or hand-edit the spec.
-- [AC-2 Sorting by name Z to A reverses the order] no rule matched: "When I click "Name (Z to A)"" (LLM fallback also failed: Could not parse binding for step 0 ("I click "Name (Z to A)""); slot was: {"step":{"keyword":"When","text":"I click \"Name (Z to A)\""},"pomCall":{"page":"page","method":"getByText","args":["\"Name (Z to A)\""]},"warning":"No POM field matches a sort dropdown or 'Name (Z to)
+- [AC-2 Removing a product from the cart takes it off the list and lowers the badge] no rule matched: "When I click the cart icon" (LLM fallback also failed: Could not parse binding for step 0 ("I click the cart icon"); slot was: {"step":{"keyword":"When","text":"I click the cart icon"},"pomCall":{"page":"page","method":"locator(\".shopping_cart_link\").first().click","args":[]},"warning":"No cart icon POM field found; synthes)
   - Suggestion: Add a custom step rule, enable --llm fallback, or hand-edit the spec.
-- [AC-2 Sorting by name Z to A reverses the order] This step requires reading and comparing product name text from a list of items; no POM field maps to a product name list or first product element, and the assertion logic (alphabetical ordering) cannot be expressed as a single Playwright matcher — hand-edit this step to implement the custom comparison.
+- [AC-2 Removing a product from the cart takes it off the list and lowers the badge] No cart item list POM field found; asserting that no '.cart_item' elements are visible — verify this selector and logic match your DOM.
   - Suggestion: Add a custom step rule, enable --llm fallback, or hand-edit the spec.
-- [AC-3a Sorting by price low to high lists the cheapest product first] no rule matched: "When I click "Price (low to high)"" (LLM fallback also failed: Could not parse binding for step 0 ("I click "Price (low to high)""); slot was: {"step":{"keyword":"When","text":"I click \"Price (low to high)\""},"pomCall":{"page":"page","method":"locator","args":["\"select.product_sort_container\""]},"customBody":"await page.locator('select.p)
+- [AC-3 Continue shopping returns to the product list with cart unchanged] no rule matched: "When I click the cart icon" (LLM fallback also failed: Could not parse binding for step 0 ("I click the cart icon"); slot was: {"step":{"keyword":"When","text":"I click the cart icon"},"pomCall":{"page":"cartPage","method":"locator('.shopping_cart_link').click","args":[]},"warning":"No cart icon field exists in the POM; synth)
   - Suggestion: Add a custom step rule, enable --llm fallback, or hand-edit the spec.
-- [AC-3a Sorting by price low to high lists the cheapest product first] No POM field maps to individual product prices or their ordering; a custom assertion comparing price elements is needed and cannot be deterministically generated without DOM price locators.
-  - Suggestion: Add a custom step rule, enable --llm fallback, or hand-edit the spec.
-- [AC-3b Sorting by price high to low lists the most expensive product first] no rule matched: "When I click "Price (high to low)"" (LLM fallback also failed: Could not parse binding for step 0 ("I click "Price (high to low)""); slot was: {"step":{"keyword":"When","text":"I click \"Price (high to low)\""},"pomCall":{"page":"page","method":"locator","args":["\"select.product_sort_container\""]},"customBody":"await page.locator('select.p)
-  - Suggestion: Add a custom step rule, enable --llm fallback, or hand-edit the spec.
-- [AC-3b Sorting by price high to low lists the most expensive product first] Cannot deterministically verify that the first product has the highest price without a list of product price locators in the POM; no price-related field exists in the provided POM fields.
-  - Suggestion: Add a custom step rule, enable --llm fallback, or hand-edit the spec.
-- [AC-story Product list page passes accessibility checks] Axe accessibility check steps are handled by a built-in bdd2pw rule; no manual binding was generated. Please verify that the bdd2pw rule 'passes axe accessibility checks' is active and that @axe-core/playwright is installed — do not hand-edit this step to call axe APIs directly.
+- [AC-story Cart page passes axe accessibility checks] No cart icon locator exists in the POM; cannot resolve a reliable locator for the cart icon element. Please add a POM field (e.g., cartIcon) and hand-edit this step.
   - Suggestion: Add a custom step rule, enable --llm fallback, or hand-edit the spec.
 
 ## Info
 
-- Parsed feature "Product list" — 5 scenario(s)
+- Parsed feature "Cart and checkout" — 5 scenario(s)
 - `E:\EB1A_Research\Application\attestqa\TestRunApplication\saucedemo\package.json` — package.json already exists — left untouched.
 - `E:\EB1A_Research\Application\attestqa\TestRunApplication\saucedemo\playwright.config.ts` — playwright.config.ts already exists — left untouched.
 - `E:\EB1A_Research\Application\attestqa\TestRunApplication\saucedemo\tsconfig.json` — tsconfig.json already exists — left untouched.
 - `E:\EB1A_Research\Application\attestqa\TestRunApplication\saucedemo\.gitignore` — .gitignore already exists — left untouched.
-- Discovered 13 element(s); picked 11 unique locator(s)
-- POM decision for ProductListPage: CREATE
-- LLM fallback: 5 successful / 5 attempted, max 50. Cache hits counted as 0.
+- Discovered 8 element(s); picked 8 unique locator(s)
+- POM decision for CartPage: CREATE (missing fields: login, loginButton)
+- LLM fallback: 4 successful / 4 attempted, max 50. Cache hits counted as 0.
