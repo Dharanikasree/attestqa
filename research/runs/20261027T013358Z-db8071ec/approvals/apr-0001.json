@@ -1,0 +1,111 @@
+{
+  "approvalId": "apr-0001",
+  "summary": "Approve 1 call: aqa.test_design(items=[{\"id\":\"D7\",\"covers\":\"AC-1\",\"type\":\"f…, excluded=[{\"what\":\"security\",\"reason\":\"The che…)",
+  "calls": [
+    {
+      "toolName": "aqa.test_design",
+      "args": {
+        "items": [
+          {
+            "id": "D7",
+            "covers": "AC-1",
+            "type": "functional",
+            "technique": "state-transition",
+            "conditions": [
+              "First name, last name and postal code all filled in",
+              "User clicks Continue"
+            ],
+            "expected": "The Continue button is activated (form submitted); the page then displays 'Checkout: Overview'",
+            "source": "AC-1"
+          },
+          {
+            "id": "D8",
+            "covers": "AC-2",
+            "type": "functional",
+            "technique": "boundary-value-analysis",
+            "conditions": [
+              "First name left empty",
+              "Last name and postal code filled in",
+              "User clicks Continue"
+            ],
+            "expected": "An error message is displayed saying the first name is required; the form remains on the checkout information page",
+            "source": "AC-2"
+          },
+          {
+            "id": "D9",
+            "covers": "AC-2",
+            "type": "functional",
+            "technique": "boundary-value-analysis",
+            "conditions": [
+              "Last name left empty",
+              "First name and postal code filled in",
+              "User clicks Continue"
+            ],
+            "expected": "An error message is displayed saying the last name is required; the form remains on the checkout information page",
+            "source": "AC-2"
+          },
+          {
+            "id": "D10",
+            "covers": "AC-2",
+            "type": "functional",
+            "technique": "boundary-value-analysis",
+            "conditions": [
+              "Postal code left empty",
+              "First name and last name filled in",
+              "User clicks Continue"
+            ],
+            "expected": "An error message is displayed saying the postal code is required; the form remains on the checkout information page",
+            "source": "AC-2"
+          },
+          {
+            "id": "D11",
+            "covers": "AC-3",
+            "type": "functional",
+            "technique": "state-transition",
+            "conditions": [
+              "User is on checkout information page with a product in the cart",
+              "User clicks Cancel"
+            ],
+            "expected": "The Cancel action takes effect (checkout info page is left); the page displays 'Your Cart' and the previously added product is still listed",
+            "source": "AC-3"
+          },
+          {
+            "id": "D12",
+            "covers": "story",
+            "type": "accessibility",
+            "technique": "checklist-based",
+            "conditions": [
+              "Checkout information page loaded",
+              "axe-core scan scoped to the checkout form",
+              "WCAG A and AA rules checked"
+            ],
+            "expected": "No accessibility violations reported (violations.map(v => v.id).sort() equals [])",
+            "source": "agent.test_types (WCAG A/AA)"
+          }
+        ],
+        "excluded": [
+          {
+            "what": "security",
+            "reason": "The checkout information form collects name and postal code — not authentication credentials or sensitive account data. The story and its context imply no authentication, session or account-enumeration concern. No security test is warranted."
+          },
+          {
+            "what": "confirmation",
+            "reason": "Bug #121 (Active) is about the product list images — unrelated to the checkout information form. Bug #122 (Active) fails at the Finish step (story #117's behaviour); the checkout information form itself accepts input successfully per the bug description. Neither bug targets story #115's behaviour directly, so no confirmation test belongs here."
+          },
+          {
+            "what": "bug #121",
+            "reason": "Active bug about product images on the product list page — entirely different surface from the checkout information form. Not related to story #115."
+          },
+          {
+            "what": "bug #122",
+            "reason": "Active bug where the error user cannot complete an order — the failure manifests at the Finish step (story #117). The checkout information form itself accepts input per the bug description. The defect does not touch story #115's acceptance criteria (form validation or Cancel behaviour)."
+          }
+        ]
+      }
+    }
+  ],
+  "requestedAt": "2026-10-27T01:35:42.558Z",
+  "decision": "approved",
+  "by": "auto-approver (evaluation phase 2)",
+  "at": "2026-10-27T01:35:43.297Z"
+}

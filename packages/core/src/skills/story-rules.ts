@@ -2685,6 +2685,30 @@ function titlesAtRunStart(path: string, events: AnyRunEvent[]): Set<string> | un
   return undefined;
 }
 
+/**
+ * Titles of the tests in `spec` that this run designed: tagged with the story
+ * being worked on and with a design item that `aqa.test_design` recorded in
+ * this run (a design carried over from an earlier run does not count).
+ */
+function ownTestsOfThisRun(spec: string, events: AnyRunEvent[]): Set<string> {
+  const out = new Set<string>();
+  const designed = successful(completedCalls(events), "aqa.test_design").pop();
+  if (!designed) return out;
+  const items = new Set(
+    asArray(designed.args["items"])
+      .map((it) => String(asRecord(it)?.["id"] ?? "").toUpperCase())
+      .filter(Boolean),
+  );
+  const story = String(lastRouteBecause(events)?.["story"] ?? "").toUpperCase();
+  if (!story || items.size === 0) return out;
+  for (const title of testsByTitle(spec).keys()) {
+    const tags = tagsAbove(spec, title);
+    if (!tags.includes(`@STORY:${story}`)) continue;
+    if (tags.some((t) => t.startsWith("@DESIGN:") && items.has(t.slice("@DESIGN:".length)))) out.add(title);
+  }
+  return out;
+}
+
 export function appendOnlySpec(
   call: { toolName: string; args: Record<string, unknown> },
   events: AnyRunEvent[],
@@ -2713,10 +2737,18 @@ export function appendOnlySpec(
   // In 20261024T124403Z the run's own review test was refused five times as an
   // existing test losing an assertion, and the run blocked.
   const atStart = titlesAtRunStart(path, events);
+  // 20261027T013412Z: the first full read of the spec came after this run's
+  // bdd2pw.scaffold, so the run's own scaffolded tests looked like tests that
+  // were there at the start, and correcting a guessed label in one of them was
+  // refused four times as an existing test losing an assertion. A test that
+  // carries this story's tag and a design item approved in this run is the
+  // run's own, whatever the read order.
+  const own = ownTestsOfThisRun(before, events);
   const lost: string[] = [];
   const weakened: string[] = [];
   for (const [title, body] of was) {
     if (atStart !== undefined && !atStart.has(title)) continue;
+    if (own.has(title)) continue;
     const next = now.get(title);
     if (next === undefined) {
       lost.push(title);

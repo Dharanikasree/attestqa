@@ -88,6 +88,9 @@ process.on("exit", unlock);
 process.on("SIGINT", () => { unlock(); process.exit(130); });
 
 function gitStatus() {
+  // refresh the stat cache first: a file rewritten with the same content (CRLF -> LF)
+  // otherwise shows as modified until something refreshes the index
+  sh("git", ["update-index", "-q", "--refresh", "--", wsRel]);
   const r = sh("git", ["--no-optional-locks", "status", "--porcelain", "--", wsRel]);
   if (r.status !== 0) fail(`git status failed: ${r.stderr}`);
   return r.stdout.split(/\r?\n/).filter((l) => l.trim() && !/\.bak$/.test(l) && !/test-results\//.test(l) && !/artefacts\//.test(l));

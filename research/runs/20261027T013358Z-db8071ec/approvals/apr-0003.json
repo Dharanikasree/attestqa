@@ -1,0 +1,54 @@
+{
+  "approvalId": "apr-0003",
+  "summary": "Approve 4 calls: ado.testplan_test_case_write(action=create, project=attestqa-saucedemo, title=AC-1: Continuing with all fields fill…, …); ado.testplan_test_case_write(action=create, project=attestqa-saucedemo, title=AC-2: Continuing with a required fiel…, …); ado.testplan_test_case_write(action=create, project=attestqa-saucedemo, title=AC-3: Cancel returns to the cart with…, …); ado.testplan_test_case_write(action=create, project=attestqa-saucedemo, title=AC-story: Checkout information page p…, …)",
+  "calls": [
+    {
+      "toolName": "ado.testplan_test_case_write",
+      "args": {
+        "action": "create",
+        "project": "attestqa-saucedemo",
+        "title": "AC-1: Continuing with all fields filled in goes to the order overview",
+        "testsWorkItemId": 115,
+        "steps": "1. Sign in as standard_user with password secret_sauce|Products page is displayed\n2. Click the first Add to cart button|Cart badge shows \"1\"\n3. Click the cart icon|Your Cart page is displayed\n4. Click \"Checkout\"|Checkout: Your Information page is displayed\n5. Enter \"Jane\" in the First Name field, \"Doe\" in the Last Name field, \"12345\" in the Zip/Postal Code field|Fields are populated\n6. Click \"Continue\"|Page displays \"Checkout: Overview\" — the order overview is shown",
+        "priority": 1
+      }
+    },
+    {
+      "toolName": "ado.testplan_test_case_write",
+      "args": {
+        "action": "create",
+        "project": "attestqa-saucedemo",
+        "title": "AC-2: Continuing with a required field empty shows the appropriate error message",
+        "testsWorkItemId": 115,
+        "steps": "1. Sign in as standard_user with password secret_sauce|Products page is displayed\n2. Click the first Add to cart button and then click the cart icon|Your Cart page is displayed\n3. Click \"Checkout\"|Checkout: Your Information page is displayed\n4a. Leave First Name empty, fill Last Name and Postal Code, click \"Continue\"|Page displays \"First Name is required\"\n4b. Fill First Name, leave Last Name empty, fill Postal Code, click \"Continue\"|Page displays \"Last Name is required\"\n4c. Fill First Name and Last Name, leave Postal Code empty, click \"Continue\"|Page displays \"Postal Code is required\"",
+        "priority": 1
+      }
+    },
+    {
+      "toolName": "ado.testplan_test_case_write",
+      "args": {
+        "action": "create",
+        "project": "attestqa-saucedemo",
+        "title": "AC-3: Cancel returns to the cart with the cart unchanged",
+        "testsWorkItemId": 115,
+        "steps": "1. Sign in as standard_user with password secret_sauce|Products page is displayed\n2. Click the first Add to cart button|Cart badge shows \"1\"\n3. Click the cart icon|Your Cart page is displayed with cart badge showing \"1\"\n4. Click \"Checkout\"|Checkout: Your Information page is displayed\n5. Click \"Cancel\"|Your Cart page is displayed and cart badge still shows \"1\" — cart is unchanged",
+        "priority": 1
+      }
+    },
+    {
+      "toolName": "ado.testplan_test_case_write",
+      "args": {
+        "action": "create",
+        "project": "attestqa-saucedemo",
+        "title": "AC-story: Checkout information page passes axe accessibility checks (WCAG 2.0 A/AA)",
+        "testsWorkItemId": 115,
+        "steps": "1. Sign in as standard_user with password secret_sauce|Products page is displayed\n2. Click the first Add to cart button and then click the cart icon|Your Cart page is displayed\n3. Click \"Checkout\"|Checkout: Your Information page is displayed\n4. Run axe-core scan scoped to the checkout form with tags wcag2a and wcag2aa|No accessibility violations reported (violations array is empty)",
+        "priority": 2
+      }
+    }
+  ],
+  "requestedAt": "2026-10-27T01:40:08.651Z",
+  "decision": "approved",
+  "by": "auto-approver (evaluation phase 2)",
+  "at": "2026-10-27T01:40:09.189Z"
+}
