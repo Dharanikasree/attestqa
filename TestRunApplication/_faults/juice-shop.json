@@ -69,5 +69,11 @@
       "storyId": "SCRUM-6",
       "note": "Replaces the planned language-attribute fault: Juice Shop never updates <html lang> (fixed lang=\"en\", changeLanguage does not touch it), so that behaviour is already the real build's, and the language story's AC-3 is expected to fail as a genuine defect."
     }
-  ]
+  ],
+  "drop": [
+    "/socket.io/"
+  ],
+  "dropNote": "30 Oct 2026: socket.io is answered 404 by the proxy (no WebSocket upgrade through a plain HTTP proxy; long polling starved the page's requests, F-0151). Juice Shop's pages work without it.",
+  "excludeTests": "Correct answer and new password changes the password",
+  "excludeNote": "30 Oct 2026 (F-0151): the accepted SCRUM-10 test 'AC-2 — Correct answer and new password changes the password and shows confirmation' resets the shared test account's password through /rest/user/reset-password and never restores it, so in a whole-suite run every later sign-in gets 401 (trace: results/juice-shop/_unstable-2026-10-30-trace/). It is left out of the fault and flakiness runs; the story runs never hit this because each ran one epic's spec after a fresh container."
 }

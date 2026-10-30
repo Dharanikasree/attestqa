@@ -129,6 +129,13 @@ Protocol: generate and approve the tests against the correct build; then run the
 `npx playwright test` against each faulty build, one fault at a time. A fault counts as caught when
 a test that covers its story fails for that reason. Faults are never shown to the agent.
 
+Added 27 Oct: the control run is the baseline, not a gate. A final suite can carry tests that
+never passed (Juice Shop's profile epic), which fail in the control and in every fault run alike;
+they are subtracted, and a fault counts as caught only when a test of its story fails that passed
+in the control. A fault aimed at a story with no passing test is reported as missed for that
+reason. Flakiness (RQ4): `TestRunApplication/_faults/run-flakiness.mjs --app <app>` makes ten plain
+full runs and separates tests whose outcome varied from the suite's standing failures.
+
 ## 6. Measurements
 
 All counted from ledgers and files; nothing is taken from the model's own account.

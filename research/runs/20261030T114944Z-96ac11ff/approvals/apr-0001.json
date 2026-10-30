@@ -1,0 +1,84 @@
+{
+  "approvalId": "apr-0001",
+  "summary": "Approve 1 call: aqa.test_design(items=[{\"id\":\"D1\",\"covers\":\"AC-1\",\"type\":\"f…, excluded=[{\"what\":\"bug #TOOL-21\",\"reason\":\"Adm…)",
+  "calls": [
+    {
+      "toolName": "aqa.test_design",
+      "args": {
+        "items": [
+          {
+            "id": "D1",
+            "covers": "AC-1",
+            "type": "functional",
+            "technique": "equivalence-partitioning",
+            "conditions": [
+              "Home page loads with at least one product visible",
+              "Each product card has a name, a price, and an image"
+            ],
+            "expected": "The product list displays at least one card; each card shows a product name, a price, and an image",
+            "source": "AC-1"
+          },
+          {
+            "id": "D2",
+            "covers": "AC-2",
+            "type": "functional",
+            "technique": "state-transition",
+            "conditions": [
+              "Start on page 1 of the product list",
+              "Click the page 2 control"
+            ],
+            "expected": "The page 2 button is activated (navigation to page 2 occurs); a different set of products is displayed compared to page 1",
+            "source": "AC-2"
+          },
+          {
+            "id": "D3",
+            "covers": "AC-3",
+            "type": "functional",
+            "technique": "state-transition",
+            "conditions": [
+              "Start on page 1",
+              "Navigate to page 2 using the page control"
+            ],
+            "expected": "The page 2 control becomes the current-page control (aria-current or active class applied to it); the page 1 control is no longer marked as current",
+            "source": "AC-3"
+          },
+          {
+            "id": "D4",
+            "covers": "story",
+            "type": "accessibility",
+            "technique": "checklist-based",
+            "conditions": [
+              "Home page product list loaded",
+              "axe-core scan scoped to the product list and pagination navigation",
+              "WCAG A and AA rules applied"
+            ],
+            "expected": "No axe-core violations reported for the scanned region",
+            "source": "agent.test_types (WCAG A/AA)"
+          }
+        ],
+        "excluded": [
+          {
+            "what": "bug #TOOL-21",
+            "reason": "Admin product search — not related to shopper catalogue pagination; belongs to admin functionality under a different story"
+          },
+          {
+            "what": "bug #TOOL-20",
+            "reason": "Billing address step — not related to product browsing; belongs to the checkout flow under a different story"
+          },
+          {
+            "what": "confirmation",
+            "reason": "Both open bugs (TOOL-21 and TOOL-20) are unrelated to this story's behaviour and are excluded above; no confirmation test applies here"
+          },
+          {
+            "what": "security",
+            "reason": "This story is purely about browsing a public product catalogue; no authentication, account data or session behaviour is involved"
+          }
+        ]
+      }
+    }
+  ],
+  "requestedAt": "2026-10-30T11:51:01.436Z",
+  "decision": "approved",
+  "by": "auto-approver (evaluation phase 2)",
+  "at": "2026-10-30T11:51:01.746Z"
+}

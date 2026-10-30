@@ -1,0 +1,101 @@
+{
+  "approvalId": "apr-0001",
+  "summary": "Approve 1 call: aqa.test_design(items=[{\"id\":\"D7\",\"covers\":\"AC-1\",\"type\":\"f…, excluded=[{\"what\":\"security\",\"reason\":\"Filteri…)",
+  "calls": [
+    {
+      "toolName": "aqa.test_design",
+      "args": {
+        "items": [
+          {
+            "id": "D7",
+            "covers": "AC-1",
+            "type": "functional",
+            "technique": "state-transition",
+            "conditions": [
+              "category checkbox 'Hammer' is ticked"
+            ],
+            "expected": "The 'Hammer' checkbox becomes checked; only products in the Hammer category are shown in the product list",
+            "source": "AC-1"
+          },
+          {
+            "id": "D8",
+            "covers": "AC-2",
+            "type": "functional",
+            "technique": "state-transition",
+            "conditions": [
+              "brand checkbox 'ForgeFlex Tools' is ticked"
+            ],
+            "expected": "The 'ForgeFlex Tools' checkbox becomes checked; only products of the ForgeFlex Tools brand are shown in the product list",
+            "source": "AC-2"
+          },
+          {
+            "id": "D9",
+            "covers": "AC-3",
+            "type": "functional",
+            "technique": "state-transition",
+            "conditions": [
+              "category checkbox 'Hammer' is ticked then unticked"
+            ],
+            "expected": "The 'Hammer' checkbox becomes unchecked; the full product list is restored with products from all categories",
+            "source": "AC-3"
+          },
+          {
+            "id": "D10",
+            "covers": "AC-3",
+            "type": "functional",
+            "technique": "state-transition",
+            "conditions": [
+              "brand checkbox 'ForgeFlex Tools' is ticked then unticked"
+            ],
+            "expected": "The 'ForgeFlex Tools' checkbox becomes unchecked; the full product list is restored with products from all brands",
+            "source": "AC-3"
+          },
+          {
+            "id": "D11",
+            "covers": "story",
+            "type": "accessibility",
+            "technique": "checklist-based",
+            "conditions": [
+              "home page product list with filters visible in side panel"
+            ],
+            "expected": "No WCAG A/AA violations reported by axe-core for the product list and filter panel",
+            "source": "agent.test_types (WCAG A/AA)"
+          },
+          {
+            "id": "D12",
+            "covers": "AC-1",
+            "type": "functional",
+            "technique": "state-transition",
+            "conditions": [
+              "category filter 'Hammer' is active, shopper navigates to page 2"
+            ],
+            "expected": "Page 2 pagination control becomes active; only Hammer category products are shown on page 2 (filter persists across pagination)",
+            "source": "task #TOOL-8"
+          }
+        ],
+        "excluded": [
+          {
+            "what": "security",
+            "reason": "Filtering products by category/brand involves no authentication, session data, or sensitive information — there is no security surface this story implies"
+          },
+          {
+            "what": "confirmation",
+            "reason": "TOOL-21 is about admin product search (not shopper filters) and TOOL-20 is about billing address — neither touches this story's behaviour; no confirmation test is needed here"
+          },
+          {
+            "what": "bug #TOOL-21",
+            "reason": "Admin product search narrowing — not shopper-facing filter panel; does not touch AC-1, AC-2 or AC-3"
+          },
+          {
+            "what": "bug #TOOL-20",
+            "reason": "Billing address from customer profile — checkout flow, entirely unrelated to product filtering"
+          }
+        ]
+      }
+    }
+  ],
+  "requestedAt": "2026-10-30T12:16:07.462Z",
+  "decision": "approved",
+  "by": "auto-approver (evaluation phase 2)",
+  "at": "2026-10-30T12:16:08.160Z"
+}

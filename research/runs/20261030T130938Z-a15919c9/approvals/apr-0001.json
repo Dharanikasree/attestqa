@@ -1,0 +1,96 @@
+{
+  "approvalId": "apr-0001",
+  "summary": "Approve 1 call: aqa.test_design(items=[{\"id\":\"D15\",\"covers\":\"AC-1\",\"type\":\"…, excluded=[{\"what\":\"bug #TOOL-21\",\"reason\":\"TOO…)",
+  "calls": [
+    {
+      "toolName": "aqa.test_design",
+      "args": {
+        "items": [
+          {
+            "id": "D15",
+            "covers": "AC-1",
+            "type": "functional",
+            "technique": "state-transition",
+            "conditions": [
+              "Sort dropdown is set to 'Name (A - Z)'",
+              "Default product list is shown"
+            ],
+            "expected": "The sort dropdown shows 'Name (A - Z)' as the selected option; products are displayed in alphabetical order by name (A to Z)",
+            "source": "AC-1"
+          },
+          {
+            "id": "D16",
+            "covers": "AC-2",
+            "type": "functional",
+            "technique": "state-transition",
+            "conditions": [
+              "Sort dropdown is set to 'Price (Low - High)'",
+              "Default product list is shown"
+            ],
+            "expected": "The sort dropdown shows 'Price (Low - High)' as the selected option; the cheapest product appears first in the list",
+            "source": "AC-2"
+          },
+          {
+            "id": "D17",
+            "covers": "AC-3",
+            "type": "functional",
+            "technique": "state-transition",
+            "conditions": [
+              "Sort dropdown is set to 'Price (High - Low)'",
+              "Default product list is shown"
+            ],
+            "expected": "The sort dropdown shows 'Price (High - Low)' as the selected option; the most expensive product appears first in the list",
+            "source": "AC-3"
+          },
+          {
+            "id": "D18",
+            "covers": "AC-2",
+            "type": "functional",
+            "technique": "state-transition",
+            "conditions": [
+              "A category filter is active (e.g. 'Hammer')",
+              "Sort dropdown is set to 'Price (Low - High)'"
+            ],
+            "expected": "The sort dropdown shows 'Price (Low - High)' as the selected option; only the filtered products are shown, with the cheapest filtered product appearing first",
+            "source": "comment"
+          },
+          {
+            "id": "D19",
+            "covers": "AC-1",
+            "type": "accessibility",
+            "technique": "checklist-based",
+            "conditions": [
+              "Home page with sort dropdown visible",
+              "axe-core scan of the product list area",
+              "rules: wcag2a, wcag2aa"
+            ],
+            "expected": "No axe violations reported (violations.map(v => v.id).sort() equals [])",
+            "source": "agent.test_types (WCAG A/AA)"
+          }
+        ],
+        "excluded": [
+          {
+            "what": "bug #TOOL-21",
+            "reason": "TOOL-21 is about admin product search not narrowing the list — an admin UI feature unrelated to shopper sorting on the catalogue page"
+          },
+          {
+            "what": "bug #TOOL-20",
+            "reason": "TOOL-20 is about the billing address step not being filled from customer profile — a checkout feature unrelated to product sorting"
+          },
+          {
+            "what": "security",
+            "reason": "Sorting is a read-only UI operation with no authentication, session or data-protection implications"
+          },
+          {
+            "what": "confirmation",
+            "reason": "No open bugs touch this story's behaviour; TOOL-21 and TOOL-20 are excluded above"
+          }
+        ]
+      }
+    }
+  ],
+  "requestedAt": "2026-10-30T13:10:32.826Z",
+  "decision": "approved",
+  "by": "auto-approver (evaluation phase 2)",
+  "at": "2026-10-30T13:10:33.119Z"
+}

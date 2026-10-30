@@ -1,0 +1,89 @@
+{
+  "approvalId": "apr-0001",
+  "summary": "Approve 1 call: aqa.test_design(items=[{\"id\":\"D20\",\"covers\":\"AC-1\",\"type\":\"…, excluded=[{\"what\":\"bug #TOOL-21\",\"reason\":\"Adm…)",
+  "calls": [
+    {
+      "toolName": "aqa.test_design",
+      "args": {
+        "items": [
+          {
+            "id": "D20",
+            "covers": "AC-1",
+            "type": "functional",
+            "technique": "equivalence-partitioning",
+            "conditions": [
+              "Navigate to a product detail page from the catalogue list",
+              "Check name is displayed",
+              "Check price is displayed",
+              "Check description is displayed",
+              "Check Add to cart button is present"
+            ],
+            "expected": "Product name, price, description and Add to cart button are all visible on the detail page",
+            "source": "AC-1"
+          },
+          {
+            "id": "D21",
+            "covers": "AC-2",
+            "type": "functional",
+            "technique": "boundary-value-analysis",
+            "conditions": [
+              "Quantity starts at 1 (minimum)",
+              "Clicking + raises quantity to 2",
+              "Clicking - lowers quantity back to 1",
+              "Clicking - when quantity is 1 does not go below 1"
+            ],
+            "expected": "Quantity increments and decrements correctly, never falling below 1",
+            "source": "AC-2"
+          },
+          {
+            "id": "D22",
+            "covers": "AC-3",
+            "type": "functional",
+            "technique": "state-transition",
+            "conditions": [
+              "A related products section is visible on the detail page",
+              "Clicking a related product navigates to that product's detail page"
+            ],
+            "expected": "Related products section is present; clicking one opens its own detail page",
+            "source": "AC-3"
+          },
+          {
+            "id": "D23",
+            "covers": "story",
+            "type": "accessibility",
+            "technique": "checklist-based",
+            "conditions": [
+              "Run axe-core on the product detail page form/content area",
+              "Pin WCAG 2.1 A and AA rule tags",
+              "Assert violations list is empty"
+            ],
+            "expected": "No axe-core violations on the product detail page",
+            "source": "agent.test_types (WCAG A/AA)"
+          }
+        ],
+        "excluded": [
+          {
+            "what": "bug #TOOL-21",
+            "reason": "Admin product search does not narrow the list — this is about the admin interface, not the shopper product detail page; it does not touch TOOL-11's behaviour"
+          },
+          {
+            "what": "bug #TOOL-20",
+            "reason": "Billing address step not filled from customer profile — this is about checkout/billing flow, not the product detail page; it does not touch TOOL-11's behaviour"
+          },
+          {
+            "what": "confirmation",
+            "reason": "Both open bugs (TOOL-21, TOOL-20) are unrelated to this story's behaviour; no confirmation tests are applicable here"
+          },
+          {
+            "what": "security",
+            "reason": "The product detail page is publicly accessible content with no authentication, session, or account-data protection concerns implied by this story"
+          }
+        ]
+      }
+    }
+  ],
+  "requestedAt": "2026-10-30T15:20:14.710Z",
+  "decision": "approved",
+  "by": "auto-approver (evaluation phase 2)",
+  "at": "2026-10-30T15:20:15.414Z"
+}

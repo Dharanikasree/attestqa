@@ -1,0 +1,1516 @@
+[
+  {
+    "story": "SCRUM-6",
+    "title": "Customer signs in with email and password",
+    "acceptanceCriteria": [
+      "AC-1",
+      "AC-2",
+      "AC-3"
+    ],
+    "designRun": "20261022T161640Z-45bd8a63",
+    "items": [
+      {
+        "id": "D6",
+        "covers": "AC-1",
+        "type": "functional",
+        "technique": "state-transition",
+        "expectFail": false,
+        "state": "no scenario"
+      },
+      {
+        "id": "D7",
+        "covers": "AC-2",
+        "type": "functional",
+        "technique": "equivalence-partitioning",
+        "expectFail": false,
+        "state": "no scenario"
+      },
+      {
+        "id": "D8",
+        "covers": "AC-3",
+        "type": "functional",
+        "technique": "boundary-value-analysis",
+        "expectFail": false,
+        "state": "no scenario"
+      },
+      {
+        "id": "D9",
+        "covers": "AC-3",
+        "type": "functional",
+        "technique": "boundary-value-analysis",
+        "expectFail": false,
+        "state": "no scenario"
+      },
+      {
+        "id": "D10",
+        "covers": "AC-3",
+        "type": "functional",
+        "technique": "boundary-value-analysis",
+        "expectFail": false,
+        "state": "no scenario"
+      },
+      {
+        "id": "D11",
+        "covers": "AC-3",
+        "type": "functional",
+        "technique": "boundary-value-analysis",
+        "expectFail": false,
+        "state": "no scenario"
+      },
+      {
+        "id": "D12",
+        "covers": "AC-2",
+        "type": "security",
+        "technique": "state-transition",
+        "expectFail": false,
+        "state": "no scenario"
+      },
+      {
+        "id": "D13",
+        "covers": "story",
+        "type": "accessibility",
+        "technique": "checklist-based",
+        "expectFail": false,
+        "state": "no scenario"
+      }
+    ],
+    "uncoveredCriteria": [
+      "AC-1",
+      "AC-2",
+      "AC-3"
+    ],
+    "outsideDesign": [],
+    "bugs": [
+      {
+        "id": "SCRUM-28",
+        "state": "In Progress",
+        "title": "Order tracking shows any order to anyone who has its number, signed in or not"
+      },
+      {
+        "id": "SCRUM-12",
+        "state": "In Progress",
+        "title": "Session token is still accepted after logout"
+      }
+    ]
+  },
+  {
+    "story": "SCRUM-8",
+    "title": "Customer signs out",
+    "acceptanceCriteria": [
+      "AC-1",
+      "AC-2"
+    ],
+    "designRun": "20261022T213317Z-dad48298",
+    "items": [
+      {
+        "id": "D1",
+        "covers": "AC-1",
+        "type": "functional",
+        "technique": "state-transition",
+        "expectFail": false,
+        "state": "no scenario"
+      },
+      {
+        "id": "D2",
+        "covers": "AC-2",
+        "type": "functional",
+        "technique": "state-transition",
+        "expectFail": false,
+        "state": "no scenario"
+      },
+      {
+        "id": "D3",
+        "covers": "AC-1",
+        "type": "security",
+        "technique": "state-transition",
+        "expectFail": false,
+        "state": "no scenario"
+      },
+      {
+        "id": "D4",
+        "covers": "story",
+        "type": "accessibility",
+        "technique": "checklist-based",
+        "expectFail": false,
+        "state": "no scenario"
+      },
+      {
+        "id": "D5",
+        "covers": "bug #SCRUM-12",
+        "type": "confirmation",
+        "technique": "state-transition",
+        "expectFail": true,
+        "state": "no scenario"
+      }
+    ],
+    "uncoveredCriteria": [
+      "AC-1",
+      "AC-2"
+    ],
+    "outsideDesign": [],
+    "bugs": [
+      {
+        "id": "SCRUM-28",
+        "state": "In Progress",
+        "title": "Order tracking shows any order to anyone who has its number, signed in or not"
+      },
+      {
+        "id": "SCRUM-12",
+        "state": "In Progress",
+        "title": "Session token is still accepted after logout"
+      }
+    ]
+  },
+  {
+    "story": "SCRUM-10",
+    "title": "New customer registers an account",
+    "acceptanceCriteria": [
+      "AC-1",
+      "AC-2",
+      "AC-3"
+    ],
+    "designRun": "20261023T125939Z-41853627",
+    "items": [
+      {
+        "id": "D14",
+        "covers": "AC-1",
+        "type": "functional",
+        "technique": "state-transition",
+        "expectFail": false,
+        "state": "no scenario"
+      },
+      {
+        "id": "D15",
+        "covers": "AC-2",
+        "type": "functional",
+        "technique": "boundary-value-analysis",
+        "expectFail": false,
+        "state": "no scenario"
+      },
+      {
+        "id": "D16",
+        "covers": "AC-2",
+        "type": "functional",
+        "technique": "boundary-value-analysis",
+        "expectFail": false,
+        "state": "no scenario"
+      },
+      {
+        "id": "D17",
+        "covers": "AC-3",
+        "type": "functional",
+        "technique": "equivalence-partitioning",
+        "expectFail": false,
+        "state": "no scenario"
+      },
+      {
+        "id": "D18",
+        "covers": "story",
+        "type": "accessibility",
+        "technique": "checklist-based",
+        "expectFail": false,
+        "state": "no scenario"
+      },
+      {
+        "id": "D19",
+        "covers": "AC-1",
+        "type": "security",
+        "technique": "error-guessing",
+        "expectFail": false,
+        "state": "no scenario"
+      }
+    ],
+    "uncoveredCriteria": [
+      "AC-1",
+      "AC-2",
+      "AC-3"
+    ],
+    "outsideDesign": [],
+    "bugs": [
+      {
+        "id": "SCRUM-28",
+        "state": "In Progress",
+        "title": "Order tracking shows any order to anyone who has its number, signed in or not"
+      },
+      {
+        "id": "SCRUM-12",
+        "state": "In Progress",
+        "title": "Session token is still accepted after logout"
+      }
+    ]
+  },
+  {
+    "story": "SCRUM-18",
+    "title": "Customer searches the product list",
+    "acceptanceCriteria": [
+      "AC-1",
+      "AC-2",
+      "AC-3"
+    ],
+    "designRun": "20261023T145501Z-dc4ce24a",
+    "items": [
+      {
+        "id": "D1",
+        "covers": "AC-1",
+        "type": "functional",
+        "technique": "equivalence-partitioning",
+        "expectFail": false,
+        "state": "no scenario"
+      },
+      {
+        "id": "D2",
+        "covers": "AC-1",
+        "type": "functional",
+        "technique": "boundary-value-analysis",
+        "expectFail": false,
+        "state": "no scenario"
+      },
+      {
+        "id": "D3",
+        "covers": "AC-2",
+        "type": "functional",
+        "technique": "state-transition",
+        "expectFail": false,
+        "state": "no scenario"
+      },
+      {
+        "id": "D4",
+        "covers": "AC-3",
+        "type": "functional",
+        "technique": "error-guessing",
+        "expectFail": false,
+        "state": "no scenario"
+      },
+      {
+        "id": "D5",
+        "covers": "story",
+        "type": "accessibility",
+        "technique": "checklist-based",
+        "expectFail": false,
+        "state": "no scenario"
+      }
+    ],
+    "uncoveredCriteria": [
+      "AC-1",
+      "AC-2",
+      "AC-3"
+    ],
+    "outsideDesign": [],
+    "bugs": [
+      {
+        "id": "SCRUM-28",
+        "state": "In Progress",
+        "title": "Order tracking shows any order to anyone who has its number, signed in or not"
+      },
+      {
+        "id": "SCRUM-12",
+        "state": "In Progress",
+        "title": "Session token is still accepted after logout"
+      }
+    ]
+  },
+  {
+    "story": "SCRUM-19",
+    "title": "Customer adds products to the basket and changes quantities",
+    "acceptanceCriteria": [
+      "AC-1",
+      "AC-2",
+      "AC-3"
+    ],
+    "designRun": "20261023T190916Z-89ae28ad",
+    "items": [
+      {
+        "id": "D6",
+        "covers": "AC-1",
+        "type": "functional",
+        "technique": "state-transition",
+        "expectFail": false,
+        "state": "no scenario"
+      },
+      {
+        "id": "D7",
+        "covers": "AC-2",
+        "type": "functional",
+        "technique": "state-transition",
+        "expectFail": false,
+        "state": "no scenario"
+      },
+      {
+        "id": "D8",
+        "covers": "AC-3",
+        "type": "functional",
+        "technique": "state-transition",
+        "expectFail": false,
+        "state": "no scenario"
+      },
+      {
+        "id": "D9",
+        "covers": "AC-1",
+        "type": "accessibility",
+        "technique": "checklist-based",
+        "expectFail": false,
+        "state": "no scenario"
+      }
+    ],
+    "uncoveredCriteria": [
+      "AC-1",
+      "AC-2",
+      "AC-3"
+    ],
+    "outsideDesign": [],
+    "bugs": [
+      {
+        "id": "SCRUM-28",
+        "state": "In Progress",
+        "title": "Order tracking shows any order to anyone who has its number, signed in or not"
+      },
+      {
+        "id": "SCRUM-12",
+        "state": "In Progress",
+        "title": "Session token is still accepted after logout"
+      }
+    ]
+  },
+  {
+    "story": "SCRUM-21",
+    "title": "Customer writes a review of a product",
+    "acceptanceCriteria": [
+      "AC-1",
+      "AC-2",
+      "AC-3"
+    ],
+    "designRun": "20261024T122142Z-721a2cd2",
+    "items": [
+      {
+        "id": "D10",
+        "covers": "AC-1",
+        "type": "functional",
+        "technique": "state-transition",
+        "expectFail": false,
+        "state": "no scenario"
+      },
+      {
+        "id": "D11",
+        "covers": "AC-2",
+        "type": "functional",
+        "technique": "state-transition",
+        "expectFail": false,
+        "state": "no scenario"
+      },
+      {
+        "id": "D12",
+        "covers": "AC-3",
+        "type": "functional",
+        "technique": "boundary-value-analysis",
+        "expectFail": false,
+        "state": "no scenario"
+      },
+      {
+        "id": "D13",
+        "covers": "AC-1",
+        "type": "security",
+        "technique": "equivalence-partitioning",
+        "expectFail": false,
+        "state": "no scenario"
+      },
+      {
+        "id": "D14",
+        "covers": "story",
+        "type": "accessibility",
+        "technique": "checklist-based",
+        "expectFail": false,
+        "state": "no scenario"
+      },
+      {
+        "id": "D15",
+        "covers": "bug #SCRUM-12",
+        "type": "confirmation",
+        "technique": "state-transition",
+        "expectFail": true,
+        "state": "no scenario"
+      }
+    ],
+    "uncoveredCriteria": [
+      "AC-1",
+      "AC-2",
+      "AC-3"
+    ],
+    "outsideDesign": [],
+    "bugs": [
+      {
+        "id": "SCRUM-28",
+        "state": "In Progress",
+        "title": "Order tracking shows any order to anyone who has its number, signed in or not"
+      },
+      {
+        "id": "SCRUM-12",
+        "state": "In Progress",
+        "title": "Session token is still accepted after logout"
+      }
+    ]
+  },
+  {
+    "story": "SCRUM-22",
+    "title": "Customer sends feedback with the feedback form",
+    "acceptanceCriteria": [
+      "AC-1",
+      "AC-2",
+      "AC-3",
+      "AC-4"
+    ],
+    "designRun": "20261024T163453Z-12a0896d",
+    "items": [
+      {
+        "id": "D1",
+        "covers": "AC-1",
+        "type": "functional",
+        "technique": "checklist-based",
+        "expectFail": false,
+        "state": "no scenario"
+      },
+      {
+        "id": "D2",
+        "covers": "AC-2",
+        "type": "functional",
+        "technique": "boundary-value-analysis",
+        "expectFail": false,
+        "state": "no scenario"
+      },
+      {
+        "id": "D3",
+        "covers": "AC-3",
+        "type": "functional",
+        "technique": "state-transition",
+        "expectFail": false,
+        "state": "no scenario"
+      },
+      {
+        "id": "D4",
+        "covers": "AC-4",
+        "type": "functional",
+        "technique": "equivalence-partitioning",
+        "expectFail": false,
+        "state": "no scenario"
+      },
+      {
+        "id": "D5",
+        "covers": "story",
+        "type": "accessibility",
+        "technique": "checklist-based",
+        "expectFail": false,
+        "state": "no scenario"
+      }
+    ],
+    "uncoveredCriteria": [
+      "AC-1",
+      "AC-2",
+      "AC-3",
+      "AC-4"
+    ],
+    "outsideDesign": [],
+    "bugs": [
+      {
+        "id": "SCRUM-28",
+        "state": "In Progress",
+        "title": "Order tracking shows any order to anyone who has its number, signed in or not"
+      },
+      {
+        "id": "SCRUM-12",
+        "state": "In Progress",
+        "title": "Session token is still accepted after logout"
+      }
+    ]
+  },
+  {
+    "story": "SCRUM-23",
+    "title": "Customer resets a forgotten password with the security question",
+    "acceptanceCriteria": [
+      "AC-1",
+      "AC-2",
+      "AC-3",
+      "AC-4"
+    ],
+    "designRun": "20261024T224232Z-c54b85dd",
+    "items": [
+      {
+        "id": "D6",
+        "covers": "AC-1",
+        "type": "functional",
+        "technique": "state-transition",
+        "expectFail": false,
+        "state": "no scenario"
+      },
+      {
+        "id": "D7",
+        "covers": "AC-2",
+        "type": "functional",
+        "technique": "state-transition",
+        "expectFail": false,
+        "state": "no scenario"
+      },
+      {
+        "id": "D8",
+        "covers": "AC-3",
+        "type": "functional",
+        "technique": "equivalence-partitioning",
+        "expectFail": false,
+        "state": "no scenario"
+      },
+      {
+        "id": "D9",
+        "covers": "AC-4",
+        "type": "functional",
+        "technique": "equivalence-partitioning",
+        "expectFail": false,
+        "state": "no scenario"
+      },
+      {
+        "id": "D10",
+        "covers": "story",
+        "type": "accessibility",
+        "technique": "checklist-based",
+        "expectFail": false,
+        "state": "no scenario"
+      },
+      {
+        "id": "D11",
+        "covers": "AC-4",
+        "type": "security",
+        "technique": "equivalence-partitioning",
+        "expectFail": false,
+        "state": "no scenario"
+      }
+    ],
+    "uncoveredCriteria": [
+      "AC-1",
+      "AC-2",
+      "AC-3",
+      "AC-4"
+    ],
+    "outsideDesign": [],
+    "bugs": [
+      {
+        "id": "SCRUM-28",
+        "state": "In Progress",
+        "title": "Order tracking shows any order to anyone who has its number, signed in or not"
+      },
+      {
+        "id": "SCRUM-12",
+        "state": "In Progress",
+        "title": "Session token is still accepted after logout"
+      }
+    ]
+  },
+  {
+    "story": "SCRUM-24",
+    "title": "Customer saves a delivery address",
+    "acceptanceCriteria": [
+      "AC-1",
+      "AC-2",
+      "AC-3"
+    ],
+    "designRun": "20261025T014046Z-94f1ed19",
+    "items": [
+      {
+        "id": "D1",
+        "covers": "AC-1",
+        "type": "functional",
+        "technique": "state-transition",
+        "expectFail": false,
+        "state": "no scenario"
+      },
+      {
+        "id": "D2",
+        "covers": "AC-2",
+        "type": "functional",
+        "technique": "state-transition",
+        "expectFail": false,
+        "state": "no scenario"
+      },
+      {
+        "id": "D3",
+        "covers": "AC-3",
+        "type": "functional",
+        "technique": "boundary-value-analysis",
+        "expectFail": false,
+        "state": "no scenario"
+      },
+      {
+        "id": "D4",
+        "covers": "story",
+        "type": "accessibility",
+        "technique": "checklist-based",
+        "expectFail": false,
+        "state": "no scenario"
+      },
+      {
+        "id": "D5",
+        "covers": "AC-2",
+        "type": "security",
+        "technique": "error-guessing",
+        "expectFail": false,
+        "state": "no scenario"
+      }
+    ],
+    "uncoveredCriteria": [
+      "AC-1",
+      "AC-2",
+      "AC-3"
+    ],
+    "outsideDesign": [],
+    "bugs": [
+      {
+        "id": "SCRUM-28",
+        "state": "In Progress",
+        "title": "Order tracking shows any order to anyone who has its number, signed in or not"
+      },
+      {
+        "id": "SCRUM-12",
+        "state": "In Progress",
+        "title": "Session token is still accepted after logout"
+      }
+    ]
+  },
+  {
+    "story": "SCRUM-25",
+    "title": "Customer changes their password",
+    "acceptanceCriteria": [
+      "AC-1",
+      "AC-2",
+      "AC-3"
+    ],
+    "designRun": "20261025T183138Z-55885357",
+    "items": [
+      {
+        "id": "D6",
+        "covers": "AC-1",
+        "type": "functional",
+        "technique": "state-transition",
+        "expectFail": false,
+        "state": "no scenario"
+      },
+      {
+        "id": "D7",
+        "covers": "AC-2",
+        "type": "functional",
+        "technique": "equivalence-partitioning",
+        "expectFail": false,
+        "state": "no scenario"
+      },
+      {
+        "id": "D8",
+        "covers": "AC-3",
+        "type": "functional",
+        "technique": "equivalence-partitioning",
+        "expectFail": false,
+        "state": "no scenario"
+      },
+      {
+        "id": "D9",
+        "covers": "AC-1",
+        "type": "security",
+        "technique": "state-transition",
+        "expectFail": false,
+        "state": "no scenario"
+      },
+      {
+        "id": "D10",
+        "covers": "story",
+        "type": "accessibility",
+        "technique": "checklist-based",
+        "expectFail": false,
+        "state": "no scenario"
+      }
+    ],
+    "uncoveredCriteria": [
+      "AC-1",
+      "AC-2",
+      "AC-3"
+    ],
+    "outsideDesign": [],
+    "bugs": [
+      {
+        "id": "SCRUM-28",
+        "state": "In Progress",
+        "title": "Order tracking shows any order to anyone who has its number, signed in or not"
+      },
+      {
+        "id": "SCRUM-12",
+        "state": "In Progress",
+        "title": "Session token is still accepted after logout"
+      }
+    ]
+  },
+  {
+    "story": "SCRUM-26",
+    "title": "Customer chooses the shop's language",
+    "acceptanceCriteria": [
+      "AC-1",
+      "AC-2",
+      "AC-3"
+    ],
+    "designRun": "20261026T235632Z-8f921a31",
+    "items": [
+      {
+        "id": "D11",
+        "covers": "AC-1",
+        "type": "functional",
+        "technique": "equivalence-partitioning",
+        "expectFail": false,
+        "state": "no scenario"
+      },
+      {
+        "id": "D12",
+        "covers": "AC-2",
+        "type": "functional",
+        "technique": "state-transition",
+        "expectFail": false,
+        "state": "no scenario"
+      },
+      {
+        "id": "D13",
+        "covers": "AC-3",
+        "type": "functional",
+        "technique": "state-transition",
+        "expectFail": false,
+        "state": "no scenario"
+      },
+      {
+        "id": "D14",
+        "covers": "story",
+        "type": "accessibility",
+        "technique": "checklist-based",
+        "expectFail": false,
+        "state": "no scenario"
+      }
+    ],
+    "uncoveredCriteria": [
+      "AC-1",
+      "AC-2",
+      "AC-3"
+    ],
+    "outsideDesign": [],
+    "bugs": [
+      {
+        "id": "SCRUM-28",
+        "state": "In Progress",
+        "title": "Order tracking shows any order to anyone who has its number, signed in or not"
+      },
+      {
+        "id": "SCRUM-12",
+        "state": "In Progress",
+        "title": "Session token is still accepted after logout"
+      }
+    ]
+  },
+  {
+    "story": "SCRUM-27",
+    "title": "Customer sees their order history and tracks an order",
+    "acceptanceCriteria": [
+      "AC-1",
+      "AC-2",
+      "AC-3"
+    ],
+    "designRun": "20261027T023556Z-68602794",
+    "items": [
+      {
+        "id": "D15",
+        "covers": "AC-1",
+        "type": "functional",
+        "technique": "state-transition",
+        "expectFail": false,
+        "state": "no scenario"
+      },
+      {
+        "id": "D16",
+        "covers": "AC-2",
+        "type": "functional",
+        "technique": "state-transition",
+        "expectFail": false,
+        "state": "no scenario"
+      },
+      {
+        "id": "D17",
+        "covers": "AC-3",
+        "type": "functional",
+        "technique": "equivalence-partitioning",
+        "expectFail": false,
+        "state": "no scenario"
+      },
+      {
+        "id": "D18",
+        "covers": "AC-3",
+        "type": "security",
+        "technique": "error-guessing",
+        "expectFail": false,
+        "state": "no scenario"
+      },
+      {
+        "id": "D19",
+        "covers": "bug #SCRUM-28",
+        "type": "confirmation",
+        "technique": "error-guessing",
+        "expectFail": true,
+        "state": "no scenario"
+      },
+      {
+        "id": "D20",
+        "covers": "story",
+        "type": "accessibility",
+        "technique": "checklist-based",
+        "expectFail": false,
+        "state": "no scenario"
+      }
+    ],
+    "uncoveredCriteria": [
+      "AC-1",
+      "AC-2",
+      "AC-3"
+    ],
+    "outsideDesign": [],
+    "bugs": [
+      {
+        "id": "SCRUM-28",
+        "state": "In Progress",
+        "title": "Order tracking shows any order to anyone who has its number, signed in or not"
+      },
+      {
+        "id": "SCRUM-12",
+        "state": "In Progress",
+        "title": "Session token is still accepted after logout"
+      }
+    ]
+  },
+  {
+    "story": "TOOL-6",
+    "title": "Shopper browses the catalogue page by page",
+    "acceptanceCriteria": [
+      "AC-1",
+      "AC-2",
+      "AC-3"
+    ],
+    "designRun": "20261030T114116Z-c2a24555",
+    "items": [
+      {
+        "id": "D1",
+        "covers": "AC-1",
+        "type": "functional",
+        "technique": "checklist-based",
+        "expectFail": false,
+        "scenario": {
+          "title": "AC-1 Home page lists products with name, price and image",
+          "file": "features/epic-tool-1-product-catalogue.feature"
+        },
+        "test": {
+          "title": "AC-1 Home page lists products with name, price and image",
+          "file": "tests/epic-tool-1-product-catalogue.spec.ts"
+        },
+        "result": {
+          "status": "passed",
+          "runId": "20261030T134303Z-154f308b"
+        },
+        "state": "passing"
+      },
+      {
+        "id": "D2",
+        "covers": "AC-2",
+        "type": "functional",
+        "technique": "state-transition",
+        "expectFail": false,
+        "scenario": {
+          "title": "AC-2 Choosing page 2 shows a different set of products",
+          "file": "features/epic-tool-1-product-catalogue.feature"
+        },
+        "test": {
+          "title": "AC-2 Choosing page 2 shows a different set of products",
+          "file": "tests/epic-tool-1-product-catalogue.spec.ts"
+        },
+        "result": {
+          "status": "passed",
+          "runId": "20261030T134303Z-154f308b"
+        },
+        "state": "passing"
+      },
+      {
+        "id": "D3",
+        "covers": "AC-3",
+        "type": "functional",
+        "technique": "state-transition",
+        "expectFail": false,
+        "scenario": {
+          "title": "AC-3 The control for the current page is marked as current",
+          "file": "features/epic-tool-1-product-catalogue.feature"
+        },
+        "test": {
+          "title": "AC-3 The control for the current page is marked as current",
+          "file": "tests/epic-tool-1-product-catalogue.spec.ts"
+        },
+        "result": {
+          "status": "passed",
+          "runId": "20261030T134303Z-154f308b"
+        },
+        "state": "passing"
+      },
+      {
+        "id": "D4",
+        "covers": "story",
+        "type": "accessibility",
+        "technique": "checklist-based",
+        "expectFail": false,
+        "scenario": {
+          "title": "AC-accessibility Home page product list passes accessibility checks",
+          "file": "features/epic-tool-1-product-catalogue.feature"
+        },
+        "test": {
+          "title": "AC-accessibility Home page product list passes accessibility checks",
+          "file": "tests/epic-tool-1-product-catalogue.spec.ts"
+        },
+        "result": {
+          "status": "failed",
+          "runId": "20261030T134303Z-154f308b"
+        },
+        "state": "failing"
+      }
+    ],
+    "uncoveredCriteria": [],
+    "outsideDesign": [],
+    "bugs": [
+      {
+        "id": "TOOL-21",
+        "state": "In Progress",
+        "title": "Admin product search does not narrow the list"
+      },
+      {
+        "id": "TOOL-20",
+        "state": "In Progress",
+        "title": "Billing address step is not filled in from the customer's profile"
+      }
+    ]
+  },
+  {
+    "story": "TOOL-7",
+    "title": "Shopper filters products by category and brand",
+    "acceptanceCriteria": [
+      "AC-1",
+      "AC-2",
+      "AC-3"
+    ],
+    "designRun": "20261030T120706Z-e5338fd9",
+    "items": [
+      {
+        "id": "D6",
+        "covers": "AC-1",
+        "type": "functional",
+        "technique": "state-transition",
+        "expectFail": false,
+        "scenario": {
+          "title": "AC-1 Ticking a category shows only products in that category",
+          "file": "features/epic-tool-1-product-catalogue.feature"
+        },
+        "state": "no test"
+      },
+      {
+        "id": "D7",
+        "covers": "AC-2",
+        "type": "functional",
+        "technique": "state-transition",
+        "expectFail": false,
+        "scenario": {
+          "title": "AC-2 Ticking a brand shows only products of that brand",
+          "file": "features/epic-tool-1-product-catalogue.feature"
+        },
+        "state": "no test"
+      },
+      {
+        "id": "D8",
+        "covers": "AC-3",
+        "type": "functional",
+        "technique": "state-transition",
+        "expectFail": false,
+        "scenario": {
+          "title": "AC-3 Unticking the filter shows the full list again",
+          "file": "features/epic-tool-1-product-catalogue.feature"
+        },
+        "state": "no test"
+      },
+      {
+        "id": "D9",
+        "covers": "AC-1",
+        "type": "functional",
+        "technique": "state-transition",
+        "expectFail": false,
+        "scenario": {
+          "title": "AC-1b Filter persists when changing page",
+          "file": "features/epic-tool-1-product-catalogue.feature"
+        },
+        "state": "no test"
+      },
+      {
+        "id": "D10",
+        "covers": "story",
+        "type": "accessibility",
+        "technique": "checklist-based",
+        "expectFail": false,
+        "scenario": {
+          "title": "AC-accessibility Filter panel passes accessibility checks",
+          "file": "features/epic-tool-1-product-catalogue.feature"
+        },
+        "state": "no test"
+      }
+    ],
+    "uncoveredCriteria": [
+      "AC-1",
+      "AC-2",
+      "AC-3"
+    ],
+    "outsideDesign": [],
+    "bugs": [
+      {
+        "id": "TOOL-21",
+        "state": "In Progress",
+        "title": "Admin product search does not narrow the list"
+      },
+      {
+        "id": "TOOL-20",
+        "state": "In Progress",
+        "title": "Billing address step is not filled in from the customer's profile"
+      }
+    ]
+  },
+  {
+    "story": "TOOL-9",
+    "title": "Shopper searches products by name",
+    "acceptanceCriteria": [
+      "AC-1",
+      "AC-2",
+      "AC-3"
+    ],
+    "designRun": "20261030T123901Z-df57dd89",
+    "items": [
+      {
+        "id": "D11",
+        "covers": "AC-1",
+        "type": "functional",
+        "technique": "equivalence-partitioning",
+        "expectFail": false,
+        "scenario": {
+          "title": "AC-1 Searching for a matching word shows only products whose names contain that word",
+          "file": "features/epic-tool-1-product-catalogue.feature"
+        },
+        "test": {
+          "title": "AC-1 Searching for a matching word shows only products whose names contain that word",
+          "file": "tests/epic-tool-1-product-catalogue.spec.ts"
+        },
+        "result": {
+          "status": "passed",
+          "runId": "20261030T134303Z-154f308b"
+        },
+        "state": "passing"
+      },
+      {
+        "id": "D12",
+        "covers": "AC-2",
+        "type": "functional",
+        "technique": "equivalence-partitioning",
+        "expectFail": false,
+        "scenario": {
+          "title": "AC-2 Searching for a word no product contains shows a no-results message",
+          "file": "features/epic-tool-1-product-catalogue.feature"
+        },
+        "test": {
+          "title": "AC-2 Searching for a word no product contains shows a no-results message",
+          "file": "tests/epic-tool-1-product-catalogue.spec.ts"
+        },
+        "result": {
+          "status": "passed",
+          "runId": "20261030T134303Z-154f308b"
+        },
+        "state": "passing"
+      },
+      {
+        "id": "D13",
+        "covers": "AC-3",
+        "type": "functional",
+        "technique": "state-transition",
+        "expectFail": false,
+        "scenario": {
+          "title": "AC-3 Clearing the search restores the full product list",
+          "file": "features/epic-tool-1-product-catalogue.feature"
+        },
+        "test": {
+          "title": "AC-3 Clearing the search restores the full product list",
+          "file": "tests/epic-tool-1-product-catalogue.spec.ts"
+        },
+        "result": {
+          "status": "passed",
+          "runId": "20261030T134303Z-154f308b"
+        },
+        "state": "passing"
+      },
+      {
+        "id": "D14",
+        "covers": "story",
+        "type": "accessibility",
+        "technique": "checklist-based",
+        "expectFail": false,
+        "scenario": {
+          "title": "AC-accessibility Search results pass accessibility checks",
+          "file": "features/epic-tool-1-product-catalogue.feature"
+        },
+        "test": {
+          "title": "AC-accessibility Search results pass accessibility checks",
+          "file": "tests/epic-tool-1-product-catalogue.spec.ts"
+        },
+        "result": {
+          "status": "failed",
+          "runId": "20261030T134303Z-154f308b"
+        },
+        "state": "failing"
+      }
+    ],
+    "uncoveredCriteria": [],
+    "outsideDesign": [],
+    "bugs": [
+      {
+        "id": "TOOL-21",
+        "state": "In Progress",
+        "title": "Admin product search does not narrow the list"
+      },
+      {
+        "id": "TOOL-20",
+        "state": "In Progress",
+        "title": "Billing address step is not filled in from the customer's profile"
+      }
+    ]
+  },
+  {
+    "story": "TOOL-10",
+    "title": "Shopper sorts products by name and price",
+    "acceptanceCriteria": [
+      "AC-1",
+      "AC-2",
+      "AC-3"
+    ],
+    "designRun": "20261030T130938Z-a15919c9",
+    "items": [
+      {
+        "id": "D15",
+        "covers": "AC-1",
+        "type": "functional",
+        "technique": "state-transition",
+        "expectFail": false,
+        "scenario": {
+          "title": "AC-1 Sorting by name A to Z lists products in alphabetical order",
+          "file": "features/epic-tool-1-product-catalogue.feature"
+        },
+        "test": {
+          "title": "AC-1 Sorting by name A to Z lists products in alphabetical order",
+          "file": "tests/epic-tool-1-product-catalogue.spec.ts"
+        },
+        "result": {
+          "status": "passed",
+          "runId": "20261030T134303Z-154f308b"
+        },
+        "state": "passing"
+      },
+      {
+        "id": "D16",
+        "covers": "AC-2",
+        "type": "functional",
+        "technique": "state-transition",
+        "expectFail": false,
+        "scenario": {
+          "title": "AC-2 Sorting by price low to high lists the cheapest product first",
+          "file": "features/epic-tool-1-product-catalogue.feature"
+        },
+        "test": {
+          "title": "AC-2 Sorting by price low to high lists the cheapest product first",
+          "file": "tests/epic-tool-1-product-catalogue.spec.ts"
+        },
+        "result": {
+          "status": "passed",
+          "runId": "20261030T134303Z-154f308b"
+        },
+        "state": "passing"
+      },
+      {
+        "id": "D17",
+        "covers": "AC-3",
+        "type": "functional",
+        "technique": "state-transition",
+        "expectFail": false,
+        "scenario": {
+          "title": "AC-3 Sorting by price high to low lists the most expensive product first",
+          "file": "features/epic-tool-1-product-catalogue.feature"
+        },
+        "test": {
+          "title": "AC-3 Sorting by price high to low lists the most expensive product first",
+          "file": "tests/epic-tool-1-product-catalogue.spec.ts"
+        },
+        "result": {
+          "status": "passed",
+          "runId": "20261030T134303Z-154f308b"
+        },
+        "state": "passing"
+      },
+      {
+        "id": "D18",
+        "covers": "AC-2",
+        "type": "functional",
+        "technique": "state-transition",
+        "expectFail": false,
+        "scenario": {
+          "title": "AC-2b Sorting applies to filtered products only",
+          "file": "features/epic-tool-1-product-catalogue.feature"
+        },
+        "test": {
+          "title": "AC-2b Sorting applies to filtered products only",
+          "file": "tests/epic-tool-1-product-catalogue.spec.ts"
+        },
+        "result": {
+          "status": "passed",
+          "runId": "20261030T134303Z-154f308b"
+        },
+        "state": "passing"
+      },
+      {
+        "id": "D19",
+        "covers": "AC-1",
+        "type": "accessibility",
+        "technique": "checklist-based",
+        "expectFail": false,
+        "scenario": {
+          "title": "AC-accessibility Sort control passes accessibility checks",
+          "file": "features/epic-tool-1-product-catalogue.feature"
+        },
+        "test": {
+          "title": "AC-accessibility Sort control passes accessibility checks",
+          "file": "tests/epic-tool-1-product-catalogue.spec.ts"
+        },
+        "result": {
+          "status": "passed",
+          "runId": "20261030T134303Z-154f308b"
+        },
+        "state": "passing"
+      }
+    ],
+    "uncoveredCriteria": [],
+    "outsideDesign": [],
+    "bugs": [
+      {
+        "id": "TOOL-21",
+        "state": "In Progress",
+        "title": "Admin product search does not narrow the list"
+      },
+      {
+        "id": "TOOL-20",
+        "state": "In Progress",
+        "title": "Billing address step is not filled in from the customer's profile"
+      }
+    ]
+  },
+  {
+    "story": "TOOL-11",
+    "title": "Shopper opens a product's detail page",
+    "acceptanceCriteria": [
+      "AC-1",
+      "AC-2",
+      "AC-3"
+    ],
+    "designRun": "20261030T134303Z-154f308b",
+    "items": [
+      {
+        "id": "D20",
+        "covers": "AC-1",
+        "type": "functional",
+        "technique": "state-transition",
+        "expectFail": false,
+        "scenario": {
+          "title": "AC-1 Opening a product from the list shows its name, price, description and Add to cart button",
+          "file": "features/epic-tool-1-product-catalogue.feature"
+        },
+        "state": "no test"
+      },
+      {
+        "id": "D21",
+        "covers": "AC-2",
+        "type": "functional",
+        "technique": "boundary-value-analysis",
+        "expectFail": false,
+        "scenario": {
+          "title": "AC-2a Quantity starts at 1 and the minus button cannot reduce it below 1",
+          "file": "features/epic-tool-1-product-catalogue.feature"
+        },
+        "state": "no test"
+      },
+      {
+        "id": "D22",
+        "covers": "AC-3",
+        "type": "functional",
+        "technique": "state-transition",
+        "expectFail": false,
+        "scenario": {
+          "title": "AC-3 Choosing a related product opens its own detail page",
+          "file": "features/epic-tool-1-product-catalogue.feature"
+        },
+        "state": "no test"
+      },
+      {
+        "id": "D23",
+        "covers": "story",
+        "type": "accessibility",
+        "technique": "checklist-based",
+        "expectFail": false,
+        "scenario": {
+          "title": "AC-accessibility Product detail page passes accessibility checks",
+          "file": "features/epic-tool-1-product-catalogue.feature"
+        },
+        "state": "no test"
+      }
+    ],
+    "uncoveredCriteria": [
+      "AC-1",
+      "AC-2",
+      "AC-3"
+    ],
+    "outsideDesign": [],
+    "bugs": [
+      {
+        "id": "TOOL-21",
+        "state": "In Progress",
+        "title": "Admin product search does not narrow the list"
+      },
+      {
+        "id": "TOOL-20",
+        "state": "In Progress",
+        "title": "Billing address step is not filled in from the customer's profile"
+      }
+    ]
+  },
+  {
+    "story": "TOOL-12",
+    "title": "Shopper adds tools to the cart and changes quantities",
+    "acceptanceCriteria": [
+      "AC-1",
+      "AC-2",
+      "AC-3"
+    ],
+    "designRun": "20261030T184243Z-f55ef5cf",
+    "items": [
+      {
+        "id": "D1",
+        "covers": "AC-1",
+        "type": "functional",
+        "technique": "state-transition",
+        "expectFail": false,
+        "scenario": {
+          "title": "AC-1a Adding a product to the cart shows a confirmation",
+          "file": "features/epic-tool-2-cart-and-checkout.feature"
+        },
+        "test": {
+          "title": "AC-1a Adding a product to the cart shows a confirmation",
+          "file": "tests/epic-tool-2-cart-and-checkout.spec.ts"
+        },
+        "result": {
+          "status": "failed",
+          "runId": "20261030T184243Z-f55ef5cf"
+        },
+        "state": "failing"
+      },
+      {
+        "id": "D2",
+        "covers": "AC-1",
+        "type": "functional",
+        "technique": "state-transition",
+        "expectFail": false,
+        "scenario": {
+          "title": "AC-1b Cart icon in the header shows the number of items after adding a product",
+          "file": "features/epic-tool-2-cart-and-checkout.feature"
+        },
+        "test": {
+          "title": "AC-1b Cart icon in the header shows the number of items after adding a product",
+          "file": "tests/epic-tool-2-cart-and-checkout.spec.ts"
+        },
+        "result": {
+          "status": "failed",
+          "runId": "20261030T184243Z-f55ef5cf"
+        },
+        "state": "failing"
+      },
+      {
+        "id": "D3",
+        "covers": "AC-2",
+        "type": "functional",
+        "technique": "state-transition",
+        "expectFail": false,
+        "scenario": {
+          "title": "AC-2 Changing a line quantity in the cart updates the line total and cart total",
+          "file": "features/epic-tool-2-cart-and-checkout.feature"
+        },
+        "test": {
+          "title": "AC-2 Changing a line quantity in the cart updates the line total and cart total",
+          "file": "tests/epic-tool-2-cart-and-checkout.spec.ts"
+        },
+        "result": {
+          "status": "failed",
+          "runId": "20261030T184243Z-f55ef5cf"
+        },
+        "state": "failing"
+      },
+      {
+        "id": "D4",
+        "covers": "AC-3",
+        "type": "functional",
+        "technique": "state-transition",
+        "expectFail": false,
+        "scenario": {
+          "title": "AC-3 Removing a line takes it out of the cart and updates the cart total",
+          "file": "features/epic-tool-2-cart-and-checkout.feature"
+        },
+        "test": {
+          "title": "AC-3 Removing a line takes it out of the cart and updates the cart total",
+          "file": "tests/epic-tool-2-cart-and-checkout.spec.ts"
+        },
+        "result": {
+          "status": "failed",
+          "runId": "20261030T184243Z-f55ef5cf"
+        },
+        "state": "failing"
+      },
+      {
+        "id": "D5",
+        "covers": "AC-1",
+        "type": "accessibility",
+        "technique": "checklist-based",
+        "expectFail": false,
+        "scenario": {
+          "title": "AC-accessibility Cart page passes accessibility checks",
+          "file": "features/epic-tool-2-cart-and-checkout.feature"
+        },
+        "test": {
+          "title": "AC-accessibility Cart page passes accessibility checks",
+          "file": "tests/epic-tool-2-cart-and-checkout.spec.ts"
+        },
+        "result": {
+          "status": "failed",
+          "runId": "20261030T184243Z-f55ef5cf"
+        },
+        "state": "failing"
+      }
+    ],
+    "uncoveredCriteria": [],
+    "outsideDesign": [],
+    "bugs": [
+      {
+        "id": "TOOL-21",
+        "state": "In Progress",
+        "title": "Admin product search does not narrow the list"
+      },
+      {
+        "id": "TOOL-20",
+        "state": "In Progress",
+        "title": "Billing address step is not filled in from the customer's profile"
+      }
+    ]
+  }
+]

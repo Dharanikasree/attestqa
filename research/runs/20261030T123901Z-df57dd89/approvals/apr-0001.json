@@ -1,0 +1,81 @@
+{
+  "approvalId": "apr-0001",
+  "summary": "Approve 1 call: aqa.test_design(items=[{\"id\":\"D11\",\"covers\":\"AC-1\",\"type\":\"…, excluded=[{\"what\":\"bug #TOOL-21\",\"reason\":\"TOO…)",
+  "calls": [
+    {
+      "toolName": "aqa.test_design",
+      "args": {
+        "items": [
+          {
+            "id": "D11",
+            "covers": "AC-1",
+            "type": "functional",
+            "technique": "equivalence-partitioning",
+            "conditions": [
+              "Search for 'Pliers' (a word that appears in multiple product names)",
+              "Submit search"
+            ],
+            "expected": "Only products whose names contain 'Pliers' are shown (e.g. 'Combination Pliers', 'Pliers', 'Long Nose Pliers'); products not containing 'Pliers' are not shown",
+            "source": "AC-1"
+          },
+          {
+            "id": "D12",
+            "covers": "AC-2",
+            "type": "functional",
+            "technique": "equivalence-partitioning",
+            "conditions": [
+              "Search for 'xyznonexistent' (a word no product name contains)",
+              "Submit search"
+            ],
+            "expected": "A 'no products found' message is displayed and no product cards are shown",
+            "source": "AC-2"
+          },
+          {
+            "id": "D13",
+            "covers": "AC-3",
+            "type": "functional",
+            "technique": "state-transition",
+            "conditions": [
+              "Search for 'Pliers' to filter the list; then clear the search field and submit (or click X)"
+            ],
+            "expected": "The search field is empty (showing the clear action took effect); the full product list is restored and a product not in the filtered set (e.g. 'Bolt Cutters') is visible again",
+            "source": "AC-3"
+          },
+          {
+            "id": "D14",
+            "covers": "story",
+            "type": "accessibility",
+            "technique": "checklist-based",
+            "conditions": [
+              "Navigate to home page with search panel visible; run axe-core scan scoped to the search form, checking WCAG A and AA rules"
+            ],
+            "expected": "No accessibility violations reported for the search area (violations.map(v=>v.id).sort() equals [])",
+            "source": "agent.test_types (WCAG A/AA)"
+          }
+        ],
+        "excluded": [
+          {
+            "what": "bug #TOOL-21",
+            "reason": "TOOL-21 concerns the Admin interface product search, not the shopper-facing search this story covers; it does not touch AC-1, AC-2, or AC-3"
+          },
+          {
+            "what": "bug #TOOL-20",
+            "reason": "TOOL-20 concerns the billing address step in checkout, which is entirely unrelated to product search"
+          },
+          {
+            "what": "confirmation",
+            "reason": "Both open bugs (TOOL-21, TOOL-20) are excluded because they do not touch this story's behaviour; no confirmation test is warranted"
+          },
+          {
+            "what": "security",
+            "reason": "This story concerns read-only product search with no authentication, account data, or session management involved; no security test is warranted"
+          }
+        ]
+      }
+    }
+  ],
+  "requestedAt": "2026-10-30T12:40:08.231Z",
+  "decision": "approved",
+  "by": "auto-approver (evaluation phase 2)",
+  "at": "2026-10-30T12:40:08.499Z"
+}

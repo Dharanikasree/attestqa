@@ -1,0 +1,90 @@
+{
+  "approvalId": "apr-0001",
+  "summary": "Approve 1 call: aqa.test_design(items=[{\"id\":\"D1\",\"covers\":\"AC-1\",\"type\":\"f…, excluded=[{\"what\":\"security\",\"reason\":\"This st…)",
+  "calls": [
+    {
+      "toolName": "aqa.test_design",
+      "args": {
+        "items": [
+          {
+            "id": "D1",
+            "covers": "AC-1",
+            "type": "functional",
+            "technique": "state-transition",
+            "conditions": [
+              "A shopper navigates to a product detail page and clicks Add to cart"
+            ],
+            "expected": "A confirmation is displayed; the cart icon in the header updates to show the number of items added.",
+            "source": "AC-1"
+          },
+          {
+            "id": "D2",
+            "covers": "AC-1",
+            "type": "functional",
+            "technique": "state-transition",
+            "conditions": [
+              "A shopper adds a product to the cart, then adds another product to the cart"
+            ],
+            "expected": "After each add-to-cart action the cart icon count increments; after two adds the cart icon shows 2.",
+            "source": "AC-1"
+          },
+          {
+            "id": "D3",
+            "covers": "AC-2",
+            "type": "functional",
+            "technique": "state-transition",
+            "conditions": [
+              "A shopper opens the cart and changes a line item's quantity"
+            ],
+            "expected": "The line's total price updates to reflect the new quantity; the cart total also updates to reflect the change.",
+            "source": "AC-2"
+          },
+          {
+            "id": "D4",
+            "covers": "AC-3",
+            "type": "functional",
+            "technique": "state-transition",
+            "conditions": [
+              "A shopper opens the cart and removes a line item"
+            ],
+            "expected": "The line is no longer present in the cart; the cart total updates to exclude the removed line's amount.",
+            "source": "AC-3"
+          },
+          {
+            "id": "D5",
+            "covers": "story",
+            "type": "accessibility",
+            "technique": "checklist-based",
+            "conditions": [
+              "The cart page is open with at least one item"
+            ],
+            "expected": "axe-core reports zero violations for WCAG A/AA rules on the cart page.",
+            "source": "agent.test_types (WCAG A/AA)"
+          }
+        ],
+        "excluded": [
+          {
+            "what": "security",
+            "reason": "This story covers adding products to the cart and adjusting quantities — it has no login, session, or account-data-exposure behaviour. There is nothing here that implies a security-observable threat through the browser."
+          },
+          {
+            "what": "confirmation",
+            "reason": "TOOL-21 (admin product search) does not touch shopper cart behaviour. TOOL-20 (billing address) belongs to the checkout story TOOL-16, not cart management. Neither open bug has any test surface in this story."
+          },
+          {
+            "what": "bug #TOOL-21",
+            "reason": "Admin product search functionality — unrelated to shopper cart or quantity management in this story."
+          },
+          {
+            "what": "bug #TOOL-20",
+            "reason": "Billing address step in checkout — belongs to TOOL-16 (checkout), not this story's cart behaviour."
+          }
+        ]
+      }
+    }
+  ],
+  "requestedAt": "2026-10-30T15:44:01.143Z",
+  "decision": "approved",
+  "by": "auto-approver (evaluation phase 2)",
+  "at": "2026-10-30T15:44:01.784Z"
+}

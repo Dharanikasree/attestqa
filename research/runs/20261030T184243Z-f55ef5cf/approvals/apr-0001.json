@@ -1,0 +1,94 @@
+{
+  "approvalId": "apr-0001",
+  "summary": "Approve 1 call: aqa.test_design(items=[{\"id\":\"D1\",\"covers\":\"AC-1\",\"type\":\"f…, excluded=[{\"what\":\"bug #TOOL-21\",\"reason\":\"Adm…)",
+  "calls": [
+    {
+      "toolName": "aqa.test_design",
+      "args": {
+        "items": [
+          {
+            "id": "D1",
+            "covers": "AC-1",
+            "type": "functional",
+            "technique": "state-transition",
+            "conditions": [
+              "A product is in the catalogue",
+              "User clicks 'Add to cart' on a product detail page"
+            ],
+            "expected": "A confirmation message is displayed; the cart icon in the header shows the number of items added",
+            "source": "AC-1"
+          },
+          {
+            "id": "D2",
+            "covers": "AC-1",
+            "type": "functional",
+            "technique": "state-transition",
+            "conditions": [
+              "User adds a first product to the cart",
+              "User navigates to a second product and clicks 'Add to cart' again"
+            ],
+            "expected": "Cart confirmation is shown for the second product; the cart icon count increments to reflect the total number of items",
+            "source": "AC-1"
+          },
+          {
+            "id": "D3",
+            "covers": "AC-2",
+            "type": "functional",
+            "technique": "state-transition",
+            "conditions": [
+              "Cart has at least one line item",
+              "User changes the quantity of a line item (increases it)"
+            ],
+            "expected": "The quantity field is updated; the line total and cart total reflect the new quantity",
+            "source": "AC-2"
+          },
+          {
+            "id": "D4",
+            "covers": "AC-3",
+            "type": "functional",
+            "technique": "state-transition",
+            "conditions": [
+              "Cart has at least one line item",
+              "User clicks the remove button for that line"
+            ],
+            "expected": "The remove action is confirmed by the line disappearing; the cart total updates to exclude the removed line",
+            "source": "AC-3"
+          },
+          {
+            "id": "D5",
+            "covers": "AC-1",
+            "type": "accessibility",
+            "technique": "checklist-based",
+            "conditions": [
+              "Cart page is open with at least one item"
+            ],
+            "expected": "No axe-core WCAG A/AA violations on the cart page",
+            "source": "agent.test_types (WCAG A/AA)"
+          }
+        ],
+        "excluded": [
+          {
+            "what": "bug #TOOL-21",
+            "reason": "Admin product search — unrelated to shopper cart; touches admin UI not covered by TOOL-12"
+          },
+          {
+            "what": "bug #TOOL-20",
+            "reason": "Billing address at checkout — belongs to TOOL-16 checkout flow, not TOOL-12 cart management"
+          },
+          {
+            "what": "confirmation",
+            "reason": "Both open bugs (TOOL-21, TOOL-20) are Active but do not touch this story's behaviour; no confirmation tests are warranted here"
+          },
+          {
+            "what": "security",
+            "reason": "TOOL-12 covers cart add/update/remove for a shopper; no authentication, session, or data-protection behaviour is introduced by these ACs"
+          }
+        ]
+      }
+    }
+  ],
+  "requestedAt": "2026-10-30T18:43:59.280Z",
+  "decision": "approved",
+  "by": "auto-approver (evaluation phase 2)",
+  "at": "2026-10-30T18:43:59.559Z"
+}

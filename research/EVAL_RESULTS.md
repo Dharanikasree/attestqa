@@ -92,12 +92,30 @@ it reached the approver. "Route" A = tests written, B = existing tests run.
 | Juice Shop | SCRUM-27 order history | same epic | 1 (c57f731, auto) | 20261027T023556Z-68602794 | A2 | 6 | 3/3 | 4 | 4/26 (1 of 5 own; 11 TODO) | 0 | 0 | **blocked**; repair cap then loop; 3 unfiled candidates (F-0148) |
 | Juice Shop | SCRUM-27 |  | 2 (c57f731, auto) | 20261027T030727Z-d4e65e24 | A2 | 6 | 3/3 | 2 | 5/26 (1 of 5 own; 11 TODO) | 0 | 0 | **budget** (F-0148) |
 | Juice Shop | SCRUM-27 |  | 3 (c57f731, auto) | 20261027T034307Z-1f532404 | A2 | 7 | 3/3 | 3 | 3/27 (0 of 6 own; 11 TODO) | 0 | 0 | **budget**; order-history API 500 (0.5), passing-test protection fired twice (F-0148) |
+| Toolshop | TOOL-6 catalogue paging | new epic TOOL-1 | 1 (c57f731, auto) | 20261030T114116Z-c2a24555 | A | 4 | 3/3 | 1 | 4/4 | 0 | 0 | **done** (F-0154) |
+| Toolshop | TOOL-6 |  | 2 (c57f731, auto) | 20261030T114944Z-96ac11ff | A | 4 | 3/3 | 2 | 2/4 | 0 | 0 | **budget**; home-list scan violations 0.33 (F-0154) |
+| Toolshop | TOOL-6 |  | 3 (c57f731, auto) | 20261030T115830Z-02b8c90b | A | 4 | 3/3 | 1 | 3/4 | 0 | 0 | **blocked**; same-write loop (F-0154) |
+| Toolshop | TOOL-7 filters | same epic | 1 (c57f731, auto) | 20261030T120706Z-e5338fd9 | A2 | 5 | 3/3 | 1 | 3/4 (0 of 5 own) | 0 | 0 | **blocked**; 4 passing-test refusals (F-0155) |
+| Toolshop | TOOL-7 |  | 2 (c57f731, auto) | 20261030T121420Z-50f2a1be | A2 | 6 | 3/3 | 3 | 9/10 (6 of 6 own) | 0 | 0 | **blocked** with own story green; 4 passing-test refusals (F-0155) |
+| Toolshop | TOOL-7 |  | 3 (c57f731, auto) | 20261030T122649Z-5a82a323 | A2 | 5 | 3/3 | 1 | 9/9 (5 own) | 0 | 0 | **done** (F-0155) |
+| Toolshop | TOOL-9 search | same epic | 1 (c57f731, auto) | 20261030T123901Z-df57dd89 | A2 | 4 | 3/3 | 1 | 6/8 (3 of 4 own) | 0 | 0 | **done**; 2 scans left for the reviewer (F-0156) |
+| Toolshop | TOOL-9 |  | 2 (c57f731, auto) | 20261030T124958Z-685c2cc8 | A2 | 4 | 3/3 | 1 | 7/8 (4 own) | 0 | 0 | **done**; scan left for the reviewer (F-0156) |
+| Toolshop | TOOL-9 |  | 3 (c57f731, auto) | 20261030T125757Z-55eec196 | A2 | 4 | 3/3 | 2 | 6/8 (2 of 4 own) | 0 | 0 | **budget** (F-0156) |
+| Toolshop | TOOL-10 sort | same epic, ui-change | 1 (c57f731, auto) | 20261030T130938Z-a15919c9 | A2 | 5 | 3/3 | 1 | 10/13 (4 of 5 own) | 0 | 0 | **blocked** (F-0157) |
+| Toolshop | TOOL-10 |  | 2 (c57f731, auto) | 20261030T132235Z-7d29a231 | A2 | 4 | 3/3 | 2 | 8/12 (2 of 4 own) | 0 | 0 | **done**; 4 failures for the reviewer after repair caps (F-0157) |
+| Toolshop | TOOL-10 |  | 3 (c57f731, auto) | 20261030T133553Z-13379bad | A2 | 4 | 3/3 | 1 | 7/8 (0 of 4 own) | 0 | 0 | **blocked**; same-write loop (F-0157) |
+| Toolshop | TOOL-11 product detail | same epic | 1 (c57f731, auto) | 20261030T134303Z-154f308b | A2 | 4 | 3/3 | 1 | 11/13 (0 of 4 own) | 0 | 0 | **budget**; 4 passing-test refusals (F-0158) |
+| Toolshop | TOOL-11 |  | 2 (c57f731, auto) | 20261030T141734Z-28b50429 | A2 | 4 | 3/3 | 1 | 11/13 (0 of 4 own) | 0 | 0 | **blocked**; 6 passing-test refusals; 61 min under load (F-0158) |
+| Toolshop | TOOL-11 |  | 3 (c57f731, auto) | 20261030T151902Z-379b608e | A2 | 4 | 3/3 | 2 | 10/13 (0 of 4 own) | 0 | 0 | **blocked**; 8 passing-test refusals (F-0158) |
+| Toolshop | TOOL-12 cart | new epic TOOL-2 | 1 (c57f731, auto) | 20261030T152708Z-15b9b998 | A | 4 | 3/3 | 3 | none run | 0 | 0 | **budget**; 3 scope refusals to Juice Shop ports; swallowed-failure refusal (F-0159) |
+| Toolshop | TOOL-12 | | 2 (c57f731, auto) | 20261030T174146Z-252cbf16 | A | 4 | 3/3 | 3 | 0/4 | 0 | 0 | **budget**; Juice Shop ports again (F-0159) |
+| Toolshop | TOOL-12 | | 3 (c57f731, auto) | 20261030T184243Z-f55ef5cf | A | 5 | 3/3 | 1 | 0/5 | 0 | 0 | **budget**; four wrong ports refused (F-0159) |
 
 Suite counts are for the whole epic spec (19 tests), not only the story's own.
 One of the 19 is the expected failure for open bug SCRUM-12, which reproduced
 in every run and counts as passed.
 
-Progress: 72 of 144 story runs (Juice Shop 36 — complete, SauceDemo 36 — complete). Toolshop and Booker remain. Runs 1-42 had a human approver (phase 1); from run 43 approvals are automatic (phase 2, EVALUATION_PLAN §7; "auto" in the Run column). SCRUM-18 run 1 took three attempts: the first two were blocked by engine defects (F-0089, F-0091) and are kept as evidence; the third is the counted run.
+Progress: 90 of 144 story runs (Juice Shop 36, SauceDemo 36, Toolshop 18). Six Toolshop stories, then Booker, remain. Runs 1-42 had a human approver (phase 1); from run 43 approvals are automatic (phase 2, EVALUATION_PLAN §7; "auto" in the Run column). SCRUM-18 run 1 took three attempts: the first two were blocked by engine defects (F-0089, F-0091) and are kept as evidence; the third is the counted run.
 
 ## 2. Excluded runs
 
@@ -126,6 +144,8 @@ Not counted. Kept in `runs/_excluded/` with a manifest row marked `eval-excluded
 | 20261027T001918Z-3d04b8f1 | SCRUM-26 | Run 2: the driver's git checkout left the epic feature and spec with CRLF; the agent's LF edits never matched (10 failures), then blocked. Excluded (F-0137); repeated with LF files. |
 | 20261027T002601Z-4dd27668 | SCRUM-26 | Run 3: same CRLF files, 28 failed edits, budget before any scenario was written. Excluded (F-0137); repeated. |
 | 20261027T013412Z-2f51bd39 | SCRUM-26 | Run 2 on build 755c270, LF files: the append-only rule took the run's own scaffolded test for a pre-existing one (spec first read after the scaffold) and refused its correction four times; blocked at 2/4 (F-0139). Repeated on the fixed build. |
+| 20261030T154127Z-7f7670fd | TOOL-12 | Run 2, interrupted by a system restart after the design approval; no end event. Excluded (F-0159); repeated. |
+| 20261030T173714Z-cba78e3e | TOOL-12 | Run 2, second attempt: the shell carried an API key that overrode .env and was not workspace-scoped; the first model call failed (400). Excluded; environment, not engine. |
 
 The SCRUM-6 pair are still evidence of something: an unchanged story is re-run without a
 new approval, which is the intended behaviour in real use.
@@ -180,6 +200,10 @@ a real defect from being filed; the others wait for the release after the evalua
 | W30 | When the fixture account cannot sign in (401 at the test's precondition), the built-in triage holds every failing test as a possible product defect at 0.5; an environment fault is not a category it knows. The opposite mislabel is W27. | F-0130 | open | Add an environment/precondition category: a failure in a step marked as precondition, or an auth failure of the configured account, is neither a defect nor the test's fault. |
 | W31 | replace_in_file matches bytes, so on a CRLF file an LF edit from the model never matches, and the error ("copy the text exactly") blames the model for a difference it cannot see. Two runs lost to it after a git checkout on Windows (F-0137); AB#113 run 3 lost 7 edits to it and still completed. | F-0137 | open | Match old text across CRLF/LF; write back in the file's own ending; say so in the error when the only difference is line endings. |
 | W32 | The append-only rule's notion of "present at run start" was the first full read of the spec; when the scaffold runs first, the run's own tests look pre-existing and their corrections are refused as weakening (SCRUM-26 run 2 on 755c270, four refusals, blocked). Same family as W-F-0102. | F-0139 | fixed locally | Own tests are now recognised by story and design tags recorded this run. |
+| W33 | An accepted test that changes the shared fixture account (SCRUM-10's forgot-password test resets its password and does not restore it) makes the whole suite non-rerunnable: in a full run every later sign-in fails with 401. Nothing in the rules, verifier or triage treats a test that mutates shared state without restoring it as a problem; it passed, so it was accepted. Found by the fault harness, not by any run (F-0151); the agent-side form cost SCRUM-25 run 2 (F-0130). | F-0151, F-0130 | open | A design rule for stories that change account state: the item's expected result must include the restore, and the verifier should check that the test leaves the fixture as it found it. |
+| W34 | Two accepted tests pass for the wrong reason: the registration test asserts the Register button is disabled after mismatched passwords, but the button is disabled anyway because the other required fields are empty; the logout test asserts the URL contains /#/, which the wrong destination also satisfies. The design rules and verifier check that the right thing is asserted in words, not that the assertion would fail if the behaviour were wrong; only the seeded faults showed it (JS-2, JS-3). | F-0153 | open | A verifier check that a state-transition test's assertion is specific to the transition (full URL, not a prefix; the single condition under test, others valid). |
+| W35 | In a shared epic spec the agent edits the earlier stories' tests that already pass, and the passing-test rule refuses, up to eight times in one run (TOOL-7, TOOL-11). The rule holds; the agent's response is to try again rather than to leave them, and the no-progress guard ends the run (TOOL-7 run 2 blocked with its own story fully green). | F-0155, F-0158 | open | Scope the agent's edit surface to its own story's tests in route A2, and count a run whose own tests are green as done regardless of the neighbours'. |
+| W36 | On a Toolshop story the agent navigated to http://localhost:3000 and :3100, Juice Shop's ports, and on SauceDemo to :3000 ten times; the scope rule refused every one. The model carries addresses from other projects into a run whose configuration names different ones. | F-0159, F-0125 | open | Keep the refusal; it is the finding. |
 | W5 | Until SCRUM-18 every story already had tests (route B). | — | shown from SCRUM-18 | Authoring, repair, weakening and real bug finding are measured from Juice Shop story 4 onward and in the other three apps. |
 
 ## 5. Threats to keep in the paper
@@ -219,8 +243,47 @@ of turns the rules refused, and cost per passing design item and per filed bug:
 Runs that were not counted (engine faults, repeats that reused a design) are kept
 there with `excluded` or `study = eval-excluded`, so their cost is reported, not hidden.
 
-So far (93 runs, 72 counted): total $274.43; runs not counted $61.58; turns the
-rules refused $40.80 (about a sixth of all spend), which is the price of the
+So far (113 runs, 90 counted): total $348.94; runs not counted $62.58; turns the
+rules refused $50.62 (about a sixth of all spend), which is the price of the
 send-backs and refusals, paid before a human saw anything. Blocked runs that never
 ran a test (SCRUM-24 runs 1 and 3: $1.3 and $3.6) are the other cost governance
 does not recover: the guard stops the loop, but only after three idle cycles.
+
+## 7. Seeded faults (RQ3)
+
+Protocol: `TestRunApplication/_faults/run-faults.mjs --app <app>`, the application's
+final suite run with plain `npx playwright test` through a proxy that changes one
+thing in what the browser receives, after a control run through the same proxy
+with no change. Caught = a test of the fault's story fails that passed in the
+control. Faults are in `_faults/<app>.json`; results in `_faults/results/<app>/`.
+
+| App | Fault | Kind | Story | Verdict | What failed |
+|---|---|---|---|---|---|
+| SauceDemo | SD-1 postal-code message removed | validation | AB#115 | caught | the AC-2c postal-code test, only |
+| SauceDemo | SD-2 Add to cart / Remove swapped | button state | AB#113 | caught | the three cart-button tests, only |
+| SauceDemo | SD-3 Cancel goes to the wrong page | redirect | AB#115 | caught | the cancel test, only |
+| SauceDemo | SD-4 total off by one unit price | calculation | AB#116 | caught | the item-total-plus-tax test, only |
+| SauceDemo | SD-5 username field loses its accessible name | accessibility | AB#110 | caught (49 of 52 tests) | every signed-in test: the sign-in step finds the field by placeholder; the scan never ran (F-0150) |
+| Juice Shop | JS-1 wrong password shows no message | validation | SCRUM-6 | caught | the four SCRUM-6 message tests, only |
+| Juice Shop | JS-2 Register enabled while passwords differ | button state | SCRUM-10 | missed | the named test exists but passes for the wrong reason: other required fields are empty, so the button is disabled anyway (F-0153) |
+| Juice Shop | JS-3 sign-out goes to the login page | redirect | SCRUM-8 | missed | the logout test asserts only that the URL contains /#/, which /#/login satisfies (F-0153) |
+| Juice Shop | JS-4 basket total off by one unit | calculation | SCRUM-19 | missed (no passing test for the story) | SCRUM-19 ended on budget three times |
+| Juice Shop | JS-5 show-password button loses its accessible name | accessibility | SCRUM-6 | missed | the login-page scan still passes; the icon ligature likely still names the button (F-0153) |
+
+SauceDemo: 5 of 5 caught, four of them by exactly the assertion the fault was
+aimed at. Juice Shop took four attempts to get a usable control: the harness did not
+load the test account (F-0149), then the whole-suite run was broken by an accepted
+test that resets the account's password mid-run (F-0151, W33); that test is excluded
+from the fault and flakiness runs, and the exclusion is part of the result. Juice Shop: 1 of 5
+caught; two of the misses are accepted tests whose assertions hold for the wrong reason (F-0153).
+
+## 8. Flakiness of the final suites (RQ4)
+
+Protocol: `TestRunApplication/_faults/run-flakiness.mjs --app <app>`, ten plain full
+runs of the application's final suite with `npx playwright test`, no agent, no proxy.
+Flaky = a test whose outcome differed between runs; tests that failed in every run
+are the suite's standing failures, listed separately.
+
+| App | Tests | Runs | Always passed | Flaky | Failed every run | Finding |
+|---|---|---|---|---|---|---|
+| SauceDemo | 52 | 10 | 52 | 0 | 0 | F-0152 |

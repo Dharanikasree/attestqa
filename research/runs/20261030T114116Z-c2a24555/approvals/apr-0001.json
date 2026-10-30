@@ -1,0 +1,86 @@
+{
+  "approvalId": "apr-0001",
+  "summary": "Approve 1 call: aqa.test_design(items=[{\"id\":\"D1\",\"covers\":\"AC-1\",\"type\":\"f…, excluded=[{\"what\":\"bug #TOOL-21\",\"reason\":\"Adm…)",
+  "calls": [
+    {
+      "toolName": "aqa.test_design",
+      "args": {
+        "items": [
+          {
+            "id": "D1",
+            "covers": "AC-1",
+            "type": "functional",
+            "technique": "checklist-based",
+            "conditions": [
+              "Home page loads",
+              "Each product card is visible",
+              "Each card shows a name",
+              "Each card shows a price",
+              "Each card shows an image"
+            ],
+            "expected": "The home page displays a list of products; each product card shows a name, a price, and an image",
+            "source": "AC-1"
+          },
+          {
+            "id": "D2",
+            "covers": "AC-2",
+            "type": "functional",
+            "technique": "state-transition",
+            "conditions": [
+              "User is on page 1 of the catalogue",
+              "User clicks the page 2 control"
+            ],
+            "expected": "The page 2 control is activated (page changes); a different set of products is displayed on page 2 compared to page 1",
+            "source": "AC-2"
+          },
+          {
+            "id": "D3",
+            "covers": "AC-3",
+            "type": "functional",
+            "technique": "state-transition",
+            "conditions": [
+              "Page 1 is the current page on load",
+              "User navigates to page 2"
+            ],
+            "expected": "The control for page 1 is marked as current on load; after navigating to page 2, the control for page 2 is marked as current",
+            "source": "AC-3"
+          },
+          {
+            "id": "D4",
+            "covers": "story",
+            "type": "accessibility",
+            "technique": "checklist-based",
+            "conditions": [
+              "axe-core scan of the product list and pagination controls on the home page",
+              "WCAG 2.1 A and AA rules"
+            ],
+            "expected": "No axe-core violations (violations.map(v => v.id).sort() equals [])",
+            "source": "agent.test_types (WCAG A/AA)"
+          }
+        ],
+        "excluded": [
+          {
+            "what": "bug #TOOL-21",
+            "reason": "Admin product search — concerns the admin panel search feature, not the shopper catalogue pagination. Does not touch any AC of TOOL-6."
+          },
+          {
+            "what": "bug #TOOL-20",
+            "reason": "Billing address step — concerns the checkout flow, not the product catalogue or pagination. Does not touch any AC of TOOL-6."
+          },
+          {
+            "what": "security",
+            "reason": "The shopper catalogue page is publicly accessible with no authentication, no account data, and no sensitive information — there is no security behaviour implied by this story's acceptance criteria."
+          },
+          {
+            "what": "confirmation",
+            "reason": "Neither open bug (TOOL-21, TOOL-20) touches this story's behaviour; there is no related Active or Resolved bug to confirm."
+          }
+        ]
+      }
+    }
+  ],
+  "requestedAt": "2026-10-30T11:42:19.538Z",
+  "decision": "approved",
+  "by": "auto-approver (evaluation phase 2)",
+  "at": "2026-10-30T11:42:20.066Z"
+}

@@ -42,6 +42,17 @@ if (args.fault && active.length !== 1) {
   process.exit(2);
 }
 const logFile = args.log ?? "fault-log.jsonl";
+// Paths the proxy answers 404 at once instead of forwarding (--drop /socket.io/,/x/):
+// a plain HTTP proxy cannot upgrade to WebSocket, so socket.io falls back to long
+// polling, and each poll holds one of the browser's six connections per host for up
+// to 25 s. With several Playwright workers that starved the page's own requests and
+// Juice Shop's sign-in timed out through the proxy but not without it (30 Oct 2026).
+const drop = String(args.drop ?? "").split(",").map((x) => x.trim()).filter(Boolean);
+// --trace <file>: one line per request (method, path, status, ms, bytes, error), to
+// see which requests are slow or fail through the proxy when a suite that passes
+// against the application directly fails through it (Juice Shop, 30 Oct 2026).
+const traceFile = args.trace;
+const trace = (entry) => traceFile && appendFileSync(traceFile, JSON.stringify({ at: new Date().toISOString(), ...entry }) + "\n");
 const log = (entry) => appendFileSync(logFile, JSON.stringify({ at: new Date().toISOString(), ...entry }) + "\n");
 
 /** Whether a rule applies to this path and content type. */
@@ -185,6 +196,13 @@ if (args.check) {
 const here = `http://localhost:${port}`;
 http
   .createServer(async (req, res) => {
+    const t0 = Date.now();
+    if (drop.some((d) => req.url.startsWith(d))) {
+      res.writeHead(404, { "content-type": "text/plain", "content-length": "0" });
+      res.end();
+      trace({ method: req.method, path: req.url, status: 404, ms: 0, dropped: true });
+      return;
+    }
     const chunks = [];
     for await (const c of req) chunks.push(c);
     const headers = { ...req.headers };
@@ -198,6 +216,7 @@ http
     } catch (e) {
       res.writeHead(502, { "content-type": "text/plain" });
       res.end(`fault proxy: upstream unreachable: ${e.message}`);
+      trace({ method: req.method, path: req.url, status: 502, ms: Date.now() - t0, error: e.message });
       return;
     }
     const out = { ...up.res.headers };
@@ -223,6 +242,7 @@ http
     out["content-length"] = String(body.length);
     res.writeHead(up.res.statusCode ?? 502, out);
     res.end(body);
+    trace({ method: req.method, path: req.url.slice(0, 120), status: up.res.statusCode, ms: Date.now() - t0, bytes: body.length });
   })
   .listen(port, () =>
     console.log(`fault proxy ${here} -> ${upstream.origin}  ${active.length ? `fault ${active[0].id}: ${active[0].change}` : "no fault (control)"}`),

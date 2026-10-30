@@ -1,0 +1,84 @@
+{
+  "approvalId": "apr-0001",
+  "summary": "Approve 1 call: aqa.test_design(items=[{\"id\":\"D15\",\"covers\":\"AC-1\",\"type\":\"…, excluded=[{\"what\":\"bug #TOOL-21\",\"reason\":\"TOO…)",
+  "calls": [
+    {
+      "toolName": "aqa.test_design",
+      "args": {
+        "items": [
+          {
+            "id": "D15",
+            "covers": "AC-1",
+            "type": "functional",
+            "technique": "state-transition",
+            "conditions": [
+              "Sort dropdown set to 'Name (A - Z)'",
+              "Default unsorted product list loaded"
+            ],
+            "expected": "The sort dropdown shows 'Name (A - Z)' as selected; the first product card displayed has a name that comes first alphabetically among all products on the page",
+            "source": "AC-1"
+          },
+          {
+            "id": "D16",
+            "covers": "AC-2",
+            "type": "functional",
+            "technique": "state-transition",
+            "conditions": [
+              "Sort dropdown set to 'Price (Low - High)'",
+              "Default unsorted product list loaded"
+            ],
+            "expected": "The sort dropdown shows 'Price (Low - High)' as selected; the first product card displayed has the lowest price among all products on the page",
+            "source": "AC-2"
+          },
+          {
+            "id": "D17",
+            "covers": "AC-3",
+            "type": "functional",
+            "technique": "state-transition",
+            "conditions": [
+              "Sort dropdown set to 'Price (High - Low)'",
+              "Default unsorted product list loaded"
+            ],
+            "expected": "The sort dropdown shows 'Price (High - Low)' as selected; the first product card displayed has the highest price among all products on the page",
+            "source": "AC-3"
+          },
+          {
+            "id": "D18",
+            "covers": "story",
+            "type": "accessibility",
+            "technique": "checklist-based",
+            "conditions": [
+              "Home page loaded with default product list",
+              "axe-core scan scoped to the sort combobox and product list",
+              "WCAG A/AA rules checked"
+            ],
+            "expected": "No accessibility violations reported (violations.map(v => v.id).sort() equals [])",
+            "source": "agent.test_types (WCAG A/AA)"
+          }
+        ],
+        "excluded": [
+          {
+            "what": "bug #TOOL-21",
+            "reason": "TOOL-21 is about admin product search not narrowing the list — it is in the admin interface, not the shopper sorting flow; it does not touch any behaviour this story covers"
+          },
+          {
+            "what": "bug #TOOL-20",
+            "reason": "TOOL-20 is about billing address not being filled from the customer profile — it is in the checkout flow, entirely unrelated to product catalogue sorting"
+          },
+          {
+            "what": "security",
+            "reason": "Sorting is a read-only UI control applied to the public product list; it implies no account protection, session management or data-access concern — there is no security behaviour to observe through the browser"
+          },
+          {
+            "what": "confirmation",
+            "reason": "Neither open bug (TOOL-21 or TOOL-20) touches this story's sorting behaviour, so there is nothing to confirm or expect to fail here"
+          }
+        ]
+      }
+    }
+  ],
+  "requestedAt": "2026-10-30T13:37:02.266Z",
+  "decision": "approved",
+  "by": "auto-approver (evaluation phase 2)",
+  "at": "2026-10-30T13:37:02.867Z"
+}

@@ -1,0 +1,82 @@
+{
+  "approvalId": "apr-0001",
+  "summary": "Approve 1 call: aqa.test_design(items=[{\"id\":\"D1\",\"covers\":\"AC-1\",\"type\":\"f…, excluded=[{\"what\":\"bug #TOOL-21\",\"reason\":\"Adm…)",
+  "calls": [
+    {
+      "toolName": "aqa.test_design",
+      "args": {
+        "items": [
+          {
+            "id": "D1",
+            "covers": "AC-1",
+            "type": "functional",
+            "technique": "equivalence-partitioning",
+            "conditions": [
+              "Home page loads",
+              "Products are listed with name, price, and image visible for each product"
+            ],
+            "expected": "Each product card displays a name, a price, and an image",
+            "source": "AC-1"
+          },
+          {
+            "id": "D2",
+            "covers": "AC-2",
+            "type": "functional",
+            "technique": "state-transition",
+            "conditions": [
+              "User is on page 1 of the catalogue",
+              "User clicks the page 2 control"
+            ],
+            "expected": "A different set of products is displayed; the product list changes from the page-1 set to the page-2 set",
+            "source": "AC-2"
+          },
+          {
+            "id": "D3",
+            "covers": "AC-3",
+            "type": "functional",
+            "technique": "state-transition",
+            "conditions": [
+              "User navigates to page 2",
+              "The page 2 control is now the current page"
+            ],
+            "expected": "The page 2 control is marked as the current page; the previously active control (page 1) is no longer marked as current",
+            "source": "AC-3"
+          },
+          {
+            "id": "D4",
+            "covers": "story",
+            "type": "accessibility",
+            "technique": "checklist-based",
+            "conditions": [
+              "Home page with product list and pagination controls loaded"
+            ],
+            "expected": "No axe-core WCAG A/AA violations on the product list and pagination area",
+            "source": "agent.test_types (WCAG A/AA)"
+          }
+        ],
+        "excluded": [
+          {
+            "what": "bug #TOOL-21",
+            "reason": "Admin product search narrowing — affects the admin panel search feature, not the shopper's catalogue pagination or product listing. Unrelated to this story's behaviour."
+          },
+          {
+            "what": "bug #TOOL-20",
+            "reason": "Billing address step — affects the checkout flow, entirely unrelated to catalogue browsing and pagination. Unrelated to this story's behaviour."
+          },
+          {
+            "what": "security",
+            "reason": "This story covers unauthenticated catalogue browsing with no account data, session tokens, or access-controlled resources — no security test is implied."
+          },
+          {
+            "what": "confirmation",
+            "reason": "No open bugs touch this story's behaviour (TOOL-21 is admin search; TOOL-20 is billing checkout); no confirmation tests are needed."
+          }
+        ]
+      }
+    }
+  ],
+  "requestedAt": "2026-10-30T11:59:26.755Z",
+  "decision": "approved",
+  "by": "auto-approver (evaluation phase 2)",
+  "at": "2026-10-30T11:59:26.769Z"
+}

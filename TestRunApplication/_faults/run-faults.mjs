@@ -7,10 +7,17 @@
 //   node run-faults.mjs --app saucedemo [--fault SD-4] [--port 8099]
 //
 // A fault counts as CAUGHT when a test tagged with the fault's story fails in
-// its run; as caught BY ACCIDENT when only other tests fail; as MISSED when
-// none fails. A run is INVALID when the proxy never applied the rule exactly
-// once, or applied it to a response where it matched more than once. The
-// control must pass, or nothing after it means anything.
+// its run and passed in the control; as caught BY ACCIDENT when only other
+// tests newly fail; as MISSED when nothing new fails. A run is INVALID when the
+// proxy never applied the rule exactly once, or applied it to a response where
+// it matched more than once.
+//
+// 27 Oct: the control is the baseline, not a gate. A final suite may carry tests
+// that never passed (Juice Shop's profile epic left TODO and failing tests from
+// stories that ended blocked or on budget); those fail in the control and in
+// every fault run alike, so they are subtracted. A fault aimed at a story whose
+// tests never passed is reported as "missed (no passing test for the story)",
+// which is the honest result, not an invalid run.
 
 import { spawn } from "node:child_process";
 import { existsSync, mkdirSync, readFileSync, readdirSync, rmSync, writeFileSync } from "node:fs";
@@ -32,6 +39,19 @@ const workspace = join(here, "..", args.app);
 const port = Number(args.port ?? 8099);
 const out = join(here, "results", args.app);
 mkdirSync(out, { recursive: true });
+
+// 27 Oct: the suite's test account (AQA_APP_USER / AQA_APP_PASS) comes from the
+// .env file aqa loaded during the evaluation; without it every signed-in test
+// failed in the control and the Juice Shop fault runs meant nothing (F-0149).
+// Same order as aqa: .env.<app> first, then .env; never printed.
+const env = { ...process.env };
+for (const f of [join(here, "..", "..", "packages", "core", `.env.${args.app}`), join(here, "..", "..", "packages", "core", ".env")]) {
+  if (!existsSync(f)) continue;
+  for (const line of readFileSync(f, "utf8").split(/\r?\n/)) {
+    const m = /^\s*([A-Z_][A-Z0-9_]*)\s*=\s*(.*)\s*$/.exec(line);
+    if (m && env[m[1]] === undefined) env[m[1]] = m[2].replace(/^["']|["']$/g, "");
+  }
+}
 
 const editsOf = (f) => f.edits ?? [{ find: f.find, replace: f.replace }];
 const ready = (f) => editsOf(f).every((e) => e.find && !e.find.startsWith("TO-CONFIRM"));
@@ -70,6 +90,8 @@ function run(cmd, cmdArgs, opts) {
 function startProxy(fault, logFile) {
   return new Promise((resolve, reject) => {
     const a = [join(here, "faultproxy.mjs"), "--upstream", plan.upstream, "--port", String(port), "--log", logFile];
+    if (plan.drop?.length) a.push("--drop", plan.drop.join(","));
+    if (args.trace) a.push("--trace", logFile.replace(/\.log\.jsonl$/, ".trace.jsonl"));
     if (fault) a.push("--rules", join(here, `${args.app}.json`), "--fault", fault.id);
     const p = spawn(process.execPath, a);
     p.stdout.on("data", (d) => String(d).includes("fault proxy") && resolve(p));
@@ -78,15 +100,24 @@ function startProxy(fault, logFile) {
   });
 }
 
+let baseline = new Set();
 async function once(fault) {
   const name = fault ? fault.id : "control";
   const logFile = join(out, `${name}.log.jsonl`);
   rmSync(logFile, { force: true });
   const proxy = await startProxy(fault, logFile);
   try {
-    const r = await run("npx", ["playwright", "test", "--reporter=json"], {
+    // plan.excludeTests: a regex of tests left out of every run of this harness,
+    // with the reason in plan.excludeNote (Juice Shop: one accepted test resets the
+    // shared account's password and breaks every later sign-in, F-0151).
+    const pw = ["playwright", "test", "--reporter=json"];
+    // the command goes through the shell on Windows (npx.cmd), so an argument with
+    // spaces must be quoted or it is split into file filters (30 Oct: a run of 40
+    // tests instead of 76)
+    if (plan.excludeTests) pw.push("--grep-invert", process.platform === "win32" ? `"${plan.excludeTests}"` : plan.excludeTests);
+    const r = await run("npx", pw, {
       cwd: workspace,
-      env: { ...process.env, AQA_APP_URL: `http://localhost:${port}` },
+      env: { ...env, AQA_APP_URL: `http://localhost:${port}` },
     });
     let report;
     try {
@@ -116,16 +147,22 @@ async function once(fault) {
       (editsOf(fault).every((_, i) => log.some((e) => (e.edit ?? 0) === i && e.matches === 1)) &&
         !log.some((e) => e.matches > 1));
     const stories = storyOfTests();
-    const ofStory = fault ? failed.filter((f) => stories.get(f.title) === String(fault.storyId ?? "")) : [];
+    const newlyFailed = fault ? failed.filter((f) => !baseline.has(f.title)) : failed;
+    const ofStory = fault ? newlyFailed.filter((f) => stories.get(f.title) === String(fault.storyId ?? "")) : [];
+    const storyHasPassing = fault
+      ? [...stories.entries()].some(([title, st]) => st === String(fault.storyId ?? "") && !baseline.has(title))
+      : true;
     const verdict = !fault
-      ? failed.length === 0 ? "control passed" : "CONTROL FAILED"
+      ? failed.length === 0 ? "control passed" : `control: ${failed.length} test(s) fail without any fault (baseline)`
       : !valid ? "INVALID (rule did not apply exactly once)"
       : ofStory.length > 0 ? "caught"
-      : failed.length > 0 ? "caught by accident"
-      : "missed";
-    const result = { run: name, fault: fault ?? null, verdict, failed, stats: report?.stats ?? null, applied: log };
+      : newlyFailed.length > 0 ? "caught by accident"
+      : storyHasPassing ? "missed" : "missed (no passing test for the story)";
+    if (!fault) baseline = new Set(failed.map((f) => f.title));
+    const result = { run: name, fault: fault ?? null, verdict, failed, newlyFailed: fault ? newlyFailed : undefined, baseline: fault ? [...baseline] : undefined, stats: report?.stats ?? null, applied: log };
     writeFileSync(join(out, `${name}.json`), JSON.stringify(result, null, 2));
-    console.log(`  ${name.padEnd(8)} ${verdict}${failed.length ? `  — failing: ${failed.map((f) => f.title).join("; ")}` : ""}`);
+    const shown = fault ? newlyFailed : failed;
+    console.log(`  ${name.padEnd(8)} ${verdict}${shown.length ? `  — ${fault ? "newly failing" : "failing"}: ${shown.map((f) => f.title).join("; ")}` : ""}`);
     return result;
   } finally {
     proxy.kill();
@@ -134,9 +171,10 @@ async function once(fault) {
 
 console.log(`${plan.app}: ${plan.upstream} via http://localhost:${port}`);
 const results = [await once(undefined)];
-if (results[0].verdict !== "control passed") {
-  console.log("The control run failed: the suite does not pass through the proxy, so no fault run would mean anything. Stopping.");
+if (results[0].stats === null) {
+  console.log("The control run produced no report: Playwright did not run through the proxy. Stopping.");
 } else {
+  if (results[0].failed.length) console.log(`  baseline failures (subtracted from every fault run): ${results[0].failed.map((f) => f.title).join("; ")}`);
   for (const f of faults.filter(ready)) results.push(await once(f));
 }
 writeFileSync(join(out, "summary.json"), JSON.stringify(results.map(({ run, verdict, failed }) => ({ run, verdict, failed: failed.map((f) => f.title) })), null, 2));
