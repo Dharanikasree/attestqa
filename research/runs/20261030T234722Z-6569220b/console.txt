@@ -1,0 +1,68 @@
+aqa: env E:\EB1A_Research\Application\attestqa\packages\core\.env.toolshop,.env — 14 key(s) loaded; model anthropic claude-sonnet-4-6 (credential: ANTHROPIC_API_KEY); ANTHROPIC_API_KEY sk-a… from .env.toolshop,.env
+aqa: Jira https://jvijayprasad.atlassian.net (REST v3), jvijayprasad@gmail.com, API token ATAT…
+aqa: bdd2pw 4.6.5 (attestqa's own dependency)
+aqa: bdd2pw LLM fallback anthropic, governed by the sidecar
+aqa run 20261030T234722Z-6569220b: "Write tests for TOOL-18"
+aqa: skill story-to-tests, Jira issue TOOL-18, model claude-sonnet-4-6, approval file
+aqa: Jira keeps no test cases — the feature file's @story tags are the record; the run report stays with the run and is not posted to the issue
+aqa: ledger .aqa-eval\runs\20261030T234722Z-6569220b
+aqa: framework — 3 existing spec(s) in this project's layout
+aqa: context — story read, 0 existing test case(s), epic read, 0 sibling stories, 0 task(s), 0 comment(s) (0 run reports left out), 2 open bug(s) (0 agent-filed left out)
+aqa: route A — author the tests: no feature file for this epic yet (features/epic-tool-4-contact.feature)
+== Test cases: none yet for this story
+== Test design: started
+aqa: back to the full toolset
+aqa: the design was sent back to the agent — 3 thing(s) to fix
+       - bug #TOOL-21 [In Progress] is neither tested nor listed in "excluded" with a reason — either add an item covering "bug #TOOL-21", or add {"what": "bug #TOOL-21", "reason": "<why not>"} to "excluded"
+       - bug #TOOL-20 [In Progress] is neither tested nor listed in "excluded" with a reason — either add an item covering "bug #TOOL-20", or add {"what": "bug #TOOL-20", "reason": "<why not>"} to "excluded"
+       - test type "confirmation" is in scope but has no item — add one, or add {"what": "confirmation", "reason": "<why not>"} to "excluded"
+aqa: the design was sent back to the agent — 1 thing(s) to fix
+       - test type "security" is in scope but has no item — add one, or add {"what": "security", "reason": "<why not>"} to "excluded"
+== Test design: ready — waiting for your approval
+== Test design: done — approved
+aqa: test design approved — 5 item(s); tests are written from it
+aqa: calling jira.record_qa itself — covered by approval apr-0001 (no model turn)
+== Test case authoring: started — writing the scenarios in features/epic-tool-4-contact.feature
+== Test case authoring: done
+== Building the test script (bdd2pw): started
+== Building the test script (bdd2pw): done — spec generated
+== Execution: waiting for your approval to run the suite
+aqa: running the suite itself — nothing has run yet (no model turn)
+== Execution: started
+aqa: suite red — 1 passed, 0 failed, 7 skipped, 7 not implemented (steps still TODO — they ran but checked nothing)
+aqa: running the suite itself — tests/epic-tool-4-contact.spec.ts changed since the last full run (no model turn)
+aqa: suite red — 3 passed, 5 failed, 0 skipped
+aqa: 5 failure(s) triaged — 5 may be flaky — re-running to find out
+== Defect analysis: started — 5 failure(s): 5 flaky
+aqa: heal agent takes over — "AC-1 Submitting the form with all required fields shows a thank-you message" failed on an action that never completed — a locator that matched nothing; it may use 5 tool(s), nothing else
+== Self-healing: started — "AC-1 Submitting the form with all required fields shows a thank-you message" failed on an action that never completed — a locator that matc
+aqa: running the suite itself — tests/epic-tool-4-contact.spec.ts changed since the last full run (no model turn)
+aqa: suite red — 3 passed, 5 failed, 0 skipped
+aqa: 5 failure(s) triaged — 5 matched no known failure pattern — held for you as possible defects, at low confidence (0.1)
+   Defect analysis: 5 failure(s): 5 possible product defect(s)
+aqa: calling jira.record_qa itself — covered by approval apr-0001 (no model turn)
+== Execution: done
+== Self-healing: done
+== Defect analysis: done — last result — 5 failure(s): 5 possible product defect(s)
+== Creating defects: none — no failure was put forward as a defect
+== Report
+     Total scripts : 8
+     Passed        : 3
+     Failed        : 5
+       - AC-1 Submitting the form with all required fields shows a thank-you message
+         screenshot: E:\EB1A_Research\Application\attestqa\TestRunApplication\toolshop\test-results\epic-tool-4-contact-Contac-c6b01-s-shows-a-thank-you-message-chrome\test-failed-1.png
+       - AC-2a Leaving the first name field empty shows a validation message and the form is not sent
+         screenshot: E:\EB1A_Research\Application\attestqa\TestRunApplication\toolshop\test-results\epic-tool-4-contact-Contac-55ff5-ge-and-the-form-is-not-sent-chrome\test-failed-1.png
+       - AC-2b Leaving the last name field empty shows a validation message and the form is not sent
+         screenshot: E:\EB1A_Research\Application\attestqa\TestRunApplication\toolshop\test-results\epic-tool-4-contact-Contac-9e6c6-ge-and-the-form-is-not-sent-chrome\test-failed-1.png
+       - AC-2c Leaving the email field empty shows a validation message and the form is not sent
+         screenshot: E:\EB1A_Research\Application\attestqa\TestRunApplication\toolshop\test-results\epic-tool-4-contact-Contac-f2c3b-ge-and-the-form-is-not-sent-chrome\test-failed-1.png
+       - AC-2e Submitting with all fields empty does not expose a server error
+         screenshot: E:\EB1A_Research\Application\attestqa\TestRunApplication\toolshop\test-results\epic-tool-4-contact-Contac-56d3e-s-not-expose-a-server-error-chrome\test-failed-1.png
+     Defects found : 0 filed
+     Test cases    : TOOL-32  https://jvijayprasad.atlassian.net/browse/TOOL-32
+== Story TOOL-18: stopped (budget) — token budget of 1500000 exhausted (1536026 used)
+
+budget: token budget of 1500000 exhausted (1536026 used)
+  291 events in .aqa-eval\runs\20261030T234722Z-6569220b
+  replay: aqa replay .aqa-eval\runs\20261030T234722Z-6569220b

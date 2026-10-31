@@ -1,0 +1,89 @@
+{
+  "approvalId": "apr-0001",
+  "summary": "Approve 1 call: aqa.test_design(items=[{\"id\":\"D11\",\"covers\":\"AC-1\",\"type\":\"…, excluded=[{\"what\":\"bug #TOOL-21\",\"reason\":\"TOO…)",
+  "calls": [
+    {
+      "toolName": "aqa.test_design",
+      "args": {
+        "items": [
+          {
+            "id": "D11",
+            "covers": "AC-1",
+            "type": "functional",
+            "technique": "state-transition",
+            "conditions": [
+              "Signed-in customer navigates to a product detail page",
+              "Customer clicks the Add to Favourites button",
+              "Customer navigates to the favourites list page"
+            ],
+            "expected": "The Add to Favourites button changes state (e.g. becomes active/filled) to confirm the action; the product appears in the favourites list",
+            "source": "AC-1"
+          },
+          {
+            "id": "D12",
+            "covers": "AC-2",
+            "type": "functional",
+            "technique": "state-transition",
+            "conditions": [
+              "Signed-in customer has at least one product in their favourites list",
+              "Customer clicks the Remove button for that product on the favourites page"
+            ],
+            "expected": "The remove action is confirmed (e.g. button interaction is acknowledged); the product is no longer displayed in the favourites list",
+            "source": "AC-2"
+          },
+          {
+            "id": "D13",
+            "covers": "AC-3",
+            "type": "functional",
+            "technique": "equivalence-partitioning",
+            "conditions": [
+              "Visitor who is not signed in navigates directly to the favourites page"
+            ],
+            "expected": "The visitor is redirected to the sign-in page and no favourites are shown",
+            "source": "AC-3"
+          },
+          {
+            "id": "D14",
+            "covers": "AC-3",
+            "type": "security",
+            "technique": "state-transition",
+            "conditions": [
+              "Visitor who is not signed in attempts to access the favourites page directly via URL"
+            ],
+            "expected": "The visitor is redirected away from the favourites page and lands on the sign-in page; no favourite items are accessible without authentication",
+            "source": "AC-3"
+          },
+          {
+            "id": "D15",
+            "covers": "story",
+            "type": "accessibility",
+            "technique": "checklist-based",
+            "conditions": [
+              "Signed-in customer is on the favourites page"
+            ],
+            "expected": "The favourites page passes axe accessibility checks with no violations",
+            "source": "agent.test_types (WCAG A/AA)"
+          }
+        ],
+        "excluded": [
+          {
+            "what": "bug #TOOL-21",
+            "reason": "TOOL-21 is about admin product search not narrowing results — unrelated to customer favourites functionality tested by this story"
+          },
+          {
+            "what": "bug #TOOL-20",
+            "reason": "TOOL-20 is about the billing address step not being pre-filled from customer profile — unrelated to the favourites list feature tested by this story"
+          },
+          {
+            "what": "confirmation",
+            "reason": "Neither open bug (TOOL-21, TOOL-20) touches this story's behaviour; no confirmation tests are needed here"
+          }
+        ]
+      }
+    }
+  ],
+  "requestedAt": "2026-10-30T23:37:37.524Z",
+  "decision": "approved",
+  "by": "auto-approver (evaluation phase 2)",
+  "at": "2026-10-30T23:37:38.304Z"
+}

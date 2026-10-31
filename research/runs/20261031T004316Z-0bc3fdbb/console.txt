@@ -1,0 +1,95 @@
+aqa: env E:\EB1A_Research\Application\attestqa\packages\core\.env.toolshop,.env — 14 key(s) loaded; model anthropic claude-sonnet-4-6 (credential: ANTHROPIC_API_KEY); ANTHROPIC_API_KEY sk-a… from .env.toolshop,.env
+aqa: Jira https://jvijayprasad.atlassian.net (REST v3), jvijayprasad@gmail.com, API token ATAT…
+aqa: bdd2pw 4.6.5 (attestqa's own dependency)
+aqa: bdd2pw LLM fallback anthropic, governed by the sidecar
+aqa run 20261031T004316Z-0bc3fdbb: "Write tests for TOOL-18"
+aqa: skill story-to-tests, Jira issue TOOL-18, model claude-sonnet-4-6, approval file
+aqa: Jira keeps no test cases — the feature file's @story tags are the record; the run report stays with the run and is not posted to the issue
+aqa: ledger .aqa-eval-r3\runs\20261031T004316Z-0bc3fdbb
+aqa: framework — 3 existing spec(s) in this project's layout
+aqa: context — story read, 0 existing test case(s), epic read, 0 sibling stories, 0 task(s), 0 comment(s) (0 run reports left out), 2 open bug(s) (0 agent-filed left out)
+aqa: route A — author the tests: no feature file for this epic yet (features/epic-tool-4-contact.feature)
+== Test cases: none yet for this story
+== Test design: started
+aqa: back to the full toolset
+aqa: the design was sent back to the agent — 2 thing(s) to fix
+       - bug #TOOL-21 [In Progress] is neither tested nor listed in "excluded" with a reason — either add an item covering "bug #TOOL-21", or add {"what": "bug #TOOL-21", "reason": "<why not>"} to "excluded"
+       - bug #TOOL-20 [In Progress] is neither tested nor listed in "excluded" with a reason — either add an item covering "bug #TOOL-20", or add {"what": "bug #TOOL-20", "reason": "<why not>"} to "excluded"
+aqa: the design was sent back to the agent — 1 thing(s) to fix
+       - test type "confirmation" is in scope but has no item — add one, or add {"what": "confirmation", "reason": "<why not>"} to "excluded"
+aqa: the design was sent back to the agent — 1 thing(s) to fix
+       - test type "security" is in scope but has no item — add one, or add {"what": "security", "reason": "<why not>"} to "excluded"
+== Test design: ready — waiting for your approval
+== Test design: done — approved
+aqa: test design approved — 4 item(s); tests are written from it
+aqa: calling jira.record_qa itself — covered by approval apr-0001 (no model turn)
+== Test case authoring: started — writing the scenarios in features/epic-tool-4-contact.feature
+== Test case authoring: done
+== Building the test script (bdd2pw): started
+== Building the test script (bdd2pw): done — spec generated
+== Execution: waiting for your approval to run the suite
+aqa: running the suite itself — nothing has run yet (no model turn)
+== Execution: started
+aqa: suite red — 1 passed, 0 failed, 3 skipped, 3 not implemented (steps still TODO — they ran but checked nothing)
+aqa: running the suite itself — tests/epic-tool-4-contact.spec.ts changed since the last full run (no model turn)
+aqa: suite red — 1 passed, 0 failed, 3 skipped, 2 not implemented (steps still TODO — they ran but checked nothing)
+aqa: running the suite itself — tests/epic-tool-4-contact.spec.ts changed since the last full run (no model turn)
+aqa: suite red — 1 passed, 1 failed, 2 skipped, 2 not implemented (steps still TODO — they ran but checked nothing)
+aqa: 1 failure(s) triaged — 1 may be flaky — re-running to find out
+== Defect analysis: started — 1 failure(s): 1 flaky
+aqa: heal agent takes over — "AC-1 Submitting the form with all required fields shows a thank-you message" failed on an action that never completed — a locator that matched nothing; it may use 5 tool(s), nothing else
+== Self-healing: started — "AC-1 Submitting the form with all required fields shows a thank-you message" failed on an action that never completed — a locator that matc
+aqa: running the suite itself — tests/epic-tool-4-contact.spec.ts changed since the last full run (no model turn)
+aqa: suite red — 1 passed, 2 failed, 1 skipped, 1 not implemented (steps still TODO — they ran but checked nothing)
+aqa: 2 failure(s) triaged — 1 matched no known failure pattern — held for you as possible defect, at low confidence (0.1); 1 may be flaky — re-running to find out
+   Defect analysis: 2 failure(s): 1 possible product defect(s), 1 flaky
+aqa: running the suite itself — tests/epic-tool-4-contact.spec.ts changed since the last full run (no model turn)
+aqa: suite red — 2 passed, 2 failed, 0 skipped
+aqa: 2 failure(s) triaged — 2 matched no known failure pattern — held for you as possible defects, at low confidence (0.1)
+   Defect analysis: 2 failure(s): 2 possible product defect(s)
+aqa: suite red — 0 passed, 1 failed, 0 skipped
+aqa: suite red — 0 passed, 1 failed, 0 skipped
+aqa: running the suite itself — tests/epic-tool-4-contact.spec.ts changed since the last full run (no model turn)
+aqa: suite red — 2 passed, 2 failed, 0 skipped
+aqa: 2 failure(s) triaged — 2 matched no known failure pattern — held for you as possible defects, at low confidence (0.1)
+   Defect analysis: 2 failure(s): 2 possible product defect(s)
+aqa: running the suite itself — tests/epic-tool-4-contact.spec.ts changed since the last full run (no model turn)
+aqa: suite red — 2 passed, 2 failed, 0 skipped
+aqa: 2 failure(s) triaged — 2 matched no known failure pattern — held for you as possible defects, at low confidence (0.1)
+   Defect analysis: 2 failure(s): 2 possible product defect(s)
+aqa: running the suite itself — tests/epic-tool-4-contact.spec.ts changed since the last full run (no model turn)
+aqa: suite red — 2 passed, 2 failed, 0 skipped
+aqa: 2 failure(s) triaged — 2 matched no known failure pattern — held for you as possible defects, at low confidence (0.1)
+   Defect analysis: 2 failure(s): 2 possible product defect(s)
+aqa: running the suite itself — tests/epic-tool-4-contact.spec.ts changed since the last full run (no model turn)
+aqa: suite red — 2 passed, 2 failed, 0 skipped
+aqa: 2 failure(s) triaged — 2 matched no known failure pattern — held for you as possible defects, at low confidence (0.1)
+   Defect analysis: 2 failure(s): 2 possible product defect(s)
+aqa: running the suite itself — tests/epic-tool-4-contact.spec.ts changed since the last full run (no model turn)
+aqa: suite red — 2 passed, 2 failed, 0 skipped
+aqa: 2 failure(s) triaged — 2 matched no known failure pattern — held for you as possible defects, at low confidence (0.1)
+   Defect analysis: 2 failure(s): 2 possible product defect(s)
+aqa: running the suite itself — tests/epic-tool-4-contact.spec.ts changed since the last full run (no model turn)
+aqa: suite red — 2 passed, 2 failed, 0 skipped
+aqa: 2 failure(s) triaged — 2 matched no known failure pattern — held for you as possible defects, at low confidence (0.1)
+   Defect analysis: 2 failure(s): 2 possible product defect(s)
+aqa: calling jira.record_qa itself — covered by approval apr-0001 (no model turn)
+== Execution: done
+== Self-healing: done
+== Defect analysis: done — last result — 2 failure(s): 2 possible product defect(s)
+== Creating defects: none — no failure was put forward as a defect
+== Report
+     Total scripts : 4
+     Passed        : 2
+     Failed        : 2
+       - AC-1 Submitting the form with all required fields shows a thank-you message
+         screenshot: E:\EB1A_Research\Application\attestqa\TestRunApplication\toolshop\test-results\epic-tool-4-contact-Contac-c6b01-s-shows-a-thank-you-message-chrome\test-failed-1.png
+       - AC-2 Submitting the form with all fields empty shows validation messages
+         screenshot: E:\EB1A_Research\Application\attestqa\TestRunApplication\toolshop\test-results\epic-tool-4-contact-Contac-5036f-y-shows-validation-messages-chrome\test-failed-1.png
+     Defects found : 0 filed
+     Test cases    : TOOL-32  https://jvijayprasad.atlassian.net/browse/TOOL-32
+== Story TOOL-18: stopped (budget) — token budget of 1500000 exhausted (1526424 used)
+
+budget: token budget of 1500000 exhausted (1526424 used)
+  401 events in .aqa-eval-r3\runs\20261031T004316Z-0bc3fdbb
+  replay: aqa replay .aqa-eval-r3\runs\20261031T004316Z-0bc3fdbb

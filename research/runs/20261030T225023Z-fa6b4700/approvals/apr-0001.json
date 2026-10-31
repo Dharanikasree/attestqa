@@ -1,0 +1,83 @@
+{
+  "approvalId": "apr-0001",
+  "summary": "Approve 1 call: aqa.test_design(items=[{\"id\":\"D5\",\"covers\":\"AC-1\",\"type\":\"f…, excluded=[{\"what\":\"bug #TOOL-21\",\"reason\":\"Adm…)",
+  "calls": [
+    {
+      "toolName": "aqa.test_design",
+      "args": {
+        "items": [
+          {
+            "id": "D5",
+            "covers": "AC-1",
+            "type": "functional",
+            "technique": "state-transition",
+            "conditions": [
+              "Signed-in customer with a product in cart navigates through checkout steps (cart → billing address → payment method → confirm order)"
+            ],
+            "expected": "Each checkout step loads without a sign-in prompt; the order confirmation page is displayed after completing payment",
+            "source": "AC-1"
+          },
+          {
+            "id": "D6",
+            "covers": "AC-2",
+            "type": "functional",
+            "technique": "state-transition",
+            "conditions": [
+              "Signed-in customer with profile address data reaches the billing address step"
+            ],
+            "expected": "The billing address form fields are pre-populated with data from the customer's profile; the customer does not need to enter the address manually",
+            "source": "AC-2"
+          },
+          {
+            "id": "D7",
+            "covers": "AC-3",
+            "type": "functional",
+            "technique": "state-transition",
+            "conditions": [
+              "Signed-in customer selects cash on delivery as payment method and confirms the order"
+            ],
+            "expected": "The payment method selection is accepted; the order confirmation page is displayed",
+            "source": "AC-3"
+          },
+          {
+            "id": "D8",
+            "covers": "bug #TOOL-20",
+            "type": "confirmation",
+            "technique": "state-transition",
+            "conditions": [
+              "Signed-in customer with a saved profile address reaches the billing address step"
+            ],
+            "expected": "Billing address fields are pre-filled from the customer's profile; the step shows the saved address without manual entry",
+            "source": "bug #TOOL-20",
+            "expectFail": true
+          },
+          {
+            "id": "D9",
+            "covers": "story",
+            "type": "accessibility",
+            "technique": "checklist-based",
+            "conditions": [
+              "Checkout flow pages (cart, billing address, payment) scanned with axe-core against WCAG A/AA rules"
+            ],
+            "expected": "No axe-core violations reported for the checkout form areas",
+            "source": "agent.test_types (WCAG A/AA)"
+          }
+        ],
+        "excluded": [
+          {
+            "what": "bug #TOOL-21",
+            "reason": "Admin product search — touches the admin product management UI, not the customer checkout flow; unrelated to this story"
+          },
+          {
+            "what": "security",
+            "reason": "This story is about completing a checkout as an already-authenticated customer; the authentication boundary (sign-in, session management) is not introduced here — it is a precondition, not the behaviour under test. No security criterion is stated in AC-1, AC-2, or AC-3, and the comment confirms scope is limited to cash-on-delivery flow only."
+          }
+        ]
+      }
+    }
+  ],
+  "requestedAt": "2026-10-30T22:51:38.624Z",
+  "decision": "approved",
+  "by": "auto-approver (evaluation phase 2)",
+  "at": "2026-10-30T22:51:39.582Z"
+}

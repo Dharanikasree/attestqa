@@ -110,12 +110,30 @@ it reached the approver. "Route" A = tests written, B = existing tests run.
 | Toolshop | TOOL-12 cart | new epic TOOL-2 | 1 (c57f731, auto) | 20261030T152708Z-15b9b998 | A | 4 | 3/3 | 3 | none run | 0 | 0 | **budget**; 3 scope refusals to Juice Shop ports; swallowed-failure refusal (F-0159) |
 | Toolshop | TOOL-12 | | 2 (c57f731, auto) | 20261030T174146Z-252cbf16 | A | 4 | 3/3 | 3 | 0/4 | 0 | 0 | **budget**; Juice Shop ports again (F-0159) |
 | Toolshop | TOOL-12 | | 3 (c57f731, auto) | 20261030T184243Z-f55ef5cf | A | 5 | 3/3 | 1 | 0/5 | 0 | 0 | **budget**; four wrong ports refused (F-0159) |
+| Toolshop | TOOL-13 sign in and out | new epic | 1 (c57f731, auto) | 20261030T204333Z-50571764 | A | 6 | 3/3 | 2/4 | 0 | 0 | **blocked** (F-0160) |
+| Toolshop | TOOL-13 |  | 2 (c57f731, auto) | 20261030T210648Z-79fd43bd | A | 7 | 3/3 | 1/8 | 0 | 0 | **budget** (F-0160) |
+| Toolshop | TOOL-13 |  | 3 (c57f731, auto) | 20261030T213749Z-f66397b9 | A | 7 | 3/3 | none | 0 | 0 | **blocked** (F-0160) |
+| Toolshop | TOOL-14 register | same epic | 1 (c57f731, auto) | 20261030T214806Z-43cece3a | A2 | 4 | 3/3 | 2/4 | 0 | 0 | **blocked** (F-0160) |
+| Toolshop | TOOL-14 |  | 2 (c57f731, auto) | 20261030T220222Z-a0404ad2 | A2 | 7 | 3/3 | 2/4 | 0 | 0 | **blocked** (F-0160) |
+| Toolshop | TOOL-14 |  | 3 (c57f731, auto) | 20261030T221405Z-d4e335a8 | A2 | 4 | 3/3 | 2/4 | 0 | 0 | **blocked** (F-0160) |
+| Toolshop | TOOL-16 checkout and pay | same epic | 1 (c57f731, auto) | 20261030T222717Z-1aea1826 | A2 | 6 | 3/3 | 0/0 | 0 | 0 | **blocked** (F-0160) |
+| Toolshop | TOOL-16 |  | 2 (c57f731, auto) | 20261030T223427Z-9d1f7482 | A2 | 5 | 3/3 | 0/0 | 0 | 0 | **blocked** (F-0160) |
+| Toolshop | TOOL-16 |  | 3 (c57f731, auto) | 20261030T225023Z-fa6b4700 | A2 | 5 | 3/3 | 0/0 | 0 | 0 | **blocked** (F-0160) |
+| Toolshop | TOOL-17 favourites | same epic | 1 (c57f731, auto) | 20261030T230929Z-19d6263b | A2 | 5 | 3/3 | 2/4 | 0 | 0 | **blocked** (F-0160) |
+| Toolshop | TOOL-17 |  | 2 (c57f731, auto) | 20261030T232230Z-cd112c73 | A2 | 4 | 3/3 | 2/4 | 0 | 0 | **blocked** (F-0160) |
+| Toolshop | TOOL-17 |  | 3 (c57f731, auto) | 20261030T233640Z-6d7e764a | A2 | 4 | 3/3 | 2/4 | 0 | 0 | **blocked** (F-0160) |
+| Toolshop | TOOL-18 contact form | new epic | 1 (c57f731, auto) | 20261030T234722Z-6569220b | A | 5 | 3/3 | 3/8 | 0 | 0 | **budget** (F-0160) |
+| Toolshop | TOOL-18 |  | 2 (c57f731, auto) | 20261031T001617Z-b9481c47 | A | 4 | 3/3 | 1/2 | 0 | 0 | **budget** (F-0160) |
+| Toolshop | TOOL-18 |  | 3 (c57f731, auto) | 20261031T004316Z-0bc3fdbb | A | 5 | 3/3 | 2/4 | 0 | 0 | **budget** (F-0160) |
+| Toolshop | TOOL-19 admin product list | same epic | 1 (c57f731, auto) | 20261031T014252Z-a135022e | A | 6 | 3/3 | none | 0 | 0 | **blocked** (F-0160) |
+| Toolshop | TOOL-19 |  | 2 (c57f731, auto) | 20261031T014839Z-fbebd198 | A | 6 | 3/3 | 2/6 | 0 | 0 | **budget** (F-0160) |
+| Toolshop | TOOL-19 |  | 3 (c57f731, auto) | 20261031T022427Z-325e4990 | A | 5 | 3/3 | 0/0 | 0 | 0 | **budget** (F-0160) |
 
 Suite counts are for the whole epic spec (19 tests), not only the story's own.
 One of the 19 is the expected failure for open bug SCRUM-12, which reproduced
 in every run and counts as passed.
 
-Progress: 90 of 144 story runs (Juice Shop 36, SauceDemo 36, Toolshop 18). Six Toolshop stories, then Booker, remain. Runs 1-42 had a human approver (phase 1); from run 43 approvals are automatic (phase 2, EVALUATION_PLAN §7; "auto" in the Run column). SCRUM-18 run 1 took three attempts: the first two were blocked by engine defects (F-0089, F-0091) and are kept as evidence; the third is the counted run.
+Progress: 108 of 144 story runs (Juice Shop 36, SauceDemo 36, Toolshop 36 — complete). Booker (36) remains. Runs 1-42 had a human approver (phase 1); from run 43 approvals are automatic (phase 2, EVALUATION_PLAN §7; "auto" in the Run column). SCRUM-18 run 1 took three attempts: the first two were blocked by engine defects (F-0089, F-0091) and are kept as evidence; the third is the counted run.
 
 ## 2. Excluded runs
 
@@ -243,8 +261,8 @@ of turns the rules refused, and cost per passing design item and per filed bug:
 Runs that were not counted (engine faults, repeats that reused a design) are kept
 there with `excluded` or `study = eval-excluded`, so their cost is reported, not hidden.
 
-So far (113 runs, 90 counted): total $348.94; runs not counted $62.58; turns the
-rules refused $50.62 (about a sixth of all spend), which is the price of the
+So far (131 runs, 108 counted): total $409.43; runs not counted $62.58; turns the
+rules refused $63.29 (about a sixth of all spend), which is the price of the
 send-backs and refusals, paid before a human saw anything. Blocked runs that never
 ran a test (SCRUM-24 runs 1 and 3: $1.3 and $3.6) are the other cost governance
 does not recover: the guard stops the loop, but only after three idle cycles.

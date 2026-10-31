@@ -1,0 +1,86 @@
+{
+  "approvalId": "apr-0001",
+  "summary": "Approve 1 call: aqa.test_design(items=[{\"id\":\"D1\",\"covers\":\"AC-1\",\"type\":\"f…, excluded=[{\"what\":\"bug #TOOL-21\",\"reason\":\"Adm…)",
+  "calls": [
+    {
+      "toolName": "aqa.test_design",
+      "args": {
+        "items": [
+          {
+            "id": "D1",
+            "covers": "AC-1",
+            "type": "functional",
+            "technique": "state-transition",
+            "conditions": [
+              "First name filled in",
+              "Last name filled in",
+              "Valid email address filled in",
+              "Subject selected",
+              "Message of required length filled in"
+            ],
+            "expected": "The Send button click is accepted (form is submitted); a thank-you message is displayed on the page",
+            "source": "AC-1"
+          },
+          {
+            "id": "D2",
+            "covers": "AC-2",
+            "type": "functional",
+            "technique": "boundary-value-analysis",
+            "conditions": [
+              "First name left empty",
+              "Last name left empty",
+              "Email address left empty",
+              "Message left empty"
+            ],
+            "expected": "An error message appears at each empty required field and the form is not submitted",
+            "source": "AC-2"
+          },
+          {
+            "id": "D3",
+            "covers": "AC-3",
+            "type": "functional",
+            "technique": "equivalence-partitioning",
+            "conditions": [
+              "Email address entered without an @ symbol (e.g. 'invalidemail.com')"
+            ],
+            "expected": "A message about the email format is shown and the form is not submitted",
+            "source": "AC-3"
+          },
+          {
+            "id": "D4",
+            "covers": "story",
+            "type": "accessibility",
+            "technique": "checklist-based",
+            "conditions": [
+              "Contact form rendered with all fields visible"
+            ],
+            "expected": "No axe-core WCAG A/AA violations on the contact form",
+            "source": "agent.test_types (WCAG A/AA)"
+          }
+        ],
+        "excluded": [
+          {
+            "what": "bug #TOOL-21",
+            "reason": "Admin product search narrowing — unrelated to the contact form; does not touch this story's behaviour"
+          },
+          {
+            "what": "bug #TOOL-20",
+            "reason": "Billing address step in checkout — unrelated to the contact form; does not touch this story's behaviour"
+          },
+          {
+            "what": "security",
+            "reason": "The contact form has no authentication, session or account-protection behaviour implied by this story or its epic; there is nothing to assert about account enumeration or session state"
+          },
+          {
+            "what": "confirmation",
+            "reason": "Neither open bug (TOOL-20, TOOL-21) touches the contact form behaviour tested by this story"
+          }
+        ]
+      }
+    }
+  ],
+  "requestedAt": "2026-10-31T00:18:10.045Z",
+  "decision": "approved",
+  "by": "auto-approver (evaluation phase 2)",
+  "at": "2026-10-31T00:18:10.095Z"
+}

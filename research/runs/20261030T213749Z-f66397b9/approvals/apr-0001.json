@@ -1,0 +1,119 @@
+{
+  "approvalId": "apr-0001",
+  "summary": "Approve 1 call: aqa.test_design(items=[{\"id\":\"D1\",\"covers\":\"AC-1\",\"type\":\"f…, excluded=[{\"what\":\"bug #TOOL-21\",\"reason\":\"Adm…)",
+  "calls": [
+    {
+      "toolName": "aqa.test_design",
+      "args": {
+        "items": [
+          {
+            "id": "D1",
+            "covers": "AC-1",
+            "type": "functional",
+            "technique": "state-transition",
+            "conditions": [
+              "registered customer",
+              "correct email",
+              "correct password",
+              "submits sign-in form"
+            ],
+            "expected": "Customer is signed in and sees their account page; header shows account menu",
+            "source": "AC-1"
+          },
+          {
+            "id": "D2",
+            "covers": "AC-2",
+            "type": "functional",
+            "technique": "equivalence-partitioning",
+            "conditions": [
+              "registered email",
+              "wrong password",
+              "submits sign-in form"
+            ],
+            "expected": "Error message is shown; customer stays on the sign-in page; message does not reveal whether the email has an account",
+            "source": "AC-2"
+          },
+          {
+            "id": "D3",
+            "covers": "AC-2",
+            "type": "functional",
+            "technique": "equivalence-partitioning",
+            "conditions": [
+              "unregistered email",
+              "any password",
+              "submits sign-in form"
+            ],
+            "expected": "Same generic error message is shown as for wrong password; customer stays on sign-in page",
+            "source": "AC-2"
+          },
+          {
+            "id": "D4",
+            "covers": "AC-3",
+            "type": "functional",
+            "technique": "state-transition",
+            "conditions": [
+              "signed-in customer",
+              "chooses Sign out from customer menu"
+            ],
+            "expected": "Customer is signed out; header offers Sign in again",
+            "source": "AC-3"
+          },
+          {
+            "id": "D5",
+            "covers": "AC-4",
+            "type": "functional",
+            "technique": "equivalence-partitioning",
+            "conditions": [
+              "sign-in page is loaded and visible"
+            ],
+            "expected": "Sign-in page renders and is reachable",
+            "source": "AC-4"
+          },
+          {
+            "id": "D6",
+            "covers": "AC-4",
+            "type": "accessibility",
+            "technique": "checklist-based",
+            "conditions": [
+              "sign-in page loaded",
+              "axe-core scan scoped to sign-in form",
+              "WCAG 2.1 A/AA rules"
+            ],
+            "expected": "No axe violations reported for the sign-in form (violations.map(v=>v.id).sort() equals [])",
+            "source": "agent.test_types (WCAG A/AA)"
+          },
+          {
+            "id": "D7",
+            "covers": "AC-2",
+            "type": "security",
+            "technique": "equivalence-partitioning",
+            "conditions": [
+              "wrong password for registered email",
+              "unregistered email with any password"
+            ],
+            "expected": "Both cases show identical error message, preventing account enumeration",
+            "source": "AC-2"
+          }
+        ],
+        "excluded": [
+          {
+            "what": "bug #TOOL-21",
+            "reason": "Admin product search — does not touch customer sign-in/sign-out behaviour tested by this story"
+          },
+          {
+            "what": "bug #TOOL-20",
+            "reason": "Billing address at checkout — does not touch customer sign-in/sign-out behaviour tested by this story"
+          },
+          {
+            "what": "confirmation",
+            "reason": "Neither open bug (TOOL-21, TOOL-20) touches this story's behaviour; both are excluded above. No confirmation test needed."
+          }
+        ]
+      }
+    }
+  ],
+  "requestedAt": "2026-10-30T21:38:55.180Z",
+  "decision": "approved",
+  "by": "auto-approver (evaluation phase 2)",
+  "at": "2026-10-30T21:38:55.666Z"
+}

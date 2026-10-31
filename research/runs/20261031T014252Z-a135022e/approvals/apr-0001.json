@@ -1,0 +1,95 @@
+{
+  "approvalId": "apr-0001",
+  "summary": "Approve 1 call: aqa.test_design(items=[{\"id\":\"D1\",\"covers\":\"AC-1\",\"type\":\"f…, excluded=[{\"what\":\"bug #TOOL-20\",\"reason\":\"TOO…)",
+  "calls": [
+    {
+      "toolName": "aqa.test_design",
+      "args": {
+        "items": [
+          {
+            "id": "D1",
+            "covers": "AC-1",
+            "type": "functional",
+            "technique": "state-transition",
+            "conditions": [
+              "Administrator is signed in",
+              "Navigates to the admin product list page"
+            ],
+            "expected": "Navigation to the admin product list succeeds (page loads without redirect or error); the list is displayed showing each product's name and price",
+            "source": "AC-1"
+          },
+          {
+            "id": "D2",
+            "covers": "AC-2",
+            "type": "functional",
+            "technique": "equivalence-partitioning",
+            "conditions": [
+              "Administrator searches by a partial product name that matches some products",
+              "Administrator searches by a name that matches no products"
+            ],
+            "expected": "When a matching name is entered, only products whose names contain the search term are shown; when no name matches, no products are shown",
+            "source": "AC-2"
+          },
+          {
+            "id": "D3",
+            "covers": "bug #TOOL-21",
+            "type": "confirmation",
+            "technique": "state-transition",
+            "conditions": [
+              "Administrator enters a product name in the search field",
+              "The search is submitted"
+            ],
+            "expected": "The product list narrows to show only products whose names match the search term; products that do not match are absent from the list",
+            "source": "bug #TOOL-21",
+            "expectFail": true
+          },
+          {
+            "id": "D4",
+            "covers": "AC-3",
+            "type": "security",
+            "technique": "equivalence-partitioning",
+            "conditions": [
+              "A signed-in customer account (non-admin) navigates directly to the admin product list URL"
+            ],
+            "expected": "The admin product list is not displayed to the customer",
+            "source": "AC-3"
+          },
+          {
+            "id": "D5",
+            "covers": "AC-3",
+            "type": "functional",
+            "technique": "equivalence-partitioning",
+            "conditions": [
+              "A signed-in customer account (non-admin) navigates directly to the admin product list URL"
+            ],
+            "expected": "The admin product list page content is not rendered for the customer",
+            "source": "AC-3"
+          },
+          {
+            "id": "D6",
+            "covers": "story",
+            "type": "accessibility",
+            "technique": "checklist-based",
+            "conditions": [
+              "Administrator is signed in",
+              "Admin product list page is loaded",
+              "axe-core scans the admin product list with WCAG 2.1 A and AA rules"
+            ],
+            "expected": "No accessibility violations are reported (violations.map(v => v.id).sort() equals [])",
+            "source": "agent.test_types (WCAG A/AA)"
+          }
+        ],
+        "excluded": [
+          {
+            "what": "bug #TOOL-20",
+            "reason": "TOOL-20 concerns the billing address step not being filled from the customer profile during checkout — unrelated to the admin product list management story"
+          }
+        ]
+      }
+    }
+  ],
+  "requestedAt": "2026-10-31T01:44:31.682Z",
+  "decision": "approved",
+  "by": "auto-approver (evaluation phase 2)",
+  "at": "2026-10-31T01:44:31.786Z"
+}

@@ -1,0 +1,116 @@
+{
+  "approvalId": "apr-0001",
+  "summary": "Approve 1 call: aqa.test_design(items=[{\"id\":\"D1\",\"covers\":\"AC-1\",\"type\":\"f…, excluded=[{\"what\":\"bug #TOOL-21\",\"reason\":\"TOO…)",
+  "calls": [
+    {
+      "toolName": "aqa.test_design",
+      "args": {
+        "items": [
+          {
+            "id": "D1",
+            "covers": "AC-1",
+            "type": "functional",
+            "technique": "state-transition",
+            "conditions": [
+              "registered customer email",
+              "correct password",
+              "clicks Sign in"
+            ],
+            "expected": "Customer is signed in and sees their account page; header shows account menu instead of Sign in",
+            "source": "AC-1"
+          },
+          {
+            "id": "D2",
+            "covers": "AC-2",
+            "type": "functional",
+            "technique": "equivalence-partitioning",
+            "conditions": [
+              "registered customer email",
+              "wrong password",
+              "clicks Sign in"
+            ],
+            "expected": "Error message shown, customer stays on sign-in page; message does not reveal whether the email has an account",
+            "source": "AC-2"
+          },
+          {
+            "id": "D3",
+            "covers": "AC-2",
+            "type": "functional",
+            "technique": "equivalence-partitioning",
+            "conditions": [
+              "unregistered email",
+              "any password",
+              "clicks Sign in"
+            ],
+            "expected": "Error message shown, customer stays on sign-in page; same generic message as wrong password (does not indicate account existence)",
+            "source": "AC-2"
+          },
+          {
+            "id": "D4",
+            "covers": "AC-3",
+            "type": "functional",
+            "technique": "state-transition",
+            "conditions": [
+              "customer is signed in",
+              "chooses Sign out from customer menu"
+            ],
+            "expected": "Customer is signed out; header shows Sign in again instead of account menu",
+            "source": "AC-3"
+          },
+          {
+            "id": "D5",
+            "covers": "AC-4",
+            "type": "functional",
+            "technique": "equivalence-partitioning",
+            "conditions": [
+              "sign-in page loaded without authentication"
+            ],
+            "expected": "Sign-in page renders and is accessible to unauthenticated users",
+            "source": "AC-4"
+          },
+          {
+            "id": "D6",
+            "covers": "AC-4",
+            "type": "accessibility",
+            "technique": "checklist-based",
+            "conditions": [
+              "sign-in form on the sign-in page"
+            ],
+            "expected": "axe-core scan of the sign-in form reports zero WCAG 2.1 A/AA violations",
+            "source": "agent.test_types (WCAG A/AA)"
+          },
+          {
+            "id": "D7",
+            "covers": "AC-1",
+            "type": "security",
+            "technique": "state-transition",
+            "conditions": [
+              "customer signs in successfully",
+              "then signs out"
+            ],
+            "expected": "After sign-out the protected account page is no longer accessible; session is ended",
+            "source": "AC-1, AC-3"
+          }
+        ],
+        "excluded": [
+          {
+            "what": "bug #TOOL-21",
+            "reason": "TOOL-21 is about admin product search narrowing — unrelated to customer sign-in/sign-out behaviour covered by this story"
+          },
+          {
+            "what": "bug #TOOL-20",
+            "reason": "TOOL-20 is about the billing address step in checkout — unrelated to customer sign-in/sign-out behaviour covered by this story"
+          },
+          {
+            "what": "confirmation",
+            "reason": "Both open bugs (TOOL-21 and TOOL-20) are unrelated to this story's sign-in/sign-out behaviour; no confirmation tests are applicable here"
+          }
+        ]
+      }
+    }
+  ],
+  "requestedAt": "2026-10-30T21:07:47.103Z",
+  "decision": "approved",
+  "by": "auto-approver (evaluation phase 2)",
+  "at": "2026-10-30T21:07:47.755Z"
+}

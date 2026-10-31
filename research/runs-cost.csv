@@ -89,8 +89,26 @@ run_id,excluded,study,story,outcome,core_commit,wall_min,approval_wait_min,agent
 20261030T141734Z-28b50429,no,eval,TOOL-11,blocked,2.0.1 @c57f731,60.7,0.6,60.1,30,391080,22889,220492,177928,2.25,8,0.74,4,0,3,0,0,,,"TOOL-11 run 2 (counted, r2); blocked; 11/13 (0 of 4 own); 6 passing-test refusals; heal once; 61 min wall (machine load: the Juice Shop fault runs were going in parallel), $2.25 (F-0158)"
 20261030T151902Z-379b608e,no,eval,TOOL-11,blocked,2.0.1 @c57f731,7.6,0.0,7.6,24,257956,26195,259374,45282,1.41,11,0.77,4,0,3,0,0,,,"TOOL-11 run 3 (counted, r3); blocked; 10/13 (0 of 4 own); 8 passing-test refusals; heal once; 8 min, $1.41 (F-0158)"
 20261030T152708Z-15b9b998,no,eval,TOOL-12,budget,2.0.1 @c57f731,12.6,0.1,12.5,75,1844684,23449,1086768,45282,6.38,9,0.71,4,0,3,3,0,,,"TOOL-12 run 1 (counted; cart, new epic TOOL-2, route A); budget before any test ran; 3 scope refusals (localhost:3000 and 3100, Juice Shop's ports, on a Toolshop story); one swallowed-failure refusal; 13 min, $6.38 (F-0159)"
-20261030T174146Z-252cbf16,no,eval,TOOL-12,budget,2.0.1 @c57f731,58.6,0.0,58.6,72,1569353,28027,909322,116646,5.84,9,0.59,4,0,3,3,0,,,
-20261030T184243Z-f55ef5cf,no,eval,TOOL-12,budget,2.0.1 @c57f731,60.2,0.0,60.2,74,1640543,22244,993004,114352,5.98,7,0.37,5,0,3,3,0,,,
+20261030T174146Z-252cbf16,no,eval,TOOL-12,budget,2.0.1 @c57f731,58.6,0.0,58.6,72,1569353,28027,909322,116646,5.84,9,0.59,4,0,3,3,0,,,"TOOL-12 run 2 (counted, r2; third attempt after the restart and the key error); budget; 0/4; the agent's cart tests never found the product link or the Add to cart button it expected; scope refusals to localhost:3000 and :3100 again; repair cap on AC-1 (F-0159)"
+20261030T184243Z-f55ef5cf,no,eval,TOOL-12,budget,2.0.1 @c57f731,60.2,0.0,60.2,74,1640543,22244,993004,114352,5.98,7,0.37,5,0,3,3,0,,,"TOOL-12 run 3 (counted, r3); budget; 0/5; four scope refusals to localhost:3000, :3100, :4000, :3001 before it found the configured 4200; same cart failures (F-0159)"
+20261030T204333Z-50571764,no,eval,TOOL-13,blocked,2.0.1 @c57f731,20.9,0.0,20.9,51,835320,23510,674218,57176,3.28,10,0.57,6,2,4,4,0,1.64,,
+20261030T210648Z-79fd43bd,no,eval,TOOL-13,budget,2.0.1 @c57f731,28.7,0.0,28.7,78,1767745,40826,1020474,99258,6.59,11,0.89,7,1,4,4,0,6.59,,
+20261030T213749Z-f66397b9,no,eval,TOOL-13,blocked,2.0.1 @c57f731,7.8,0.0,7.8,45,535276,20397,633948,45282,2.27,8,0.35,7,0,4,0,0,,,
+20261030T214806Z-43cece3a,no,eval,TOOL-14,blocked,2.0.1 @c57f731,12.0,0.0,12.0,27,250009,22833,304716,32422,1.31,11,0.63,4,0,3,0,0,,,
+20261030T220222Z-a0404ad2,no,eval,TOOL-14,blocked,2.0.1 @c57f731,9.5,0.0,9.5,18,136040,23611,176116,57176,1.03,10,0.63,7,0,3,0,0,,,
+20261030T221405Z-d4e335a8,no,eval,TOOL-14,blocked,2.0.1 @c57f731,10.8,0.0,10.8,27,235302,20423,283162,57176,1.31,11,0.62,4,0,3,0,0,,,
+20261030T222717Z-1aea1826,no,eval,TOOL-16,blocked,2.0.1 @c57f731,5.0,0.0,4.9,31,336609,11656,422632,45282,1.48,6,0.27,6,0,3,0,0,,,
+20261030T223427Z-9d1f7482,no,eval,TOOL-16,blocked,2.0.1 @c57f731,13.6,0.0,13.6,60,1095839,34938,905640,0,4.08,11,0.71,5,0,3,0,0,,,
+20261030T225023Z-fa6b4700,no,eval,TOOL-16,blocked,2.0.1 @c57f731,16.6,0.0,16.6,49,1187877,48960,739606,0,4.52,10,1.21,5,0,3,3,0,,,
+20261030T230929Z-19d6263b,no,eval,TOOL-17,blocked,2.0.1 @c57f731,10.5,0.0,10.5,32,417502,25953,357122,42686,1.91,9,0.69,5,0,3,0,0,,,
+20261030T232230Z-cd112c73,no,eval,TOOL-17,blocked,2.0.1 @c57f731,11.9,0.0,11.8,40,539049,21901,437784,57176,2.29,8,0.63,4,0,3,0,0,,,
+20261030T233640Z-6d7e764a,no,eval,TOOL-17,blocked,2.0.1 @c57f731,8.4,0.0,8.3,16,103570,20638,149128,57176,0.88,9,0.57,5,0,3,0,0,,,
+20261030T234722Z-6569220b,no,eval,TOOL-18,budget,2.0.1 @c57f731,26.4,0.0,26.4,57,1562759,28472,743288,69070,5.6,9,0.87,5,2,3,3,0,2.8,,
+20261031T001617Z-b9481c47,no,eval,TOOL-18,budget,2.0.1 @c57f731,24.6,0.0,24.5,63,1548186,23275,757958,84164,5.54,7,0.42,4,1,3,3,0,5.54,,
+20261031T004316Z-0bc3fdbb,no,eval,TOOL-18,budget,2.0.1 @c57f731,57.3,0.0,57.2,75,1700457,34850,939992,92858,6.25,9,0.72,4,2,3,3,0,3.13,,
+20261031T014252Z-a135022e,no,eval,TOOL-19,blocked,2.0.1 @c57f731,3.5,0.0,3.5,21,132406,12726,271692,45282,0.84,10,0.46,6,0,3,0,0,,,
+20261031T014839Z-fbebd198,no,eval,TOOL-19,budget,2.0.1 @c57f731,33.3,0.0,33.3,61,1581605,36335,813746,23788,5.62,16,1.8,6,1,3,3,0,5.62,,
+20261031T022427Z-325e4990,no,eval,TOOL-19,budget,2.0.1 @c57f731,11.5,0.0,11.5,60,1656874,19518,860358,45282,5.69,7,0.63,5,0,3,3,0,,,
 20261022T171911Z-a0749b09,yes,eval-excluded,SCRUM-6,done,2.0.1 @8f59bc0,5.1,1.8,3.3,2,6100,89,13853,13853,0.08,0,0.0,,,,,0,,,"not a repeat: shared ledger let it reuse run 1 design (route B, story unchanged); excluded"
 20261022T185532Z-1552136a,yes,eval-excluded,SCRUM-6,done,2.0.1 @8f59bc0,7.5,4.2,3.3,2,6102,139,13853,13853,0.08,0,0.0,,,,,0,,,"second start of run 3 after run 3 had finished; reused its design (route B, story unchanged); excluded"
 20261023T165205Z-c56cab94,yes,eval-excluded,SCRUM-18,blocked,2.0.1 @010ec25,23.4,5.0,18.5,47,1008610,24272,560642,72305,3.83,13,1.31,,,,,0,,,"SCRUM-18 run 2, first attempt; real a11y bug dropped at end by a check reading the spec from before an edit (F-0094); excluded, run 2 repeated on the fixed build"

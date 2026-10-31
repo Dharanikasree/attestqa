@@ -1,0 +1,92 @@
+{
+  "approvalId": "apr-0001",
+  "summary": "Approve 1 call: aqa.test_design(items=[{\"id\":\"D5\",\"covers\":\"AC-1\",\"type\":\"f…, excluded=[{\"what\":\"security\",\"reason\":\"The che…)",
+  "calls": [
+    {
+      "toolName": "aqa.test_design",
+      "args": {
+        "items": [
+          {
+            "id": "D5",
+            "covers": "AC-1",
+            "type": "functional",
+            "technique": "state-transition",
+            "conditions": [
+              "Customer is signed in",
+              "Customer has at least one product in the cart",
+              "Customer proceeds through all checkout steps (cart → address → payment) using cash on delivery"
+            ],
+            "expected": "Each checkout step advances without a sign-in prompt appearing; the order confirmation page is shown",
+            "source": "AC-1"
+          },
+          {
+            "id": "D6",
+            "covers": "AC-2",
+            "type": "functional",
+            "technique": "state-transition",
+            "conditions": [
+              "Customer is signed in with a profile that has a billing address",
+              "Customer navigates to the billing address step of checkout"
+            ],
+            "expected": "The billing address form is displayed pre-filled; the fields contain the customer's profile address data",
+            "source": "AC-2",
+            "expectFail": true
+          },
+          {
+            "id": "D7",
+            "covers": "AC-3",
+            "type": "functional",
+            "technique": "state-transition",
+            "conditions": [
+              "Customer is signed in with a product in the cart",
+              "Customer completes billing address step",
+              "Customer selects cash on delivery as payment method",
+              "Customer confirms the order"
+            ],
+            "expected": "The payment step accepts cash on delivery; the order confirmation page is displayed",
+            "source": "AC-3"
+          },
+          {
+            "id": "D8",
+            "covers": "bug #TOOL-20",
+            "type": "confirmation",
+            "technique": "state-transition",
+            "conditions": [
+              "Customer is signed in with a profile that has a saved billing address",
+              "Customer navigates to the billing address step of checkout"
+            ],
+            "expected": "The billing address form is displayed pre-filled; the fields contain the customer's profile address data",
+            "source": "bug #TOOL-20",
+            "expectFail": true
+          },
+          {
+            "id": "D9",
+            "covers": "story",
+            "type": "accessibility",
+            "technique": "checklist-based",
+            "conditions": [
+              "Checkout page is loaded and accessible",
+              "Axe-core scans the checkout form with WCAG A and AA rules"
+            ],
+            "expected": "No axe violations are reported; violations array is empty",
+            "source": "agent.test_types (WCAG A/AA)"
+          }
+        ],
+        "excluded": [
+          {
+            "what": "security",
+            "reason": "The checkout flow has no browser-observable security behaviour beyond session continuity, which AC-1 covers functionally. No token endpoints, no credential forms, and no account enumeration surfaces are part of this story's scope."
+          },
+          {
+            "what": "bug #TOOL-21",
+            "reason": "TOOL-21 is about admin product search narrowing — a different UI surface with no overlap with the signed-in customer checkout flow tested by this story."
+          }
+        ]
+      }
+    }
+  ],
+  "requestedAt": "2026-10-30T22:35:58.126Z",
+  "decision": "approved",
+  "by": "auto-approver (evaluation phase 2)",
+  "at": "2026-10-30T22:35:58.244Z"
+}

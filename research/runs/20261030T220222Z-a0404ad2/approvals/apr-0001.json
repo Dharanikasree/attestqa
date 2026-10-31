@@ -1,0 +1,110 @@
+{
+  "approvalId": "apr-0001",
+  "summary": "Approve 1 call: aqa.test_design(items=[{\"id\":\"D8\",\"covers\":\"AC-1\",\"type\":\"f…, excluded=[{\"what\":\"bug #TOOL-21\",\"reason\":\"Adm…)",
+  "calls": [
+    {
+      "toolName": "aqa.test_design",
+      "args": {
+        "items": [
+          {
+            "id": "D8",
+            "covers": "AC-1",
+            "type": "functional",
+            "technique": "equivalence-partitioning",
+            "conditions": [
+              "All required fields filled with valid values: valid email, valid password meeting rules, matching confirm password, valid name"
+            ],
+            "expected": "Account is created and the customer is taken to the sign-in page",
+            "source": "AC-1"
+          },
+          {
+            "id": "D9",
+            "covers": "AC-2",
+            "type": "functional",
+            "technique": "boundary-value-analysis",
+            "conditions": [
+              "Submit with email field empty",
+              "Submit with password field empty",
+              "Submit with name field empty"
+            ],
+            "expected": "A validation message appears at the empty field; no account is created and the customer remains on the registration form",
+            "source": "AC-2"
+          },
+          {
+            "id": "D10",
+            "covers": "AC-1",
+            "type": "functional",
+            "technique": "state-transition",
+            "conditions": [
+              "Customer clicks the register/create account link on the sign-in page"
+            ],
+            "expected": "The register link is no longer visible (navigation away from sign-in page has occurred); the registration form is displayed",
+            "source": "AC-1"
+          },
+          {
+            "id": "D11",
+            "covers": "AC-3",
+            "type": "functional",
+            "technique": "equivalence-partitioning",
+            "conditions": [
+              "Password that is too short or missing a required character class (e.g. no uppercase, no digit, no special character)"
+            ],
+            "expected": "The registration form is not submitted; a message is shown that names the violated password rule",
+            "source": "AC-3"
+          },
+          {
+            "id": "D12",
+            "covers": "AC-3",
+            "type": "functional",
+            "technique": "state-transition",
+            "conditions": [
+              "Password rules are visible next to the password field before and during input"
+            ],
+            "expected": "The password rules text is present on the registration page; after submitting an invalid password the rule-naming error message is displayed",
+            "source": "task #TOOL-15"
+          },
+          {
+            "id": "D13",
+            "covers": "AC-1",
+            "type": "security",
+            "technique": "error-guessing",
+            "conditions": [
+              "Submit registration form with an email address that is already registered"
+            ],
+            "expected": "The form is rejected with a message indicating the email is taken; no second account is created and no information about the existing account's password is disclosed",
+            "source": "AC-1"
+          },
+          {
+            "id": "D14",
+            "covers": "story",
+            "type": "accessibility",
+            "technique": "checklist-based",
+            "conditions": [
+              "axe-core scan of the registration form with rules wcag2a and wcag2aa pinned; violations asserted by rule ID"
+            ],
+            "expected": "expect(violations.map(v => v.id).sort()).toEqual([]) — zero WCAG A/AA violations on the registration form",
+            "source": "agent.test_types (WCAG A/AA)"
+          }
+        ],
+        "excluded": [
+          {
+            "what": "bug #TOOL-21",
+            "reason": "Admin product search is a different surface (admin UI, search/filter feature) and does not touch customer registration behaviour"
+          },
+          {
+            "what": "bug #TOOL-20",
+            "reason": "Billing address auto-fill is part of the checkout flow, not the customer registration story"
+          },
+          {
+            "what": "confirmation",
+            "reason": "Neither open bug (TOOL-20, TOOL-21) touches this story's registration behaviour; no confirmation tests are needed here"
+          }
+        ]
+      }
+    }
+  ],
+  "requestedAt": "2026-10-30T22:03:45.481Z",
+  "decision": "approved",
+  "by": "auto-approver (evaluation phase 2)",
+  "at": "2026-10-30T22:03:45.912Z"
+}

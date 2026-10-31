@@ -1,0 +1,85 @@
+{
+  "approvalId": "apr-0001",
+  "summary": "Approve 1 call: aqa.test_design(items=[{\"id\":\"D7\",\"covers\":\"AC-1\",\"type\":\"f…, excluded=[{\"what\":\"bug #TOOL-21\",\"reason\":\"Adm…)",
+  "calls": [
+    {
+      "toolName": "aqa.test_design",
+      "args": {
+        "items": [
+          {
+            "id": "D7",
+            "covers": "AC-1",
+            "type": "functional",
+            "technique": "equivalence-partitioning",
+            "conditions": [
+              "All required fields filled with valid values",
+              "Valid email format",
+              "Password meets all rules",
+              "Form submitted"
+            ],
+            "expected": "Account is created and customer is taken to the sign-in page",
+            "source": "AC-1"
+          },
+          {
+            "id": "D8",
+            "covers": "AC-2",
+            "type": "functional",
+            "technique": "boundary-value-analysis",
+            "conditions": [
+              "Each required field left empty in turn while others are valid",
+              "Form submitted with empty field"
+            ],
+            "expected": "A message appears at the empty field and no account is created",
+            "source": "AC-2"
+          },
+          {
+            "id": "D9",
+            "covers": "AC-3",
+            "type": "functional",
+            "technique": "equivalence-partitioning",
+            "conditions": [
+              "Password that violates the stated password rules (e.g. too short, missing required character class)",
+              "All other fields valid"
+            ],
+            "expected": "Registration is refused with a message that names the broken rule",
+            "source": "AC-3"
+          },
+          {
+            "id": "D10",
+            "covers": "story",
+            "type": "accessibility",
+            "technique": "checklist-based",
+            "conditions": [
+              "Registration page loaded",
+              "axe-core scan of the registration form with WCAG A/AA rules"
+            ],
+            "expected": "No accessibility violations reported by axe-core",
+            "source": "agent.test_types (WCAG A/AA)"
+          }
+        ],
+        "excluded": [
+          {
+            "what": "bug #TOOL-21",
+            "reason": "Admin product search — entirely unrelated to customer registration; does not touch any AC of this story"
+          },
+          {
+            "what": "bug #TOOL-20",
+            "reason": "Billing address at checkout — entirely unrelated to customer registration; does not touch any AC of this story"
+          },
+          {
+            "what": "security",
+            "reason": "Registration does not imply account-enumeration or session risks beyond what sign-in covers (tested under TOOL-13); no security criterion stated in this story"
+          },
+          {
+            "what": "confirmation",
+            "reason": "No open bugs touch this story's behaviour; both open bugs (TOOL-20, TOOL-21) are about unrelated features"
+          }
+        ]
+      }
+    }
+  ],
+  "requestedAt": "2026-10-30T21:49:20.044Z",
+  "decision": "approved",
+  "by": "auto-approver (evaluation phase 2)",
+  "at": "2026-10-30T21:49:20.141Z"
+}

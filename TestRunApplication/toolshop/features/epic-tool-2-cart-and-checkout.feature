@@ -37,3 +37,55 @@ Feature: Cart and checkout
     And I click "Add to cart"
     And I navigate to the cart page
     Then the page passes axe accessibility checks
+
+  # TOOL-16: Signed-in customer checks out and pays
+
+  @story:TOOL-16 @ac:1 @design:D6 @type:functional @technique:state-transition
+  Scenario: AC-1 Signed-in customer proceeds through checkout to payment without re-authentication
+    Given I sign in with registered credentials
+    And I add "Combination Pliers" to the cart via the API
+    When I navigate to the cart page
+    And I click "Proceed to checkout"
+    Then the URL contains "checkout"
+    And the page displays "Billing"
+
+  @story:TOOL-16 @ac:2 @design:D7 @type:functional @technique:state-transition
+  Scenario: AC-2 Billing address step is pre-filled from the customer profile
+    Given I sign in with registered credentials
+    And I add "Combination Pliers" to the cart via the API
+    And I navigate to the checkout billing address page
+    Then the billing first name field is pre-filled
+    And the billing last name field is pre-filled
+    And the billing address line field is pre-filled
+
+  @story:TOOL-16 @ac:3 @design:D8 @type:functional @technique:state-transition
+  Scenario: AC-3 Paying with cash on delivery confirms the order
+    Given I sign in with registered credentials
+    And I add "Combination Pliers" to the cart via the API
+    And I navigate to the checkout payment page
+    When I select "Cash on Delivery" as the payment method
+    And I click "Confirm"
+    Then the page displays "Payment was successful"
+
+  @story:TOOL-16 @ac:1 @design:D9 @type:security @technique:state-transition
+  Scenario: AC-1 Unauthenticated user is redirected to sign-in when accessing checkout directly
+    Given I am on the home page
+    When I navigate directly to the checkout page
+    Then the URL contains "login"
+
+  @story:TOOL-16 @design:D10 @type:accessibility @technique:checklist-based
+  Scenario: AC-accessibility Checkout page passes accessibility checks
+    Given I sign in with registered credentials
+    And I add "Combination Pliers" to the cart via the API
+    When I navigate to the cart page
+    And I click "Proceed to checkout"
+    Then the page passes axe accessibility checks
+
+  @story:TOOL-16 @bug:TOOL-20 @ac:2 @design:D11 @type:confirmation @technique:state-transition
+  Scenario: AC-2 Bug TOOL-20 Billing address is not pre-filled from the customer profile
+    Given I sign in with registered credentials
+    And I add "Combination Pliers" to the cart via the API
+    And I navigate to the checkout billing address page
+    Then the billing first name field is pre-filled
+    And the billing last name field is pre-filled
+    And the billing address line field is pre-filled

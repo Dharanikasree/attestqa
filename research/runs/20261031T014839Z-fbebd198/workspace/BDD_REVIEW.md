@@ -1,0 +1,57 @@
+# bdd2pw — Conversion Review
+
+> **Source feature:** `E:\EB1A_Research\Application\attestqa\TestRunApplication\toolshop\features\epic-tool-5-shop-administration.feature`
+> **Target URL:** http://localhost:4200/#/admin/products
+> **Generated:** 2026-10-31T01:54:32.235Z
+
+## Summary
+
+0 errors · 17 warnings · 8 info
+
+## Warnings
+
+- [AC-1 A signed-in administrator can open the product list in the back office] no rule matched: "When I fill the "email" field with the admin email" (LLM fallback also failed: Governance sidecar unreachable; refusing to call LLM (fail-closed). ai-governance sidecar unreachable at http://127.0.0.1:4900/sanitize. Start it with: 'uvicorn service.app:app --port 4900' from the ai-governance repo, or pass --skip-governance for non-production runs (NOT recommended). Underlying error: connect ECONNREFUSED 127.0.0.1:4900)
+  - Suggestion: Add a custom step rule, enable --llm fallback, or hand-edit the spec.
+- [AC-1 A signed-in administrator can open the product list in the back office] no rule matched: "And I fill the "password" field with the admin password" (LLM fallback also failed: Governance sidecar unreachable; refusing to call LLM (fail-closed). ai-governance sidecar unreachable at http://127.0.0.1:4900/sanitize. Start it with: 'uvicorn service.app:app --port 4900' from the ai-governance repo, or pass --skip-governance for non-production runs (NOT recommended). Underlying error: connect ECONNREFUSED 127.0.0.1:4900)
+  - Suggestion: Add a custom step rule, enable --llm fallback, or hand-edit the spec.
+- [AC-1 A signed-in administrator can open the product list in the back office] no rule matched: "And I click the "login" button" (LLM fallback also failed: Governance sidecar unreachable; refusing to call LLM (fail-closed). ai-governance sidecar unreachable at http://127.0.0.1:4900/sanitize. Start it with: 'uvicorn service.app:app --port 4900' from the ai-governance repo, or pass --skip-governance for non-production runs (NOT recommended). Underlying error: connect ECONNREFUSED 127.0.0.1:4900)
+  - Suggestion: Add a custom step rule, enable --llm fallback, or hand-edit the spec.
+- [AC-2 Searching the admin product list by name shows only matching products] no rule matched: "When I fill the "email" field with the admin email" (LLM fallback also failed: Governance sidecar unreachable; refusing to call LLM (fail-closed). ai-governance sidecar unreachable at http://127.0.0.1:4900/sanitize. Start it with: 'uvicorn service.app:app --port 4900' from the ai-governance repo, or pass --skip-governance for non-production runs (NOT recommended). Underlying error: connect ECONNREFUSED 127.0.0.1:4900)
+  - Suggestion: Add a custom step rule, enable --llm fallback, or hand-edit the spec.
+- [AC-2 Searching the admin product list by name shows only matching products] no rule matched: "And I fill the "password" field with the admin password" (LLM fallback also failed: Governance sidecar unreachable; refusing to call LLM (fail-closed). ai-governance sidecar unreachable at http://127.0.0.1:4900/sanitize. Start it with: 'uvicorn service.app:app --port 4900' from the ai-governance repo, or pass --skip-governance for non-production runs (NOT recommended). Underlying error: connect ECONNREFUSED 127.0.0.1:4900)
+  - Suggestion: Add a custom step rule, enable --llm fallback, or hand-edit the spec.
+- [AC-2 Searching the admin product list by name shows only matching products] no rule matched: "And I click the "login" button" (LLM fallback also failed: Governance sidecar unreachable; refusing to call LLM (fail-closed). ai-governance sidecar unreachable at http://127.0.0.1:4900/sanitize. Start it with: 'uvicorn service.app:app --port 4900' from the ai-governance repo, or pass --skip-governance for non-production runs (NOT recommended). Underlying error: connect ECONNREFUSED 127.0.0.1:4900)
+  - Suggestion: Add a custom step rule, enable --llm fallback, or hand-edit the spec.
+- [AC-2 bug:TOOL-21 Admin product search does not narrow the list] no rule matched: "When I fill the "email" field with the admin email" (LLM fallback also failed: Governance sidecar unreachable; refusing to call LLM (fail-closed). ai-governance sidecar unreachable at http://127.0.0.1:4900/sanitize. Start it with: 'uvicorn service.app:app --port 4900' from the ai-governance repo, or pass --skip-governance for non-production runs (NOT recommended). Underlying error: connect ECONNREFUSED 127.0.0.1:4900)
+  - Suggestion: Add a custom step rule, enable --llm fallback, or hand-edit the spec.
+- [AC-2 bug:TOOL-21 Admin product search does not narrow the list] no rule matched: "And I fill the "password" field with the admin password" (LLM fallback also failed: Governance sidecar unreachable; refusing to call LLM (fail-closed). ai-governance sidecar unreachable at http://127.0.0.1:4900/sanitize. Start it with: 'uvicorn service.app:app --port 4900' from the ai-governance repo, or pass --skip-governance for non-production runs (NOT recommended). Underlying error: connect ECONNREFUSED 127.0.0.1:4900)
+  - Suggestion: Add a custom step rule, enable --llm fallback, or hand-edit the spec.
+- [AC-2 bug:TOOL-21 Admin product search does not narrow the list] no rule matched: "And I click the "login" button" (LLM fallback also failed: Governance sidecar unreachable; refusing to call LLM (fail-closed). ai-governance sidecar unreachable at http://127.0.0.1:4900/sanitize. Start it with: 'uvicorn service.app:app --port 4900' from the ai-governance repo, or pass --skip-governance for non-production runs (NOT recommended). Underlying error: connect ECONNREFUSED 127.0.0.1:4900)
+  - Suggestion: Add a custom step rule, enable --llm fallback, or hand-edit the spec.
+- [AC-3 A customer account that opens the admin product list address does not see the list] no rule matched: "When I fill the "email" field with the registered email" (LLM fallback also failed: Governance sidecar unreachable; refusing to call LLM (fail-closed). ai-governance sidecar unreachable at http://127.0.0.1:4900/sanitize. Start it with: 'uvicorn service.app:app --port 4900' from the ai-governance repo, or pass --skip-governance for non-production runs (NOT recommended). Underlying error: connect ECONNREFUSED 127.0.0.1:4900)
+  - Suggestion: Add a custom step rule, enable --llm fallback, or hand-edit the spec.
+- [AC-3 A customer account that opens the admin product list address does not see the list] no rule matched: "And I fill the "password" field with the registered password" (LLM fallback also failed: Governance sidecar unreachable; refusing to call LLM (fail-closed). ai-governance sidecar unreachable at http://127.0.0.1:4900/sanitize. Start it with: 'uvicorn service.app:app --port 4900' from the ai-governance repo, or pass --skip-governance for non-production runs (NOT recommended). Underlying error: connect ECONNREFUSED 127.0.0.1:4900)
+  - Suggestion: Add a custom step rule, enable --llm fallback, or hand-edit the spec.
+- [AC-3 A customer account that opens the admin product list address does not see the list] no rule matched: "And I click the "login" button" (LLM fallback also failed: Governance sidecar unreachable; refusing to call LLM (fail-closed). ai-governance sidecar unreachable at http://127.0.0.1:4900/sanitize. Start it with: 'uvicorn service.app:app --port 4900' from the ai-governance repo, or pass --skip-governance for non-production runs (NOT recommended). Underlying error: connect ECONNREFUSED 127.0.0.1:4900)
+  - Suggestion: Add a custom step rule, enable --llm fallback, or hand-edit the spec.
+- [AC-3 A customer account that opens the admin product list address does not see the list] no rule matched: "Then the customer is not shown the admin product list" (LLM fallback also failed: Governance sidecar unreachable; refusing to call LLM (fail-closed). ai-governance sidecar unreachable at http://127.0.0.1:4900/sanitize. Start it with: 'uvicorn service.app:app --port 4900' from the ai-governance repo, or pass --skip-governance for non-production runs (NOT recommended). Underlying error: connect ECONNREFUSED 127.0.0.1:4900)
+  - Suggestion: Add a custom step rule, enable --llm fallback, or hand-edit the spec.
+- [AC-3b A visitor who is not signed in and opens the admin product list address is not shown the list] no rule matched: "Then the visitor is not shown the admin product list" (LLM fallback also failed: Governance sidecar unreachable; refusing to call LLM (fail-closed). ai-governance sidecar unreachable at http://127.0.0.1:4900/sanitize. Start it with: 'uvicorn service.app:app --port 4900' from the ai-governance repo, or pass --skip-governance for non-production runs (NOT recommended). Underlying error: connect ECONNREFUSED 127.0.0.1:4900)
+  - Suggestion: Add a custom step rule, enable --llm fallback, or hand-edit the spec.
+- [AC-accessibility The admin product list page passes an automated accessibility scan] no rule matched: "When I fill the "email" field with the admin email" (LLM fallback also failed: Governance sidecar unreachable; refusing to call LLM (fail-closed). ai-governance sidecar unreachable at http://127.0.0.1:4900/sanitize. Start it with: 'uvicorn service.app:app --port 4900' from the ai-governance repo, or pass --skip-governance for non-production runs (NOT recommended). Underlying error: connect ECONNREFUSED 127.0.0.1:4900)
+  - Suggestion: Add a custom step rule, enable --llm fallback, or hand-edit the spec.
+- [AC-accessibility The admin product list page passes an automated accessibility scan] no rule matched: "And I fill the "password" field with the admin password" (LLM fallback also failed: Governance sidecar unreachable; refusing to call LLM (fail-closed). ai-governance sidecar unreachable at http://127.0.0.1:4900/sanitize. Start it with: 'uvicorn service.app:app --port 4900' from the ai-governance repo, or pass --skip-governance for non-production runs (NOT recommended). Underlying error: connect ECONNREFUSED 127.0.0.1:4900)
+  - Suggestion: Add a custom step rule, enable --llm fallback, or hand-edit the spec.
+- [AC-accessibility The admin product list page passes an automated accessibility scan] no rule matched: "And I click the "login" button" (LLM fallback also failed: Governance sidecar unreachable; refusing to call LLM (fail-closed). ai-governance sidecar unreachable at http://127.0.0.1:4900/sanitize. Start it with: 'uvicorn service.app:app --port 4900' from the ai-governance repo, or pass --skip-governance for non-production runs (NOT recommended). Underlying error: connect ECONNREFUSED 127.0.0.1:4900)
+  - Suggestion: Add a custom step rule, enable --llm fallback, or hand-edit the spec.
+
+## Info
+
+- Parsed feature "Shop administration" — 6 scenario(s)
+- `E:\EB1A_Research\Application\attestqa\TestRunApplication\toolshop\package.json` — package.json already exists — left untouched.
+- `E:\EB1A_Research\Application\attestqa\TestRunApplication\toolshop\playwright.config.ts` — playwright.config.ts already exists — left untouched.
+- `E:\EB1A_Research\Application\attestqa\TestRunApplication\toolshop\tsconfig.json` — tsconfig.json already exists — left untouched.
+- `E:\EB1A_Research\Application\attestqa\TestRunApplication\toolshop\.gitignore` — .gitignore already exists — left untouched.
+- Discovered 50 element(s); picked 37 unique locator(s)
+- POM decision for ShopAdministrationPage: CREATE (missing fields: searchHeading, searchButton)
+- LLM fallback: 0 successful / 0 attempted, max 50. Cache hits counted as 0.
