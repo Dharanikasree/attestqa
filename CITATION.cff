@@ -8,5 +8,7 @@ authors:
     orcid: "https://orcid.org/0009-0004-1192-6906"
 license: MIT
 repository-code: "https://github.com/javvadivijayprasad/attestqa"
-doi: 10.5281/zenodo.22758876
+doi: 10.5281/zenodo.23897787
+version: 2.0.1
+date-released: 2026-11-02
 type: software
