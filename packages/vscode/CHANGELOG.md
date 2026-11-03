@@ -1,5 +1,13 @@
 # Changelog
 
+## 2.0.3
+
+- Published through the Marketplace's trusted publishing from the release workflow; no personal access token. No change to the extension's behaviour.
+
+## 2.0.2
+
+- Version aligned with the engine and the product release (one version line, ADR-005). No change to the extension's behaviour since 1.0.1.
+
 ## 1.0.1
 
 - `aqa.envFile` can list several credential files, comma-separated (`.env.toolshop,.env`), as `aqa run --env` takes them. Before, the list was checked as one file name, `--env` was left out, and the run read `.env` alone.

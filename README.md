@@ -2,7 +2,7 @@
 
 Governed, open-source end-to-end testing for any website. A model your company already pays for writes and runs ordinary Playwright tests in a folder you own, and attestqa refuses — in code, not in a prompt — to make a failing test pass by weakening it. Every step is written to a ledger you can audit.
 
-Status: **v2.0.2** — the engine and CLI are on npm (`attestqa` 2.0.1, 22 Oct 2026; 2.0.2 carries the fixes from the October evaluation), the attestqa
+Status: **v2.0.3** — the engine and CLI are on npm (`attestqa` 2.0.2, 3 Nov 2026, carries the fixes from the October evaluation; 2.0.3 corrects the citation file), the attestqa
 extension on the VS Code Marketplace). The design set was approved on 10 October 2026
 (`Docs/00_Signoff.pdf`).
 

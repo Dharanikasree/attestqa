@@ -4,7 +4,7 @@
 VS Code extension share one version number; the `aqa` command is unchanged.*
 
 [![CI](https://github.com/javvadivijayprasad/attestqa/actions/workflows/ci.yml/badge.svg)](https://github.com/javvadivijayprasad/attestqa/actions/workflows/ci.yml)
-[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.23897787.svg)](https://doi.org/10.5281/zenodo.23897787)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.22758875.svg)](https://doi.org/10.5281/zenodo.22758875)
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 [![Node](https://img.shields.io/badge/node-%3E%3D20-brightgreen.svg)](package.json)
 
@@ -220,7 +220,7 @@ reference managers import it directly.
 Vijay Prasad Javvadi, Independent Researcher, Plainsboro, NJ, USA · ORCID
 [0009-0004-1192-6906](https://orcid.org/0009-0004-1192-6906).
 
-Archived on Zenodo: [10.5281/zenodo.23897787](https://doi.org/10.5281/zenodo.23897787).
+Archived on Zenodo: [10.5281/zenodo.22758875](https://doi.org/10.5281/zenodo.22758875) (all versions; each release also has its own DOI).
 
 ## License
 

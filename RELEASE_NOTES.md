@@ -1,7 +1,9 @@
-# attestqa v2.0.2 — November 2026
+# attestqa v2.0.3 — November 2026
 
-The patch release that follows the October evaluation of 2.0.1: the same engine, with the eleven
-fixes the evaluation produced. attestqa is governed, open-source end-to-end testing for web
+A small patch on 2.0.2: the citation file shipped with the package now carries the right version
+and the Zenodo concept DOI, and the release itself is the first made by the token-free pipeline
+(trusted publishing on npm and the VS Code Marketplace). The engine is the 2.0.2 engine: the
+eleven fixes from the October evaluation of 2.0.1, listed below. attestqa is governed, open-source end-to-end testing for web
 applications. Point it at a user story in **Jira or Azure DevOps**; approve the test design it
 proposes; get ordinary Playwright tests in a folder you own — written, run, triaged and repaired
 under rules that refuse, in code, to make a failing test pass by weakening it. Every step is in a
@@ -17,6 +19,11 @@ VS Code: install **attestqa** from the Marketplace (publisher `vijaypjavvadi`), 
 attached to this release.
 
 Then follow the [user guide](packages/core/docs/USAGE.md) — about ten minutes to set up a project.
+
+## Changed in 2.0.3
+
+- `CITATION.cff` (repository and npm package): version, date and the Zenodo concept DOI, which resolves to the latest archived version.
+- One release workflow; npm and Marketplace publishing without tokens. See `packages/core/docs/RELEASING.md`.
 
 ## Fixed in 2.0.2 (each from an observed run; finding ids in `research/findings.jsonl`)
 
@@ -47,8 +54,8 @@ Then follow the [user guide](packages/core/docs/USAGE.md) — about ten minutes 
 
 | Package | Version |
 | --- | --- |
-| `attestqa` (npm) | 2.0.2 |
-| `attestqa-vscode` (Marketplace) | 2.0.2 |
+| `attestqa` (npm) | 2.0.3 |
+| `attestqa-vscode` (Marketplace) | 2.0.3 |
 | bdd2pw / pw-self-heal (dependencies) | 4.6.5 / 1.3.0 |
 
 `attestqa` 2.0.x replaced the 1.x engine published from agentic-qa; the ledger format changed. From 2.0.2 the product, the engine and the extension share one version number (ADR-005). What

@@ -37,6 +37,11 @@ TestRunApplication/juice-shop-copilot/
 
 # earlier run attempts, kept outside the workspaces
 TestRunApplication/_attempts/
+# A local target workspace that is not part of the evaluation record.
+TestRunApplication/booker/
+# Screenshots the agent takes while working (pw.screenshot) land beside the
+# package when the workspace is the package root. Never part of the package.
+packages/core/*.png
 
 # Backups made before an edit (.before_<what>_<date>.bak)
 *.before_*.bak

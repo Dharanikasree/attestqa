@@ -1,14 +1,46 @@
 cff-version: 1.2.0
-message: "If you use attestqa, please cite it as below."
+message: "If you use attestqa, please cite it as below. The DOI is the concept DOI and resolves to the latest archived version; a specific version has its own DOI on its Zenodo page."
+type: software
 title: "attestqa (formerly agentic-qa): governed agentic end-to-end testing"
+abstract: >-
+  A runtime for agentic software testing in which a language model proposes tool
+  calls but decides nothing. Every proposed call is classified against a manifest
+  and resolved by an operator-owned policy table into execute, ask, or refuse; an
+  unclassified operation is refused by default. Completion is decided by code that
+  reads the run's evidence rather than by the model's own account of itself. Each
+  cycle is reassembled from an append-only JSONL ledger rather than from a
+  conversation, so a run can be replayed offline and every reported figure traces
+  to a recorded event. The reference skill turns a user story's acceptance criteria
+  into executable Playwright tests and records the resulting test cases against the
+  story in Jira or Azure DevOps.
 authors:
   - family-names: Javvadi
     given-names: Vijay Prasad
-    affiliation: "Independent Researcher, Plainsboro, NJ, USA"
     orcid: "https://orcid.org/0009-0004-1192-6906"
+    affiliation: "Independent Researcher, Plainsboro, NJ, USA"
+    email: vijay@vijayjavvadiresearch.ai
+version: 2.0.3
+date-released: "2026-11-03"
 license: MIT
 repository-code: "https://github.com/javvadivijayprasad/attestqa"
-doi: 10.5281/zenodo.23897787
-version: 2.0.1
-date-released: 2026-11-02
-type: software
+url: "https://github.com/javvadivijayprasad/attestqa#readme"
+doi: 10.5281/zenodo.22758875
+identifiers:
+  - type: doi
+    value: 10.5281/zenodo.22758875
+    description: "Concept DOI: all versions, resolves to the latest (Zenodo)"
+  - type: doi
+    value: 10.5281/zenodo.23897787
+    description: "Version 2.0.1, the version evaluated in the SoftwareX article (Zenodo)"
+keywords:
+  - agentic AI
+  - software testing
+  - test automation
+  - Model Context Protocol
+  - AI governance
+  - auditability
+  - provenance
+  - Playwright
+  - Jira
+  - Azure DevOps
+  - requirements traceability

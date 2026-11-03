@@ -12,16 +12,20 @@ Check this table against reality before every release, with the commands below.
 
 | Artefact | Name | Version | Published | Source |
 | --- | --- | --- | --- | --- |
-| Runtime | `attestqa` | **2.0.1** (2.0.2 pending: eleven changesets) | npm | `packages/core/package.json` |
-| Extension | `attestqa-vscode` | **2.0.2** (set 3 Nov 2026; was 1.0.1) | VS Code Marketplace | `packages/vscode/package.json` |
-| Archive | `attestqa` | 2.0.1 — DOI 10.5281/zenodo.23897787 | Zenodo (GitHub release integration) | `CITATION.cff` |
+| Runtime | `attestqa` | **2.0.3** (2.0.2 on npm 3 Nov 2026) | npm | `packages/core/package.json` |
+| Extension | `attestqa-vscode` | **2.0.3** (2.0.2 on the Marketplace 3 Nov 2026) | VS Code Marketplace | `packages/vscode/package.json` |
+| Archive | `attestqa` | every release; cite the concept DOI (see `CITATION.cff`) | Zenodo (GitHub release integration) | `CITATION.cff` |
 
 One version line (ADR-005, 3 Nov 2026): the product release tag, the runtime and the extension carry the
 same number. They are not technically coupled — the extension reads ledgers the runtime writes — but two
 numbers that drift apart make "which version are you on?" a two-part question for no benefit.
 
 The Zenodo archive is created automatically for every GitHub release (the integration is on), so every
-release is citable; `CITATION.cff` must be bumped (version, date-released, doi) with each release.
+release is citable. `CITATION.cff` carries the *concept* DOI, which always resolves to the latest
+version, so only `version` and `date-released` change per release (`packages/core/CITATION.cff` is
+the copy that ships in the npm package and must say the same). A paper that needs a fixed version
+cites that version's own DOI from its Zenodo page (2.0.1: 10.5281/zenodo.23897787, cited by the
+SoftwareX article; 2.0.2: 10.5281/zenodo.23932981).
 
 ## What 2.0.x means here
 

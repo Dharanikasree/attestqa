@@ -1,5 +1,11 @@
 # Changelog
 
+## 2.0.3
+
+### Patch Changes
+
+- The `CITATION.cff` shipped in the package now matches the release: version, release date and the Zenodo concept DOI, which resolves to the latest archived version, instead of a fixed version DOI from an earlier release. The release pipeline is one workflow and token-free (trusted publishing on npm and the VS Code Marketplace); `docs/RELEASING.md` describes the four-step routine.
+
 ## 2.0.2
 
 ### Patch Changes
