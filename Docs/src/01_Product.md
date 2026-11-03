@@ -9,7 +9,7 @@ date: "2026-10-10"
 
 attestqa is an open-source desktop application for Windows. A tester opens it, points it at a website, connects it to an AI model their company already pays for, and it tests that website end to end. The tests it writes are ordinary Playwright code in a folder the tester owns. The part that makes it different from every other "AI testing" tool is that it will not make a failing test pass by weakening the test. That rule is enforced in code, not asked for in a prompt, and every step the AI takes is written to a ledger the tester can audit afterwards.
 
-Releases come at least once a month, starting with v1.0.0 in November 2026 (AQ-05). Each major version marks a new stage: v1 web testing, v2 API testing, v3 the web version of attestqa itself, v4 security testing and v5 ETL testing, all on the same engine and under the same rules. Monthly releases in between (v1.1.0, v1.2.0 …) add features within the stage, and fix releases (v1.2.1 …) go out whenever they are needed. The web version runs the same engine on a company server, so a team can share runs and approvals, and so IDE agents such as GitHub Copilot or Claude Code can call it over MCP.
+Releases come at least once a month, starting with v2.0.2 in November 2026 (AQ-05). Each major version marks a new stage: v1 web testing, v2 API testing, v3 the web version of attestqa itself, v4 security testing and v5 ETL testing, all on the same engine and under the same rules. Monthly releases in between (v2.1.0, v2.2.0 …) add features within the stage, and fix releases (v2.2.1 …) go out whenever they are needed. The web version runs the same engine on a company server, so a team can share runs and approvals, and so IDE agents such as GitHub Copilot or Claude Code can call it over MCP.
 
 This document says what the product is and why. How it is built is in the HLD (AQ-03) and LLD (AQ-04). What it looks like is in the Design document (AQ-02).
 
@@ -127,7 +127,7 @@ There is no free-text box that talks to the model. A chat window invites the use
 
 **Why desktop first.** Credentials never leave the laptop. The browser under test can reach intranet and VPN-only environments. The ledger is disk-only by construction. There is nothing to host and no account to create. Each of those is a reason an enterprise security review says yes.
 
-**The web version** is major release v3.0.0, with MCP and multi-user approvals in v3.1.0, straight after API testing (v2), so the server launches with two test types behind it. It reuses the same engine behind a server with company sign-in, the same review screens in a browser, and an MCP endpoint so IDE agents can start runs and read results. It does not change the four rules; it changes who holds the credentials and where the browser runs, which is the decision a company will want to make for itself.
+**The web version** is major release v4.0.0, with MCP and multi-user approvals in v4.1.0, straight after API testing (v3), so the server launches with two test types behind it. It reuses the same engine behind a server with company sign-in, the same review screens in a browser, and an MCP endpoint so IDE agents can start runs and read results. It does not change the four rules; it changes who holds the credentials and where the browser runs, which is the decision a company will want to make for itself.
 
 # 12. Packages we will publish
 
@@ -162,9 +162,9 @@ Three more packages from the same family are relevant. `pw-triage` uses the same
 
 Every monthly release has its own exit test in AQ-05. Four of them mark a test type as complete, and each repeats the same check for its type.
 
-**v1.4.0, web testing complete.** A tester on a company laptop installs the signed app, signs in to Azure OpenAI with their work account, explores OWASP Juice Shop to a set of feature files, turns one story from Azure DevOps or Jira into approved Playwright tests, runs them, and gets a report whose numbers match the ledger exactly, with at least one attempted weakening shown as refused. The suite then runs with `npx playwright test` on a machine without attestqa.
+**v2.4.0, web testing complete.** A tester on a company laptop installs the signed app, signs in to Azure OpenAI with their work account, explores OWASP Juice Shop to a set of feature files, turns one story from Azure DevOps or Jira into approved Playwright tests, runs them, and gets a report whose numbers match the ledger exactly, with at least one attempted weakening shown as refused. The suite then runs with `npx playwright test` on a machine without attestqa.
 
-**v2.1.0, API.** The same story gains API tests from Juice Shop's REST interface, checked against its contract. **v3.1.0, web version.** The same run is started from an IDE over MCP and approved by a second person in a browser. **v4.1.0, security.** The protected-route defect from the Paper I runs is found and reported as an access-control failure. **v5.0.0, ETL.** A reconciliation suite between two local synthetic databases catches a seeded transformation fault. In each, at least one attempted weakening of that type is refused and logged.
+**v3.1.0, API.** The same story gains API tests from Juice Shop's REST interface, checked against its contract. **v4.1.0, web version.** The same run is started from an IDE over MCP and approved by a second person in a browser. **v5.1.0, security.** The protected-route defect from the Paper I runs is found and reported as an access-control failure. **v6.0.0, ETL.** A reconciliation suite between two local synthetic databases catches a seeded transformation fault. In each, at least one attempted weakening of that type is refused and logged.
 
 # 15. Out of scope
 

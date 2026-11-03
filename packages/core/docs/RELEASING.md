@@ -161,10 +161,10 @@ npm deprecate attestqa@0.1.0 "broken build; use 0.1.1"
 
 ## Product releases and the VS Code extension
 
-From v1.0.0 a **product release** (tag `vX.Y.Z`, ADR-002) ships the engine and the extension
-together, from CI. The engine keeps its own version (`attestqa` 2.0.0 in v1.0.0); the extension's
-version equals the product release (`attestqa-vscode` 1.0.0), and the release workflow refuses a tag
-that does not match it.
+A **product release** (tag `vX.Y.Z`, ADR-002) ships the engine and the extension together, from CI.
+From 2.0.2 there is one version number (ADR-005): the tag, `attestqa` on npm and `attestqa-vscode` on
+the Marketplace are equal, and the release workflow refuses a tag that does not match both
+`packages/core/package.json` and `packages/vscode/package.json`.
 
 **Once, before the first release:**
 

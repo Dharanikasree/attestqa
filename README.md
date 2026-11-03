@@ -2,7 +2,7 @@
 
 Governed, open-source end-to-end testing for any website. A model your company already pays for writes and runs ordinary Playwright tests in a folder you own, and attestqa refuses — in code, not in a prompt — to make a failing test pass by weakening it. Every step is written to a ledger you can audit.
 
-Status: **first release, v1.0.0, on 15 November 2026** (`attestqa` 2.0.0 on npm, the attestqa
+Status: **v2.0.2** — the engine and CLI are on npm (`attestqa` 2.0.1, 22 Oct 2026; 2.0.2 carries the fixes from the October evaluation), the attestqa
 extension on the VS Code Marketplace). The design set was approved on 10 October 2026
 (`Docs/00_Signoff.pdf`).
 
@@ -20,8 +20,8 @@ extension on the VS Code Marketplace). The design set was approved on 10 October
 | `packages/core` | The governed runtime and the `aqa` CLI, published on npm as `attestqa` (history imported from agentic-qa) |
 | `packages/vscode` | The VS Code extension, `attestqa-vscode` on the Marketplace — a thin client of the `aqa` CLI |
 | `packages/*` | Other shared packages (`@attestqa/ui`, `@attestqa/client`, provider and sign-in plug-ins) as they arrive |
-| `Winapp/` | The Windows desktop app (from v1.2.0) |
-| `WebApplication/` | The web version, `@attestqa/server` (from v3.0.0) |
+| `Winapp/` | The Windows desktop app (from v2.2.0) |
+| `WebApplication/` | The web version, `@attestqa/server` (from v4.0.0) |
 | `TestRunApplication/` | One plain Playwright project per site under test, plus `targets.yaml` |
 | `Docs/` | Product, design, HLD, LLD, plan, test strategy, packaging and publishing documents (PDF), with sources |
 | `research/` | Findings, decisions, hypotheses, run manifest and weekly journal |

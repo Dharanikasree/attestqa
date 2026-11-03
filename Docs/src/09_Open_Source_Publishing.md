@@ -7,7 +7,7 @@ date: "2026-10-10"
 
 # 1. Build in the open from the first day
 
-The attestqa repository is public from the first commit of the v1.0.0 month, not from the first release. Three reasons. An open-source tool that asks to be trusted with test results should show how it was built, not only what it became. A public history timestamps every decision and rule, which matters for the papers built on it. And the earliest users of a QA tool are usually other testers, who are more likely to find it while it is being made than after.
+The attestqa repository is public from the first commit of the v2.0.2 month, not from the first release. Three reasons. An open-source tool that asks to be trusted with test results should show how it was built, not only what it became. A public history timestamps every decision and rule, which matters for the papers built on it. And the earliest users of a QA tool are usually other testers, who are more likely to find it while it is being made than after.
 
 What is never published: `.env` files, tokens and keys, ledgers from runs against private or company systems, and anything from a target whose owner has not agreed to automated testing. The repository's `.gitignore`, secret scanning and the scrubber in the engine are three separate barriers against that.
 

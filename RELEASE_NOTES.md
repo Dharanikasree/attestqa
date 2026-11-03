@@ -1,6 +1,7 @@
-# attestqa v1.0.0 — 15 November 2026
+# attestqa v2.0.2 — November 2026
 
-The first public release of attestqa: governed, open-source end-to-end testing for web
+The patch release that follows the October evaluation of 2.0.1: the same engine, with the eleven
+fixes the evaluation produced. attestqa is governed, open-source end-to-end testing for web
 applications. Point it at a user story in **Jira or Azure DevOps**; approve the test design it
 proposes; get ordinary Playwright tests in a folder you own — written, run, triaged and repaired
 under rules that refuse, in code, to make a failing test pass by weakening it. Every step is in a
@@ -17,7 +18,19 @@ attached to this release.
 
 Then follow the [user guide](packages/core/docs/USAGE.md) — about ten minutes to set up a project.
 
-## In this release
+## Fixed in 2.0.2 (each from an observed run; finding ids in `research/findings.jsonl`)
+
+- Bug gate judges each test by its latest result (F-0089).
+- Accessibility scope gate applies the run's own edits to the spec before judging (F-0091).
+- The file view the rules read applies in-place edits (F-0094).
+- Feature-churn guard counts `bdd2pw.analyze` as progress (F-0098).
+- Append-only rule protects only tests present at run start (F-0102).
+- Verifier counts navigation as a state-transition action when the design names it (F-0110).
+- Edits may name a masked value by its mask token (F-0113).
+- Append-only rule recognises the run's own scaffolded tests by their tags (F-0139).
+- Ledger names its engine; a page-load transient is a flake, not a defect; relative navigation is resolved against the configured origin (three further changesets).
+
+## What attestqa 2.0.x is
 
 - Jira and Azure DevOps stories, read with their epic, sub-tasks, comments and open bugs.
 - A test design — functional, security, accessibility, confirmation — approved by a person before
@@ -34,9 +47,9 @@ Then follow the [user guide](packages/core/docs/USAGE.md) — about ten minutes 
 
 | Package | Version |
 | --- | --- |
-| `attestqa` (npm) | 2.0.0 |
-| `attestqa-vscode` (Marketplace) | 1.0.0 |
-| bdd2pw / pw-emit / pw-self-heal (dependencies) | 4.5.2 / 1.4.0 / 1.2.2 |
+| `attestqa` (npm) | 2.0.2 |
+| `attestqa-vscode` (Marketplace) | 2.0.2 |
+| bdd2pw / pw-self-heal (dependencies) | 4.6.5 / 1.3.0 |
 
-`attestqa` 2.0.0 replaces the 1.x engine published from agentic-qa; the ledger format changed. What
+`attestqa` 2.0.x replaced the 1.x engine published from agentic-qa; the ledger format changed. From 2.0.2 the product, the engine and the extension share one version number (ADR-005). What
 comes next is in the [roadmap](ROADMAP.md).

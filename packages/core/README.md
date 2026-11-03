@@ -1,7 +1,7 @@
 # attestqa
 
-*Formerly `@vijaypjavvadi/agentic-qa` (engine 1.x). Version 2.0.0 is the engine inside attestqa
-release v1.0.0; the `aqa` command is unchanged.*
+*Formerly `@vijaypjavvadi/agentic-qa` (engine 1.x). From 2.0.2 the engine, the product release and the
+VS Code extension share one version number; the `aqa` command is unchanged.*
 
 [![CI](https://github.com/javvadivijayprasad/attestqa/actions/workflows/ci.yml/badge.svg)](https://github.com/javvadivijayprasad/attestqa/actions/workflows/ci.yml)
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.23897787.svg)](https://doi.org/10.5281/zenodo.23897787)
@@ -189,7 +189,7 @@ Deliberate limits, not missing features:
 
 ## Status
 
-**Engine 2.0.0, part of attestqa release v1.0.0 (15 November 2026).** Jira and Azure DevOps, any
+**attestqa 2.0.2 (November 2026; 2.0.1 on npm since 22 Oct).** Jira and Azure DevOps, any
 model your company uses, the CLI and a VS Code extension. Stories run end to end against a live Jira
 project and OWASP Juice Shop; the runtime, governance rules, ledger, replay, coverage and verifier
 are covered by more than 750 tests, including a golden fixture that fails CI on any drift in the

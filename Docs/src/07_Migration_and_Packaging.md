@@ -97,7 +97,7 @@ git subtree add --prefix=packages/core ^
 | `@attestqa/tracker-jira` | `packages/tracker-jira` | 0.1.0 | npm | `attestqa` |
 | `@attestqa/adapter-zap` | `packages/adapter-zap` | with v4.0 (security testing) | npm | `attestqa`; OWASP ZAP installed separately |
 | `@attestqa/adapter-sql` | `packages/adapter-sql` | with v5.0 (ETL testing) | npm | `attestqa`; database drivers as optional peers |
-| `@attestqa/server` | `WebApplication` | with v3.0.0 | npm + container image | core, client |
+| `@attestqa/server` | `WebApplication` | with v4.0.0 | npm + container image | core, client |
 | attestqa for Windows | `Winapp` | 0.1.0 | GitHub Releases (signed NSIS) | all of the above |
 
 Versioning: semantic versioning per package, with Changesets managing release notes across the workspace. Each npm publish uses npm provenance from GitHub Actions so anyone can check a package was built from the public source.
@@ -114,7 +114,7 @@ MIT licence in every package. `CONTRIBUTING.md`, `CODE_OF_CONDUCT.md`, `SECURITY
 
 | Risk | Mitigation |
 |---|---|
-| `@attestqa` scope taken | Check and create the npm organisation in the first month, before v1.0.0 (D4); fallback `@attestqa-dev` or unscoped names |
+| `@attestqa` scope taken | Check and create the npm organisation in the first month, before v2.0.2 (D4); fallback `@attestqa-dev` or unscoped names |
 | Subtree import loses tags | Push tags explicitly; verify `git show f2771d4` in the monorepo before continuing |
 | Shim and core versions drift | Shim pins `attestqa ^1.1.0`; it is final and never republished |
 | A change in one of our packages breaks attestqa | attestqa pins major versions and runs its replay tests against each new minor release before raising the range |
