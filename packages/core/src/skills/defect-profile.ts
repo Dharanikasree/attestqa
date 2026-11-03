@@ -34,7 +34,9 @@ export const DEFECT_PROFILE_SOURCES = ["ado.wit_query", "ado.wit_work_item"];
 function vocabulary(): string {
   const surfaces = DEFECT_SURFACES.map((l) => `  - ${l}: ${SURFACE_MEANINGS[l]}`).join("\n");
   const techniques = TEST_TECHNIQUES.map((t) => `  - ${t}: ${TECHNIQUE_MEANINGS[t]}`).join("\n");
-  return `SURFACE — where the defect lived:\n${surfaces}\n\nTECHNIQUE — what nobody did, i.e. the test technique that would have caught it:\n${techniques}\n\nEXCEPTION TYPE — how it announced itself. Exactly one of:\n  ${EXCEPTION_TYPES.join(", ")}\nUse "Other" when the bug names no exception; most bug reports will not.`;
+  return `SURFACE — where the defect lived:\n${surfaces}\n\nTECHNIQUE — what nobody did, i.e. the test technique that would have caught it:\n${techniques}\n\nEXCEPTION TYPE — how it announced itself. Exactly one of:\n  ${EXCEPTION_TYPES.join(
+    ", ",
+  )}\nUse "Other" when the bug names no exception; most bug reports will not.`;
 }
 
 export function defectProfileInstructions(project: string, maxBugs: number): string {

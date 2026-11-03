@@ -100,7 +100,7 @@ const end = () =>
     eventId: ++n,
     kind: "end",
     payload: { status: "done", summary: "", exitCode: 0 },
-  } as unknown as AnyRunEvent);
+  }) as unknown as AnyRunEvent;
 const priorRun = (facts: StoryFacts, failing: string[] = []) => ({
   runId: "20261018T100000Z",
   events: [

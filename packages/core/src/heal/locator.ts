@@ -114,8 +114,9 @@ export function rankCandidates(
       if (a && a === n) {
         score += sameRole ? 30 : 20;
         why =
-          `same ${sameRole ? "control" : "name"} as the selector that failed — "${asked.name}" vs ` +
-          `"${c.name}" differ only in spacing, case or punctuation`;
+          `same ${sameRole ? "control" : "name"} as the selector that failed — "${
+            asked.name
+          }" vs ` + `"${c.name}" differ only in spacing, case or punctuation`;
       } else if (a && n && (n.includes(a) || a.includes(n)) && Math.min(a.length, n.length) >= 4) {
         score += sameRole ? 15 : 10;
         why = `name "${c.name}" contains or is contained in "${asked.name}"`;

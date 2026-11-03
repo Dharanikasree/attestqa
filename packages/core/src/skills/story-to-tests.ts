@@ -183,12 +183,12 @@ Jira keeps no test cases, so nothing about cases or suites is checked.`
      there from an earlier run — at one case per acceptance criterion;
   4b. if you created any, you read the existing ones first;
   5. every created case carries testsWorkItemId = ${workItem};${
-        canCreatePlans
-          ? `
+    canCreatePlans
+      ? `
   6. the cases were added to a test suite.`
-          : `
+      : `
 Suite membership is NOT checked in this environment (see step 6).`
-      }`
+  }`
 }
 Saying you are finished does not make you finished. When you believe the work is
 done, stop calling tools and the verifier will check. If it finds gaps you will
@@ -817,14 +817,14 @@ ${
    step — do not look for a plan, and say in your final summary that suite
    membership was skipped because the environment does not permit it.`
        : testPlan
-       ? `The plan you may use is named "${testPlan}" — that name and no other.
+         ? `The plan you may use is named "${testPlan}" — that name and no other.
    Call ado.testplan with action "list_plans" first. A project that has never
    had one comes back with an empty list: that is not an error and not a reason
    to list again. Create the plan with ado.testplan_test_plan_write action
    "create" and name "${testPlan}", then ado.testplan_test_suite_write action
    "create" for a suite under its planId, then action "add_test_cases" with the
    ids returned when you created the cases.`
-       : `Call ado.testplan with action "list_plans" to find the plan. If the
+         : `Call ado.testplan with action "list_plans" to find the plan. If the
    list is empty, stop and report that no test plan is in scope — creating one
    is not something you may choose unilaterally.`
    }
@@ -1344,7 +1344,7 @@ export function storyToTestsSkill(
           from: "B",
           appendOnly: true,
           missing,
-          locked: completing ? last?.["locked"] ?? [] : lockedScenarios(featureText ?? ""),
+          locked: completing ? (last?.["locked"] ?? []) : lockedScenarios(featureText ?? ""),
         },
         deny: [],
       };

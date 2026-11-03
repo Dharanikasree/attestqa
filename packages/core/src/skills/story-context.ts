@@ -436,7 +436,7 @@ export function relations(item: unknown): Relations {
 /** A get_batch result as a list of work items, whatever envelope it came in. */
 function workItems(result: unknown): Array<Record<string, unknown>> {
   const rec = asRecord(result);
-  const list = rec ? rec["value"] ?? rec["workItems"] : result;
+  const list = rec ? (rec["value"] ?? rec["workItems"]) : result;
   return asArray(list).map((x) => asRecord(x) ?? {});
 }
 

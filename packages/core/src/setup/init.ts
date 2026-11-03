@@ -166,7 +166,9 @@ ${modelBlock(o)}
   approve_execution: true
   scope:
     # The stories the agent may read and work on. A story outside this list is
-    # refused before anything is spent.${jira ? " Jira: a project key with -*." : " Azure DevOps: ids or ranges."}
+    # refused before anything is spent.${
+      jira ? " Jira: a project key with -*." : " Azure DevOps: ids or ranges."
+    }
     work_items: ["${work}"]
     repos: []
     test_plans: []${jira ? " # Jira keeps no test plans" : ""}
@@ -313,7 +315,9 @@ export function runInit(o: InitOptions): InitResult {
     for (const n of already) prefilled.add(n);
     if (already.length)
       result.notes.push(
-        `${already.join(" and ")} already set in this environment (as Claude Code uses them) — no need to repeat in .env`,
+        `${already.join(
+          " and ",
+        )} already set in this environment (as Claude Code uses them) — no need to repeat in .env`,
       );
     result.notes.push(
       `fill in the empty values in .env: ${names.filter((n) => !prefilled.has(n)).join(", ")}`,
@@ -327,7 +331,9 @@ export function runInit(o: InitOptions): InitResult {
     const sep = gi === "" || gi.endsWith("\n") ? "" : "\n";
     writeFileSync(
       giPath,
-      `${gi}${sep}${gi ? "\n" : ""}# attestqa: credentials and run records stay out of git\n${add.join("\n")}\n`,
+      `${gi}${sep}${
+        gi ? "\n" : ""
+      }# attestqa: credentials and run records stay out of git\n${add.join("\n")}\n`,
       "utf8",
     );
     result.written.push(".gitignore");

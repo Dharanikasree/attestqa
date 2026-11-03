@@ -236,7 +236,9 @@ export class AnthropicModel implements ModelClient {
         {
           role: "user",
           content: scrub(
-            `${renderRequest(input)}\n\nOutline how you will approach this, as a short numbered list of steps. Do not call any tools yet.`,
+            `${renderRequest(
+              input,
+            )}\n\nOutline how you will approach this, as a short numbered list of steps. Do not call any tools yet.`,
           ).text,
         },
       ],
@@ -368,7 +370,9 @@ function describeTool(d: ToolDescriptor): string {
   const args = [...new Set(scoped.flatMap((s) => Object.values(s ?? {})))];
   if (args.length > 0) {
     parts.push(
-      `Scope-checked argument(s): ${args.join(", ")} — required, and checked against the run's allow-list.`,
+      `Scope-checked argument(s): ${args.join(
+        ", ",
+      )} — required, and checked against the run's allow-list.`,
     );
   }
   return parts.join(" ");
@@ -435,7 +439,9 @@ function isSourceLike(h: HistoryItem): boolean {
 
 function renderItem(h: HistoryItem): string {
   const args = briefArgs(h.args);
-  const head = `## ${h.toolName}${args ? ` ${args}` : ""} (${h.ok ? "ok" : "failed"}, ${h.ledgerRef})`;
+  const head = `## ${h.toolName}${args ? ` ${args}` : ""} (${h.ok ? "ok" : "failed"}, ${
+    h.ledgerRef
+  })`;
   if (h.gate) return `${head}\n\n${h.gate.decision.toUpperCase()}: ${h.gate.reason}`;
   return `${head}\n\n${h.summary}`;
 }

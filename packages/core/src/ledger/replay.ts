@@ -64,7 +64,9 @@ export function renderLine(e: AnyRunEvent): string {
     case "ruling":
       return `Ruling by ${e.payload.author} on ${e.payload.subject.type} ${e.payload.subject.ref}: ${e.payload.decision} — ${e.payload.reason}`;
     case "user_edit":
-      return `Edited by ${e.payload.author}: ${e.payload.path}${e.payload.reason ? ` — ${e.payload.reason}` : ""}`;
+      return `Edited by ${e.payload.author}: ${e.payload.path}${
+        e.payload.reason ? ` — ${e.payload.reason}` : ""
+      }`;
     case "run_aborted":
       return `Run aborted after event ${e.payload.lastEventId}: ${e.payload.reason}`;
   }
@@ -166,7 +168,9 @@ export function renderMarkdown(events: AnyRunEvent[]): string {
     `**Events:** ${stats.events} · **Inferences:** ${stats.inferences} · **Tool calls:** ${stats.calls} (${stats.failedCalls} failed) · **Approvals:** ${stats.approvals} · **Refusals:** ${stats.refusals}  `,
   );
   lines.push(
-    `**Tokens:** ${stats.inputTokens} in / ${stats.outputTokens} out${renderCache(stats)} · **Wall:** ${formatMs(stats.wallMs)}`,
+    `**Tokens:** ${stats.inputTokens} in / ${stats.outputTokens} out${renderCache(
+      stats,
+    )} · **Wall:** ${formatMs(stats.wallMs)}`,
   );
   lines.push("");
   lines.push("## Timeline");

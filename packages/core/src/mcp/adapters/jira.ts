@@ -61,7 +61,10 @@ export class JiraTools implements ToolClient {
   private readonly timeoutMs: number;
   private readonly api: string;
 
-  constructor(private readonly conn: JiraConnection, opts: JiraOptions = {}) {
+  constructor(
+    private readonly conn: JiraConnection,
+    opts: JiraOptions = {},
+  ) {
     this.fetchImpl = opts.fetch ?? (globalThis.fetch as unknown as FetchLike);
     this.timeoutMs = opts.timeoutMs ?? 60_000;
     this.api = `${conn.baseUrl.replace(/\/+$/, "")}/rest/api/${conn.apiVersion ?? 3}`;
@@ -306,8 +309,8 @@ export class JiraTools implements ToolClient {
       acceptanceCriteriaSource: fromField
         ? acField
         : acceptanceSection(description)
-        ? "description"
-        : "none",
+          ? "description"
+          : "none",
       labels: Array.isArray(f["labels"]) ? (f["labels"] as unknown[]).map(String) : [],
       parent: str((f["parent"] as { key?: string } | undefined)?.key),
       links: links(f["issuelinks"]),

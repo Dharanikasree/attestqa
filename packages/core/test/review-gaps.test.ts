@@ -74,7 +74,7 @@ describe("broken stops the run; weaker goes to review", () => {
         eventId,
         kind,
         payload,
-      } as unknown as AnyRunEvent);
+      }) as unknown as AnyRunEvent;
     t.line(ev(1, "request", { text: "Write tests for TOOL-6" }));
     t.line(
       ev(2, "verify", {
@@ -101,7 +101,7 @@ describe("one fix attempt, then the reviewer", () => {
         done: false,
         gaps: [{ code: "test-is-weaker-than-its-design", evidence: { items } }],
       },
-    } as unknown as AnyRunEvent);
+    }) as unknown as AnyRunEvent;
 
   it("asks the agent first, and sends it to review only once it has been asked", async () => {
     const { splitReviewItems } = await import("../src/verify/story-to-tests.js");

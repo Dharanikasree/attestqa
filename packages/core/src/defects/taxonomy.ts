@@ -258,7 +258,9 @@ export function profileProblems(profile: DefectProfile): string[] {
       );
     if (!isExceptionType(r.exceptionType))
       problems.push(
-        `work item ${r.id}: exceptionType "${String(r.exceptionType)}" is not one of Paper F's EXCEPTION_TYPES`,
+        `work item ${r.id}: exceptionType "${String(
+          r.exceptionType,
+        )}" is not one of Paper F's EXCEPTION_TYPES`,
       );
     if (r.httpStatus !== undefined && (typeof r.httpStatus !== "number" || r.httpStatus < 0))
       problems.push(`work item ${r.id}: httpStatus is not a status code`);

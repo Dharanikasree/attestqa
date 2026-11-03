@@ -544,12 +544,12 @@ export class StoryToTestsVerifier implements Verifier {
                       .join(", ") +
                     ". Implement each of those steps in the spec from its design item's expected result, then the suite runs again"
                 : skippedOnly(r)
-                ? `the suite ran but ${String(
-                    r["skipped"],
-                  )} test(s) are still unimplemented (fixme), so nothing was actually verified`
-                : `the suite ran but is not green: ${String(r["passed"] ?? 0)} passed, ${String(
-                    r["failed"] ?? 0,
-                  )} failed, ${String(r["skipped"] ?? 0)} skipped`,
+                  ? `the suite ran but ${String(
+                      r["skipped"],
+                    )} test(s) are still unimplemented (fixme), so nothing was actually verified`
+                  : `the suite ran but is not green: ${String(r["passed"] ?? 0)} passed, ${String(
+                      r["failed"] ?? 0,
+                    )} failed, ${String(r["skipped"] ?? 0)} skipped`,
               {
                 passed: r["passed"],
                 failed: r["failed"],
@@ -857,8 +857,8 @@ function specPathsTouched(calls: CallRecord[]): string[] {
       c.server === "fs"
         ? c.args["path"]
         : c.toolName === "pw.run_tests"
-        ? c.args["spec"]
-        : undefined;
+          ? c.args["spec"]
+          : undefined;
     if (typeof p === "string" && isSpecPath(p)) out.push(p);
   }
   return out;

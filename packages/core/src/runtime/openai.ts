@@ -124,7 +124,9 @@ export function endpointFor(
       const base = (config.endpoint ?? "").replace(/\/+$/, "");
       const version = config.api_version ?? DEFAULT_AZURE_API_VERSION;
       return {
-        url: `${base}/openai/deployments/${encodeURIComponent(config.name)}/chat/completions?api-version=${encodeURIComponent(version)}`,
+        url: `${base}/openai/deployments/${encodeURIComponent(
+          config.name,
+        )}/chat/completions?api-version=${encodeURIComponent(version)}`,
         headers: apiKey ? { "api-key": apiKey } : {},
         // Azure routes by deployment in the path; a model in the body is ignored.
         bodyModel: undefined,
@@ -219,7 +221,9 @@ export class OpenAiCompatibleModel implements ModelClient {
         {
           role: "user",
           content: scrub(
-            `${renderRequest(input)}\n\nOutline how you will approach this, as a short numbered list of steps. Do not call any tools yet.`,
+            `${renderRequest(
+              input,
+            )}\n\nOutline how you will approach this, as a short numbered list of steps. Do not call any tools yet.`,
           ).text,
         },
       ],

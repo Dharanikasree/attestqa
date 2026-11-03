@@ -11,7 +11,7 @@ const ev = (kind: string, payload: Record<string, unknown>): AnyRunEvent =>
     timestamp: 1,
     kind,
     payload,
-  } as unknown as AnyRunEvent);
+  }) as unknown as AnyRunEvent;
 const call = (server: string, toolName: string, args: Record<string, unknown> = {}) =>
   ev("call", { server, toolName, args, startedAt: 0 });
 
@@ -130,7 +130,7 @@ describe("the report links what was filed and shows the evidence", () => {
         eventId: ++id,
         kind,
         payload,
-      } as unknown as import("../src/types.js").AnyRunEvent);
+      }) as unknown as import("../src/types.js").AnyRunEvent;
     const out: string[] = [];
     const call = (
       server: string,

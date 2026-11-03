@@ -675,7 +675,12 @@ describe("a new story in a spec other stories already fill (20261012T192216Z)", 
       {
         eventId: 3,
         kind: "call",
-        payload: { server: "fs", toolName: "write_file", args: { path: PATH, content: mine }, startedAt: 0 },
+        payload: {
+          server: "fs",
+          toolName: "write_file",
+          args: { path: PATH, content: mine },
+          startedAt: 0,
+        },
       },
       {
         eventId: 4,
@@ -686,9 +691,9 @@ describe("a new story in a spec other stories already fill (20261012T192216Z)", 
     expect(
       appendOnlySpec(write(mine.replace("expect(2).toBe(2)", "expect(3).toBe(3)")), withMine),
     ).toBeUndefined();
-    expect(
-      appendOnlySpec(write(mine.replace("    expect(1).toBe(1);\n", "")), withMine),
-    ).toMatch(/lose an assertion/);
+    expect(appendOnlySpec(write(mine.replace("    expect(1).toBe(1);\n", "")), withMine)).toMatch(
+      /lose an assertion/,
+    );
     // 20261027T013412Z: the spec was first read after this run's scaffold had
     // added its tests, so the read says nothing about the run's start. A test
     // tagged with this story and an item designed in this run is still the
@@ -728,7 +733,10 @@ describe("a new story in a spec other stories already fill (20261012T192216Z)", 
       },
     ] as unknown as AnyRunEvent[];
     expect(
-      appendOnlySpec(write(mine.replace("expect(2).toBe(2)", "expect(3).toBe(3)")), readAfterScaffold),
+      appendOnlySpec(
+        write(mine.replace("expect(2).toBe(2)", "expect(3).toBe(3)")),
+        readAfterScaffold,
+      ),
     ).toBeUndefined();
     expect(
       appendOnlySpec(write(mine.replace("    expect(1).toBe(1);\n", "")), readAfterScaffold),

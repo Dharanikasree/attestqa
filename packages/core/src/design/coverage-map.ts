@@ -131,7 +131,9 @@ export function renderCoverage(c: { feature?: string; lines: CoverageLine[] }): 
         : `  ${l.what}: ${l.covered
             .map(
               (x) =>
-                `${x.design} "${x.scenario}"${x.scripted ? "" : " (scenario only — no script yet)"}`,
+                `${x.design} "${x.scenario}"${
+                  x.scripted ? "" : " (scenario only — no script yet)"
+                }`,
             )
             .join("; ")}`,
     );

@@ -114,9 +114,8 @@ describe("run 20261019T155404Z (TOOL-6): the third clean-gate attempt", () => {
   const events = ledger("20261019T155404Z-79a992bf");
 
   it("sends back the static items labelled state-transition at design time", async () => {
-    const { validateDesign, parseDesign, storyFacts } = await import(
-      "../src/design/test-design.js"
-    );
+    const { validateDesign, parseDesign, storyFacts } =
+      await import("../src/design/test-design.js");
     const call = events.find(
       (e) =>
         e.kind === "call" &&

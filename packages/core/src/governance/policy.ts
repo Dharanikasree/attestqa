@@ -99,14 +99,18 @@ export function resolveAction(
       return {
         ok: false,
         class: "destructive",
-        reason: `argument "${arg}" is required for action "${action}" of ${tool.server}.${tool.name} (must be one of: ${allowed.join(", ")})`,
+        reason: `argument "${arg}" is required for action "${action}" of ${tool.server}.${
+          tool.name
+        } (must be one of: ${allowed.join(", ")})`,
       };
     }
     if (!allowed.includes(value)) {
       return {
         ok: false,
         class: "destructive",
-        reason: `action "${action}" of ${tool.server}.${tool.name} is permitted only with ${arg} in {${allowed.join(", ")}}; got "${value}"`,
+        reason: `action "${action}" of ${tool.server}.${
+          tool.name
+        } is permitted only with ${arg} in {${allowed.join(", ")}}; got "${value}"`,
       };
     }
   }

@@ -725,10 +725,10 @@ function keptItsClaims(events: AnyRunEvent[], test: string): boolean {
       c.toolName === "fs.write_file"
         ? String(c.args["content"] ?? "")
         : edited !== undefined
-        ? edited
-        : typeof asRecord(c.result)?.["content"] === "string"
-        ? String(asRecord(c.result)?.["content"])
-        : undefined;
+          ? edited
+          : typeof asRecord(c.result)?.["content"] === "string"
+            ? String(asRecord(c.result)?.["content"])
+            : undefined;
     if (text === undefined) continue;
     const isWrite = c.toolName === "fs.write_file" || c.toolName === "fs.replace_in_file";
     if (isWrite && previous !== undefined && previous !== text) {

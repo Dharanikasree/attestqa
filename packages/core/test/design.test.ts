@@ -456,7 +456,8 @@ describe("state transition means an action (20261019T155404Z)", () => {
       type: "functional" as const,
       technique: "state-transition" as const,
       conditions: ["User is not signed in", "User navigates directly to the product list URL"],
-      expected: "The browser is redirected to the sign-in page; an error saying sign-in is needed is shown",
+      expected:
+        "The browser is redirected to the sign-in page; an error saying sign-in is needed is shown",
       source: "AC-2",
     };
     const body =

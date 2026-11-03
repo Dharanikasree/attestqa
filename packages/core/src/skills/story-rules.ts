@@ -334,7 +334,7 @@ export function coveredCriteria(
   // Test cases READ this run — the preflight reads the story's existing ones.
   for (const c of successful(calls, "ado.wit_work_item", "get_batch")) {
     const rec = asRecord(c.result);
-    const items = asArray(rec ? rec["value"] ?? rec["workItems"] : payloadOf(c.result));
+    const items = asArray(rec ? (rec["value"] ?? rec["workItems"]) : payloadOf(c.result));
     for (const w of items) {
       const f = asRecord(asRecord(w)?.["fields"]) ?? {};
       if (f["System.WorkItemType"] !== "Test Case") continue;
@@ -2365,7 +2365,7 @@ function claimNotInDesign(
     const said = items
       .map((it) => {
         const n = /AC-?(\d+)/i.exec(it.covers)?.[1];
-        const ac = n !== undefined ? facts?.acceptanceCriteria[Number(n) - 1] ?? "" : "";
+        const ac = n !== undefined ? (facts?.acceptanceCriteria[Number(n) - 1] ?? "") : "";
         return `${it.expected} ${it.conditions.join(" ")} ${ac}`;
       })
       .join(" ");
@@ -2699,7 +2699,8 @@ function ownTestsOfThisRun(spec: string, events: AnyRunEvent[]): Set<string> {
   for (const title of testsByTitle(spec).keys()) {
     const tags = tagsAbove(spec, title);
     if (!tags.includes(`@STORY:${story}`)) continue;
-    if (tags.some((t) => t.startsWith("@DESIGN:") && items.has(t.slice("@DESIGN:".length)))) out.add(title);
+    if (tags.some((t) => t.startsWith("@DESIGN:") && items.has(t.slice("@DESIGN:".length))))
+      out.add(title);
   }
   return out;
 }

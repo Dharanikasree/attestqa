@@ -226,7 +226,13 @@ function edit(old: string, next: string, all = false): AnyRunEvent[] {
       ...base,
       eventId: ++id,
       kind: "observation",
-      payload: { eventIdOfCall: callId, ok: true, result: { replaced: 1 }, artefacts: [], durationMs: 1 },
+      payload: {
+        eventIdOfCall: callId,
+        ok: true,
+        result: { replaced: 1 },
+        artefacts: [],
+        durationMs: 1,
+      },
     },
   ] as unknown as AnyRunEvent[];
 }

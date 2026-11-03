@@ -464,9 +464,10 @@ export function validateDesign(
     } else if (task !== undefined) {
       if (!facts.tasks.includes(task))
         problems.push(`${at}: covers task #${task}, which is not one of the story's tasks`);
-    } else if (
-      !(it.covers.toLowerCase() === "story" && (it.type === "accessibility" || noCriteria))
-    ) {
+    } else if (!(
+      it.covers.toLowerCase() === "story" &&
+      (it.type === "accessibility" || noCriteria)
+    )) {
       problems.push(
         `${at}: covers "${it.covers}" — name a criterion (AC-2), a bug (bug #48) or a task (task #46)`,
       );
@@ -1104,11 +1105,15 @@ export function shapeProblems(item: DesignItem, body: string): string[] {
     const conditionsText = (item.conditions ?? []).join(" ");
     const navigationIsTheAction =
       actions.length === 0 &&
-      /\b(navigat\w*|go(es)? to|went to|open\w*|visit\w*|load\w*|reload\w*)\b/i.test(conditionsText) &&
+      /\b(navigat\w*|go(es)? to|went to|open\w*|visit\w*|load\w*|reload\w*)\b/i.test(
+        conditionsText,
+      ) &&
       !/\b(click\w*|fill\w*|enter\w*|typ(e|es|ed|ing)|press\w*|select\w*|submit\w*|check\w*|toggl\w*|hover\w*)\b/i.test(
         conditionsText,
       );
-    const gotos = navigationIsTheAction ? [...body.matchAll(/\.(goto|reload|goBack|goForward)\s*\(/g)] : [];
+    const gotos = navigationIsTheAction
+      ? [...body.matchAll(/\.(goto|reload|goBack|goForward)\s*\(/g)]
+      : [];
     const last = actions[actions.length - 1] ?? gotos[gotos.length - 1];
     // No action at all, though a state-transition item names one (the design
     // check makes sure it does). 20261019T200105Z passed a "page 2 control is

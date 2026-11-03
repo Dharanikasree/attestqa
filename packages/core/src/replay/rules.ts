@@ -162,7 +162,9 @@ function probeDeadlock(events: AnyRunEvent[], skill: Skill): DeadlockProbe | und
         args: {
           path: feature,
           content:
-            `${featureNow.trimEnd()}\n\n  @story:${story} @design:${id} @type:${item?.type ?? "functional"} @technique:${item?.technique ?? "state-transition"}\n` +
+            `${featureNow.trimEnd()}\n\n  @story:${story} @design:${id} @type:${
+              item?.type ?? "functional"
+            } @technique:${item?.technique ?? "state-transition"}\n` +
             `  Scenario: ${id}: replay probe\n    When I open the page\n`,
         },
       },

@@ -166,11 +166,16 @@ export function render(profile: DefectProfile, counts: ReturnType<typeof countPr
 
   const testSide =
     counts.testSideTotal > 0
-      ? `\n${counts.testSideTotal} of these (${pct(counts.testSideTotal, counts.total)}) are \`fixture\` — test defects rather than product defects.`
+      ? `\n${counts.testSideTotal} of these (${pct(
+          counts.testSideTotal,
+          counts.total,
+        )}) are \`fixture\` — test defects rather than product defects.`
       : "";
 
   return [
-    `**Defect profile — ${profile.project}**, ${counts.total} classified bug${counts.total === 1 ? "" : "s"}.`,
+    `**Defect profile — ${profile.project}**, ${counts.total} classified bug${
+      counts.total === 1 ? "" : "s"
+    }.`,
     ``,
     `By surface: ${surfaces}`,
     ``,

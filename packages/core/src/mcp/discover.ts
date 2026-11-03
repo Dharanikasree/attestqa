@@ -81,7 +81,9 @@ export function renderReportMarkdown(r: DiscoveryReport): string {
   lines.push("|---|---|---|---|");
   for (const t of r.tools)
     lines.push(
-      `| \`${t.qualified}\` | ${t.policyClass} | ${t.classified ? "yes" : "**no**"} | ${cell(t.description)} |`,
+      `| \`${t.qualified}\` | ${t.policyClass} | ${t.classified ? "yes" : "**no**"} | ${cell(
+        t.description,
+      )} |`,
     );
   lines.push("");
   lines.push("## Schemas");
