@@ -85,10 +85,23 @@ function outcomes(report) {
   return map;
 }
 
-console.log(`${args.app}: ${runs} plain runs of the final suite against ${env.AQA_APP_URL}`);
+// plan.resetCommands: shell commands run before EVERY run so each starts from the
+// same application state (Juice Shop: docker restart + juice-shop-ready.mjs). Without
+// it the ten runs share one database and the later runs see what the earlier ones
+// left behind (orders, sessions), which looks like flakiness and is not (30 Oct 2026).
+async function resetApp() {
+  for (const cmd of plan.resetCommands ?? []) {
+    const [c, ...a] = cmd.split(" ");
+    const r = await run(c, a, { cwd: here, env });
+    if (r.code !== 0) { console.error(`reset failed: ${cmd}`); process.exit(1); }
+  }
+  if (plan.resetCommands?.length) console.log(`  reset: ${plan.resetCommands.length} command(s) done`);
+}
+console.log(`${args.app}: ${runs} plain runs of the final suite against ${env.AQA_APP_URL}${plan.resetCommands?.length ? ", application reset before each" : ""}`);
 const perTest = new Map();
 const started = new Date().toISOString();
 for (let n = 1; n <= runs; n++) {
+  await resetApp();
   const pw = ["playwright", "test", "--reporter=json"];
   // the command goes through the shell on Windows (npx.cmd), so an argument with
     // spaces must be quoted or it is split into file filters (30 Oct: a run of 40
@@ -115,7 +128,7 @@ const done = tests.length ? Math.max(...tests.map((t) => t.passed + t.failed + t
 const flaky = tests.filter((t) => t.passed > 0 && t.failed > 0);
 const standing = tests.filter((t) => t.failed === done && done > 0);
 const summary = {
-  app: args.app, url: env.AQA_APP_URL, runs: done, started, excludeTests: plan.excludeTests ?? null, finished: new Date().toISOString(),
+  app: args.app, url: env.AQA_APP_URL, runs: done, started, excludeTests: plan.excludeTests ?? null, resetCommands: plan.resetCommands ?? [], finished: new Date().toISOString(),
   tests: tests.length, alwaysPassed: tests.filter((t) => t.passed === done).length,
   flaky: flaky.map((t) => ({ title: t.title, passed: t.passed, failed: t.failed, messages: t.messages })),
   standingFailures: standing.map((t) => t.title),

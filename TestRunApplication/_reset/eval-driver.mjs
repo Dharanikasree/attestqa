@@ -33,6 +33,7 @@ import { existsSync, mkdirSync, readdirSync, readFileSync, writeFileSync, cpSync
 import { join, resolve, dirname, relative } from "node:path";
 import { fileURLToPath } from "node:url";
 import { createInterface } from "node:readline";
+import { createHash } from "node:crypto";
 import { approvePending } from "./auto-approve.mjs";
 
 const here = dirname(fileURLToPath(import.meta.url));
@@ -47,22 +48,27 @@ const APPS = {
   "saucedemo": { config: "examples/eval/saucedemo.config.yaml", env: ".env.saucedemo,.env", ledgers: [".aqa-eval-sd", ".aqa-eval-sd-r2", ".aqa-eval-sd-r3"], slug: (s) => "SD-" + s.replace(/^AB#/, ""), reset: "none" },
   "juice-shop": { config: "examples/ai-quality.jira.config.yaml", env: null, ledgers: [".aqa-eval", ".aqa-eval-r2", ".aqa-eval-r3"], slug: (s) => s, reset: "juice-shop" },
   "toolshop": { config: "examples/eval/toolshop.config.yaml", env: ".env.toolshop,.env", ledgers: [".aqa-eval", ".aqa-eval-r2", ".aqa-eval-r3"], slug: (s) => s, reset: "toolshop" },
-  "booker": { config: "examples/eval/booker.config.yaml", env: ".env.booker,.env", ledgers: [".aqa-eval-rb", ".aqa-eval-rb-r2", ".aqa-eval-rb-r3"], slug: (s) => "RB-" + s.replace(/^AB#/, ""), reset: "booker" },
+  "booker": { config: "examples/eval/booker.config.yaml", env: ".env.booker,.env", ledgers: [".aqa-eval-rb", ".aqa-eval-rb-r2", ".aqa-eval-rb-r3"], slug: (s) => "RB-" + s.replace(/^AB#/, ""), reset: "none" }, // Booker is stateful in memory; its only reset is restarting run_locally.cmd, which kills the driver, so the driver does not reset between runs. Runs 2-3 of a data-creating story see run 1's leftovers (threat, EVAL_RESULTS). Restart Booker by hand only if it crashes.
 };
 
 const arg = (name, dflt) => { const i = process.argv.indexOf(`--${name}`); return i > 0 && process.argv[i + 1] && !process.argv[i + 1].startsWith("--") ? process.argv[i + 1] : dflt; };
 const has = (name) => process.argv.includes(`--${name}`);
 const appName = arg("app");
-const story = arg("story");
-const runs = arg("runs", "1,2,3").split(",").map((n) => Number(n.trim())).filter((n) => [1, 2, 3].includes(n));
+// one story (--story X [--runs 1,2,3]) or a queue (--stories "AB#115:2,3 AB#116 AB#117"),
+// each entry a story id with an optional :runs suffix; the queue runs in order and
+// stops at the first story that ends in an error or fails a precondition
+const queue = (arg("stories") ? arg("stories").split(/[\s,;]+(?=[A-Za-z])/) : [arg("story") ? `${arg("story")}:${arg("runs", "1,2,3")}` : ""])
+  .filter(Boolean)
+  .map((e) => { const [st, rs] = e.split(":"); return { story: st, runs: (rs ?? "1,2,3").split(",").map((n) => Number(n.trim())).filter((n) => [1, 2, 3].includes(n)) }; });
 const app = APPS[appName];
-if (!app || !story || runs.length === 0) {
-  console.error("usage: eval-driver.mjs --app saucedemo|juice-shop|toolshop|booker --story <AB#113|SCRUM-25|TOOL-6> [--runs 1,2,3] [--no-reset] [--dry-run]");
+if (!app || queue.length === 0 || queue.some((q) => !q.story || q.runs.length === 0)) {
+  console.error("usage: eval-driver.mjs --app saucedemo|juice-shop|toolshop|booker (--story <AB#113|SCRUM-25|TOOL-6> [--runs 1,2,3] | --stories \"AB#115:2,3 AB#116 AB#117\") [--no-reset] [--dry-run]");
   process.exit(2);
 }
+let story = queue[0].story;
 const wsRel = `TestRunApplication/${appName}`;
 const ws = join(root, wsRel);
-const slug = app.slug(story);
+let slug = app.slug(story);
 const today = new Date().toISOString().slice(0, 10);
 const log = (s) => console.log(`[driver ${new Date().toISOString().slice(11, 19)}] ${s}`);
 // node itself is run without a shell (its path may contain a space); git and docker
@@ -83,7 +89,7 @@ if (existsSync(lock)) {
   log(`stale lock from pid ${pid} removed`);
   rmSync(lock);
 }
-writeFileSync(lock, `${process.pid} ${new Date().toISOString()} ${story}\n`); locked = true;
+writeFileSync(lock, `${process.pid} ${new Date().toISOString()} ${queue.map((q) => q.story).join(" ")}\n`); locked = true;
 process.on("exit", unlock);
 process.on("SIGINT", () => { unlock(); process.exit(130); });
 
@@ -112,16 +118,43 @@ function toLF() {
   for (const f of ["BDD_REVIEW.md"]) { const p = join(ws, f); if (existsSync(p)) { const b = readFileSync(p); if (b.includes("\r\n")) { writeFileSync(p, b.toString("utf8").replace(/\r\n/g, "\n")); n++; } } }
   if (n) log(`${n} file(s) converted from CRLF to LF`);
 }
+// The state runs 2 and 3 start from is a copy taken before run 1 (or before run 2 when
+// run 1 was done elsewhere), not a git checkout: the base of the previous story is
+// often not committed yet when a queue of stories runs overnight, and git checkout
+// writes CRLF on Windows (F-0137).
+const snapDir = join(core, `.eval-snap-${appName}`);
+const TRACKED = ["features", "pages", "tests"];
+function takeSnapshot() {
+  rmSync(snapDir, { recursive: true, force: true }); mkdirSync(snapDir, { recursive: true });
+  for (const d of TRACKED) if (existsSync(join(ws, d))) cpSync(join(ws, d), join(snapDir, d), { recursive: true });
+  if (existsSync(join(ws, "BDD_REVIEW.md"))) cpSync(join(ws, "BDD_REVIEW.md"), join(snapDir, "BDD_REVIEW.md"));
+}
 function restoreWorkspace() {
   scrub();
-  let r = sh("git", ["checkout", "--", wsRel]); if (r.status !== 0) fail(`git checkout failed: ${r.stderr}`);
-  r = sh("git", ["clean", "-fdq", "--", wsRel]); if (r.status !== 0) fail(`git clean failed: ${r.stderr}`);
+  for (const d of TRACKED) rmSync(join(ws, d), { recursive: true, force: true });
+  for (const d of TRACKED) if (existsSync(join(snapDir, d))) cpSync(join(snapDir, d), join(ws, d), { recursive: true });
+  if (existsSync(join(snapDir, "BDD_REVIEW.md"))) cpSync(join(snapDir, "BDD_REVIEW.md"), join(ws, "BDD_REVIEW.md"));
   toLF();
-  const left = gitStatus(); if (left.length) fail(`test project not clean after restore:\n${left.join("\n")}`);
 }
-const tagId = story.startsWith("AB#") ? story.slice(3) : story;
-const tagRe = new RegExp(`@story:${tagId.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}(?![\\w-])`);
+// the base the driver installed last (so a queued story can start without a commit in between)
+const baseRecord = join(core, `.eval-base-${appName}.json`);
+function hashTree() {
+  const out = {};
+  const walk = (dir, rel) => { for (const f of readdirSync(dir)) { const p = join(dir, f); const r = rel ? `${rel}/${f}` : f; if (statSync(p).isDirectory()) walk(p, r); else out[r] = createHash("sha256").update(readFileSync(p)).digest("hex"); } };
+  for (const d of TRACKED) if (existsSync(join(ws, d))) walk(join(ws, d), d);
+  if (existsSync(join(ws, "BDD_REVIEW.md"))) out["BDD_REVIEW.md"] = createHash("sha256").update(readFileSync(join(ws, "BDD_REVIEW.md"))).digest("hex");
+  return out;
+}
+function matchesRecordedBase() {
+  if (!existsSync(baseRecord)) return false;
+  const rec = JSON.parse(readFileSync(baseRecord, "utf8"));
+  const now = hashTree();
+  const a = Object.keys(rec.files).sort().join("\n"), b = Object.keys(now).sort().join("\n");
+  return a === b && Object.keys(now).every((k) => now[k] === rec.files[k]) ? rec : false;
+}
 function storyOnDisk() {
+  const tagId = story.startsWith("AB#") ? story.slice(3) : story;
+  const tagRe = new RegExp(`@story:${tagId.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}(?![\\w-])`);
   const feats = join(ws, "features"); if (!existsSync(feats)) return false;
   return readdirSync(feats).some((f) => f.endsWith(".feature") && tagRe.test(readFileSync(join(feats, f), "utf8")));
 }
@@ -206,11 +239,19 @@ function runOnce(ledger, n) {
 }
 
 // ---- main ----------------------------------------------------------------
-(async () => {
+async function runStory(q) {
+  story = q.story; slug = app.slug(story);
+  const runs = q.runs;
   log(`${appName} ${story}: runs ${runs.join(", ")}; approver "${APPROVER}"`);
   scrub(); toLF();
-  const dirty = gitStatus(); if (dirty.length) fail(`test project is not clean against git — archive and reset first:\n${dirty.join("\n")}`);
+  const dirty = gitStatus();
+  if (dirty.length) {
+    const rec = matchesRecordedBase();
+    if (!rec) fail(`test project is not clean against git and does not match the base the driver last installed — archive, reset or commit first:\n${dirty.join("\n")}`);
+    log(`test project matches the base installed after ${rec.story} (not committed yet; fine for a queue)`);
+  }
   if (storyOnDisk()) fail(`a scenario tagged for ${story} is already in ${wsRel}/features — a run from here would resume, not start`);
+  takeSnapshot();
   const main = app.ledgers[0];
   const before = ledgerRuns(main);
   const basePath = join(attempts, `eval-base-${slug}-run1`);
@@ -233,7 +274,7 @@ function runOnce(ledger, n) {
     archive(runId, ledger, n);
     if (n === 1) {
       rmSync(basePath, { recursive: true, force: true }); mkdirSync(basePath, { recursive: true });
-      for (const d of ["features", "pages", "tests"]) if (existsSync(join(ws, d))) cpSync(join(ws, d), join(basePath, d), { recursive: true });
+      for (const d of TRACKED) if (existsSync(join(ws, d))) cpSync(join(ws, d), join(basePath, d), { recursive: true });
       if (existsSync(join(ws, "BDD_REVIEW.md"))) cpSync(join(ws, "BDD_REVIEW.md"), join(basePath, "BDD_REVIEW.md"));
       log(`run 1 files saved as the story's base: _attempts/eval-base-${slug}-run1`);
     } else {
@@ -247,15 +288,27 @@ function runOnce(ledger, n) {
   }
   if (!has("dry-run")) {
     // the next story starts from this story's run 1
+    for (const d of TRACKED) rmSync(join(ws, d), { recursive: true, force: true });
     cpSync(basePath, ws, { recursive: true }); toLF();
+    writeFileSync(baseRecord, JSON.stringify({ story, at: new Date().toISOString(), files: hashTree() }, null, 2));
     log(`base installed: ${wsRel} now holds ${story} run 1's files`);
   }
+  return results;
+}
+
+(async () => {
+  const all = [];
+  for (const q of queue) {
+    const results = await runStory(q);
+    all.push({ story: q.story, results });
+  }
   console.log("\n==== driver summary ====");
-  for (const r of results) console.log(`run ${r.n}: ${r.status}  ${r.runId ?? ""}`);
+  for (const s of all) for (const r of s.results) console.log(`${s.story} run ${r.n}: ${r.status}  ${r.runId ?? ""}`);
   console.log(`approvals log: research/runs/_auto-approvals.log`);
   const rel = (p) => { const r = relative(process.cwd(), join(root, p)); return r ? r : "."; };
-  console.log(`next: send this summary to Claude for the manifest row, findings and results; then\n  git add ${rel("research")} ${rel(wsRel)} ${rel("TestRunApplication/_attempts")}\n  git commit -m "${story} ${results.map((r) => r.status).join(", ")}; base = ${story} run 1"`);
+  const last = all[all.length - 1];
+  console.log(`next: send this summary to Claude for the manifest rows, findings and results; then\n  git add ${rel("research")} ${rel(wsRel)} ${rel("TestRunApplication/_attempts")}\n  git commit -m "${all.map((s) => `${s.story} ${s.results.map((r) => r.status).join(", ")}`).join("; ")}; base = ${last.story} run 1"`);
   unlock();
-  const worst = Math.max(...results.map((r) => r.code));
+  const worst = Math.max(...all.flatMap((s) => s.results.map((r) => r.code)));
   process.exit(worst === 1 ? 1 : 0);
 })().catch((e) => fail(String(e?.stack || e)));

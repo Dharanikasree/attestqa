@@ -48,3 +48,6 @@ _to_delete/
 .vscode/
 .aqa-eval/
 .aqa-eval-*/
+.eval-snap-*/
+.eval-base-*.json
+.eval-driver-*.lock

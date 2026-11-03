@@ -234,6 +234,9 @@ a real defect from being filed; the others wait for the release after the evalua
   protocol changed.
 - One model (claude-sonnet-4-6) at one price throughout; no other model was
   run.
+- Booker is stateful in memory and the driver does not restart it between runs,
+  so runs 2 and 3 of a data-creating story (create room, booking, messages) see
+  run 1's leftovers; recorded here and visible in those runs.
 - The trackers are not reset between repeats: Azure DevOps keeps run 1's test
   cases, Jira's QA sub-task keeps every attempt's records, so a repeat is
   independent in what it designs and checks, not in what it records (F-0129).
@@ -305,3 +308,11 @@ are the suite's standing failures, listed separately.
 | App | Tests | Runs | Always passed | Flaky | Failed every run | Finding |
 |---|---|---|---|---|---|---|
 | SauceDemo | 52 | 10 | 52 | 0 | 0 | F-0152 |
+| Juice Shop | 83 | 10 | 44 | 7 | 21 | F-0161 |
+
+Juice Shop's 7 flakes are all in the stateful or scan-heavy part of the suite (order
+history, change-password, the two axe scans, the review submit, a syntactically broken
+CAPTCHA test); none is a functional test of the kind that passes on SauceDemo. A first run
+under machine load and without a per-run reset gave 12 flakes and a monotonic decline
+(results/juice-shop/flakiness-under-load-no-reset-2026-10-30.json), which is state, not
+flakiness; the runner now resets before each run and that is the counted result.
