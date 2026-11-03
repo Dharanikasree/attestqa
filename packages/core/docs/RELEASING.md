@@ -50,19 +50,21 @@ Keep the CHANGELOG section and `RELEASE_NOTES.md` saying the same thing.
   `release.yml`, environment blank. The workflow then publishes through OIDC with provenance. No
   `NPM_TOKEN` secret, no one-time password. (A token that needs a one-time password cannot publish
   from CI: that was the EOTP failure of 3 Nov 2026.)
-- **Marketplace: the `VSCE_PAT` repository secret.** An Azure DevOps personal access token created
-  by the **Microsoft account that owns the publisher `vijaypjavvadi`** (check at
-  marketplace.visualstudio.com/manage), organisation *All accessible organizations*, scope
-  *Marketplace → Manage*. A token from any other account fails with "Access Denied … needs the
-  following permission(s) on the resource /vijaypjavvadi/attestqa-vscode", whatever its scope.
-  Azure DevOps stops accepting all-organisations tokens on 1 Dec 2026; after that the step moves to
-  `vsce publish --azure-credential` (Entra workload identity federation).
+- **Marketplace: trusted publishing, no token.** On marketplace.visualstudio.com/manage, publisher
+  `vijaypjavvadi` (owner account vijay@vijayjavvadiresearch.ai) → *Trusted Publishing* → Create:
+  GitHub owner `javvadivijayprasad`, repository `attestqa`, workflow `release.yml`. The workflow
+  runs `vsce publish --oidc` (vsce 4.1+), which exchanges the job's GitHub OIDC token for a
+  short-lived Marketplace credential. No `VSCE_PAT`, and the 1 Dec 2026 retirement of
+  all-organisations PATs does not apply. (The PAT route failed on 3 Nov 2026 with "Access Denied …
+  /vijaypjavvadi/attestqa-vscode" because the token had been made under a different Microsoft
+  account than the publisher owner.)
 - **GitHub release:** the workflow's own token; nothing to set.
 
 If a publish step fails on credentials, the manual fallback is the same command from the package
-folder (`npm publish --access public` in `packages/core` with your own login; `npx vsce publish
---no-dependencies` in `packages/vscode` after `npx vsce login vijaypjavvadi`), then *Re-run failed
-jobs* so the remaining steps complete.
+folder (`npm publish --access public` in `packages/core` with your own login; `npx @vscode/vsce
+publish --no-dependencies` in `packages/vscode` after `npx @vscode/vsce login vijaypjavvadi` with a
+PAT of the owner account, scope Marketplace → Manage), then *Re-run failed jobs* so the remaining
+steps complete.
 
 ## Version bumps
 

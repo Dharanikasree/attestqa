@@ -97,22 +97,23 @@ jobs:
 
       - name: Extension - package
         working-directory: packages/vscode
-        run: npx vsce package --no-dependencies
+        run: npx @vscode/vsce@4.1.0 package --no-dependencies
 
       - name: Extension - publish to the Marketplace
         if: env.DRY_RUN != 'true'
         working-directory: packages/vscode
-        env:
-          VSCE_PAT: ${{ secrets.VSCE_PAT }}
-        # VSCE_PAT: Azure DevOps PAT of the account that owns publisher
-        # vijaypjavvadi, "All accessible organizations", scope Marketplace > Manage.
+        # Trusted publishing (no token): the Marketplace publisher vijaypjavvadi has
+        # a Trusted Publishing policy for this repository and this workflow file
+        # (marketplace.visualstudio.com/manage -> Trusted Publishing). vsce >= 4.1
+        # exchanges the job's GitHub OIDC token (permissions: id-token: write) for
+        # a short-lived Marketplace credential. It never falls back to a PAT.
         run: |
           v=$(node -p "require('./package.json').version")
-          live=$(npx vsce show vijaypjavvadi.attestqa-vscode --json 2>/dev/null | node -p "try{JSON.parse(require('fs').readFileSync(0,'utf8')).versions[0].version}catch{''}")
+          live=$(npx @vscode/vsce@4.1.0 show vijaypjavvadi.attestqa-vscode --json 2>/dev/null | node -p "try{JSON.parse(require('fs').readFileSync(0,'utf8')).versions[0].version}catch{''}")
           if [ "$live" = "$v" ]; then
             echo "attestqa-vscode $v is already on the Marketplace - skipping"
           else
-            npx vsce publish --no-dependencies --packagePath attestqa-vscode-*.vsix
+            npx @vscode/vsce@4.1.0 publish --oidc --no-dependencies --packagePath attestqa-vscode-*.vsix
           fi
 
       - name: GitHub release
