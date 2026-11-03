@@ -661,11 +661,6 @@ function noChangeWrite(
   );
 }
 
-/** How many times a path has been written since the last scaffold or test run. */
-function writesSinceProgress(path: string, events: AnyRunEvent[]): number {
-  return churnOf(path, events).unchecked;
-}
-
 /**
  * Writes of one file since the last suite run or scaffold: all of them, and
  * those no check has looked at since.
