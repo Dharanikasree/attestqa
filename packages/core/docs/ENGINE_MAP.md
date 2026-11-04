@@ -93,6 +93,8 @@ Grouped by stage, in the order the chain checks them (first match wins).
 
 **Design:** `invalidDesign` (+ `takenDesignIds`), `designFirst`
 
+**Design review, not a rule (W2/W6, fixed in 2.1.0, F-0087/F-0088):** on existing-tests stories the design adopts the existing test's scope and labels — a login-page scan on a sign-out story, a security item citing AC-1 while testing AC-3's case — and the source rule, which checks that a source is *named* not that it *supports* the item, passed them, as did the approver. Whether a source supports an item or a page fits the story is a judgement no string match makes. So: each `DesignItem` carries an optional one-line `rationale` justifying its page and source against the story's own text; `renderDesign` shows it to the approver (and says "not justified against the story" when absent — the item most likely copied from an existing test); the design skill asks for it and warns against adopting an existing test's scope; and the design approval (`renderDesignCall`) carries a reviewer checklist — does the source support the item, is the page one the story mentions, is the expected from the story not carried over. No gate; the approver judges.
+
 Each rule was written for a real incident (named in its doc comment). None of them was tested against the others.
 
 ## 7. Triage and quarantine

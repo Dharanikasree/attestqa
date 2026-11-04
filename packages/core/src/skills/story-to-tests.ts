@@ -1398,6 +1398,23 @@ function testDesignStep(types: readonly string[]): string {
                  has no criterion behind it — say so: "agent.test_types
                  (WCAG A/AA)".
      expectFail  true for an Active bug's test, and only then
+     rationale   one line: how THIS story's own text supports the page this
+                 item tests and the source it cites. Written for the approver to
+                 judge, so make it specific — "SCRUM-8 is sign-out, so the scan
+                 covers the open account menu and the home page after logout",
+                 not "accessibility of the page".
+
+   Justify each item against the story, not against a test that already exists.
+   When this epic already has tests, it is tempting to adopt their scope and
+   their labels — but an existing test was written for a DIFFERENT story, and
+   its page and its source may not fit yours. Two misses came from exactly this
+   (F-0087, F-0088): an accessibility item that scanned the login page because
+   the existing scan did, on a sign-out story that is about the account menu and
+   the home page; and a security item that cited AC-1 while testing AC-3's case,
+   copying the existing test's label. The source must be the criterion whose
+   text actually supports this item's conditions and expected result, and the
+   page must be one this story's criteria mention. Say so in "rationale"; if you
+   cannot, the item does not belong in this story's design.
 
    Pick the technique from the RULE the criterion states:
      - a field that is required or has limits → boundary-value-analysis

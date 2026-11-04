@@ -86,6 +86,13 @@ export interface DesignItem {
   source: string;
   /** True for an Active bug's test: it is EXPECTED to fail (test.fail). */
   expectFail?: boolean;
+  /**
+   * The model's one-line justification that THIS item's page and source follow
+   * from the story's own text — not from an existing test's scope or label
+   * (W2/W6, F-0087/F-0088). Optional, and never string-matched: it is shown to
+   * the approver, whose job is to judge whether the page and source really fit.
+   */
+  rationale?: string;
 }
 
 export interface Exclusion {
@@ -186,6 +193,9 @@ export function parseDesign(args: Record<string, unknown>): TestDesign {
       expected: String(r["expected"] ?? "").trim(),
       source: String(r["source"] ?? "").trim(),
       ...(r["expectFail"] === true ? { expectFail: true } : {}),
+      ...(typeof r["rationale"] === "string" && r["rationale"].trim()
+        ? { rationale: r["rationale"].trim() }
+        : {}),
     };
   });
   const excluded = asArray(args["excluded"]).map((x) => {
@@ -687,6 +697,11 @@ export function renderDesign(
     if (hit) out.push(`      ALREADY TESTED by "${hit.scenario}" (matched on ${hit.how})`);
     if (it.conditions.length > 0) out.push(`      conditions: ${it.conditions.join("; ")}`);
     out.push(`      expect: ${it.expected}   (from ${it.source})`);
+    // The model's justification that this page and source fit the story, shown
+    // so the approver can judge it (W2/W6). When absent, say so — an item with
+    // no justification is the one most likely to have been copied from an
+    // existing test's scope or label.
+    out.push(`      why: ${it.rationale ? it.rationale : "— not justified against the story"}`);
   }
   if (d.excluded.length > 0) {
     out.push("", "NOT TESTED, and why:");

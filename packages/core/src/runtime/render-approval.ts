@@ -144,6 +144,23 @@ function renderDesignCall(
     const lead = /^ */.exec(l)?.[0].length ?? 0;
     out.push(...wrap(l, 3 + lead, 3 + lead + 4));
   }
+  // W2/W6 (F-0087/F-0088): the rules check that a source is named and each
+  // criterion is covered, not that the source supports the item or that the
+  // page is one the story is about — a judgement only a person makes. On
+  // existing-tests stories the design tends to adopt the existing test's scope
+  // and labels, and that slipped past the approver too. These lines put the
+  // check in front of them, item by item, with the "why" line to weigh it
+  // against.
+  out.push("");
+  for (const l of [
+    "Before you approve, for each item:",
+    "- does the source named actually support this item's conditions and expected result, or is it a label copied from a test that already exists?",
+    "- is the page it tests one THIS story's criteria mention (an accessibility scan especially), not just the page the existing test happened to cover?",
+    "- is the expected result taken from the story, not invented or carried over from another story?",
+  ]) {
+    const lead = l.startsWith("-") ? 5 : 3;
+    out.push(...wrap(l, lead, lead + 2));
+  }
   return out;
 }
 
