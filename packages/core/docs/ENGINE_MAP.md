@@ -61,7 +61,7 @@ Each cycle is about 25–30k input tokens. A 1.5M-token budget is therefore only
 | Control | What it does |
 |---|---|
 | Budgets | `budgets.steps` and `budgets.tokens` from the config (eval: 150 steps, 1.5M tokens) |
-| `MAX_STALE_CYCLES = 3` | A cycle whose calls were all made before counts as stale; three in a row means blocked |
+| `MAX_STALE_CYCLES = 3` | A cycle whose calls were all made before counts as stale; three in a row means blocked. On each stale cycle the repeat is fed back, not executed; a repeated `*.read_file` gets a read-specific nudge — it has the file, so the next call must change something or end the run (W24, F-0109/F-0111/F-0124) |
 | `refusedAt` | A refused call is a repeat only while nothing has succeeded since (18 Oct fix) |
 | `MAX_SAME_REFUSAL = 5` | The same tool refused for the same reason five times means blocked (18 Oct) |
 | `MAX_SAME_DESIGN_PROBLEM = 6` | The same design problem six times means blocked |
