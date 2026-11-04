@@ -1491,9 +1491,14 @@ export function bodyMutatesAccount(body: string): boolean {
 // a fresh account per test, the state cleared before each test, or a unique
 // datum per test.
 
-/** A noun naming shared server-side state a story mutates and another test sees. */
+/**
+ * A noun naming shared server-side state a story mutates and another test sees.
+ * Not only e-commerce: the booker createroom run (20261104T231022Z) showed the
+ * list was too narrow — "a room is added to the room list" is as stateful as a
+ * basket add, and rooms, bookings and inbox messages accumulate the same way.
+ */
 const SHARED_STATE =
-  /\b(basket|cart|booking|reservation|order|checkout|wish[\s-]?list|address\s*book)\b/;
+  /\b(basket|cart|booking|reservation|order|checkout|wish[\s-]?list|address\s*book|room|inbox)\b/;
 
 /**
  * A verb that creates or changes that state (as opposed to reading it). `clear`,
@@ -1506,7 +1511,7 @@ const STATE_MUTATION_VERB =
 
 /** A signal that the test did NOT change the state — refused, prevented, read-only. */
 const STATE_NON_OCCURRENCE =
-  /\bnot\s+(?:add|creat|plac|book|order|chang)\w*|\brefus\w*|\breject\w*|\bprevent\w*|\bcannot\b|\bread[\s-]?only\b|\bjust\s+(?:view|see|show)\w*|\bwithout\s+(?:adding|changing|creating)\b/i;
+  /\bnot\s+(?:add|creat|plac|book|order|chang)\w*|\bno\s+\w+\s+(?:is|are|was|were)\s+(?:add|creat|book|order|plac)\w*|\brefus\w*|\breject\w*|\bprevent\w*|\bcannot\b|\bread[\s-]?only\b|\bjust\s+(?:view|see|show)\w*|\bwithout\s+(?:adding|changing|creating)\b/i;
 
 /** A statement that each test gets its own data, or clears/resets what it shares. */
 const ISOLATION =
@@ -1518,11 +1523,12 @@ const ISOLATION =
  * of that state, or a change that was refused, is excluded (W15/W18/W21).
  */
 export function mutatesSharedState(text: string): boolean {
-  if (
-    STATE_NON_OCCURRENCE.test(text) &&
-    !/\b(is|was|been)\s+(?:add|creat|plac|book)\w*/i.test(text)
-  )
-    return false;
+  // A refused / "no room is added" / read-only item does not mutate. A genuine
+  // creation ("a room is added to the list") carries none of these words, so the
+  // guard needs no positive-case exception — the booker createroom D2 ("no room
+  // is added") stays excluded while D1/D3 ("room is added", "create the room")
+  // are caught.
+  if (STATE_NON_OCCURRENCE.test(text)) return false;
   if (!SHARED_STATE.test(text)) return false;
   // A mutation verb within a short window of the state noun, either order.
   return (

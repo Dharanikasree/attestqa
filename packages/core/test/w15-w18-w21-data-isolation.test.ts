@@ -167,6 +167,14 @@ describe("W15 detectors", () => {
     expect(mutatesSharedState("place an order at checkout")).toBe(true);
     expect(mutatesSharedState("view the basket page and see the items")).toBe(false);
     expect(mutatesSharedState("the booking is refused when the dates overlap")).toBe(false);
+    // Booker (createroom run 20261104T231022Z): rooms and the inbox are stateful
+    // too, and a refused creation ("no room is added") must not count.
+    expect(mutatesSharedState("Room is added to the room list with the values")).toBe(true);
+    expect(mutatesSharedState("a submitted message is added to the admin inbox")).toBe(true);
+    expect(
+      mutatesSharedState("Room creation is refused with a message, and no room is added"),
+    ).toBe(false);
+    expect(mutatesSharedState("an error message is shown on the form")).toBe(false);
   });
 
   it("statesIsolation", () => {
