@@ -1284,7 +1284,7 @@ const BUG_NOISE = new Set([
 /** Arguments that make a pw.run_tests call run less than the whole spec. */
 const FILTER_KEYS = ["grep", "shard", "project", "lastFailed"] as const;
 
-function unhealedLocator(
+export function unhealedLocator(
   call: { toolName: string; args: Record<string, unknown> },
   events: AnyRunEvent[],
 ): string | undefined {
