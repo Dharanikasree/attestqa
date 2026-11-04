@@ -299,7 +299,9 @@ export function isReviewOnly(problem: string): boolean {
   return (
     problem.startsWith("the scan is not scoped") ||
     problem.startsWith("the assertion is on the whole violations array") ||
-    problem.startsWith("a state-transition test needs an assertion that the action took effect")
+    problem.startsWith("a state-transition test needs an assertion that the action took effect") ||
+    problem.startsWith("the destination assertion matches a prefix") ||
+    problem.startsWith("the control-state assertion has no valid-case counterpart")
   );
 }
 
@@ -1148,9 +1150,144 @@ export function shapeProblems(item: DesignItem, body: string): string[] {
         );
     }
   }
+  // W34 (F-0153): an assertion that is true for the wrong reason.
+  //
+  // Two accepted tests passed while a seeded fault was live, because the
+  // assertion did not actually exercise the transition the design named:
+  //   - a logout test asserted toHaveURL(/#\//), a prefix that /#/login also
+  //     satisfies, so "returns to the home page" passed on the wrong page;
+  //   - a "Register button is disabled when the passwords differ" test filled
+  //     only the two password fields and asserted toBeDisabled(), which held
+  //     because the other required fields were empty, whether or not the rule
+  //     under test exists.
+  // Neither is a broken or fake test, so both go to the reviewer (isReviewOnly)
+  // rather than stopping the run: only a seeded fault reveals them, and the
+  // heuristic that finds them can misread a legitimate test.
+  //
+  // Each is scoped to a design item whose OWN expected result is about that
+  // kind of transition — a destination, or a control's enabled state. Firing on
+  // any test would re-create the mistake the state-transition check was taught
+  // not to make: telling the agent to add an address check the design never
+  // named (20261019T155404Z), which it did, broke, and filed as a false bug.
+  if (
+    /\b(home ?page|login ?page|storefront|redirect\w*|lands? on|returns? to|url|route)\b/i.test(
+      item.expected,
+    )
+  ) {
+    const weakUrl = weakUrlDestination(body);
+    if (weakUrl)
+      out.push(
+        `the destination assertion matches a prefix other pages also satisfy: ${weakUrl} is true ` +
+          `of /#/login as much as the page the design names ("${item.expected}"). Pin the ` +
+          "destination — assert the exact route the action reaches (anchor the end, " +
+          "toHaveURL(/#\\/$/) for the home page, or give the full path), not a fragment every " +
+          "in-app URL contains",
+      );
+  }
+  if (
+    /\b(disabled|enabled|greyed|grey(?:ed)?|clickable|cannot (?:be )?(?:click|submit))\b/i.test(
+      item.expected,
+    )
+  ) {
+    if (lopsidedControlState(body))
+      out.push(
+        "the control-state assertion has no valid-case counterpart: the test asserts the control " +
+          "is disabled after an action but never asserts it is enabled when every other input is " +
+          "valid, so the assertion holds whether or not the rule under test exists (a Register " +
+          "button is disabled anyway while other required fields are empty). Assert both: the " +
+          "control enabled in its all-valid baseline, and the control after the one condition " +
+          "under test changes",
+      );
+  }
   if (item.expectFail === true && !/\btest\.fail\s*\(/.test(body))
     out.push("no test.fail marker, though the design says this test is expected to fail");
   return out;
+}
+
+/**
+ * A toHaveURL / url-contains assertion whose pattern is only the SPA root
+ * scaffolding (`#`, `/`) with no route segment and no end anchor, so a longer
+ * URL such as /#/login satisfies it too. Returns the offending token, or
+ * undefined (W34, F-0153).
+ */
+export function weakUrlDestination(body: string): string | undefined {
+  for (const m of body.matchAll(/\.toHaveURL\s*\(/g)) {
+    const arg = balancedArg(body, (m.index ?? 0) + m[0].length - 1);
+    if (arg !== undefined && isRootOnlyUrl(arg)) return firstArgument(arg);
+  }
+  // expect(page.url()).toContain("…") / .toMatch(/…/) — only when it is plainly
+  // a URL being matched, so a text assertion that happens to contain "/" is left
+  // alone.
+  for (const m of body.matchAll(/\.(?:toContain|toMatch)\s*\(/g)) {
+    const at = m.index ?? 0;
+    const arg = balancedArg(body, at + m[0].length - 1);
+    if (arg === undefined) continue;
+    const before = body.slice(Math.max(0, at - 48), at);
+    if (!/\b(url|href|location)\b/i.test(before)) continue;
+    if (isRootOnlyUrl(arg)) return firstArgument(arg);
+  }
+  return undefined;
+}
+
+/** The text inside the parentheses that open at `open`, or undefined. */
+function balancedArg(body: string, open: number): string | undefined {
+  if (body[open] !== "(") return undefined;
+  let depth = 0;
+  for (let i = open; i < body.length; i++) {
+    const c = body[i];
+    if (c === "(") depth++;
+    else if (c === ")") {
+      depth--;
+      if (depth === 0) return body.slice(open + 1, i);
+    }
+  }
+  return undefined;
+}
+
+/** The first argument, dropping a trailing options object (`, { timeout }`). */
+function firstArgument(arg: string): string {
+  return arg.replace(/,\s*\{[^{}]*\}\s*$/, "").trim();
+}
+
+/**
+ * True when a toHaveURL/contains argument pins nothing but the app root: a
+ * regex or string whose meaningful part is only `#` and `/`, and which is not
+ * anchored to the end. `/#\/$/` (exact home) and `/#\/login/` (a route) are
+ * both fine; `/#\//` and "/#/" are not. A variable or expression is treated as
+ * pinned — code cannot read what it resolves to.
+ */
+function isRootOnlyUrl(raw: string): boolean {
+  let s = firstArgument(raw);
+  let endAnchored = false;
+  const rx = /^\/([\s\S]*)\/[a-z]*$/i.exec(s);
+  if (rx) {
+    s = rx[1] ?? "";
+    endAnchored = /\$$/.test(s);
+  } else {
+    const str = /^(['"`])([\s\S]*)\1$/.exec(s);
+    if (!str) return false;
+    s = str[2] ?? "";
+  }
+  if (endAnchored) return false;
+  const core = s.replace(/\\\//g, "/").replace(/^\^/, "").replace(/\$$/, "").replace(/\\/g, "");
+  return core.length > 0 && /^[#/]+$/.test(core);
+}
+
+/**
+ * True when a test asserts a control is DISABLED after an action but never
+ * asserts the enabled (valid-case) counterpart. The disabled state then proves
+ * nothing about the condition under test: an incomplete form disables the
+ * control on its own (W34, F-0153). The enabled-only direction is not weak —
+ * a disabled control would fail it — so only the disabled-without-enabled shape
+ * is flagged.
+ */
+function lopsidedControlState(body: string): boolean {
+  const disabled = /\.toBeDisabled\s*\(/.test(body) || /\.not\s*\.toBeEnabled\s*\(/.test(body);
+  const enabled = /\.toBeEnabled\s*\(/.test(body) || /\.not\s*\.toBeDisabled\s*\(/.test(body);
+  const action = /\.(fill|type|press|click|check|uncheck|selectOption|setInputFiles)\s*\(/.test(
+    body,
+  );
+  return disabled && !enabled && action;
 }
 
 /** The @story:<id> tags on each scenario of a feature file. */

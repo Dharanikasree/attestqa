@@ -127,6 +127,10 @@ Each rule was written for a real incident (named in its doc comment). None of th
 
 `story-not-read`, `no-test-design`, `design-item-not-tested`, `scenario-not-in-design`, `test-does-not-match-its-design`, `no-feature-file`, `no-spec-written`, `spec-not-generated-from-feature`, `hand-written`, `suite-not-run`, `suite-not-green`, `failures-not-triaged`, `known-bug-test-not-marked`, `quarantined-test-modified`, `no-test-cases`, `cases-not-linked`, `cases-not-in-suite`, `created-without-looking`, `bug-not-linked-to-story`, `bug-not-marked-as-agent-filed`
 
+**Shape checks (`design/test-design.ts` `shapeProblems`, read by `traceProblems`).** Per design item, what its own type/technique requires of the test on disk: no self-recovering step (try/catch), a scoped and id-asserting axe scan, a state-transition that asserts the action took effect and the state it leaves. A weaker-but-working shape (`isReviewOnly`) gets one agent attempt as `test-is-weaker-than-its-design`, then goes to the reviewer as a limitation (`splitReviewItems`).
+
+- **Assertion specific to the transition (W34, fixed in 2.1.0, F-0153):** two accepted tests passed while a seeded fault was live because the assertion was true for the wrong reason — a logout test asserted `toHaveURL(/#\//)`, a prefix `/#/login` also satisfies, and a "Register disabled when passwords differ" test filled only the two password fields and asserted `toBeDisabled()`, which held because the other required fields were empty. `shapeProblems` now adds two review-only checks, each scoped to a design item whose *own* expected result is about that transition so it cannot demand a URL check the design never named (the mistake of 20261019T155404Z): `weakUrlDestination` flags a `toHaveURL`/url-contains whose pattern is only SPA-root scaffolding (`#`, `/`) and not end-anchored; `lopsidedControlState` flags a `toBeDisabled` after an action with no enabled valid-case counterpart. The enabled-only direction is not weak and is left alone.
+
 ## 9. What went wrong on 18 Oct, and why
 
 | Run | Stopped by | Root cause | Category |
