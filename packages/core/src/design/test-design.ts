@@ -529,14 +529,26 @@ export function validateDesign(
         'but it still needs at least one functional item, covering "story" and citing the description',
     );
 
-  // Coverage: every criterion has a functional test.
+  // Coverage: every criterion has a test. Normally that is a functional test,
+  // but a criterion whose natural type is accessibility or security is satisfied
+  // by an item of that type covering it (W25, F-0112). "Every criterion has a
+  // functional test" refused AB#110's AC-3 ("the sign-in page passes a WCAG
+  // scan") for having no functional item; the agent added a functional item to
+  // satisfy the rule and implemented it as a second copy of the axe scan — the
+  // coverage rule produced padding. The design records only the AC labels, not
+  // their text, so the criterion's natural type is read from the item the agent
+  // chose to cover it with; the reviewer approving the design is the check that
+  // the type fits the criterion. confirmation is for a bug, never a criterion,
+  // so it does not count here.
+  const coveringTypes: readonly TestType[] = ["functional", "accessibility", "security"];
   for (const ac of storyAcs) {
     const covered = d.items.some(
       (it) =>
-        it.type === "functional" &&
+        coveringTypes.includes(it.type) &&
         acLabels(it.covers).some((l) => l === ac || baseLabel(l) === ac),
     );
-    if (!covered) problems.push(`${ac} has no functional test in the design`);
+    if (!covered)
+      problems.push(`${ac} has no functional, accessibility or security test in the design`);
   }
 
   // Every open bug is either tested or explicitly left out, with a reason.
