@@ -355,15 +355,60 @@ export function withUnimplemented(
       }
     }
     for (const [title, body] of testsByTitle(text)) {
-      const steps = [...body.matchAll(/test\.step\(\s*(["'`])(\[SKIPPED\][^"'`]*)\1/g)].map(
-        (m) => m[2] ?? "",
-      );
-      const todo = /@bdd2pw lane=todo|\/\/\s*TODO\b/.test(body);
-      if (steps.length > 0 || todo)
-        unimplemented.push({ title, file, steps: steps.length > 0 ? steps : ["(a TODO step)"] });
+      // A step is unimplemented only when its BODY does no work — not because a
+      // "// TODO" comment or a "[SKIPPED]" title is present. The agent can write
+      // a working step and leave a generator comment behind, and counting that as
+      // unimplemented dropped a real pass: SCRUM-32 run 3's AC-1 did the work and
+      // was reported "not implemented" over a stray TODO (F-0096, W14). So read
+      // the step bodies and count what the code does.
+      const empty = emptyStepTitles(body);
+      if (empty.length > 0) unimplemented.push({ title, file, steps: empty });
     }
   }
   if (unimplemented.length === 0) return summary;
+  return applyUnimplemented(summary, unimplemented);
+}
+
+/**
+ * Titles of `test.step(...)` calls in one test whose body does no work — only
+ * comments and whitespace. These are the steps the generator could not bind and
+ * the agent has not implemented. A `[SKIPPED]` title or a `// TODO` comment is a
+ * marker the agent can leave behind after writing a working step, so emptiness
+ * is read from the body, not from the markers (W14, F-0096).
+ */
+function emptyStepTitles(testBody: string): string[] {
+  const out: string[] = [];
+  const open =
+    /test\.step\(\s*(["'`])((?:\\.|(?!\1)[\s\S])*?)\1\s*,\s*async\s*\([^)]*\)\s*=>\s*\{/g;
+  let m: RegExpExecArray | null;
+  while ((m = open.exec(testBody)) !== null) {
+    const stepTitle = m[2] ?? "";
+    // Scan to the matching close brace of the step callback. Empty steps hold no
+    // braces, so the count is exact for them; an implemented step is read as
+    // non-empty regardless of where the scan lands inside its code.
+    let depth = 1;
+    let i = open.lastIndex;
+    const start = i;
+    for (; i < testBody.length && depth > 0; i++) {
+      const c = testBody[i];
+      if (c === "{") depth++;
+      else if (c === "}") depth--;
+    }
+    const code = testBody
+      .slice(start, Math.max(start, i - 1))
+      .replace(/\/\*[\s\S]*?\*\//g, "")
+      .replace(/\/\/[^\n]*/g, "")
+      .trim();
+    if (code.length === 0) out.push(stepTitle);
+    open.lastIndex = i;
+  }
+  return out;
+}
+
+function applyUnimplemented(
+  summary: TestRunSummary,
+  unimplemented: Array<{ title: string; file: string; steps: string[] }>,
+): TestRunSummary {
   const names = new Set(unimplemented.map((u) => u.title));
   const passedButEmpty = (summary.tests ?? []).filter(
     (t) => names.has(t.title) && t.status === "passed",
