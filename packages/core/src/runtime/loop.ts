@@ -762,7 +762,7 @@ export async function runLoop(deps: LoopDeps): Promise<LoopResult> {
       // narrows the tools AND the instructions: the healer is shown five tools
       // and twenty lines, not the whole skill, so the instructions for
       // authoring cannot be read as permission while repairing.
-      const role = roleFor(ledger.read());
+      const role = roleFor(ledger.read(), skill.workItem);
       if (role.name !== currentRole) {
         currentRole = role.name;
         ledger.append(

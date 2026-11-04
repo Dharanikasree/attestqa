@@ -23,7 +23,13 @@
 import type { AnyRunEvent } from "../types.js";
 import { asArray, asRecord, completedCalls, successful } from "../verify/evidence.js";
 import { CATCHES, stuckAction } from "../heal/locator.js";
-import { isPartialRead, testsByTitle } from "../design/test-design.js";
+import {
+  isPartialRead,
+  otherStoryScenarios,
+  otherStoryTestTitles,
+  testsByTitle,
+} from "../design/test-design.js";
+import type { TrackerId } from "../design/ids.js";
 
 export type RoleName = "heal" | "default";
 
@@ -88,8 +94,8 @@ const HEAL_TOOLS = [
  * whose test recovers from its own break, which is the same problem wearing an
  * assertion's clothes — and ends when neither is true any more.
  */
-export function roleFor(events: AnyRunEvent[]): Role {
-  const healable = healableFailure(events);
+export function roleFor(events: AnyRunEvent[], storyId?: TrackerId): Role {
+  const healable = healableFailure(events, storyId);
   if (healable)
     return {
       name: "heal",
@@ -106,6 +112,7 @@ export function roleFor(events: AnyRunEvent[]): Role {
 
 function healableFailure(
   events: AnyRunEvent[],
+  storyId?: TrackerId,
 ): { title: string; why: "locator" | "fallback" } | undefined {
   const calls = completedCalls(events);
   const runs = successful(calls, "pw.run_tests");
@@ -114,25 +121,49 @@ function healableFailure(
 
   // The spec as the run last saw it — where a fallback would be.
   const specs = new Map<string, string>();
+  const features = new Map<string, string>();
   for (const c of calls) {
     if (!c.ok) continue;
     const path = String(c.args["path"] ?? "");
-    if (!/\.(spec|test)\.[cm]?[jt]sx?$/i.test(path)) continue;
-    if (c.toolName === "fs.write_file") specs.set(path, String(c.args["content"] ?? ""));
+    const dest = /\.(spec|test)\.[cm]?[jt]sx?$/i.test(path)
+      ? specs
+      : /\.feature$/i.test(path)
+        ? features
+        : undefined;
+    if (!dest) continue;
+    if (c.toolName === "fs.write_file") dest.set(path, String(c.args["content"] ?? ""));
     // A ranged read is a fragment; a fallback outside the window would look
     // absent and the role would be chosen from half a file.
     else if (c.toolName === "fs.read_file" && !isPartialRead(c.args, c.result)) {
       const content = asRecord(c.result)?.["content"];
-      if (typeof content === "string") specs.set(path, content);
+      if (typeof content === "string") dest.set(path, content);
     }
   }
   const anySpec = [...specs.values()].join("\n");
+  const anyFeature = [...features.values()].join("\n");
+
+  // A failing test that belongs to ANOTHER story is a leftover in a shared epic
+  // file: this run did not write it, so it is not the run's to repair — it goes
+  // in the report, not the heal queue (W28/W19, F-0126). The feature file maps
+  // each scenario (and the test bdd2pw names after it) to its @story tag, which
+  // is the reliable signal right after a scaffold when the spec is on disk but
+  // not yet read; the spec's own @story comments are used too when present.
+  // Without a story id the behaviour is unchanged; an untagged test is nobody's
+  // and stays in scope.
+  const otherStory =
+    storyId !== undefined
+      ? new Set<string>([
+          ...(anyFeature ? otherStoryScenarios(anyFeature, storyId) : []),
+          ...(anySpec ? otherStoryTestTitles(anySpec, storyId) : []),
+        ])
+      : undefined;
 
   for (const raw of asArray(asRecord(last.result)?.["failures"])) {
     const f = asRecord(raw);
     const title = typeof f?.["title"] === "string" ? f["title"] : "";
     const message = typeof f?.["message"] === "string" ? f["message"] : "";
     if (!title) continue;
+    if (otherStory?.has(title)) continue;
     if (stuckAction(message)) return { title, why: "locator" };
     // A test that recovers from its own break reports an assertion failure, so
     // the locator error never surfaces. Same job, one step earlier.

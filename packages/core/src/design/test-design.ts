@@ -1206,6 +1206,44 @@ export function storyTestTitles(spec: string, storyId: TrackerId): Set<string> {
   return out;
 }
 
+/**
+ * Test titles tagged for ANOTHER story — a leftover in a shared epic spec that
+ * this run did not write and is not its to repair, triage or report (W28, W19,
+ * F-0126). A test with no @story tag is nobody's and stays in scope, so it is
+ * NOT returned here.
+ */
+export function otherStoryTestTitles(spec: string, storyId: TrackerId): Set<string> {
+  const out = new Set<string>();
+  let current: TrackerId[] = [];
+  for (const line of spec.split("\n")) {
+    if (/^\s*\/\//.test(line)) {
+      const ids = storyTagIds(line);
+      if (ids.length > 0) current = ids;
+      continue;
+    }
+    const m = /^\s*test(?:\.(?:only|skip|fixme|fail|slow))?\s*\(\s*(["'`])([\s\S]*?)\1/.exec(line);
+    if (m) {
+      if (current.length > 0 && !includesId(current, storyId)) out.add((m[2] ?? "").trim());
+      current = [];
+    }
+  }
+  return out;
+}
+
+/**
+ * Scenario names in a feature file tagged for ANOTHER story (W28/W19, F-0126).
+ * bdd2pw names each test after its scenario, so a failing test's title matches
+ * the scenario name here — which is the reliable signal right after a scaffold,
+ * when the generated spec is on disk but not yet in the run's reads. A scenario
+ * with no @story tag is nobody's and is not returned.
+ */
+export function otherStoryScenarios(feature: string, storyId: TrackerId): Set<string> {
+  const out = new Set<string>();
+  for (const s of scenarioStoryTags(feature))
+    if (s.stories.length > 0 && !includesId(s.stories, storyId)) out.add(s.scenario);
+  return out;
+}
+
 /** The last content this run has for a path, from what it wrote or read. */
 export function fileTextFromEvents(events: AnyRunEvent[], path: string): string | undefined {
   const calls = completedCalls(events);

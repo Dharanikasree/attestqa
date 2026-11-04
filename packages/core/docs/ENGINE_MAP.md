@@ -39,6 +39,8 @@ There is **one model**. A *role* narrows the tools and instructions it sees. Cod
 
 **Fixed 19 Oct:** `valueMismatch()` in `heal/locator.ts` is now checked first. A `Received…:`, `Expected pattern|…:`, "unexpected value" or `expect(received).toX(expected)` failure is an assertion, unless the element was not found. `stuckAction()` (used by the heal role, `aqa.heal_locator` and the bug rule `unhealedLocator`) returns false for it. Replaying run `223256Z`: the heal role that was started at event 116 no longer starts. Tests: `test/classify-failures.test.ts`.
 
+**Heal is scoped to the run's own story (W28/W19, fixed in 2.1.0, F-0126/F-0101):** `roleFor(events, storyId)` takes the run's story (`skill.workItem`), and `healableFailure` skips a failing test that belongs to ANOTHER story in a shared epic file — a leftover the run did not write, matched by the `@story` tag on its scenario in the feature file (`otherStoryScenarios`, the signal that survives a scaffold the run has not read) or by the `@story` comment in the spec (`otherStoryTestTitles`). Such a test goes in the report, not the repair queue. An untagged test is nobody's and stays in scope; no story id leaves the behaviour unchanged. Replaying the real SCRUM-25 run: heal moved from SCRUM-24's "Create Address" scan to SCRUM-25's own test. Tests: `test/w28-heal-own-story.test.ts`. Not yet done: scaffold still generates another story's scenarios (the generation half of W28).
+
 ## 4. Context the model sees each cycle
 
 `runtime/context.ts`, `OrderedContextBuilder`. Each cycle sends the following sections; only their hashes and token counts go into the ledger:
