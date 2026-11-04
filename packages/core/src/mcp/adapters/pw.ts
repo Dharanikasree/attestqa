@@ -72,6 +72,13 @@ export interface TestRunSummary {
   unexpectedPasses: Array<{ title: string; file: string; note: string }>;
   /** Tests that passed only because some of their steps are still empty TODOs. */
   unimplemented?: Array<{ title: string; file: string; steps: string[] }>;
+  /**
+   * Top-level errors Playwright reported for the RUN rather than for a test —
+   * above all a spec that did not compile, which makes every test count zero.
+   * A spec that does not compile is its own state, not "no test is failing"
+   * (W17, F-0099); present only when there is at least one.
+   */
+  loadErrors?: string[];
   exitCode: number;
 }
 
@@ -223,6 +230,19 @@ export class PwTools implements ToolClient {
           `. ${tail(r.stderr || r.stdout)}`,
       );
     }
+    // A spec that does not compile is its own state, not "no test is failing":
+    // no test ran, so nothing was measured, and the compile error (often the
+    // last edit) must be fixed before the suite can run again (W17, F-0099).
+    if (summary.loadErrors && summary.loadErrors.length > 0)
+      return fail(
+        "the spec does not compile, so no test ran and nothing here is a result about the " +
+          "product — this is not a green suite and not 'no test failing'. Fix the compile error " +
+          "(usually the last edit) and run again:\n" +
+          summary.loadErrors
+            .map((e) => head(e, 300))
+            .slice(0, 3)
+            .join("\n"),
+      );
     // A filter that matched nothing executed nothing, and "nothing" is not a
     // result.
     //
@@ -457,11 +477,18 @@ export function summarise(raw: string, exitCode: number): TestRunSummary | undef
   );
   const skipped = num("skipped");
   const flaky = num("flaky");
+  // Errors Playwright attributes to the RUN, not to a test — above all a spec
+  // that did not compile, which leaves every count at zero and otherwise reads
+  // as "nothing is failing" (W17, F-0099).
+  const loadErrors = ((report as { errors?: Array<{ message?: unknown }> }).errors ?? [])
+    .map((e) => (typeof e?.message === "string" ? e.message : ""))
+    .filter((m) => m.length > 0);
   return {
     passed,
     failed,
     skipped,
     flaky,
+    ...(loadErrors.length > 0 ? { loadErrors } : {}),
     // Playwright exits non-zero on an unexpected pass. When that is the ONLY
     // reason, every test did what the product should do, and the suite is green.
     green:
