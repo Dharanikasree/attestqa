@@ -1092,6 +1092,40 @@ export function traceProblems(
     );
   }
 
+  // W11 (F-0093): the scope rule removes the story's own control when it lives
+  // in the header. SCRUM-18's search box is in the top toolbar; the accessibility
+  // scan was scoped to <main>, which excludes the toolbar, so a real "label"
+  // violation on the search box passed and the run reported nothing. The scope
+  // rule exists to keep site-wide header/footer noise off a story — but scoping
+  // to a generic page region also drops the story's own controls that happen to
+  // sit outside main. When the scan is scoped to main/body alone and the story
+  // is about a control that usually lives in the header or toolbar, the scope
+  // may have hidden a defect in the story's own control; a person decides, so it
+  // is review-only.
+  const storyText = design.items
+    .map((i) => `${(i.conditions ?? []).join(" ")} ${i.expected} ${i.covers}`)
+    .join(" ");
+  if (HEADER_CONTROL.test(storyText)) {
+    for (const item of design.items) {
+      if (item.type !== "accessibility") continue;
+      const body = bodies.get(item.id);
+      if (!body) continue;
+      const includes = [...body.matchAll(/\.include\s*\(\s*(['"`])([^'"`]*)\1/g)].map((m) =>
+        (m[2] ?? "").trim(),
+      );
+      const genericOnly = includes.length > 0 && includes.every((x) => GENERIC_REGION.test(x));
+      if (genericOnly)
+        reviewShape.push(
+          `${item.id} (${item.covers}): the accessibility scan is scoped to the main region ` +
+            `(${includes.join(", ")}), which excludes the header and toolbar — but this story is ` +
+            "about a control (a search box, menu or cart) that usually lives there, so a real " +
+            "defect in the story's own control is scoped out and never reported. Scope the scan to " +
+            'the story\'s own control as well as the main content — .include("<the control>") ' +
+            "alongside the region, not the region alone.",
+        );
+    }
+  }
+
   return { untested, untagged, unmarked, wrongShape, reviewShape };
 }
 
@@ -1138,7 +1172,10 @@ export function shapeProblems(item: DesignItem, body: string): string[] {
     if (!/\.include\s*\(/.test(body))
       out.push(
         "the scan is not scoped — add .include(<the form or region under test>) so a violation " +
-          "elsewhere on the page is not reported against this story. .include takes a CSS " +
+          "elsewhere on the page is not reported against this story. Scope it to the story's own " +
+          "control wherever it lives — a search box, menu or sign-in icon in the header is part " +
+          "of this story, so include it even though it sits outside the main content; scoping to " +
+          "<main> alone scopes a header control out of the scan (W11). .include takes a CSS " +
           "selector, and the page snapshot shows roles rather than classes, so build it from " +
           'what the snapshot shows: a role (navigation → "nav", main → "main", form → ' +
           '"form", list → "ul"), an attribute the elements carry ("[data-test]" values), or ' +
@@ -1365,6 +1402,13 @@ export function leavesFixtureRestored(text: string): boolean {
   if (/\bregisters?\b[\s\S]{0,24}\baccount\b/i.test(text)) return true;
   return false;
 }
+
+/** A control that usually lives in the header or toolbar, not in main (W11). */
+const HEADER_CONTROL =
+  /\b(search|magnifying|top[\s-]?bar|toolbar|header|nav(?:bar|\s*bar)?|menu|cart|basket|sign[\s-]?in\s+icon)\b/i;
+
+/** A scan include that is a generic page region rather than a specific control (W11). */
+const GENERIC_REGION = /^(?:main|body|\[role=["']?main["']?\]|#main|\.main)$/i;
 
 /** Whether a spec body actually runs a credential-change flow (W33 verifier). */
 export function bodyMutatesAccount(body: string): boolean {

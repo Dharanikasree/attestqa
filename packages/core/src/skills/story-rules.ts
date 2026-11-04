@@ -1529,8 +1529,10 @@ function unscopedAccessibilityBug(
       `"${f.title}" scans the WHOLE page: its AxeBuilder call has no .include(...), so a violation ` +
       "it finds may belong to the site's header, footer or a storefront widget rather than to this " +
       "story. A defect that cannot say which part of the page fails sends someone looking in the " +
-      "wrong place. Scope the scan to the element this story is about, re-run it, and propose the " +
-      "bug from what the scoped scan reports."
+      "wrong place. Scope the scan to the control this story is about wherever it lives — a search " +
+      "box or menu in the header is part of this story, so include it rather than narrowing to " +
+      "<main>, which would scope the story's own control out — re-run it, and propose the bug from " +
+      "what the scoped scan reports."
     );
   }
   return;
