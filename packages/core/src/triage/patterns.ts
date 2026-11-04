@@ -237,6 +237,30 @@ export const SETUP_HOOK_FAILURE: readonly TriagePattern[] = [
 ];
 
 /**
+ * A precondition the test sets before exercising the product — signing in with
+ * the configured account — failed. Decides, like SETUP_HOOK_FAILURE: a
+ * precondition is setup, so if it fails no step of the body reached the product
+ * and nothing about the product was observed.
+ *
+ * Run 20261026T143742Z-8ca35396 (F-0130): a stateful story had changed the
+ * shared fixture account's password and nothing restored it, so the login the
+ * next run needed answered 401 at its precondition. Triage scored
+ * `expect(received).toBe … Received: 401` as a product defect at 0.5, and every
+ * functional test in the run became a possible defect — the mirror of W27, an
+ * environment fault read as the product's. The two signals below are the
+ * precondition's own words and the name of the configured credentials, which a
+ * failure only carries when the fixture account itself could not sign in. A bare
+ * 401 with none of this stays a product failure (as DECLARED_ENVIRONMENTAL does
+ * for a bare 4xx): triage believes a suite that says so, it does not assume.
+ */
+export const PRECONDITION_FAILURE: readonly TriagePattern[] = [
+  py(
+    String.raw`(?i)\bprecondition\b.{0,200}\b(401|403|unauthoriz|forbidden|log[\s-]?in|sign[\s-]?in|must succeed|AQA_APP_)`,
+  ),
+  py(String.raw`(?i)\bAQA_APP_(USER|PASS)\b`),
+];
+
+/**
  * The test's own code is invalid — the product was never asked anything. Not a
  * defect, and not a flake either: it fails the same way every time until the
  * test is fixed, which is why it must not go through the repetition rule.
@@ -259,6 +283,8 @@ export const TEST_CODE_ERROR: readonly TriagePattern[] = [
 
 /** Rationale prefixes the repetition rule and the live line recognise. */
 export const SETUP_HOOK_RATIONALE = "A setup hook failed before the test body ran";
+export const PRECONDITION_RATIONALE =
+  "The sign-in the test needs before it can exercise the product failed";
 export const TEST_CODE_RATIONALE = "The test's own code is invalid";
 /** A test that passed earlier in this run and fails only since it was edited. */
 export const EDIT_REGRESSION_RATIONALE =
