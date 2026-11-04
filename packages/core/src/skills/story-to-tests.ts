@@ -563,6 +563,15 @@ ${design}2. ONE FEATURE FILE PER EPIC — ADD TO IT, DO NOT REPLACE IT.
    The page snapshot taken at the failure shows menuitem "Logout" was on
    screen the whole time; only the selector was wrong.
 
+   A 500 or a wrong count is a DATA problem, not a locator problem. When a
+   stateful setup fails — adding to the basket answers HTTP 500, a badge reads
+   "2" where you expected "1", a booking is rejected as a duplicate — the cause
+   is state a test before this one left behind, not a selector. Do not wrap it in
+   try/catch and do not hunt for another locator; isolate the data: register a
+   fresh account for this test, clear the state in a beforeEach (empty the basket
+   first), or use a unique datum (a different product). SCRUM-19 spent nine runs
+   repairing locators for a failure that was the shared basket (F-0097/F-0100).
+
 4g. READ THE PAGE THE FAILURE HANDS YOU.
    When a test fails, pw.run_tests returns pageAtFailure with that failure:
    the accessibility snapshot of the page as it actually was, taken by
@@ -573,6 +582,12 @@ ${design}2. ONE FEATURE FILE PER EPIC — ADD TO IT, DO NOT REPLACE IT.
    second selector when the answer is in front of you is how four selectors
    were tried and four bugs filed for a menu item that was visible the whole
    time.
+
+   This holds for TEXT you assert, not just locators. When a confirmation message
+   is not found, read the snapshot for the words the page actually shows and
+   assert those — do not widen the pattern and hope. SCRUM-21 widened a review
+   confirmation to /thank you|submitted/ and still missed it, because the page
+   said "You review has been saved." and that text was never read (F-0104).
 
 4h. HEAL A LOCATOR WITH aqa.heal_locator, THEN RE-RUN THAT TEST ALONE.
    Do not read the snapshot by eye and write a selector from memory. Call
@@ -1415,6 +1430,18 @@ function testDesignStep(types: readonly string[]): string {
    text actually supports this item's conditions and expected result, and the
    page must be one this story's criteria mention. Say so in "rationale"; if you
    cannot, the item does not belong in this story's design.
+
+   Isolate the data of a STATEFUL item. When a test changes server-side state —
+   adds to a basket, creates a booking, places an order — the next test runs
+   against what it left behind, because the suite shares one account and runs the
+   tests one after another. SCRUM-19's basket tests failed for nine runs this way
+   (F-0097/F-0100/F-0104): the product one test added was still in the basket when
+   the next added it, the application answered HTTP 500, and a badge that expected
+   "1" read "2" — all test-isolation faults, not product bugs. Say in the item's
+   conditions how each test gets its own data: a fresh account registered per test,
+   the state cleared before each test (a beforeEach that empties the basket), or a
+   unique datum per test (a different product). A stateful item that names no
+   isolation is sent back.
 
    Pick the technique from the RULE the criterion states:
      - a field that is required or has limits → boundary-value-analysis

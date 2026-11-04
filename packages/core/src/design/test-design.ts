@@ -581,6 +581,29 @@ export function validateDesign(
       );
   }
 
+  // W15/W18/W21 (F-0097/F-0100/F-0104): a stateful story names its isolation.
+  // SCRUM-19's basket tests shared one account and ran serially, so the product
+  // one test added was still in the basket when the next added it — Juice Shop
+  // answered 500 and a badge expecting "1" read "2". The agent repaired locators
+  // for nine runs instead of isolating the data. Checked once per story, not per
+  // item: isolation is a suite-level decision (usually one beforeEach), so a
+  // design that mutates shared state has to say, SOMEWHERE in its items (or an
+  // exclusion reason), how each test gets its own data.
+  const designText = (it: DesignItem) => `${it.conditions.join(" ")} ${it.expected}`;
+  const anyStateful = d.items.some((it) => mutatesSharedState(designText(it)));
+  const anyIsolation =
+    d.items.some((it) => statesIsolation(designText(it))) ||
+    d.excluded.some((e) => statesIsolation(e.reason));
+  if (anyStateful && !anyIsolation)
+    problems.push(
+      "this story changes shared server-side state (a basket, booking or order), but no item says " +
+        "how each test gets its own data. Tests share one account and run one after another, so one " +
+        "test's leftover breaks the next — a product already in the basket answers HTTP 500, a badge " +
+        "that expects 1 reads 2. Add the isolation to the item(s) that mutate state: a fresh account " +
+        "per test, the state cleared before each test (a beforeEach that empties the basket), or a " +
+        "unique datum per test (a different product).",
+    );
+
   return problems;
 }
 
@@ -1107,6 +1130,29 @@ export function traceProblems(
     );
   }
 
+  // W15/W18/W21 (F-0097/F-0100/F-0104): a stateful test isolates its data. A
+  // test that mutates shared state (adds to the basket, creates a booking) when
+  // nothing isolates it — not its own body, not a shared hook the whole spec
+  // runs — inherits a prior test's state and collides (the SCRUM-19 500s). The
+  // isolation can be inline (AC-2 cleared the basket before adding) or in a
+  // beforeEach, so the whole spec is searched. Review-only: whether two tests
+  // truly collide is a judgement from the file.
+  const specIsolates = isolatesTestData(allSpecText) && /beforeEach|afterEach/.test(allSpecText);
+  for (const item of design.items) {
+    const body = bodies.get(item.id);
+    if (!body) continue;
+    if (!bodyMutatesSharedState(body)) continue;
+    if (isolatesTestData(body) || specIsolates) continue;
+    reviewShape.push(
+      `${item.id} (${item.covers}): the test changes shared server-side state (a basket, booking ` +
+        "or order) and nothing isolates it — no fresh account, no cleared state, no unique datum, " +
+        "in this test or a shared beforeEach. A test that ran before it leaves its data behind, so " +
+        "this one collides (a product already in the basket, a duplicate booking → HTTP 500) and " +
+        "the suite is not re-runnable. Register a fresh account per test, clear the state before " +
+        "each test, or use a unique datum per test.",
+    );
+  }
+
   // W11 (F-0093): the scope rule removes the story's own control when it lives
   // in the header. SCRUM-18's search box is in the top toolbar; the accessibility
   // scan was scoped to <main>, which excludes the toolbar, so a real "label"
@@ -1433,6 +1479,91 @@ export function bodyMutatesAccount(body: string): boolean {
     );
   const acts = /\.(fill|click|press|check)\s*\(|request\.(post|put|patch)\s*\(/i.test(body);
   return flow && acts;
+}
+
+// ── W15/W18/W21 (F-0097/F-0100/F-0104): per-test data isolation ──────────────
+// Stateful stories (a basket, a booking, an order) share one account and run
+// one after another, so the state one test creates is still there for the next:
+// Juice Shop answers 500 on the duplicate add, and a badge that expects "1"
+// reads "2". The agent spent nine runs of nine repairing locators instead of
+// isolating the data. These detectors drive a design rule and a review-only
+// verifier check: a test that mutates shared server-side state must isolate it —
+// a fresh account per test, the state cleared before each test, or a unique
+// datum per test.
+
+/** A noun naming shared server-side state a story mutates and another test sees. */
+const SHARED_STATE =
+  /\b(basket|cart|booking|reservation|order|checkout|wish[\s-]?list|address\s*book)\b/;
+
+/**
+ * A verb that creates or changes that state (as opposed to reading it). `clear`,
+ * `empty` and `remove` are isolation/teardown rather than the mutation under
+ * test, so they are not here; a removal test still trips `SHARED_STATE` through
+ * its add step.
+ */
+const STATE_MUTATION_VERB =
+  /\b(add\w*|creat\w*|plac\w*|submit\w*|book\w*|reserv\w*|check\s*out|checkout)\b/;
+
+/** A signal that the test did NOT change the state — refused, prevented, read-only. */
+const STATE_NON_OCCURRENCE =
+  /\bnot\s+(?:add|creat|plac|book|order|chang)\w*|\brefus\w*|\breject\w*|\bprevent\w*|\bcannot\b|\bread[\s-]?only\b|\bjust\s+(?:view|see|show)\w*|\bwithout\s+(?:adding|changing|creating)\b/i;
+
+/** A statement that each test gets its own data, or clears/resets what it shares. */
+const ISOLATION =
+  /\b(fresh|unique|per[\s-]?test|isolat\w*|own\s+(?:account|basket|booking|data)|new\s+account|registers?\s+(?:a\s+)?(?:new\s+)?account|before\s*each|beforeEach|after\s*each|afterEach|each\s+test|cleared|clear\w*\s+(?:the\s+)?(?:basket|cart|state|booking)|empt(?:y|ies|ied)\s+(?:the\s+)?(?:basket|cart)|reset\w*\s+(?:the\s+)?(?:basket|state|data)|a\s+different\s+(?:product|item|room|datum))\b/i;
+
+/**
+ * Whether a design item's prose describes mutating shared server-side state
+ * (adding to a basket, creating a booking, placing an order). A read-only view
+ * of that state, or a change that was refused, is excluded (W15/W18/W21).
+ */
+export function mutatesSharedState(text: string): boolean {
+  if (
+    STATE_NON_OCCURRENCE.test(text) &&
+    !/\b(is|was|been)\s+(?:add|creat|plac|book)\w*/i.test(text)
+  )
+    return false;
+  if (!SHARED_STATE.test(text)) return false;
+  // A mutation verb within a short window of the state noun, either order.
+  return (
+    new RegExp(`${STATE_MUTATION_VERB.source}[\\s\\S]{0,40}?${SHARED_STATE.source}`, "i").test(
+      text,
+    ) ||
+    new RegExp(`${SHARED_STATE.source}[\\s\\S]{0,40}?${STATE_MUTATION_VERB.source}`, "i").test(text)
+  );
+}
+
+/** Whether the design/test text states a per-test isolation strategy (W15). */
+export function statesIsolation(text: string): boolean {
+  return ISOLATION.test(text);
+}
+
+/** Whether a spec body actually performs a stateful mutation (W15 verifier). */
+export function bodyMutatesSharedState(body: string): boolean {
+  return (
+    /\/BasketItems|addToBasket|add\s+to\s+basket|\/api\/Bookings\b|\/booking\b|createBooking|place[\s\S]{0,12}order|\/api\/Orders\b|\bcheckout\b/i.test(
+      body,
+    ) || /\.(post|put)\s*\(\s*[`'"][^`'"]*(basket|booking|order|reservation)/i.test(body)
+  );
+}
+
+/**
+ * Whether a spec body (or a shared hook its tests all run) isolates the data it
+ * mutates: a fresh/registered account, a unique datum, or the state cleared.
+ * The clearing can be inline in the test — SCRUM-19's AC-2 fetched the basket
+ * and deleted its items before adding — or in a beforeEach/afterEach hook.
+ */
+export function isolatesTestData(text: string): boolean {
+  return (
+    /\bregisters?\b|\/api\/Users\b|\/rest\/user\/(?!login)|createAccount|sign[\s-]?up/i.test(
+      text,
+    ) ||
+    /Date\.now\(\)|faker|randomUUID|crypto\.random|`[^`]*\$\{[^}]*\}@/i.test(text) ||
+    /\.delete\s*\(\s*[`'"][^`'"]*(BasketItems|basket|booking|order)/i.test(text) ||
+    /empt(?:y|ies|ied)\s+(?:the\s+)?(?:basket|cart)|clear\w*\s+(?:the\s+)?(?:basket|cart|state)/i.test(
+      text,
+    )
+  );
 }
 
 /**
