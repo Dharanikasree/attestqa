@@ -437,6 +437,29 @@ export function validateDesign(
           "A reviewer cannot approve a choice that is made after the approval.",
       );
 
+    // W33 (F-0151, F-0130): a test that changes the shared sign-in account and
+    // does not restore it makes the whole suite non-rerunnable — SCRUM-10's
+    // forgot-password test reset the fixture account's password and left it
+    // changed, and in a full parallel run every later sign-in answered 401.
+    // Nothing in the design rules looked for it. If an item mutates a credential
+    // of the account the suite signs in with, its expected result has to say how
+    // the account is left usable: the original restored, or an account this test
+    // creates. Registration (a NEW account) is not a mutation of the shared one.
+    // Read the EXPECTED result, not the conditions: "the password is changed" is
+    // the outcome that mutates the account, whereas a sign-in test only enters a
+    // password as setup and an axe test signs in before scanning — including
+    // their conditions flagged both (32 items across the ledgers, almost all
+    // sign-in/accessibility setup; scoping to expected leaves the genuine
+    // change-password items).
+    if (mutatesAccount(it.expected) && !leavesFixtureRestored(it.expected))
+      problems.push(
+        `${at}: this item changes the shared sign-in account (a password, e-mail or security ` +
+          "question the suite logs in with). Its expected result must say how the account is left " +
+          "usable for the tests that run after it — restore the original value at the end, or use " +
+          "an account this test creates — otherwise a whole-suite run answers 401 on every sign-in " +
+          "after it and cannot be re-run.",
+      );
+
     // What it covers must exist.
     const label = acLabels(it.covers)[0];
     const bug = bugRef(it.covers);
@@ -1035,6 +1058,28 @@ export function traceProblems(
       );
   }
 
+  // W33 (F-0151, F-0130): the fixture is left as it was found. For an item whose
+  // design is about changing an account credential, the TEST must either restore
+  // it or run against its own account. The restore can live in an afterEach /
+  // afterAll hook outside the item's own body, so the whole spec is searched,
+  // not just the body. Review-only: the mutation is real but whether the suite
+  // is left rerunnable is a judgement a person makes from the whole file.
+  const allSpecText = specs.map((s) => s.text).join("\n");
+  const restored = leavesFixtureRestored(allSpecText);
+  for (const item of design.items) {
+    const body = bodies.get(item.id);
+    if (!body) continue;
+    if (!mutatesAccount(item.expected)) continue;
+    if (!bodyMutatesAccount(body)) continue;
+    if (restored) continue;
+    reviewShape.push(
+      `${item.id} (${item.covers}): the test changes the shared sign-in account and nothing ` +
+        "restores it, so a whole-suite run answers 401 on every sign-in after it. Restore the " +
+        "original value at the end of the test (or in an afterEach/afterAll hook), or run against " +
+        "an account this test creates.",
+    );
+  }
+
   return { untested, untagged, unmarked, wrongShape, reviewShape };
 }
 
@@ -1252,6 +1297,71 @@ export function proseAbsenceAssertion(body: string): string | undefined {
     if (negative && byText) return a;
   }
   return undefined;
+}
+
+/**
+ * A verb changing a credential of the account the suite signs in with, in either
+ * order — "reset the password" and "the password is changed" both count.
+ */
+const CREDENTIAL = /\b(password|e-?mail|security\s+(?:question|answer)|credentials?)\b/;
+const ACCOUNT_MUTATION = new RegExp(
+  `\\b(reset\\w*|chang\\w*|updat\\w*|set\\w*)\\b[\\s\\S]{0,40}?${CREDENTIAL.source}` +
+    `|${CREDENTIAL.source}[\\s\\S]{0,40}?\\b(reset\\w*|chang\\w*|updat\\w*)\\b`,
+  "i",
+);
+
+/** A restore, or the use of a throwaway/own account, that leaves the fixture usable. */
+const RESTORE_SIGNAL =
+  /\b(restore\w*|revert\w*|original\s+password|afterEach|afterAll|per-test account|throwaway|dedicated(?:\s+test)?\s+account|freshly[\s-]registered|newly[\s-]registered|unique\s+(?:e-?mail|account)|Date\.now\(\)|faker)\b/i;
+
+/**
+ * Whether a design item's prose, or a test, changes a credential of the shared
+ * sign-in account (W33). Registration creates a NEW account, which is not a
+ * mutation of the shared one, so a registration context with no reset/change/
+ * update/forgot verb is excluded.
+ */
+export function mutatesAccount(text: string): boolean {
+  // A change that did NOT take effect does not mutate the account: a refused or
+  // rejected change, a "the password is not changed" negative case, or an
+  // access-control check that the route requires sign-in. These are the bulk of
+  // a change-password epic and must not be asked for a restore they never need.
+  const nonOccurrence =
+    /\bnot\s+(?:chang|updat|reset|accept)\w*|\brefus\w*|\breject\w*|\bdenied\b|requires?\s+(?:authentication|login|a\s+login|to\s+(?:be\s+)?(?:sign|log))|must\s+(?:be\s+)?(?:authenticat|logged|signed)|cannot\s+(?:chang|updat|reset|access)|unauthenticated/i.test(
+      text,
+    );
+  const positiveSuccess =
+    /\b(?:is|was|been|then)\s+(?:chang|updat|reset)\w*|\bsuccessfully\b|\bconfirmation\b/i.test(
+      text,
+    );
+  if (nonOccurrence && !positiveSuccess) return false;
+  const registrationOnly =
+    /\b(register\w*|sign[\s-]?up|create[sd]?\s+(?:a\s+|an\s+)?(?:new\s+)?account|new user)\b/i.test(
+      text,
+    ) && !/\b(reset|chang\w*|updat\w*|forgot)\b/i.test(text);
+  if (registrationOnly) return false;
+  if (/\bforgot[\s-]?password\b/i.test(text)) return true;
+  if (/\bdelete[sd]?\b[\s\S]{0,24}\baccount\b/i.test(text)) return true;
+  return ACCOUNT_MUTATION.test(text);
+}
+
+/** Whether the design/test text states a restore or the use of its own account. */
+export function leavesFixtureRestored(text: string): boolean {
+  if (RESTORE_SIGNAL.test(text)) return true;
+  // "change it back", "reset the password back", "put the account back".
+  if (/\b(chang\w*|reset|put|set)\b[\s\S]{0,24}\bback\b/i.test(text)) return true;
+  // "registers a (new) account", used so the test does not touch the shared one.
+  if (/\bregisters?\b[\s\S]{0,24}\baccount\b/i.test(text)) return true;
+  return false;
+}
+
+/** Whether a spec body actually runs a credential-change flow (W33 verifier). */
+export function bodyMutatesAccount(body: string): boolean {
+  const flow =
+    /forgot-?password|reset-?password|change-?password|new[\s-]?password|newPassword|security\s*answer|securityAnswer/i.test(
+      body,
+    );
+  const acts = /\.(fill|click|press|check)\s*\(|request\.(post|put|patch)\s*\(/i.test(body);
+  return flow && acts;
 }
 
 /**
