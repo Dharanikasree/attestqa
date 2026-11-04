@@ -73,6 +73,8 @@ export interface TransportOptions {
 export interface AnthropicConnection {
   baseURL?: string;
   authToken?: string;
+  /** Sent as the `anthropic-workspace-id` header; required by an org-scoped key. */
+  workspaceId?: string;
 }
 
 export type MessagesFactory = (
@@ -111,6 +113,7 @@ export const sdkMessagesFactory: MessagesFactory = async (apiKey, transport, con
       baseURL?: string | null;
       timeout?: number;
       maxRetries?: number;
+      defaultHeaders?: Record<string, string>;
     }) => {
       messages: MessagesApi;
     };
@@ -128,6 +131,11 @@ export const sdkMessagesFactory: MessagesFactory = async (apiKey, transport, con
     baseURL: connection?.baseURL ?? null,
     timeout: timeoutMs,
     maxRetries,
+    // An org-scoped key must name its workspace; a workspace-scoped key does not
+    // set this and the header is omitted.
+    ...(connection?.workspaceId
+      ? { defaultHeaders: { "anthropic-workspace-id": connection.workspaceId } }
+      : {}),
   }).messages;
 };
 
@@ -138,6 +146,8 @@ export interface AnthropicModelOptions {
   authToken?: string;
   /** A company gateway's address (ANTHROPIC_BASE_URL, or agent.model.endpoint). */
   baseURL?: string;
+  /** ANTHROPIC_WORKSPACE_ID — sent as the `anthropic-workspace-id` header. */
+  workspaceId?: string;
   model?: string;
   promptVersion?: string;
   maxTokens?: number;
@@ -210,6 +220,7 @@ export class AnthropicModel implements ModelClient {
     this.connection = {
       ...(opts.authToken ? { authToken: opts.authToken } : {}),
       ...(opts.baseURL ? { baseURL: opts.baseURL } : {}),
+      ...(opts.workspaceId ? { workspaceId: opts.workspaceId } : {}),
     };
     this.model = opts.model ?? DEFAULT_MODEL;
     this.promptVersion = opts.promptVersion ?? DEFAULT_PROMPT_VERSION;

@@ -134,6 +134,7 @@ export function buildModel(opts: BuildModelOptions): ModelClient {
       apiKey: viaGateway ? "" : (key as string),
       ...(viaGateway ? { authToken: opts.env.anthropicAuthToken as string } : {}),
       ...(baseURL ? { baseURL } : {}),
+      ...(opts.env.anthropicWorkspaceId ? { workspaceId: opts.env.anthropicWorkspaceId } : {}),
       model: config.name,
       promptVersion: opts.promptVersion,
       warn,

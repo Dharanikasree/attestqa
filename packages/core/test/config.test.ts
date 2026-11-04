@@ -167,6 +167,13 @@ describe("readRuntimeEnv", () => {
     });
     expect(r.sandbox).toBe(true);
   });
+  it("reads ANTHROPIC_WORKSPACE_ID when set, and leaves it unset otherwise", () => {
+    expect(
+      readRuntimeEnv({ ANTHROPIC_API_KEY: "k", ANTHROPIC_WORKSPACE_ID: "wrkspc_abc" })
+        .anthropicWorkspaceId,
+    ).toBe("wrkspc_abc");
+    expect(readRuntimeEnv({ ANTHROPIC_API_KEY: "k" }).anthropicWorkspaceId).toBeUndefined();
+  });
 });
 
 describe("orgNameFromUrl", () => {

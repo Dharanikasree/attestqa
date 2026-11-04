@@ -293,6 +293,13 @@ export interface RuntimeEnv {
    */
   anthropicAuthToken?: string;
   anthropicBaseUrl?: string;
+  /**
+   * ANTHROPIC_WORKSPACE_ID — the workspace an org-scoped Anthropic key must name.
+   * An API key not tied to a single workspace is rejected ("must include the
+   * anthropic-workspace-id header") unless the request carries this; set it and
+   * the client sends the header. A workspace-scoped key needs none of this.
+   */
+  anthropicWorkspaceId?: string;
   /** Set by the attestqa VS Code extension when it relays model calls to Copilot. */
   vscodeLmEndpoint?: string;
   vscodeLmToken?: string;
@@ -338,6 +345,7 @@ export function readRuntimeEnv(
   const out: RuntimeEnv = { anthropicApiKey: key ?? "", sandbox: env["AQA_SANDBOX"] === "1" };
   if (env["ANTHROPIC_AUTH_TOKEN"]) out.anthropicAuthToken = env["ANTHROPIC_AUTH_TOKEN"];
   if (env["ANTHROPIC_BASE_URL"]) out.anthropicBaseUrl = env["ANTHROPIC_BASE_URL"];
+  if (env["ANTHROPIC_WORKSPACE_ID"]) out.anthropicWorkspaceId = env["ANTHROPIC_WORKSPACE_ID"];
   if (env["AQA_VSCODE_LM_ENDPOINT"]) out.vscodeLmEndpoint = env["AQA_VSCODE_LM_ENDPOINT"];
   if (env["AQA_VSCODE_LM_TOKEN"]) out.vscodeLmToken = env["AQA_VSCODE_LM_TOKEN"];
   if (env["OPENAI_API_KEY"]) out.openaiApiKey = env["OPENAI_API_KEY"];
