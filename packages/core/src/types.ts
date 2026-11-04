@@ -218,6 +218,14 @@ export interface TriagePayload {
     rationale: string;
     triagedBy: "builtin" | "service";
     serviceVersion?: string;
+    /**
+     * The failure was the test's own code (strict-mode violation, invalid
+     * selector, axe scope not on the page), which the rationale already states.
+     * The category stays `flake`; this additive flag lets the report count it
+     * as a test fault rather than as flaky (W27). Optional, so a reader that
+     * does not know it is unaffected.
+     */
+    testFault?: boolean;
   }>;
   /**
    * Tests the agent may not modify: those triaged `real-defect`. Recorded here

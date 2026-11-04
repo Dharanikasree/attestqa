@@ -2,8 +2,10 @@
 
 A small patch on 2.0.2: the citation file shipped with the package now carries the right version
 and the Zenodo concept DOI, and the release itself is the first made by the token-free pipeline
-(trusted publishing on npm and the VS Code Marketplace). The engine is the 2.0.2 engine: the
-eleven fixes from the October evaluation of 2.0.1, listed below. attestqa is governed, open-source end-to-end testing for web
+(trusted publishing on npm and the VS Code Marketplace). It also carries one engine fix on top of
+the eleven from the October evaluation that 2.0.2 shipped: a failure that is the test's own code —
+a broken or ambiguous selector, an accessibility scan scoped to a region that is not on the page —
+is now reported as a test fault, not as "flaky". All are listed below. attestqa is governed, open-source end-to-end testing for web
 applications. Point it at a user story in **Jira or Azure DevOps**; approve the test design it
 proposes; get ordinary Playwright tests in a folder you own — written, run, triaged and repaired
 under rules that refuse, in code, to make a failing test pass by weakening it. Every step is in a
@@ -22,6 +24,7 @@ Then follow the [user guide](packages/core/docs/USAGE.md) — about ten minutes 
 
 ## Changed in 2.0.3
 
+- Triage: a failure that is the test's own code — an invalid or ambiguous selector (a strict-mode violation), or an accessibility scan scoped to a region that is not on the page — is reported as a test fault instead of as "flaky". The agent still repairs it exactly as before; only the report's wording changes, so a run whose one failure was a broken selector no longer reads "1 flaky" (F-0125, F-0126).
 - `CITATION.cff` (repository and npm package): version, date and the Zenodo concept DOI, which resolves to the latest archived version.
 - One release workflow; npm and Marketplace publishing without tokens. See `packages/core/docs/RELEASING.md`.
 

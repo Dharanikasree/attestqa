@@ -228,16 +228,22 @@ export class StageTracker {
       }
       case "triage": {
         const verdicts = Array.isArray(p["verdicts"])
-          ? (p["verdicts"] as Array<{ category?: string }>)
+          ? (p["verdicts"] as Array<{ category?: string; testFault?: boolean }>)
           : [];
         if (verdicts.length === 0) break;
         const n = (cat: string) => verdicts.filter((v) => v.category === cat).length;
+        // A test fault is category `flake` but the test's own code, not a flake
+        // (W27): count it on its own, so the report stops saying "flaky" for a
+        // broken selector the rationale already calls the test's fault.
+        const faults = verdicts.filter((v) => v.testFault === true).length;
+        const flaky = verdicts.filter((v) => v.category === "flake" && v.testFault !== true).length;
         const other = verdicts.length - n("real-defect") - n("flake");
         this.analysis =
           `${verdicts.length} failure(s): ` +
           [
             n("real-defect") ? `${n("real-defect")} possible product defect(s)` : "",
-            n("flake") ? `${n("flake")} flaky` : "",
+            flaky ? `${flaky} flaky` : "",
+            faults ? `${faults} test fault(s)` : "",
             other > 0 ? `${other} test or environment problem(s)` : "",
           ]
             .filter(Boolean)

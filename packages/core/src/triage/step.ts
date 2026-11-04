@@ -614,7 +614,9 @@ export function triageGaps(events: AnyRunEvent[]): {
     });
   }
 
-  const flakes = latest.verdicts.filter((v) => v.category === "flake");
+  // A test fault is category `flake` but not a flake (W27): it is not what "a
+  // flake that survived a retry" means, so it is left out of this note.
+  const flakes = latest.verdicts.filter((v) => v.category === "flake" && v.testFault !== true);
   if (flakes.length > 0 && history.length > 1) {
     limitations.push(
       `triage — ${flakes.length} failure(s) were triaged as flaky and the suite was retried; ` +

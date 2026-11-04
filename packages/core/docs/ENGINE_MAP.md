@@ -96,6 +96,7 @@ Each rule was written for a real incident (named in its doc comment). None of th
 ## 7. Triage and quarantine
 
 - **Categories:** `real-defect`, `flake`, `environmental`, `infrastructure`, plus test-code problems, scored by the pattern banks in `triage/patterns.ts`.
+- **Test faults (W27, fixed in 2.0.3, F-0125/F-0126):** a `TEST_CODE_ERROR` match (strict-mode violation, invalid selector, axe "No elements found") stays category `flake` — that is what hands the test back to the agent rather than quarantining it — but the verdict now carries an optional `testFault: true`. The category set is ledger contract in 2.0.x, so no new category value was added; the flag is additive and ignorable. The report (`runtime/stages.ts`) counts `testFault` verdicts as "test fault(s)", separately from "flaky", and the verifier's flake note (`triage/step.ts`) excludes them. The rationale is unchanged.
 - **`applyRepetition`:** a `flake` that fails the same way twice becomes `real-defect` at 0.1 ("guessing has stopped working"). Since 18 Oct, "the same way" includes the locator.
 - **Two different definitions of "quarantined" (F2):**
   - `triage/step.ts` → `quarantines(v)`: `real-defect` **and confidence > 0.1**. The verifier uses this.

@@ -99,6 +99,16 @@ export interface TriageVerdict {
   triagedBy: "builtin" | "service";
   /** Present only when a service produced it. */
   serviceVersion?: string;
+  /**
+   * The failure is the test's own code — a strict-mode violation, an invalid
+   * selector, an axe include/exclude region that is not on the page. The
+   * category stays `flake` (its loop treatment — the agent fixes it, it is not
+   * quarantined — is already right), but the rationale says "not a defect and
+   * not a flake", and a report that counts it as flaky repeats the one word the
+   * rationale denies. This flag lets the report tell the two apart without
+   * matching on the rationale text. Set only on the test-code branch (W27).
+   */
+  testFault?: boolean;
 }
 
 /**
@@ -250,6 +260,7 @@ export function classifyFailure(f: FailureSignal): TriageVerdict {
   const hook = score(f.message, stack, SETUP_HOOK_FAILURE);
   const code = score(f.message, stack, TEST_CODE_ERROR);
   let rationaleOverride: string | undefined;
+  let testFault = false;
   if (declared.matched.length === 0 && hook.matched.length > 0) {
     category = "environmental";
     confidence = 0.9;
@@ -266,6 +277,7 @@ export function classifyFailure(f: FailureSignal): TriageVerdict {
     matchedCount = code.matched.length;
     hits = code.hits;
     matched = code.matched;
+    testFault = true;
     rationaleOverride =
       `${TEST_CODE_RATIONALE} (${
         /strict mode violation/i.test(f.message)
@@ -314,6 +326,7 @@ export function classifyFailure(f: FailureSignal): TriageVerdict {
     rationale:
       rationaleOverride ?? `${RATIONALE[category]} ${whatClause(category, matchedCount)}`.trim(),
     triagedBy: "builtin",
+    ...(testFault ? { testFault: true } : {}),
   };
 }
 
