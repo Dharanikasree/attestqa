@@ -168,6 +168,20 @@ export class FsTools implements ToolClient {
       }
       case "write_file": {
         const content = args["content"];
+        // A whole-file write larger than the model's output limit (about 8192
+        // tokens) arrives with the `content` cut off before it reaches the tool,
+        // so the arg is missing. Answering "content must be a string" did not say
+        // why, and the agent repeated the identical write until the no-progress
+        // guard stopped it, paying the cap each time (W29, SCRUM-25 run 2).
+        if (content === undefined)
+          return fail(
+            "No `content` arrived for the whole-file write. A write larger than the model's " +
+              "output limit (about 8192 tokens) is cut off before it reaches the tool, which is " +
+              "what this looks like — and rewriting a large file is exactly what hits that limit, " +
+              "so repeating it will not help. Use `fs.replace_in_file` to change only the part that " +
+              "differs: it is far smaller than the whole file, it does not hit the limit, and it " +
+              "keeps whatever you did not reproduce.",
+          );
         if (typeof content !== "string") return fail(`"content" must be a string`);
         const previous = existsSync(abs) && statSync(abs).isFile() ? readFileSync(abs, "utf8") : "";
         mkdirSync(dirname(abs), { recursive: true });
