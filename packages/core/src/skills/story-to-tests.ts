@@ -1383,6 +1383,11 @@ export function storyToTestsSkill(
       ),
       // Stage 2's one tool, shown only when the project has test types in scope.
       ...(options.testTypes && options.testTypes.length > 0 ? ["aqa.test_design"] : []),
+      // The project's synthetic-data generator, for a unique datum per test on a
+      // stateful story (W15). Listed always; it only reaches the model when the
+      // synthdata server is actually running (SYNTHDATA_CMD is set), so it is a
+      // no-op on a project that has not configured one.
+      "synthdata.generate",
     ],
     sourceTools: trackerSources(tracker),
     verifier: new StoryToTestsVerifier(options),
@@ -1441,7 +1446,10 @@ function testDesignStep(types: readonly string[]): string {
    conditions how each test gets its own data: a fresh account registered per test,
    the state cleared before each test (a beforeEach that empties the basket), or a
    unique datum per test (a different product). A stateful item that names no
-   isolation is sent back.
+   isolation is sent back. If a synthdata.generate tool is offered, it is the
+   project's synthetic-data generator — use it to produce the unique datum per
+   test (a unique room number, a unique guest) into a workspace file the test
+   reads; it never touches real data.
 
    Pick the technique from the RULE the criterion states:
      - a field that is required or has limits → boundary-value-analysis

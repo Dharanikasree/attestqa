@@ -181,6 +181,7 @@ describe("W15 detectors", () => {
     expect(statesIsolation("each test registers a fresh account")).toBe(true);
     expect(statesIsolation("clear the basket before each test")).toBe(true);
     expect(statesIsolation("use a different product per test")).toBe(true);
+    expect(statesIsolation("generate a unique room per test with synthdata")).toBe(true);
     expect(statesIsolation("add the product and check the badge")).toBe(false);
   });
 
@@ -189,5 +190,10 @@ describe("W15 detectors", () => {
     expect(bodyMutatesSharedState(d2Body)).toBe(true);
     expect(isolatesTestData(d1Body)).toBe(false);
     expect(isolatesTestData(d2Body)).toBe(true);
+    expect(
+      isolatesTestData(
+        `const rooms = await synthdata.generate({ schema: "room", out: "rooms.json" });`,
+      ),
+    ).toBe(true);
   });
 });

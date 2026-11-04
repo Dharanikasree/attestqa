@@ -1515,7 +1515,7 @@ const STATE_NON_OCCURRENCE =
 
 /** A statement that each test gets its own data, or clears/resets what it shares. */
 const ISOLATION =
-  /\b(fresh|unique|per[\s-]?test|isolat\w*|own\s+(?:account|basket|booking|data)|new\s+account|registers?\s+(?:a\s+)?(?:new\s+)?account|before\s*each|beforeEach|after\s*each|afterEach|each\s+test|cleared|clear\w*\s+(?:the\s+)?(?:basket|cart|state|booking)|empt(?:y|ies|ied)\s+(?:the\s+)?(?:basket|cart)|reset\w*\s+(?:the\s+)?(?:basket|state|data)|a\s+different\s+(?:product|item|room|datum))\b/i;
+  /\b(fresh|unique|per[\s-]?test|isolat\w*|own\s+(?:account|basket|booking|data)|new\s+account|registers?\s+(?:a\s+)?(?:new\s+)?account|before\s*each|beforeEach|after\s*each|afterEach|each\s+test|cleared|clear\w*\s+(?:the\s+)?(?:basket|cart|state|booking)|empt(?:y|ies|ied)\s+(?:the\s+)?(?:basket|cart)|reset\w*\s+(?:the\s+)?(?:basket|state|data)|a\s+different\s+(?:product|item|room|datum)|synth(?:etic)?[\s-]?data|synthdata|generated?\s+(?:test\s+)?data)\b/i;
 
 /**
  * Whether a design item's prose describes mutating shared server-side state
@@ -1564,7 +1564,7 @@ export function isolatesTestData(text: string): boolean {
     /\bregisters?\b|\/api\/Users\b|\/rest\/user\/(?!login)|createAccount|sign[\s-]?up/i.test(
       text,
     ) ||
-    /Date\.now\(\)|faker|randomUUID|crypto\.random|`[^`]*\$\{[^}]*\}@/i.test(text) ||
+    /Date\.now\(\)|faker|randomUUID|crypto\.random|`[^`]*\$\{[^}]*\}@|synthdata/i.test(text) ||
     /\.delete\s*\(\s*[`'"][^`'"]*(BasketItems|basket|booking|order)/i.test(text) ||
     /empt(?:y|ies|ied)\s+(?:the\s+)?(?:basket|cart)|clear\w*\s+(?:the\s+)?(?:basket|cart|state)/i.test(
       text,
