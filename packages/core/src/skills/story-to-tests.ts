@@ -1111,6 +1111,9 @@ export function storyToTestsSkill(
       // So a rule comparing a write against the file's previous content has a
       // baseline even when the run never read it.
       ...(options.workspaceDir ? { workspaceDir: options.workspaceDir } : {}),
+      // So the edit-surface rule can tell this story's own tests from the
+      // neighbours' in a shared epic file (W35).
+      ...(options.workItem ? { workItem: options.workItem } : {}),
     }),
     // ADR-004: once the design is approved, its test cases go to the story's
     // QA sub-task straight away — covered by that approval, not asked again.
