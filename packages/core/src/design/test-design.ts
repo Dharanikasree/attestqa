@@ -301,7 +301,8 @@ export function isReviewOnly(problem: string): boolean {
     problem.startsWith("the assertion is on the whole violations array") ||
     problem.startsWith("a state-transition test needs an assertion that the action took effect") ||
     problem.startsWith("the destination assertion matches a prefix") ||
-    problem.startsWith("the control-state assertion has no valid-case counterpart")
+    problem.startsWith("the control-state assertion has no valid-case counterpart") ||
+    problem.startsWith("a negative assertion located by text")
   );
 }
 
@@ -989,8 +990,18 @@ export function traceProblems(
         });
   const tagged = new Set(scenarios.flatMap((s) => s.designs));
   const known = new Set(design.items.map((i) => i.id));
+  // A design item is tested only when a scenario tags it AND, once the spec
+  // exists, a test in the spec references that @design id (W8/W10,
+  // F-0090/F-0092). design-item-not-tested used to read the feature file alone,
+  // so an item whose scenario was tagged but whose generated test was dropped
+  // or never written read as covered — "every approved design item has a test
+  // that references it" is the spec-level half the feature tag cannot see. With
+  // no spec on disk yet, no-spec-written carries it, so the spec clause is off.
+  const specBodyIds = new Set<string>();
+  for (const sp of specs) for (const id of specBodies(sp.text).keys()) specBodyIds.add(id);
+  const haveSpecs = specs.length > 0;
   const untested = design.items
-    .filter((i) => !tagged.has(i.id))
+    .filter((i) => !tagged.has(i.id) || (haveSpecs && !specBodyIds.has(i.id)))
     .map((i) => `${i.id} (${i.covers})`);
   const untagged = scenarios
     .filter((s) => s.designs.length === 0 || s.designs.some((d) => !known.has(d)))
@@ -1199,9 +1210,48 @@ export function shapeProblems(item: DesignItem, body: string): string[] {
           "under test changes",
       );
   }
+  // W10 (F-0092): a negative-form assertion must name an element, not prose.
+  //
+  // A "no match shows no product cards" test asserted
+  // `getByText("product cards").not.toBeVisible()` — but "product cards" is a
+  // description, never on any page, so the assertion passes whatever the product
+  // does. Absence located by text is satisfied whenever that text is simply not
+  // there, for any reason. The remedy is to locate the thing whose absence you
+  // mean by what it IS (a role, a test id, the card's selector), so "no product
+  // cards" is "no .product elements", not "the words 'product cards' are
+  // unprinted". Review-only: a negative assertion on a real error string (say
+  // "Internal Server Error") is legitimate and only a person can tell the two
+  // apart.
+  const prose = proseAbsenceAssertion(body);
+  if (prose)
+    out.push(
+      `a negative assertion located by text passes whenever that text is absent for any reason: ` +
+        `${prose}. Locate what you are asserting is gone by what it is — a role, a test id, or ` +
+        "the element's selector (getByRole / getByTestId / locator) — so its absence means the " +
+        "product behaved, not that a phrase happens not to be printed",
+    );
   if (item.expectFail === true && !/\btest\.fail\s*\(/.test(body))
     out.push("no test.fail marker, though the design says this test is expected to fail");
   return out;
+}
+
+/**
+ * A negative/absence assertion (`.not.toBeVisible()`, `.toBeHidden()`,
+ * `.toHaveCount(0)`, …) whose target is located by TEXT (`getByText`, a `text=`
+ * or `:has-text()` engine). Such an assertion passes whenever that text is
+ * absent for any reason, so it proves nothing about the product (W10, F-0092).
+ * Returns the offending assertion, normalised, or undefined.
+ */
+export function proseAbsenceAssertion(body: string): string | undefined {
+  for (const a of assertionsOf(body)) {
+    const negative =
+      /\.not\.(toBeVisible|toBeAttached|toContainText|toHaveText|toBeInViewport)\b/.test(a) ||
+      /\.toBeHidden\(/.test(a) ||
+      /\.toHaveCount\(\s*0\s*\)/.test(a);
+    const byText = /getByText\(/.test(a) || /text=/.test(a) || /:has-text\(/.test(a);
+    if (negative && byText) return a;
+  }
+  return undefined;
 }
 
 /**

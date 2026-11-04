@@ -379,9 +379,12 @@ export class StoryToTestsVerifier implements Verifier {
             gaps.push(
               gap(
                 "design-item-not-tested",
-                `approved design items have no scenario tagged @design:<id>: ${t.untested.join(
-                  ", ",
-                )}. ` + "Add a scenario for each, tagged with its design id, and scaffold again.",
+                `approved design items have no test that references them (no scenario tagged ` +
+                  `@design:<id>, or a scenario with no test in the generated spec): ${t.untested.join(
+                    ", ",
+                  )}. ` +
+                  "Add or tag a scenario for each in the feature file, scaffold, and implement the " +
+                  "generated test — an item nothing references was approved but never checked.",
                 { items: t.untested },
               ),
             );
