@@ -401,6 +401,12 @@ export function validateDesign(
     // where naming a criterion that never mentioned accessibility is not.
     const sourced =
       SOURCE.test(it.source) ||
+      // A tracker issue key on its own, or with a type word before or after it
+      // ("SCRUM-9", "task SCRUM-9", "SCRUM-9 sub-task"): a sub-task is where the
+      // implementation facts live, and refusing the key for its form pushed the
+      // agent to drop the true source (W3, F-0086). Case-sensitive, so a
+      // lowercase word like "page-2" is not mistaken for a key.
+      /\b[A-Z][A-Z0-9_]+-\d+\b/.test(it.source) ||
       (it.type === "accessibility" && /config|test.?types|wcag|axe/i.test(it.source)) ||
       // No criteria: the description and the story itself are what there is.
       (noCriteria && DERIVED_SOURCE.test(it.source));
