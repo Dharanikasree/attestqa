@@ -340,9 +340,17 @@ export class StageTracker {
         }
         const status = String(p["status"] ?? "");
         const who = this.story ? `Story ${this.story}` : "Story";
+        // "Completed" is qualified by what it leaves open: a run can pass every
+        // test and still be weaker than its design (an unscoped scan, a
+        // half-asserted transition) that was sent to review rather than blocked,
+        // and a reader skimming the headline must see that (W22, F-0106).
+        const open: string[] = [];
+        if (this.forReview.length > 0) open.push(`${this.forReview.length} for your review`);
+        if (this.forReviewer.length > 0)
+          open.push(`${this.forReviewer.length} needing your decision`);
         out.push(
           status === "done"
-            ? `== ${who}: completed`
+            ? `== ${who}: completed${open.length > 0 ? ` — ${open.join(", ")}` : ""}`
             : `== ${who}: stopped (${status}) — ${String(p["summary"] ?? "").slice(0, 200)}`,
         );
         break;
