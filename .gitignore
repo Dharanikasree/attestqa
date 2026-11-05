@@ -45,3 +45,6 @@ packages/core/*.png
 
 # Backups made before an edit (.before_<what>_<date>.bak)
 *.before_*.bak
+
+# Release notes the workflow generates from the changelog at publish time
+RELEASE_NOTES.generated.md
