@@ -30,6 +30,9 @@ identifiers:
     value: 10.5281/zenodo.22758875
     description: "Concept DOI: all versions, resolves to the latest (Zenodo)"
   - type: doi
+    value: 10.5281/zenodo.23979481
+    description: "Version 2.1.0 (Zenodo)"
+  - type: doi
     value: 10.5281/zenodo.23897787
     description: "Version 2.0.1, the version evaluated in the SoftwareX article (Zenodo)"
 keywords:
