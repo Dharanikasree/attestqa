@@ -175,6 +175,41 @@ describe("stop rules", () => {
     expect(d.ledger.read().filter((e) => e.kind === "call")).toHaveLength(1);
   });
 
+  it("a repeated file read is nudged to act or stop, naming the file it has (W24)", async () => {
+    // F-0109/F-0111/F-0124: stuck on a failing test, the agent re-read the same
+    // file three cycles running until this guard stopped it. A file read gets a
+    // read-specific nudge, not the generic repeat message.
+    const readFile: ModelDecision = {
+      calls: [{ toolName: "fs.read_file", args: { path: "a.spec.ts" } }],
+      usage: u,
+    };
+    const model = new ScriptedModel({
+      plan: { steps: ["a"], usage: u },
+      decisions: Array(5).fill(readFile),
+    });
+    const fsTools = new StubTools().add(
+      { server: "fs", name: "read_file", description: "", inputSchema: {}, policyClass: "read" },
+      { ok: true, result: { content: "x" }, artefacts: [] },
+    );
+    const base = skill();
+    const d = deps([], {
+      model,
+      tools: fsTools,
+      skill: { ...base, allowedTools: ["fs.read_file"] },
+      config: config({ steps: 50 }),
+    });
+    const r = await runLoop(d);
+    expect(r.status).toBe("blocked");
+    expect(r.summary).toMatch(/no progress/);
+    const reasons = model.inputs.flatMap((inp) => inp.history.map((h) => h.gate?.reason ?? ""));
+    expect(reasons.some((x) => /you have this file/.test(x))).toBe(true);
+    expect(reasons.some((x) => /next call must change something/i.test(x))).toBe(true);
+    // and NOT the generic message for a read
+    expect(reasons.some((x) => /already made this exact call/.test(x))).toBe(false);
+    // the read reached the tool exactly once
+    expect(d.ledger.read().filter((e) => e.kind === "call")).toHaveLength(1);
+  });
+
   it("no progress: a NEW call resets the counter", async () => {
     const d = deps(
       [read, read, { calls: [{ toolName: "s.read", args: { x: 1 } }], usage: u }, goal],

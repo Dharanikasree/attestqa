@@ -72,6 +72,13 @@ export interface TestRunSummary {
   unexpectedPasses: Array<{ title: string; file: string; note: string }>;
   /** Tests that passed only because some of their steps are still empty TODOs. */
   unimplemented?: Array<{ title: string; file: string; steps: string[] }>;
+  /**
+   * Top-level errors Playwright reported for the RUN rather than for a test —
+   * above all a spec that did not compile, which makes every test count zero.
+   * A spec that does not compile is its own state, not "no test is failing"
+   * (W17, F-0099); present only when there is at least one.
+   */
+  loadErrors?: string[];
   exitCode: number;
 }
 
@@ -223,6 +230,19 @@ export class PwTools implements ToolClient {
           `. ${tail(r.stderr || r.stdout)}`,
       );
     }
+    // A spec that does not compile is its own state, not "no test is failing":
+    // no test ran, so nothing was measured, and the compile error (often the
+    // last edit) must be fixed before the suite can run again (W17, F-0099).
+    if (summary.loadErrors && summary.loadErrors.length > 0)
+      return fail(
+        "the spec does not compile, so no test ran and nothing here is a result about the " +
+          "product — this is not a green suite and not 'no test failing'. Fix the compile error " +
+          "(usually the last edit) and run again:\n" +
+          summary.loadErrors
+            .map((e) => head(e, 300))
+            .slice(0, 3)
+            .join("\n"),
+      );
     // A filter that matched nothing executed nothing, and "nothing" is not a
     // result.
     //
@@ -355,15 +375,60 @@ export function withUnimplemented(
       }
     }
     for (const [title, body] of testsByTitle(text)) {
-      const steps = [...body.matchAll(/test\.step\(\s*(["'`])(\[SKIPPED\][^"'`]*)\1/g)].map(
-        (m) => m[2] ?? "",
-      );
-      const todo = /@bdd2pw lane=todo|\/\/\s*TODO\b/.test(body);
-      if (steps.length > 0 || todo)
-        unimplemented.push({ title, file, steps: steps.length > 0 ? steps : ["(a TODO step)"] });
+      // A step is unimplemented only when its BODY does no work — not because a
+      // "// TODO" comment or a "[SKIPPED]" title is present. The agent can write
+      // a working step and leave a generator comment behind, and counting that as
+      // unimplemented dropped a real pass: SCRUM-32 run 3's AC-1 did the work and
+      // was reported "not implemented" over a stray TODO (F-0096, W14). So read
+      // the step bodies and count what the code does.
+      const empty = emptyStepTitles(body);
+      if (empty.length > 0) unimplemented.push({ title, file, steps: empty });
     }
   }
   if (unimplemented.length === 0) return summary;
+  return applyUnimplemented(summary, unimplemented);
+}
+
+/**
+ * Titles of `test.step(...)` calls in one test whose body does no work — only
+ * comments and whitespace. These are the steps the generator could not bind and
+ * the agent has not implemented. A `[SKIPPED]` title or a `// TODO` comment is a
+ * marker the agent can leave behind after writing a working step, so emptiness
+ * is read from the body, not from the markers (W14, F-0096).
+ */
+function emptyStepTitles(testBody: string): string[] {
+  const out: string[] = [];
+  const open =
+    /test\.step\(\s*(["'`])((?:\\.|(?!\1)[\s\S])*?)\1\s*,\s*async\s*\([^)]*\)\s*=>\s*\{/g;
+  let m: RegExpExecArray | null;
+  while ((m = open.exec(testBody)) !== null) {
+    const stepTitle = m[2] ?? "";
+    // Scan to the matching close brace of the step callback. Empty steps hold no
+    // braces, so the count is exact for them; an implemented step is read as
+    // non-empty regardless of where the scan lands inside its code.
+    let depth = 1;
+    let i = open.lastIndex;
+    const start = i;
+    for (; i < testBody.length && depth > 0; i++) {
+      const c = testBody[i];
+      if (c === "{") depth++;
+      else if (c === "}") depth--;
+    }
+    const code = testBody
+      .slice(start, Math.max(start, i - 1))
+      .replace(/\/\*[\s\S]*?\*\//g, "")
+      .replace(/\/\/[^\n]*/g, "")
+      .trim();
+    if (code.length === 0) out.push(stepTitle);
+    open.lastIndex = i;
+  }
+  return out;
+}
+
+function applyUnimplemented(
+  summary: TestRunSummary,
+  unimplemented: Array<{ title: string; file: string; steps: string[] }>,
+): TestRunSummary {
   const names = new Set(unimplemented.map((u) => u.title));
   const passedButEmpty = (summary.tests ?? []).filter(
     (t) => names.has(t.title) && t.status === "passed",
@@ -412,11 +477,18 @@ export function summarise(raw: string, exitCode: number): TestRunSummary | undef
   );
   const skipped = num("skipped");
   const flaky = num("flaky");
+  // Errors Playwright attributes to the RUN, not to a test — above all a spec
+  // that did not compile, which leaves every count at zero and otherwise reads
+  // as "nothing is failing" (W17, F-0099).
+  const loadErrors = ((report as { errors?: Array<{ message?: unknown }> }).errors ?? [])
+    .map((e) => (typeof e?.message === "string" ? e.message : ""))
+    .filter((m) => m.length > 0);
   return {
     passed,
     failed,
     skipped,
     flaky,
+    ...(loadErrors.length > 0 ? { loadErrors } : {}),
     // Playwright exits non-zero on an unexpected pass. When that is the ONLY
     // reason, every test did what the product should do, and the suite is green.
     green:

@@ -168,6 +168,20 @@ export class FsTools implements ToolClient {
       }
       case "write_file": {
         const content = args["content"];
+        // A whole-file write larger than the model's output limit (about 8192
+        // tokens) arrives with the `content` cut off before it reaches the tool,
+        // so the arg is missing. Answering "content must be a string" did not say
+        // why, and the agent repeated the identical write until the no-progress
+        // guard stopped it, paying the cap each time (W29, SCRUM-25 run 2).
+        if (content === undefined)
+          return fail(
+            "No `content` arrived for the whole-file write. A write larger than the model's " +
+              "output limit (about 8192 tokens) is cut off before it reaches the tool, which is " +
+              "what this looks like — and rewriting a large file is exactly what hits that limit, " +
+              "so repeating it will not help. Use `fs.replace_in_file` to change only the part that " +
+              "differs: it is far smaller than the whole file, it does not hit the limit, and it " +
+              "keeps whatever you did not reproduce.",
+          );
         if (typeof content !== "string") return fail(`"content" must be a string`);
         const previous = existsSync(abs) && statSync(abs).isFile() ? readFileSync(abs, "utf8") : "";
         mkdirSync(dirname(abs), { recursive: true });
@@ -209,11 +223,23 @@ export class FsTools implements ToolClient {
         // the same token in `new` keeps that value.
         const resolved = unmask(text, before, after);
         if (resolved) ({ before, after } = resolved);
-        const hits = text.split(before).length - 1;
+        // Match `old` across line endings. `git checkout` on Windows restores
+        // files with CRLF while the agent reads a normalised view and writes its
+        // edit with LF, so a byte-exact match failed on every edit and the error
+        // told the model to "copy the text exactly" — advice it could not act on,
+        // because its view showed CRLF, its output was LF, and the error named
+        // neither (F-0137: SCRUM-26 lost runs 2 and 3, 10 then 28 failed edits).
+        // Each line break in `old` matches CRLF or LF; `new` is written back in
+        // the file's own ending so nothing else in the file changes ending.
+        const fileEol = text.includes("\r\n") ? "\r\n" : "\n";
+        const pattern = escapeRegExp(before.replace(/\r\n/g, "\n")).replace(/\n/g, "\\r?\\n");
+        const afterEol = after.replace(/\r\n/g, "\n").replace(/\n/g, fileEol);
         const every = args["all"] === true;
+        const hits = (text.match(new RegExp(pattern, "g")) ?? []).length;
         if (hits === 0)
           return fail(
-            `"old" does not appear in ${rel}. Copy the text exactly as it is — including ` +
+            `"old" does not appear in ${rel} (CRLF and LF line endings are matched either way, ` +
+              "so the difference is in the text itself). Copy the text exactly as it is — including " +
               "indentation and quotes, and with no backslashes the file does not have. " +
               nearest(text, before) +
               "A shorter `old` (the changed line alone, or just the changed words with `all: true`) " +
@@ -227,7 +253,9 @@ export class FsTools implements ToolClient {
         // A function replacer: with a string, `$&`, `$1` or `$$` in the new text
         // would be read as replacement patterns and the file would get
         // something other than what was asked for.
-        const next = every ? text.split(before).join(after) : text.replace(before, () => after);
+        const next = every
+          ? text.replace(new RegExp(pattern, "g"), () => afterEol)
+          : text.replace(new RegExp(pattern), () => afterEol);
         const tests = changedTests(rel, text, next);
         writeFileSync(abs, next, "utf8");
         return {

@@ -379,9 +379,12 @@ export class StoryToTestsVerifier implements Verifier {
             gaps.push(
               gap(
                 "design-item-not-tested",
-                `approved design items have no scenario tagged @design:<id>: ${t.untested.join(
-                  ", ",
-                )}. ` + "Add a scenario for each, tagged with its design id, and scaffold again.",
+                `approved design items have no test that references them (no scenario tagged ` +
+                  `@design:<id>, or a scenario with no test in the generated spec): ${t.untested.join(
+                    ", ",
+                  )}. ` +
+                  "Add or tag a scenario for each in the feature file, scaffold, and implement the " +
+                  "generated test — an item nothing references was approved but never checked.",
                 { items: t.untested },
               ),
             );
@@ -494,6 +497,34 @@ export class StoryToTestsVerifier implements Verifier {
       const reported = new Set(
         failingTitles.filter((t) => t && heldBugs.some((b) => bugIsAbout(b, t, failingTitles))),
       );
+      // W21 (F-0104): an accessibility scan reports facts about the DOM, so a
+      // rule it flags is a candidate defect even on a test that never passed —
+      // unlike a functional test, where "never passed" means the test itself may
+      // be wrong, so the bug gate withholds a defect. SCRUM-21's button-name
+      // violation (an icon-only button with no accessible name) recurred across
+      // runs and was never surfaced, because its test never passed. These are put
+      // to the reviewer (an axe scan can be mis-scoped, W11) and counted as
+      // reported, so the run ends with the violation in the report rather than
+      // only "suite not green". Narrow: the message must carry axe output and
+      // concrete rule ids, so a broken or empty scan (which triage handles) does
+      // not qualify.
+      const a11yViolations = new Map<string, string[]>();
+      for (const raw of asArray(r["failures"])) {
+        const f = asRecord(raw);
+        const title = String(f?.["title"] ?? "");
+        if (!title || (mine && !mine.has(title))) continue;
+        if (triage.defectCandidates.some((c) => c.endsWith(title) || c.includes(title))) continue;
+        if (exhausted.has(title) || reported.has(title)) continue;
+        const rules = axeRuleIds(String(f?.["message"] ?? ""));
+        if (rules.length > 0) a11yViolations.set(title, rules);
+      }
+      for (const [t, rules] of a11yViolations)
+        reviewItems.push(
+          `the accessibility scan "${t}" reported ${rules.join(", ")}, but the test has not ` +
+            "passed, so no bug was filed — an axe rule is a fact about the page's DOM, not a test " +
+            "guess. Review whether it is a real defect (if the scan is scoped to this story's own " +
+            "controls, it almost certainly is).",
+        );
       const allDefects =
         failingTitles.length > 0 &&
         failingTitles.every(
@@ -501,7 +532,8 @@ export class StoryToTestsVerifier implements Verifier {
             t &&
             (triage.defectCandidates.some((c) => c.endsWith(t) || c.includes(t)) ||
               exhausted.has(t) ||
-              reported.has(t)),
+              reported.has(t) ||
+              a11yViolations.has(t)),
         );
       for (const t of reported)
         sharedSpecLimitations.push(
@@ -782,6 +814,32 @@ export function parseWorkItemRef(text: string): string | undefined {
 
 function gap(code: string, message: string, evidence: Record<string, unknown>): Gap {
   return { code, message, evidence };
+}
+
+/**
+ * The axe rule ids in a failure message, or [] when it is not an axe-scan
+ * failure. The accessibility assertion the skill prescribes
+ * (`expect(violations.map(v => v.id).sort(), "axe violations: …").toEqual([])`)
+ * puts both the word "axe" and the kebab-case rule ids ("button-name",
+ * "color-contrast") in the message, so a real scan that found something is
+ * recognisable, while a scan that threw or was empty is not (W21, F-0104).
+ */
+export function axeRuleIds(message: string): string[] {
+  if (!/\baxe\b|@axe-core/i.test(message)) return [];
+  const ids = new Set<string>();
+  // attestqa's summarised form: "axe violations — button-name (critical) on 1
+  // element(s): <selector>". The rule id is the kebab token before its impact.
+  for (const m of message.matchAll(
+    /\b([a-z][a-z0-9]*(?:-[a-z0-9]+)+)\s*\((?:critical|serious|moderate|minor)\)/gi,
+  ))
+    ids.add((m[1] ?? "").toLowerCase());
+  // The raw toEqual form: quoted rule ids. Not stray attributes or test-id
+  // selectors picked up by the same shape.
+  for (const m of message.matchAll(/["'`]([a-z][a-z0-9]*(?:-[a-z0-9]+)+)["'`]/g)) {
+    const id = m[1] ?? "";
+    if (!/^(data-|test-)/.test(id)) ids.add(id);
+  }
+  return [...ids].slice(0, 10);
 }
 
 /** Ids arrive as numbers or strings depending on the caller; compare as text. */

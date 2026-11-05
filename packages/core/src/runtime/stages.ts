@@ -228,16 +228,22 @@ export class StageTracker {
       }
       case "triage": {
         const verdicts = Array.isArray(p["verdicts"])
-          ? (p["verdicts"] as Array<{ category?: string }>)
+          ? (p["verdicts"] as Array<{ category?: string; testFault?: boolean }>)
           : [];
         if (verdicts.length === 0) break;
         const n = (cat: string) => verdicts.filter((v) => v.category === cat).length;
+        // A test fault is category `flake` but the test's own code, not a flake
+        // (W27): count it on its own, so the report stops saying "flaky" for a
+        // broken selector the rationale already calls the test's fault.
+        const faults = verdicts.filter((v) => v.testFault === true).length;
+        const flaky = verdicts.filter((v) => v.category === "flake" && v.testFault !== true).length;
         const other = verdicts.length - n("real-defect") - n("flake");
         this.analysis =
           `${verdicts.length} failure(s): ` +
           [
             n("real-defect") ? `${n("real-defect")} possible product defect(s)` : "",
-            n("flake") ? `${n("flake")} flaky` : "",
+            flaky ? `${flaky} flaky` : "",
+            faults ? `${faults} test fault(s)` : "",
             other > 0 ? `${other} test or environment problem(s)` : "",
           ]
             .filter(Boolean)
@@ -334,9 +340,17 @@ export class StageTracker {
         }
         const status = String(p["status"] ?? "");
         const who = this.story ? `Story ${this.story}` : "Story";
+        // "Completed" is qualified by what it leaves open: a run can pass every
+        // test and still be weaker than its design (an unscoped scan, a
+        // half-asserted transition) that was sent to review rather than blocked,
+        // and a reader skimming the headline must see that (W22, F-0106).
+        const open: string[] = [];
+        if (this.forReview.length > 0) open.push(`${this.forReview.length} for your review`);
+        if (this.forReviewer.length > 0)
+          open.push(`${this.forReviewer.length} needing your decision`);
         out.push(
           status === "done"
-            ? `== ${who}: completed`
+            ? `== ${who}: completed${open.length > 0 ? ` — ${open.join(", ")}` : ""}`
             : `== ${who}: stopped (${status}) — ${String(p["summary"] ?? "").slice(0, 200)}`,
         );
         break;

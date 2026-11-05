@@ -86,6 +86,13 @@ export interface DesignItem {
   source: string;
   /** True for an Active bug's test: it is EXPECTED to fail (test.fail). */
   expectFail?: boolean;
+  /**
+   * The model's one-line justification that THIS item's page and source follow
+   * from the story's own text — not from an existing test's scope or label
+   * (W2/W6, F-0087/F-0088). Optional, and never string-matched: it is shown to
+   * the approver, whose job is to judge whether the page and source really fit.
+   */
+  rationale?: string;
 }
 
 export interface Exclusion {
@@ -186,6 +193,9 @@ export function parseDesign(args: Record<string, unknown>): TestDesign {
       expected: String(r["expected"] ?? "").trim(),
       source: String(r["source"] ?? "").trim(),
       ...(r["expectFail"] === true ? { expectFail: true } : {}),
+      ...(typeof r["rationale"] === "string" && r["rationale"].trim()
+        ? { rationale: r["rationale"].trim() }
+        : {}),
     };
   });
   const excluded = asArray(args["excluded"]).map((x) => {
@@ -299,7 +309,10 @@ export function isReviewOnly(problem: string): boolean {
   return (
     problem.startsWith("the scan is not scoped") ||
     problem.startsWith("the assertion is on the whole violations array") ||
-    problem.startsWith("a state-transition test needs an assertion that the action took effect")
+    problem.startsWith("a state-transition test needs an assertion that the action took effect") ||
+    problem.startsWith("the destination assertion matches a prefix") ||
+    problem.startsWith("the control-state assertion has no valid-case counterpart") ||
+    problem.startsWith("a negative assertion located by text")
   );
 }
 
@@ -401,6 +414,12 @@ export function validateDesign(
     // where naming a criterion that never mentioned accessibility is not.
     const sourced =
       SOURCE.test(it.source) ||
+      // A tracker issue key on its own, or with a type word before or after it
+      // ("SCRUM-9", "task SCRUM-9", "SCRUM-9 sub-task"): a sub-task is where the
+      // implementation facts live, and refusing the key for its form pushed the
+      // agent to drop the true source (W3, F-0086). Case-sensitive, so a
+      // lowercase word like "page-2" is not mistaken for a key.
+      /\b[A-Z][A-Z0-9_]+-\d+\b/.test(it.source) ||
       (it.type === "accessibility" && /config|test.?types|wcag|axe/i.test(it.source)) ||
       // No criteria: the description and the story itself are what there is.
       (noCriteria && DERIVED_SOURCE.test(it.source));
@@ -426,6 +445,29 @@ export function validateDesign(
           .slice(0, 90)}". ` +
           "One item, one expectation: pick the one that must hold, or split this into two items. " +
           "A reviewer cannot approve a choice that is made after the approval.",
+      );
+
+    // W33 (F-0151, F-0130): a test that changes the shared sign-in account and
+    // does not restore it makes the whole suite non-rerunnable — SCRUM-10's
+    // forgot-password test reset the fixture account's password and left it
+    // changed, and in a full parallel run every later sign-in answered 401.
+    // Nothing in the design rules looked for it. If an item mutates a credential
+    // of the account the suite signs in with, its expected result has to say how
+    // the account is left usable: the original restored, or an account this test
+    // creates. Registration (a NEW account) is not a mutation of the shared one.
+    // Read the EXPECTED result, not the conditions: "the password is changed" is
+    // the outcome that mutates the account, whereas a sign-in test only enters a
+    // password as setup and an axe test signs in before scanning — including
+    // their conditions flagged both (32 items across the ledgers, almost all
+    // sign-in/accessibility setup; scoping to expected leaves the genuine
+    // change-password items).
+    if (mutatesAccount(it.expected) && !leavesFixtureRestored(it.expected))
+      problems.push(
+        `${at}: this item changes the shared sign-in account (a password, e-mail or security ` +
+          "question the suite logs in with). Its expected result must say how the account is left " +
+          "usable for the tests that run after it — restore the original value at the end, or use " +
+          "an account this test creates — otherwise a whole-suite run answers 401 on every sign-in " +
+          "after it and cannot be re-run.",
       );
 
     // What it covers must exist.
@@ -497,14 +539,26 @@ export function validateDesign(
         'but it still needs at least one functional item, covering "story" and citing the description',
     );
 
-  // Coverage: every criterion has a functional test.
+  // Coverage: every criterion has a test. Normally that is a functional test,
+  // but a criterion whose natural type is accessibility or security is satisfied
+  // by an item of that type covering it (W25, F-0112). "Every criterion has a
+  // functional test" refused AB#110's AC-3 ("the sign-in page passes a WCAG
+  // scan") for having no functional item; the agent added a functional item to
+  // satisfy the rule and implemented it as a second copy of the axe scan — the
+  // coverage rule produced padding. The design records only the AC labels, not
+  // their text, so the criterion's natural type is read from the item the agent
+  // chose to cover it with; the reviewer approving the design is the check that
+  // the type fits the criterion. confirmation is for a bug, never a criterion,
+  // so it does not count here.
+  const coveringTypes: readonly TestType[] = ["functional", "accessibility", "security"];
   for (const ac of storyAcs) {
     const covered = d.items.some(
       (it) =>
-        it.type === "functional" &&
+        coveringTypes.includes(it.type) &&
         acLabels(it.covers).some((l) => l === ac || baseLabel(l) === ac),
     );
-    if (!covered) problems.push(`${ac} has no functional test in the design`);
+    if (!covered)
+      problems.push(`${ac} has no functional, accessibility or security test in the design`);
   }
 
   // Every open bug is either tested or explicitly left out, with a reason.
@@ -526,6 +580,29 @@ export function validateDesign(
           `{"what": "${t}", "reason": "<why not>"} to "excluded"`,
       );
   }
+
+  // W15/W18/W21 (F-0097/F-0100/F-0104): a stateful story names its isolation.
+  // SCRUM-19's basket tests shared one account and ran serially, so the product
+  // one test added was still in the basket when the next added it — Juice Shop
+  // answered 500 and a badge expecting "1" read "2". The agent repaired locators
+  // for nine runs instead of isolating the data. Checked once per story, not per
+  // item: isolation is a suite-level decision (usually one beforeEach), so a
+  // design that mutates shared state has to say, SOMEWHERE in its items (or an
+  // exclusion reason), how each test gets its own data.
+  const designText = (it: DesignItem) => `${it.conditions.join(" ")} ${it.expected}`;
+  const anyStateful = d.items.some((it) => mutatesSharedState(designText(it)));
+  const anyIsolation =
+    d.items.some((it) => statesIsolation(designText(it))) ||
+    d.excluded.some((e) => statesIsolation(e.reason));
+  if (anyStateful && !anyIsolation)
+    problems.push(
+      "this story changes shared server-side state (a basket, booking or order), but no item says " +
+        "how each test gets its own data. Tests share one account and run one after another, so one " +
+        "test's leftover breaks the next — a product already in the basket answers HTTP 500, a badge " +
+        "that expects 1 reads 2. Add the isolation to the item(s) that mutate state: a fresh account " +
+        "per test, the state cleared before each test (a beforeEach that empties the basket), or a " +
+        "unique datum per test (a different product).",
+    );
 
   return problems;
 }
@@ -643,6 +720,11 @@ export function renderDesign(
     if (hit) out.push(`      ALREADY TESTED by "${hit.scenario}" (matched on ${hit.how})`);
     if (it.conditions.length > 0) out.push(`      conditions: ${it.conditions.join("; ")}`);
     out.push(`      expect: ${it.expected}   (from ${it.source})`);
+    // The model's justification that this page and source fit the story, shown
+    // so the approver can judge it (W2/W6). When absent, say so — an item with
+    // no justification is the one most likely to have been copied from an
+    // existing test's scope or label.
+    out.push(`      why: ${it.rationale ? it.rationale : "— not justified against the story"}`);
   }
   if (d.excluded.length > 0) {
     out.push("", "NOT TESTED, and why:");
@@ -981,8 +1063,18 @@ export function traceProblems(
         });
   const tagged = new Set(scenarios.flatMap((s) => s.designs));
   const known = new Set(design.items.map((i) => i.id));
+  // A design item is tested only when a scenario tags it AND, once the spec
+  // exists, a test in the spec references that @design id (W8/W10,
+  // F-0090/F-0092). design-item-not-tested used to read the feature file alone,
+  // so an item whose scenario was tagged but whose generated test was dropped
+  // or never written read as covered — "every approved design item has a test
+  // that references it" is the spec-level half the feature tag cannot see. With
+  // no spec on disk yet, no-spec-written carries it, so the spec clause is off.
+  const specBodyIds = new Set<string>();
+  for (const sp of specs) for (const id of specBodies(sp.text).keys()) specBodyIds.add(id);
+  const haveSpecs = specs.length > 0;
   const untested = design.items
-    .filter((i) => !tagged.has(i.id))
+    .filter((i) => !tagged.has(i.id) || (haveSpecs && !specBodyIds.has(i.id)))
     .map((i) => `${i.id} (${i.covers})`);
   const untagged = scenarios
     .filter((s) => s.designs.length === 0 || s.designs.some((d) => !known.has(d)))
@@ -1014,6 +1106,85 @@ export function traceProblems(
       (isReviewOnly(missing) ? reviewShape : wrongShape).push(
         `${item.id} (${item.covers}): ${missing}`,
       );
+  }
+
+  // W33 (F-0151, F-0130): the fixture is left as it was found. For an item whose
+  // design is about changing an account credential, the TEST must either restore
+  // it or run against its own account. The restore can live in an afterEach /
+  // afterAll hook outside the item's own body, so the whole spec is searched,
+  // not just the body. Review-only: the mutation is real but whether the suite
+  // is left rerunnable is a judgement a person makes from the whole file.
+  const allSpecText = specs.map((s) => s.text).join("\n");
+  const restored = leavesFixtureRestored(allSpecText);
+  for (const item of design.items) {
+    const body = bodies.get(item.id);
+    if (!body) continue;
+    if (!mutatesAccount(item.expected)) continue;
+    if (!bodyMutatesAccount(body)) continue;
+    if (restored) continue;
+    reviewShape.push(
+      `${item.id} (${item.covers}): the test changes the shared sign-in account and nothing ` +
+        "restores it, so a whole-suite run answers 401 on every sign-in after it. Restore the " +
+        "original value at the end of the test (or in an afterEach/afterAll hook), or run against " +
+        "an account this test creates.",
+    );
+  }
+
+  // W15/W18/W21 (F-0097/F-0100/F-0104): a stateful test isolates its data. A
+  // test that mutates shared state (adds to the basket, creates a booking) when
+  // nothing isolates it — not its own body, not a shared hook the whole spec
+  // runs — inherits a prior test's state and collides (the SCRUM-19 500s). The
+  // isolation can be inline (AC-2 cleared the basket before adding) or in a
+  // beforeEach, so the whole spec is searched. Review-only: whether two tests
+  // truly collide is a judgement from the file.
+  const specIsolates = isolatesTestData(allSpecText) && /beforeEach|afterEach/.test(allSpecText);
+  for (const item of design.items) {
+    const body = bodies.get(item.id);
+    if (!body) continue;
+    if (!bodyMutatesSharedState(body)) continue;
+    if (isolatesTestData(body) || specIsolates) continue;
+    reviewShape.push(
+      `${item.id} (${item.covers}): the test changes shared server-side state (a basket, booking ` +
+        "or order) and nothing isolates it — no fresh account, no cleared state, no unique datum, " +
+        "in this test or a shared beforeEach. A test that ran before it leaves its data behind, so " +
+        "this one collides (a product already in the basket, a duplicate booking → HTTP 500) and " +
+        "the suite is not re-runnable. Register a fresh account per test, clear the state before " +
+        "each test, or use a unique datum per test.",
+    );
+  }
+
+  // W11 (F-0093): the scope rule removes the story's own control when it lives
+  // in the header. SCRUM-18's search box is in the top toolbar; the accessibility
+  // scan was scoped to <main>, which excludes the toolbar, so a real "label"
+  // violation on the search box passed and the run reported nothing. The scope
+  // rule exists to keep site-wide header/footer noise off a story — but scoping
+  // to a generic page region also drops the story's own controls that happen to
+  // sit outside main. When the scan is scoped to main/body alone and the story
+  // is about a control that usually lives in the header or toolbar, the scope
+  // may have hidden a defect in the story's own control; a person decides, so it
+  // is review-only.
+  const storyText = design.items
+    .map((i) => `${(i.conditions ?? []).join(" ")} ${i.expected} ${i.covers}`)
+    .join(" ");
+  if (HEADER_CONTROL.test(storyText)) {
+    for (const item of design.items) {
+      if (item.type !== "accessibility") continue;
+      const body = bodies.get(item.id);
+      if (!body) continue;
+      const includes = [...body.matchAll(/\.include\s*\(\s*(['"`])([^'"`]*)\1/g)].map((m) =>
+        (m[2] ?? "").trim(),
+      );
+      const genericOnly = includes.length > 0 && includes.every((x) => GENERIC_REGION.test(x));
+      if (genericOnly)
+        reviewShape.push(
+          `${item.id} (${item.covers}): the accessibility scan is scoped to the main region ` +
+            `(${includes.join(", ")}), which excludes the header and toolbar — but this story is ` +
+            "about a control (a search box, menu or cart) that usually lives there, so a real " +
+            "defect in the story's own control is scoped out and never reported. Scope the scan to " +
+            'the story\'s own control as well as the main content — .include("<the control>") ' +
+            "alongside the region, not the region alone.",
+        );
+    }
   }
 
   return { untested, untagged, unmarked, wrongShape, reviewShape };
@@ -1062,7 +1233,10 @@ export function shapeProblems(item: DesignItem, body: string): string[] {
     if (!/\.include\s*\(/.test(body))
       out.push(
         "the scan is not scoped — add .include(<the form or region under test>) so a violation " +
-          "elsewhere on the page is not reported against this story. .include takes a CSS " +
+          "elsewhere on the page is not reported against this story. Scope it to the story's own " +
+          "control wherever it lives — a search box, menu or sign-in icon in the header is part " +
+          "of this story, so include it even though it sits outside the main content; scoping to " +
+          "<main> alone scopes a header control out of the scan (W11). .include takes a CSS " +
           "selector, and the page snapshot shows roles rather than classes, so build it from " +
           'what the snapshot shows: a role (navigation → "nav", main → "main", form → ' +
           '"form", list → "ul"), an attribute the elements carry ("[data-test]" values), or ' +
@@ -1142,9 +1316,346 @@ export function shapeProblems(item: DesignItem, body: string): string[] {
         );
     }
   }
+  // W34 (F-0153): an assertion that is true for the wrong reason.
+  //
+  // Two accepted tests passed while a seeded fault was live, because the
+  // assertion did not actually exercise the transition the design named:
+  //   - a logout test asserted toHaveURL(/#\//), a prefix that /#/login also
+  //     satisfies, so "returns to the home page" passed on the wrong page;
+  //   - a "Register button is disabled when the passwords differ" test filled
+  //     only the two password fields and asserted toBeDisabled(), which held
+  //     because the other required fields were empty, whether or not the rule
+  //     under test exists.
+  // Neither is a broken or fake test, so both go to the reviewer (isReviewOnly)
+  // rather than stopping the run: only a seeded fault reveals them, and the
+  // heuristic that finds them can misread a legitimate test.
+  //
+  // Each is scoped to a design item whose OWN expected result is about that
+  // kind of transition — a destination, or a control's enabled state. Firing on
+  // any test would re-create the mistake the state-transition check was taught
+  // not to make: telling the agent to add an address check the design never
+  // named (20261019T155404Z), which it did, broke, and filed as a false bug.
+  if (
+    /\b(home ?page|login ?page|storefront|redirect\w*|lands? on|returns? to|url|route)\b/i.test(
+      item.expected,
+    )
+  ) {
+    const weakUrl = weakUrlDestination(body);
+    if (weakUrl)
+      out.push(
+        `the destination assertion matches a prefix other pages also satisfy: ${weakUrl} is true ` +
+          `of /#/login as much as the page the design names ("${item.expected}"). Pin the ` +
+          "destination — assert the exact route the action reaches (anchor the end, " +
+          "toHaveURL(/#\\/$/) for the home page, or give the full path), not a fragment every " +
+          "in-app URL contains",
+      );
+  }
+  if (
+    /\b(disabled|enabled|greyed|grey(?:ed)?|clickable|cannot (?:be )?(?:click|submit))\b/i.test(
+      item.expected,
+    )
+  ) {
+    if (lopsidedControlState(body))
+      out.push(
+        "the control-state assertion has no valid-case counterpart: the test asserts the control " +
+          "is disabled after an action but never asserts it is enabled when every other input is " +
+          "valid, so the assertion holds whether or not the rule under test exists (a Register " +
+          "button is disabled anyway while other required fields are empty). Assert both: the " +
+          "control enabled in its all-valid baseline, and the control after the one condition " +
+          "under test changes",
+      );
+  }
+  // W10 (F-0092): a negative-form assertion must name an element, not prose.
+  //
+  // A "no match shows no product cards" test asserted
+  // `getByText("product cards").not.toBeVisible()` — but "product cards" is a
+  // description, never on any page, so the assertion passes whatever the product
+  // does. Absence located by text is satisfied whenever that text is simply not
+  // there, for any reason. The remedy is to locate the thing whose absence you
+  // mean by what it IS (a role, a test id, the card's selector), so "no product
+  // cards" is "no .product elements", not "the words 'product cards' are
+  // unprinted". Review-only: a negative assertion on a real error string (say
+  // "Internal Server Error") is legitimate and only a person can tell the two
+  // apart.
+  const prose = proseAbsenceAssertion(body);
+  if (prose)
+    out.push(
+      `a negative assertion located by text passes whenever that text is absent for any reason: ` +
+        `${prose}. Locate what you are asserting is gone by what it is — a role, a test id, or ` +
+        "the element's selector (getByRole / getByTestId / locator) — so its absence means the " +
+        "product behaved, not that a phrase happens not to be printed",
+    );
   if (item.expectFail === true && !/\btest\.fail\s*\(/.test(body))
     out.push("no test.fail marker, though the design says this test is expected to fail");
   return out;
+}
+
+/**
+ * A negative/absence assertion (`.not.toBeVisible()`, `.toBeHidden()`,
+ * `.toHaveCount(0)`, …) whose target is located by TEXT (`getByText`, a `text=`
+ * or `:has-text()` engine). Such an assertion passes whenever that text is
+ * absent for any reason, so it proves nothing about the product (W10, F-0092).
+ * Returns the offending assertion, normalised, or undefined.
+ */
+export function proseAbsenceAssertion(body: string): string | undefined {
+  for (const a of assertionsOf(body)) {
+    const negative =
+      /\.not\.(toBeVisible|toBeAttached|toContainText|toHaveText|toBeInViewport)\b/.test(a) ||
+      /\.toBeHidden\(/.test(a) ||
+      /\.toHaveCount\(\s*0\s*\)/.test(a);
+    const byText = /getByText\(/.test(a) || /text=/.test(a) || /:has-text\(/.test(a);
+    if (negative && byText) return a;
+  }
+  return undefined;
+}
+
+/**
+ * A verb changing a credential of the account the suite signs in with, in either
+ * order — "reset the password" and "the password is changed" both count.
+ */
+const CREDENTIAL = /\b(password|e-?mail|security\s+(?:question|answer)|credentials?)\b/;
+const ACCOUNT_MUTATION = new RegExp(
+  `\\b(reset\\w*|chang\\w*|updat\\w*|set\\w*)\\b[\\s\\S]{0,40}?${CREDENTIAL.source}` +
+    `|${CREDENTIAL.source}[\\s\\S]{0,40}?\\b(reset\\w*|chang\\w*|updat\\w*)\\b`,
+  "i",
+);
+
+/** A restore, or the use of a throwaway/own account, that leaves the fixture usable. */
+const RESTORE_SIGNAL =
+  /\b(restore\w*|revert\w*|original\s+password|afterEach|afterAll|per-test account|throwaway|dedicated(?:\s+test)?\s+account|freshly[\s-]registered|newly[\s-]registered|unique\s+(?:e-?mail|account)|Date\.now\(\)|faker)\b/i;
+
+/**
+ * Whether a design item's prose, or a test, changes a credential of the shared
+ * sign-in account (W33). Registration creates a NEW account, which is not a
+ * mutation of the shared one, so a registration context with no reset/change/
+ * update/forgot verb is excluded.
+ */
+export function mutatesAccount(text: string): boolean {
+  // A change that did NOT take effect does not mutate the account: a refused or
+  // rejected change, a "the password is not changed" negative case, or an
+  // access-control check that the route requires sign-in. These are the bulk of
+  // a change-password epic and must not be asked for a restore they never need.
+  const nonOccurrence =
+    /\bnot\s+(?:chang|updat|reset|accept)\w*|\brefus\w*|\breject\w*|\bdenied\b|requires?\s+(?:authentication|login|a\s+login|to\s+(?:be\s+)?(?:sign|log))|must\s+(?:be\s+)?(?:authenticat|logged|signed)|cannot\s+(?:chang|updat|reset|access)|unauthenticated/i.test(
+      text,
+    );
+  const positiveSuccess =
+    /\b(?:is|was|been|then)\s+(?:chang|updat|reset)\w*|\bsuccessfully\b|\bconfirmation\b/i.test(
+      text,
+    );
+  if (nonOccurrence && !positiveSuccess) return false;
+  const registrationOnly =
+    /\b(register\w*|sign[\s-]?up|create[sd]?\s+(?:a\s+|an\s+)?(?:new\s+)?account|new user)\b/i.test(
+      text,
+    ) && !/\b(reset|chang\w*|updat\w*|forgot)\b/i.test(text);
+  if (registrationOnly) return false;
+  if (/\bforgot[\s-]?password\b/i.test(text)) return true;
+  if (/\bdelete[sd]?\b[\s\S]{0,24}\baccount\b/i.test(text)) return true;
+  return ACCOUNT_MUTATION.test(text);
+}
+
+/** Whether the design/test text states a restore or the use of its own account. */
+export function leavesFixtureRestored(text: string): boolean {
+  if (RESTORE_SIGNAL.test(text)) return true;
+  // "change it back", "reset the password back", "put the account back".
+  if (/\b(chang\w*|reset|put|set)\b[\s\S]{0,24}\bback\b/i.test(text)) return true;
+  // "registers a (new) account", used so the test does not touch the shared one.
+  if (/\bregisters?\b[\s\S]{0,24}\baccount\b/i.test(text)) return true;
+  return false;
+}
+
+/** A control that usually lives in the header or toolbar, not in main (W11). */
+const HEADER_CONTROL =
+  /\b(search|magnifying|top[\s-]?bar|toolbar|header|nav(?:bar|\s*bar)?|menu|cart|basket|sign[\s-]?in\s+icon)\b/i;
+
+/** A scan include that is a generic page region rather than a specific control (W11). */
+const GENERIC_REGION = /^(?:main|body|\[role=["']?main["']?\]|#main|\.main)$/i;
+
+/** Whether a spec body actually runs a credential-change flow (W33 verifier). */
+export function bodyMutatesAccount(body: string): boolean {
+  const flow =
+    /forgot-?password|reset-?password|change-?password|new[\s-]?password|newPassword|security\s*answer|securityAnswer/i.test(
+      body,
+    );
+  const acts = /\.(fill|click|press|check)\s*\(|request\.(post|put|patch)\s*\(/i.test(body);
+  return flow && acts;
+}
+
+// ── W15/W18/W21 (F-0097/F-0100/F-0104): per-test data isolation ──────────────
+// Stateful stories (a basket, a booking, an order) share one account and run
+// one after another, so the state one test creates is still there for the next:
+// Juice Shop answers 500 on the duplicate add, and a badge that expects "1"
+// reads "2". The agent spent nine runs of nine repairing locators instead of
+// isolating the data. These detectors drive a design rule and a review-only
+// verifier check: a test that mutates shared server-side state must isolate it —
+// a fresh account per test, the state cleared before each test, or a unique
+// datum per test.
+
+/**
+ * A noun naming shared server-side state a story mutates and another test sees.
+ * Not only e-commerce: the booker createroom run (20261104T231022Z) showed the
+ * list was too narrow — "a room is added to the room list" is as stateful as a
+ * basket add, and rooms, bookings and inbox messages accumulate the same way.
+ */
+const SHARED_STATE =
+  /\b(basket|cart|booking|reservation|order|checkout|wish[\s-]?list|address\s*book|room|inbox)\b/;
+
+/**
+ * A verb that creates or changes that state (as opposed to reading it). `clear`,
+ * `empty` and `remove` are isolation/teardown rather than the mutation under
+ * test, so they are not here; a removal test still trips `SHARED_STATE` through
+ * its add step.
+ */
+const STATE_MUTATION_VERB =
+  /\b(add\w*|creat\w*|plac\w*|submit\w*|book\w*|reserv\w*|check\s*out|checkout)\b/;
+
+/** A signal that the test did NOT change the state — refused, prevented, read-only. */
+const STATE_NON_OCCURRENCE =
+  /\bnot\s+(?:add|creat|plac|book|order|chang)\w*|\bno\s+\w+\s+(?:is|are|was|were)\s+(?:add|creat|book|order|plac)\w*|\brefus\w*|\breject\w*|\bprevent\w*|\bcannot\b|\bread[\s-]?only\b|\bjust\s+(?:view|see|show)\w*|\bwithout\s+(?:adding|changing|creating)\b/i;
+
+/** A statement that each test gets its own data, or clears/resets what it shares. */
+const ISOLATION =
+  /\b(fresh|unique|per[\s-]?test|isolat\w*|own\s+(?:account|basket|booking|data)|new\s+account|registers?\s+(?:a\s+)?(?:new\s+)?account|before\s*each|beforeEach|after\s*each|afterEach|each\s+test|cleared|clear\w*\s+(?:the\s+)?(?:basket|cart|state|booking)|empt(?:y|ies|ied)\s+(?:the\s+)?(?:basket|cart)|reset\w*\s+(?:the\s+)?(?:basket|state|data)|a\s+different\s+(?:product|item|room|datum)|synth(?:etic)?[\s-]?data|synthdata|generated?\s+(?:test\s+)?data)\b/i;
+
+/**
+ * Whether a design item's prose describes mutating shared server-side state
+ * (adding to a basket, creating a booking, placing an order). A read-only view
+ * of that state, or a change that was refused, is excluded (W15/W18/W21).
+ */
+export function mutatesSharedState(text: string): boolean {
+  // A refused / "no room is added" / read-only item does not mutate. A genuine
+  // creation ("a room is added to the list") carries none of these words, so the
+  // guard needs no positive-case exception — the booker createroom D2 ("no room
+  // is added") stays excluded while D1/D3 ("room is added", "create the room")
+  // are caught.
+  if (STATE_NON_OCCURRENCE.test(text)) return false;
+  if (!SHARED_STATE.test(text)) return false;
+  // A mutation verb within a short window of the state noun, either order.
+  return (
+    new RegExp(`${STATE_MUTATION_VERB.source}[\\s\\S]{0,40}?${SHARED_STATE.source}`, "i").test(
+      text,
+    ) ||
+    new RegExp(`${SHARED_STATE.source}[\\s\\S]{0,40}?${STATE_MUTATION_VERB.source}`, "i").test(text)
+  );
+}
+
+/** Whether the design/test text states a per-test isolation strategy (W15). */
+export function statesIsolation(text: string): boolean {
+  return ISOLATION.test(text);
+}
+
+/** Whether a spec body actually performs a stateful mutation (W15 verifier). */
+export function bodyMutatesSharedState(body: string): boolean {
+  return (
+    /\/BasketItems|addToBasket|add\s+to\s+basket|\/api\/Bookings\b|\/booking\b|createBooking|place[\s\S]{0,12}order|\/api\/Orders\b|\bcheckout\b/i.test(
+      body,
+    ) || /\.(post|put)\s*\(\s*[`'"][^`'"]*(basket|booking|order|reservation)/i.test(body)
+  );
+}
+
+/**
+ * Whether a spec body (or a shared hook its tests all run) isolates the data it
+ * mutates: a fresh/registered account, a unique datum, or the state cleared.
+ * The clearing can be inline in the test — SCRUM-19's AC-2 fetched the basket
+ * and deleted its items before adding — or in a beforeEach/afterEach hook.
+ */
+export function isolatesTestData(text: string): boolean {
+  return (
+    /\bregisters?\b|\/api\/Users\b|\/rest\/user\/(?!login)|createAccount|sign[\s-]?up/i.test(
+      text,
+    ) ||
+    /Date\.now\(\)|faker|randomUUID|crypto\.random|`[^`]*\$\{[^}]*\}@|synthdata/i.test(text) ||
+    /\.delete\s*\(\s*[`'"][^`'"]*(BasketItems|basket|booking|order)/i.test(text) ||
+    /empt(?:y|ies|ied)\s+(?:the\s+)?(?:basket|cart)|clear\w*\s+(?:the\s+)?(?:basket|cart|state)/i.test(
+      text,
+    )
+  );
+}
+
+/**
+ * A toHaveURL / url-contains assertion whose pattern is only the SPA root
+ * scaffolding (`#`, `/`) with no route segment and no end anchor, so a longer
+ * URL such as /#/login satisfies it too. Returns the offending token, or
+ * undefined (W34, F-0153).
+ */
+export function weakUrlDestination(body: string): string | undefined {
+  for (const m of body.matchAll(/\.toHaveURL\s*\(/g)) {
+    const arg = balancedArg(body, (m.index ?? 0) + m[0].length - 1);
+    if (arg !== undefined && isRootOnlyUrl(arg)) return firstArgument(arg);
+  }
+  // expect(page.url()).toContain("…") / .toMatch(/…/) — only when it is plainly
+  // a URL being matched, so a text assertion that happens to contain "/" is left
+  // alone.
+  for (const m of body.matchAll(/\.(?:toContain|toMatch)\s*\(/g)) {
+    const at = m.index ?? 0;
+    const arg = balancedArg(body, at + m[0].length - 1);
+    if (arg === undefined) continue;
+    const before = body.slice(Math.max(0, at - 48), at);
+    if (!/\b(url|href|location)\b/i.test(before)) continue;
+    if (isRootOnlyUrl(arg)) return firstArgument(arg);
+  }
+  return undefined;
+}
+
+/** The text inside the parentheses that open at `open`, or undefined. */
+function balancedArg(body: string, open: number): string | undefined {
+  if (body[open] !== "(") return undefined;
+  let depth = 0;
+  for (let i = open; i < body.length; i++) {
+    const c = body[i];
+    if (c === "(") depth++;
+    else if (c === ")") {
+      depth--;
+      if (depth === 0) return body.slice(open + 1, i);
+    }
+  }
+  return undefined;
+}
+
+/** The first argument, dropping a trailing options object (`, { timeout }`). */
+function firstArgument(arg: string): string {
+  return arg.replace(/,\s*\{[^{}]*\}\s*$/, "").trim();
+}
+
+/**
+ * True when a toHaveURL/contains argument pins nothing but the app root: a
+ * regex or string whose meaningful part is only `#` and `/`, and which is not
+ * anchored to the end. `/#\/$/` (exact home) and `/#\/login/` (a route) are
+ * both fine; `/#\//` and "/#/" are not. A variable or expression is treated as
+ * pinned — code cannot read what it resolves to.
+ */
+function isRootOnlyUrl(raw: string): boolean {
+  let s = firstArgument(raw);
+  let endAnchored = false;
+  const rx = /^\/([\s\S]*)\/[a-z]*$/i.exec(s);
+  if (rx) {
+    s = rx[1] ?? "";
+    endAnchored = /\$$/.test(s);
+  } else {
+    const str = /^(['"`])([\s\S]*)\1$/.exec(s);
+    if (!str) return false;
+    s = str[2] ?? "";
+  }
+  if (endAnchored) return false;
+  const core = s.replace(/\\\//g, "/").replace(/^\^/, "").replace(/\$$/, "").replace(/\\/g, "");
+  return core.length > 0 && /^[#/]+$/.test(core);
+}
+
+/**
+ * True when a test asserts a control is DISABLED after an action but never
+ * asserts the enabled (valid-case) counterpart. The disabled state then proves
+ * nothing about the condition under test: an incomplete form disables the
+ * control on its own (W34, F-0153). The enabled-only direction is not weak —
+ * a disabled control would fail it — so only the disabled-without-enabled shape
+ * is flagged.
+ */
+function lopsidedControlState(body: string): boolean {
+  const disabled = /\.toBeDisabled\s*\(/.test(body) || /\.not\s*\.toBeEnabled\s*\(/.test(body);
+  const enabled = /\.toBeEnabled\s*\(/.test(body) || /\.not\s*\.toBeDisabled\s*\(/.test(body);
+  const action = /\.(fill|type|press|click|check|uncheck|selectOption|setInputFiles)\s*\(/.test(
+    body,
+  );
+  return disabled && !enabled && action;
 }
 
 /** The @story:<id> tags on each scenario of a feature file. */
@@ -1203,6 +1714,44 @@ export function storyTestTitles(spec: string, storyId: TrackerId): Set<string> {
       current = [];
     }
   }
+  return out;
+}
+
+/**
+ * Test titles tagged for ANOTHER story — a leftover in a shared epic spec that
+ * this run did not write and is not its to repair, triage or report (W28, W19,
+ * F-0126). A test with no @story tag is nobody's and stays in scope, so it is
+ * NOT returned here.
+ */
+export function otherStoryTestTitles(spec: string, storyId: TrackerId): Set<string> {
+  const out = new Set<string>();
+  let current: TrackerId[] = [];
+  for (const line of spec.split("\n")) {
+    if (/^\s*\/\//.test(line)) {
+      const ids = storyTagIds(line);
+      if (ids.length > 0) current = ids;
+      continue;
+    }
+    const m = /^\s*test(?:\.(?:only|skip|fixme|fail|slow))?\s*\(\s*(["'`])([\s\S]*?)\1/.exec(line);
+    if (m) {
+      if (current.length > 0 && !includesId(current, storyId)) out.add((m[2] ?? "").trim());
+      current = [];
+    }
+  }
+  return out;
+}
+
+/**
+ * Scenario names in a feature file tagged for ANOTHER story (W28/W19, F-0126).
+ * bdd2pw names each test after its scenario, so a failing test's title matches
+ * the scenario name here — which is the reliable signal right after a scaffold,
+ * when the generated spec is on disk but not yet in the run's reads. A scenario
+ * with no @story tag is nobody's and is not returned.
+ */
+export function otherStoryScenarios(feature: string, storyId: TrackerId): Set<string> {
+  const out = new Set<string>();
+  for (const s of scenarioStoryTags(feature))
+    if (s.stories.length > 0 && !includesId(s.stories, storyId)) out.add(s.scenario);
   return out;
 }
 

@@ -30,6 +30,9 @@ export default defineConfig({
     baseURL: appUrl,
     trace: "retain-on-failure",
     screenshot: "only-on-failure",
+    // Headless by default (no window). Set AQA_HEADED=1 in the .env the run uses
+    // to watch the browser drive the app; unset or 0 stays headless.
+    headless: process.env["AQA_HEADED"] !== "1",
   },
   // The installed Chrome; PW_CHANNEL=msedge for Edge, PW_CHANNEL=chromium for
   // Playwright's bundled build.

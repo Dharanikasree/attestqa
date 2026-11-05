@@ -762,7 +762,7 @@ export async function runLoop(deps: LoopDeps): Promise<LoopResult> {
       // narrows the tools AND the instructions: the healer is shown five tools
       // and twenty lines, not the whole skill, so the instructions for
       // authoring cannot be read as permission while repairing.
-      const role = roleFor(ledger.read());
+      const role = roleFor(ledger.read(), skill.workItem);
       if (role.name !== currentRole) {
         currentRole = role.name;
         ledger.append(
@@ -898,6 +898,14 @@ export async function runLoop(deps: LoopDeps): Promise<LoopResult> {
           );
         }
         for (const { call } of verdicts) {
+          // W24 (F-0109/F-0111/F-0124): six runs ended with the agent, stuck on
+          // a failing test, re-reading the same file three cycles running until
+          // this guard stopped it. The guard works; the model's response to
+          // being stuck is to re-read rather than act. A file read gets a nudge
+          // that names the file it already has and says the next call must
+          // change something or end the run — a cheap experiment, aimed at the
+          // one behaviour the ledgers show, measured in 2.1.0.
+          const repeatedRead = /(?:^|\.)read_file$/.test(call.toolName);
           history.push({
             toolName: call.toolName,
             args: call.args,
@@ -906,8 +914,12 @@ export async function runLoop(deps: LoopDeps): Promise<LoopResult> {
             ledgerRef: `e${ledger.read().length}`,
             gate: {
               decision: "refuse",
-              reason:
-                "you have already made this exact call and its result is in your context; repeating it cannot change anything — do something different or stop and explain what is blocking you",
+              reason: repeatedRead
+                ? "you have this file — its content is already in your context, so reading it again " +
+                  "cannot tell you anything new. The next call must change something (edit the file, " +
+                  "run the suite, propose a bug, file the cases) or end the run and say what is " +
+                  "blocking you."
+                : "you have already made this exact call and its result is in your context; repeating it cannot change anything — do something different or stop and explain what is blocking you",
             },
           });
         }

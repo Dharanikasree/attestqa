@@ -409,6 +409,35 @@ describe("model call bounds", () => {
     expect(seen[0]!.transport).toEqual(DEFAULT_TRANSPORT);
   });
 
+  it("passes a workspace id to the factory as the connection, for the anthropic-workspace-id header", async () => {
+    const seen: Array<{ workspaceId?: string } | undefined> = [];
+    const api = fakeApi([{ content: [] }]);
+    const m = new AnthropicModel({
+      apiKey: "sk-ant-test",
+      workspaceId: "wrkspc_abc123",
+      factory: async (_k, _t, connection) => {
+        seen.push(connection);
+        return api;
+      },
+    });
+    await m.decide(input());
+    expect(seen[0]?.workspaceId).toBe("wrkspc_abc123");
+  });
+
+  it("omits the workspace id when none is set (a workspace-scoped key needs none)", async () => {
+    const seen: Array<{ workspaceId?: string } | undefined> = [];
+    const api = fakeApi([{ content: [] }]);
+    const m = new AnthropicModel({
+      apiKey: "sk-ant-test",
+      factory: async (_k, _t, connection) => {
+        seen.push(connection);
+        return api;
+      },
+    });
+    await m.decide(input());
+    expect(seen[0]?.workspaceId).toBeUndefined();
+  });
+
   it("lets a caller tighten the timeout without restating the rest", async () => {
     const seen: TransportOptions[] = [];
     const api = fakeApi([{ content: [] }]);

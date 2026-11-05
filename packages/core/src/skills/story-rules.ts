@@ -11,7 +11,7 @@ import {
   payloadOf,
   successful,
 } from "../verify/evidence.js";
-import { acLabels, allFailedTitles, lastFullRun } from "../triage/settle.js";
+import { acLabels, allFailedTitles, lastFullRun, ownTestTitles } from "../triage/settle.js";
 import { droppedClaims, LOCATOR_CALL } from "../design/claims.js";
 import { exhaustedTests, MAX_REPAIRS_PER_TEST, quarantinedTitles } from "../triage/quarantine.js";
 import { missingImports } from "../framework/survey.js";
@@ -62,7 +62,7 @@ export function storyRefusal(
    * assertion in 20260925T184615Z: the claim was dropped, the test passed, and
    * nothing refused it.
    */
-  opts: { workspaceDir?: string } = {},
+  opts: { workspaceDir?: string; workItem?: string } = {},
 ): string | undefined {
   // A surgical edit is a write of the file it produces, and is judged as one.
   // Every rule below asks "what would this file become?", so `replace_in_file`
@@ -81,7 +81,7 @@ export function storyRefusal(
     specBeforeScaffold(call, events) ??
     expectedFailRemoved(call, events, opts.workspaceDir) ??
     weakensAQuarantinedTest(call, events, opts.workspaceDir) ??
-    editsAPassingTest(call, events, opts.workspaceDir) ??
+    editsAPassingTest(call, events, opts.workspaceDir, opts.workItem) ??
     claimNotInDesign(call, events, opts.workspaceDir) ??
     repairsExhausted(call, events, opts.workspaceDir) ??
     alreadyRead(call, events) ??
@@ -123,10 +123,13 @@ export function storyRefusal(
  * before anyone is asked to approve it.
  */
 export function makeStoryRefusal(
-  opts: { testTypes?: readonly TestType[]; workspaceDir?: string } = {},
+  opts: { testTypes?: readonly TestType[]; workspaceDir?: string; workItem?: string } = {},
 ) {
   const types = opts.testTypes;
-  const where = opts.workspaceDir ? { workspaceDir: opts.workspaceDir } : {};
+  const where = {
+    ...(opts.workspaceDir ? { workspaceDir: opts.workspaceDir } : {}),
+    ...(opts.workItem ? { workItem: opts.workItem } : {}),
+  };
   if (!types || types.length === 0)
     return (call: { toolName: string; args: Record<string, unknown> }, events: AnyRunEvent[]) =>
       storyRefusal(call, events, where);
@@ -1284,7 +1287,7 @@ const BUG_NOISE = new Set([
 /** Arguments that make a pw.run_tests call run less than the whole spec. */
 const FILTER_KEYS = ["grep", "shard", "project", "lastFailed"] as const;
 
-function unhealedLocator(
+export function unhealedLocator(
   call: { toolName: string; args: Record<string, unknown> },
   events: AnyRunEvent[],
 ): string | undefined {
@@ -1526,8 +1529,10 @@ function unscopedAccessibilityBug(
       `"${f.title}" scans the WHOLE page: its AxeBuilder call has no .include(...), so a violation ` +
       "it finds may belong to the site's header, footer or a storefront widget rather than to this " +
       "story. A defect that cannot say which part of the page fails sends someone looking in the " +
-      "wrong place. Scope the scan to the element this story is about, re-run it, and propose the " +
-      "bug from what the scoped scan reports."
+      "wrong place. Scope the scan to the control this story is about wherever it lives — a search " +
+      "box or menu in the header is part of this story, so include it rather than narrowing to " +
+      "<main>, which would scope the story's own control out — re-run it, and propose the bug from " +
+      "what the scoped scan reports."
     );
   }
   return;
@@ -2208,10 +2213,11 @@ function fieldValue(call: { args: Record<string, unknown> }, name: string): stri
  * touch it is a gap the verifier raised about it (item 3 in
  * docs/ENGINE_MAP.md §11).
  */
-function editsAPassingTest(
+export function editsAPassingTest(
   call: { toolName: string; args: Record<string, unknown> },
   events: AnyRunEvent[],
   workspaceDir?: string,
+  workItem?: string,
 ): string | undefined {
   if (call.toolName !== "fs.write_file") return;
   const path = String(call.args["path"] ?? "");
@@ -2250,17 +2256,32 @@ function editsAPassingTest(
     return !(gapText.includes(title) || ids.some((id) => gapText.includes(id)));
   });
   if (touched.length === 0) return;
-  return (
-    `${touched
-      .map((t) => `"${t}"`)
-      .join(", ")} passed in the last full run, and this write changes ` +
-    `${
-      touched.length === 1 ? "it" : "them"
-    }. Leave passing tests exactly as they are and change only ` +
-    `the failing ${failing.length === 1 ? "test" : "tests"}: ${failing
-      .map((t) => `"${t}"`)
-      .join(", ")}. Use fs.replace_in_file on the failing test's lines alone.`
-  );
+  // Scope the edit surface to this story's own tests in a shared epic file
+  // (route A2): the failing tests to fix are the run's own, and a test that
+  // belongs to another story is not this run's to change at all — editing the
+  // earlier stories' passing tests, refused over and over, is what spent a run
+  // whose own story was green (W35, F-0155/F-0158). Without a story id the
+  // behaviour is unchanged.
+  const own = ownTestTitles(events, workItem);
+  const ownFailing = own ? failing.filter((t) => own.has(t)) : failing;
+  const touchedOther = own ? touched.filter((t) => !own.has(t)) : [];
+  const nextStep =
+    ownFailing.length > 0
+      ? `Change only the failing ${ownFailing.length === 1 ? "test" : "tests"}: ${ownFailing
+          .map((t) => `"${t}"`)
+          .join(", ")}, with fs.replace_in_file on its lines alone.`
+      : "If your own story's tests all pass, the run is done — say so.";
+  if (touchedOther.length > 0)
+    return `${touchedOther.map((t) => `"${t}"`).join(", ")} belong${
+      touchedOther.length === 1 ? "s" : ""
+    } to another story in this shared epic file — this run is not here to change ${
+      touchedOther.length === 1 ? "it" : "them"
+    }, so leave ${touchedOther.length === 1 ? "it" : "them"} exactly as ${
+      touchedOther.length === 1 ? "it is" : "they are"
+    }. Work only on your own story's tests. ${nextStep}`;
+  return `${touched.map((t) => `"${t}"`).join(", ")} passed in the last full run, and this write changes ${
+    touched.length === 1 ? "it" : "them"
+  }. Leave passing tests exactly as they are. ${nextStep}`;
 }
 
 /**

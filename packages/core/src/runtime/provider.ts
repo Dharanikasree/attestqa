@@ -33,6 +33,8 @@ export interface BuildModelOptions {
   modelOverride?: string;
   /** Company sign-in. When present, it wins over any key in the environment. */
   tokenSource?: TokenSource;
+  /** The per-call output cap (agent.budgets.max_output_tokens); unset = the model's 8192 default (W29). */
+  maxOutputTokens?: number;
   warn?: (message: string) => void;
 }
 
@@ -134,6 +136,8 @@ export function buildModel(opts: BuildModelOptions): ModelClient {
       apiKey: viaGateway ? "" : (key as string),
       ...(viaGateway ? { authToken: opts.env.anthropicAuthToken as string } : {}),
       ...(baseURL ? { baseURL } : {}),
+      ...(opts.env.anthropicWorkspaceId ? { workspaceId: opts.env.anthropicWorkspaceId } : {}),
+      ...(opts.maxOutputTokens ? { maxTokens: opts.maxOutputTokens } : {}),
       model: config.name,
       promptVersion: opts.promptVersion,
       warn,
@@ -146,6 +150,7 @@ export function buildModel(opts: BuildModelOptions): ModelClient {
         : config,
     ...(key ? { apiKey: key } : {}),
     ...(opts.tokenSource ? { tokenSource: opts.tokenSource } : {}),
+    ...(opts.maxOutputTokens ? { maxTokens: opts.maxOutputTokens } : {}),
     promptVersion: opts.promptVersion,
     warn,
   });

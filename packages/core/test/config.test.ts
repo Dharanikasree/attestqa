@@ -43,6 +43,19 @@ describe("agentConfigFromObject", () => {
     });
   });
 
+  it("parses an optional max_output_tokens cap, and omits it when unset (W29)", () => {
+    const c = agentConfigFromObject({
+      agent: { scope: { work_items: [1] }, budgets: { max_output_tokens: 16384 } },
+    });
+    expect(c.budgets.maxOutputTokens).toBe(16384);
+    expect(agentConfigFromObject(good).budgets.maxOutputTokens).toBeUndefined();
+    expect(() =>
+      agentConfigFromObject({
+        agent: { scope: { work_items: [1] }, budgets: { max_output_tokens: -5 } },
+      }),
+    ).toThrow(/max_output_tokens/);
+  });
+
   it("applies defaults for model, prompt_version and budgets", () => {
     const c = agentConfigFromObject({ agent: { scope: { work_items: [1] } } });
     expect(c.model).toEqual({ provider: "anthropic", name: "claude-sonnet-4-6" });
@@ -166,6 +179,13 @@ describe("readRuntimeEnv", () => {
       project: "agentic-qa-sandbox",
     });
     expect(r.sandbox).toBe(true);
+  });
+  it("reads ANTHROPIC_WORKSPACE_ID when set, and leaves it unset otherwise", () => {
+    expect(
+      readRuntimeEnv({ ANTHROPIC_API_KEY: "k", ANTHROPIC_WORKSPACE_ID: "wrkspc_abc" })
+        .anthropicWorkspaceId,
+    ).toBe("wrkspc_abc");
+    expect(readRuntimeEnv({ ANTHROPIC_API_KEY: "k" }).anthropicWorkspaceId).toBeUndefined();
   });
 });
 

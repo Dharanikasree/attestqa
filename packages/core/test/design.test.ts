@@ -107,7 +107,7 @@ describe("validateDesign — checked against what stage 1 read", () => {
   it("requires every criterion, bug and in-scope type to be accounted for", () => {
     const d = parseDesign({ items: [item({ id: "D1", covers: "AC-1" })], excluded: [] });
     const p = validateDesign(d, FACTS, ALL).join("\n");
-    expect(p).toContain("AC-2 has no functional test");
+    expect(p).toContain("AC-2 has no functional, accessibility or security test");
     expect(p).toContain("bug #49 [New] is neither tested nor listed");
     expect(p).toContain('{"what": "bug #49", "reason": "<why not>"}');
     expect(p).toContain('test type "security" is in scope but has no item');
@@ -280,7 +280,7 @@ describe("design-first, enforced before the call", () => {
       preflight,
     );
     expect(r).toContain("problem(s)");
-    expect(r).toContain("AC-2 has no functional test");
+    expect(r).toContain("AC-2 has no functional, accessibility or security test");
   });
 
   it("lets a valid design through, and writes after it is recorded", () => {

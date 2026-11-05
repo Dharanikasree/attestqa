@@ -808,6 +808,9 @@ async function live(
         env,
         promptVersion: config.prompt_version,
         ...(env.model ? { modelOverride: env.model } : {}),
+        ...(config.budgets.maxOutputTokens
+          ? { maxOutputTokens: config.budgets.maxOutputTokens }
+          : {}),
         warn: (m) => io.err(`aqa: ${scrub(m).text}\n`),
       });
 
@@ -827,7 +830,7 @@ async function live(
     if (skillName === "story-to-tests" && tracker === "jira")
       io.err(
         "aqa: Jira keeps no test cases — the feature file's @story tags are the record; " +
-          "the run report stays with the run and is not posted to the issue\n",
+          "the run's QA report is posted to the story's QA sub-task\n",
       );
     else if (skillName === "story-to-tests" && !canCreatePlans)
       io.err(

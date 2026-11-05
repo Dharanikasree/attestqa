@@ -4,6 +4,7 @@
 
 ### Patch Changes
 
+- A failure that is the test's own code is no longer reported as "flaky". When a test used an invalid selector, an ambiguous locator (a strict-mode violation), or scoped an accessibility scan to a region that is not on the page, triage already read it as the test's fault and left it for the agent to fix — but it recorded the verdict as category `flake` at high confidence, and the end-of-run analysis counted every `flake` verdict as flaky, so a run whose only failure was a broken selector said "1 flaky". The category is unchanged (it is what hands the test back to the agent); the verdict now carries a test-fault flag that the report reads to count these as test faults, separately from genuine flakes. The rationale, which already said "not a defect and not a flake", is untouched (F-0125, F-0126).
 - The `CITATION.cff` shipped in the package now matches the release: version, release date and the Zenodo concept DOI, which resolves to the latest archived version, instead of a fixed version DOI from an earlier release. The release pipeline is one workflow and token-free (trusted publishing on npm and the VS Code Marketplace); `docs/RELEASING.md` describes the four-step routine.
 
 ## 2.0.2

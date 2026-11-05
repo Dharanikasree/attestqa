@@ -43,9 +43,11 @@ import {
   type TriagePattern,
   DECLARED_ENVIRONMENTAL,
   SETUP_HOOK_FAILURE,
+  PRECONDITION_FAILURE,
   TEST_CODE_ERROR,
   STALE_RATIONALE,
   SETUP_HOOK_RATIONALE,
+  PRECONDITION_RATIONALE,
   TEST_CODE_RATIONALE,
 } from "./patterns.js";
 
@@ -99,6 +101,16 @@ export interface TriageVerdict {
   triagedBy: "builtin" | "service";
   /** Present only when a service produced it. */
   serviceVersion?: string;
+  /**
+   * The failure is the test's own code — a strict-mode violation, an invalid
+   * selector, an axe include/exclude region that is not on the page. The
+   * category stays `flake` (its loop treatment — the agent fixes it, it is not
+   * quarantined — is already right), but the rationale says "not a defect and
+   * not a flake", and a report that counts it as flaky repeats the one word the
+   * rationale denies. This flag lets the report tell the two apart without
+   * matching on the rationale text. Set only on the test-code branch (W27).
+   */
+  testFault?: boolean;
 }
 
 /**
@@ -248,8 +260,11 @@ export function classifyFailure(f: FailureSignal): TriageVerdict {
   // hook that failed (nothing in the test body ran), or test code that is not
   // valid (an unparseable selector). Neither says anything about the product.
   const hook = score(f.message, stack, SETUP_HOOK_FAILURE);
+  // A precondition sign-in that failed: setup, not the product (F-0130, W30).
+  const precond = score(f.message, stack, PRECONDITION_FAILURE);
   const code = score(f.message, stack, TEST_CODE_ERROR);
   let rationaleOverride: string | undefined;
+  let testFault = false;
   if (declared.matched.length === 0 && hook.matched.length > 0) {
     category = "environmental";
     confidence = 0.9;
@@ -260,12 +275,27 @@ export function classifyFailure(f: FailureSignal): TriageVerdict {
       `${SETUP_HOOK_RATIONALE}, so no step of the test was reached and nothing about the ` +
       "product was observed. Fix the setup (a pop-up in the way, a missing fixture, a page " +
       "that never loaded) before reading anything into the tests themselves.";
+  } else if (declared.matched.length === 0 && precond.matched.length > 0) {
+    // The configured account could not sign in. The precondition is setup, so
+    // no step reached the product and nothing here is a product defect — the
+    // mirror of the test-code case, and the opposite mislabel to W27.
+    category = "environmental";
+    confidence = 0.9;
+    matchedCount = precond.matched.length;
+    hits = precond.hits;
+    matched = precond.matched;
+    rationaleOverride =
+      `${PRECONDITION_RATIONALE}: the configured account could not sign in (check AQA_APP_USER ` +
+      "and AQA_APP_PASS, and that the application and its data are up — a stateful story may have " +
+      "left the account changed). No step reached the product, so nothing here is a defect. Fix " +
+      "the environment and run again.";
   } else if (declared.matched.length === 0 && code.matched.length > 0) {
     category = "flake";
     confidence = 0.9;
     matchedCount = code.matched.length;
     hits = code.hits;
     matched = code.matched;
+    testFault = true;
     rationaleOverride =
       `${TEST_CODE_RATIONALE} (${
         /strict mode violation/i.test(f.message)
@@ -314,6 +344,7 @@ export function classifyFailure(f: FailureSignal): TriageVerdict {
     rationale:
       rationaleOverride ?? `${RATIONALE[category]} ${whatClause(category, matchedCount)}`.trim(),
     triagedBy: "builtin",
+    ...(testFault ? { testFault: true } : {}),
   };
 }
 
