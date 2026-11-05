@@ -1,5 +1,0 @@
----
-"attestqa": patch
----
-
-A test that changes the shared sign-in account and does not restore it is now caught. SCRUM-10's forgot-password test reset the fixture account's password through the security-question flow and never put it back; in a whole-suite parallel run every sign-in after it answered 401 and the suite could not be re-run, and nothing in the design rules, verifier or triage looked for it. A design rule now requires an item whose expected result changes an account credential (a password, e-mail or security question the suite logs in with) to state how the account is left usable — the original restored, or an account the test creates. It reads the expected result, not the setup conditions, so a plain sign-in and an accessibility test that signs in before scanning are not caught, and a refused/rejected/"not changed"/requires-authentication case is excluded. A review-only verifier backstop reports a test whose body runs the change flow when nothing in the spec — an afterEach/afterAll hook included — restores it (F-0151, F-0130).

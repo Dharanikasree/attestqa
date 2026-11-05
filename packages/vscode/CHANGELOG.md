@@ -1,5 +1,9 @@
 # Changelog
 
+## 2.1.0
+
+- Version aligned with the engine's 2.1.0 (one version line, ADR-005). The extension's own behaviour is unchanged; 2.1.0 is an engine release — an organization-scoped Anthropic key (`ANTHROPIC_WORKSPACE_ID`), a configurable per-call output cap, and the fixes for the 27 W items from the October evaluation.
+
 ## 2.0.3
 
 - Published through the Marketplace's trusted publishing from the release workflow; no personal access token. No change to the extension's behaviour.

@@ -1,5 +1,0 @@
----
-"attestqa": patch
----
-
-Two more verifier checks for tests weaker than the approved design, building on the W34 work. First, "every approved design item has a test that references it": `design-item-not-tested` read the feature file alone, so an item whose scenario was tagged `@design:<id>` but whose generated test was dropped or never written read as covered — the check now also requires a test in the spec to reference it, once a spec exists. Second, a negative-form assertion must name an element, not prose: a "no match shows no product cards" test asserted `getByText("product cards").not.toBeVisible()`, but "product cards" is a description that is never on any page, so the assertion passed whatever the product did. A review-only check now flags a negative/absence assertion (`.not.toBeVisible()`, `.toBeHidden()`, `.toHaveCount(0)`) whose target is located by text, pointing the author at a role, test id or selector instead. The semantic weaknesses the same study names — absence never checked, an assertion a product name satisfies — are the paper's central measurement and stay with the reviewer (F-0090, F-0092).

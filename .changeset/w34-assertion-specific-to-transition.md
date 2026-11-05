@@ -1,5 +1,0 @@
----
-"attestqa": patch
----
-
-The verifier now checks that a test's assertion is specific to the transition it claims to test. The seeded-fault study found two accepted tests that passed while a fault was live because the assertion was true for the wrong reason: a logout test asserted `toHaveURL(/#\//)`, a prefix that `/#/login` also satisfies, so "returns to the home page" passed on the wrong page; and a "Register button is disabled when the passwords differ" test filled only the two password fields and asserted `toBeDisabled()`, which held because the other required fields were empty, whether or not the mismatch rule existed. Two review-only shape checks now catch these, each scoped to a design item whose own expected result is about that kind of transition (a destination, or a control's enabled state) so neither demands a check the design never named: a `toHaveURL`/url-contains assertion whose pattern is only SPA-root scaffolding and is not end-anchored, and a `toBeDisabled` after an action with no enabled valid-case counterpart. Both go to the reviewer after one agent attempt rather than stopping the run (F-0153).

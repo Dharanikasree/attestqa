@@ -1,5 +1,0 @@
----
-"attestqa": patch
----
-
-The test design is now justified against the story, for the approver to judge. On stories that already have tests, the design tended to adopt the existing test's scope and labels — an accessibility item that scanned the login page on a sign-out story, a security item that cited AC-1 while testing AC-3's case — and the rules passed them, because they check that a source is named, not that it supports the item; the approver passed them too. Whether a source supports an item, or a page fits the story, is a judgement no string match can make. So each design item now carries an optional one-line `rationale` justifying its page and source against the story's own text; it is shown to the approver (and the design says "not justified against the story" for an item that gives none); the design skill asks for it and warns against adopting an existing test's scope; and the design approval now carries a short reviewer checklist — does the source support the item, is the page one the story mentions, is the expected taken from the story. It is a review aid, not a gate (F-0087, F-0088).
