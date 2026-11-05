@@ -1,0 +1,5 @@
+---
+"attestqa": patch
+---
+
+An accessibility violation a never-passed test found is no longer dropped (W21, F-0104). The bug gate withholds a defect from a test that never passed, because a never-passing functional test may itself be wrong — but an axe scan reports facts about the DOM, so a rule it flags ("button-name" on an icon-only button with no accessible name) is real whether or not the test passed. SCRUM-21's button-name violation recurred across runs and was never surfaced. The verifier's green-suite check now reads each failing test's message through `axeRuleIds`: a scan that found concrete rule ids (not one that threw or ran empty, which triage handles) is put to the reviewer and counted toward "all remaining failures are defects", so the run ends with the violation in the report rather than only "suite not green". It is surfaced for review, not auto-filed, because a scan can be mis-scoped. Verified by replaying the SCRUM-21 ledger: the button-name violation surfaces and another story's color-contrast does not.
