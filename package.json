@@ -12,7 +12,7 @@
     "lint": "npm run lint --workspaces --if-present",
     "typecheck": "npm run typecheck --workspaces --if-present",
     "changeset": "changeset",
-    "version-packages": "changeset version",
+    "version-packages": "changeset version && node scripts/sync-release-meta.mjs",
     "format:check": "npm run format:check --workspaces --if-present",
     "format": "npm run format --workspaces --if-present",
     "preflight": "npm run format:check && npm run lint && npm run typecheck && npm run build && npm test"
