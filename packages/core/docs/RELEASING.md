@@ -9,6 +9,9 @@ The tag, `packages/core/package.json` and `packages/vscode/package.json` must ca
 (ADR-005); the workflow refuses a tag that does not match both. Both bump together — the two packages
 are `fixed` in `.changeset/config.json`, so `changeset version` sets both from the changesets.
 
+What is currently published, and what each bump means, is in [VERSIONS.md](VERSIONS.md) — the single
+version-of-record.
+
 ## The branch model (ADR-006)
 
 ```

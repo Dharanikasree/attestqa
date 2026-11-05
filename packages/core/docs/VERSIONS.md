@@ -63,27 +63,13 @@ git rev-parse v2.0.2
 git log --oneline -1 v2.0.2
 ```
 
-## Release order, and why it is this order
+## Release order
 
-1. `npm run typecheck && npm test && npm run lint` — all three, on a clean tree.
-2. `npm run build`, then `node dist/cli.js --version`. A stale `dist/` has
-   silently shipped old behaviour once: a build predating its source by thirteen
-   minutes made a feature look absent when it was present.
-3. `npm run fixture:make` if any ledger event shape changed, then re-run the
-   tests. The golden fixture is generated, never hand-edited — a hand-inserted
-   event passes the "covers every kind" check and fails the byte-for-byte one,
-   which is the suite telling you the fixture is a record of what the loop does.
-4. `npm run version-packages` (changesets bump `package.json` and write the CHANGELOG); bump
-   `CITATION.cff` (version, date-released) to the same number; commit.
-5. `npm publish --access public`.
-6. Tag **the published commit**: `git tag v2.0.2 <that sha>`, then push the tag.
-   Tagging HEAD afterwards is how a tag and a release come to describe different
-   code.
-7. `gh release create v2.0.2` with notes from the CHANGELOG; Zenodo archives it and mints the DOI —
-   put that DOI into `CITATION.cff` and the README badge in a follow-up commit.
-8. Extension: set `packages/vscode/package.json` to the same number, `npm run package` in `packages/vscode/`,
-   then `npx vsce publish`.
-9. Update the table at the top of this file.
+The release runbook is [RELEASING.md](RELEASING.md): one tag, one token-free workflow
+(`npm run preflight` → `changeset version` → commit → tag `vX.Y.Z` → CI publishes npm, the VS Code
+Marketplace and the GitHub release, which Zenodo archives). This file is only the version-of-record;
+it does not restate the steps. After a release, update the table at the top of this file and put the
+new Zenodo DOI into `CITATION.cff`.
 
 ## Windows note
 

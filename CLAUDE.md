@@ -24,8 +24,11 @@ Other standing rules for this repo:
   protocol in its §3. Work that list top down; one changeset per W item.
 - Releasing: `packages/core/docs/RELEASING.md` (four steps; the pipeline is token-free).
   `npm run preflight` at the repo root before every commit — it is exactly what CI runs.
-- Versions: one number everywhere (ADR-005). Next patch 2.0.4; features go to 2.1.0
+- Versions: one number everywhere (ADR-005); what is published where is the version-of-record
+  `packages/core/docs/VERSIONS.md`. Next patch 2.0.4; features go to 2.1.0
   (`ROADMAP.md`). No contract change in 2.0.x (`packages/core/docs/TECHNICAL.md`).
+- How the documentation is organised (living / frozen baseline / history):
+  `research/decisions/ADR-007-documentation-structure.md`.
 - The papers are a separate track and use attestqa 2.0.1 with its frozen evidence under
   `E:\EB1A_Research\EB1_Master\06_Authorship\Paper_I2_WeakeningStudy\Experiment\`. Never run
   paper experiments from main, never edit that folder from here, never build a

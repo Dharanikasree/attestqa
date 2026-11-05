@@ -2,7 +2,7 @@
 
 attestqa ships on the **15th of every month**. A release ships with whatever is finished and tested;
 unfinished work moves to the next month and the release notes say so. The full plan, with hours and
-risks, is `Docs/05_Implementation_Plan.pdf`.
+risks, is the frozen `Docs/baseline/05_Implementation_Plan.pdf`.
 
 **Version numbers.** One line, everywhere: the product release (GitHub tag, release notes), the
 engine on npm (`attestqa`) and the VS Code extension (`attestqa-vscode`) carry the same number. A new

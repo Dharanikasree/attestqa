@@ -1,6 +1,6 @@
 # research
 
-The record that turns development into evidence. Plan: `Docs/08_Research_Logging_Plan.pdf`.
+The record that turns development into evidence. Plan: `Docs/baseline/08_Research_Logging_Plan.pdf`.
 
 | File | What goes in it |
 |---|---|

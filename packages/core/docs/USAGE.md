@@ -12,7 +12,7 @@ locators. Throughout, a governance layer refuses — in code — any change that
 test pass by weakening it, and every step is written to a ledger you can replay. The tests it leaves
 behind run with plain `npx playwright test`, with attestqa uninstalled.
 
-For how it works inside, see [HOW-A-RUN-WORKS.md](HOW-A-RUN-WORKS.md) and
+For how it works inside, see [ENGINE_MAP.md](ENGINE_MAP.md) and
 [ARCHITECTURE.md](ARCHITECTURE.md). For the contracts (event shapes, exit codes, config schema), see
 [TECHNICAL.md](TECHNICAL.md).
 

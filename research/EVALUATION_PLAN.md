@@ -30,7 +30,7 @@ different applications and both trackers — and what do the governance rules ac
 
 All four run on this machine or are public practice sites built to be tested. Each gets an entry
 in `TestRunApplication/targets.yaml` with `permission_basis` and `checked` filled in before its
-first run (Docs/06_Local_Test_Strategy.pdf §5), and a Playwright project in
+first run (Docs/baseline/06_Local_Test_Strategy.pdf §5), and a Playwright project in
 `TestRunApplication/<id>/` that runs with plain `npx playwright test`.
 
 | Id | Application | Kind | Hosting | Tracker | Faults from |
