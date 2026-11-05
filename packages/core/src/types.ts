@@ -494,7 +494,7 @@ export interface ModelConfig {
 export interface AgentConfig {
   model: ModelConfig;
   prompt_version: string;
-  budgets: { steps: number; tokens: number };
+  budgets: { steps: number; tokens: number; maxOutputTokens?: number };
   scope: ScopeConfig;
   policy: PolicyTable;
   /** Additive and optional (A8b); defaults to `DEFAULT_CAPABILITIES`. */

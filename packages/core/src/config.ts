@@ -72,6 +72,19 @@ export function agentConfigFromObject(raw: unknown, source = "<config>"): AgentC
   const budgets = {
     steps: posInt(b["steps"], DEFAULT_BUDGETS.steps, `${source}: agent.budgets.steps`),
     tokens: posInt(b["tokens"], DEFAULT_BUDGETS.tokens, `${source}: agent.budgets.tokens`),
+    // W29: the per-call output cap. A whole-file write larger than this arrives
+    // truncated (fs.ts tells the agent to use replace_in_file). A project that
+    // legitimately writes big files can raise it; unset keeps the model's 8192
+    // default. Config, not contract — it changes cost, not the ledger shape.
+    ...(b["max_output_tokens"] !== undefined
+      ? {
+          maxOutputTokens: posInt(
+            b["max_output_tokens"],
+            8192,
+            `${source}: agent.budgets.max_output_tokens`,
+          ),
+        }
+      : {}),
   };
 
   const s = agent["scope"];

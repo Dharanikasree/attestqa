@@ -808,6 +808,9 @@ async function live(
         env,
         promptVersion: config.prompt_version,
         ...(env.model ? { modelOverride: env.model } : {}),
+        ...(config.budgets.maxOutputTokens
+          ? { maxOutputTokens: config.budgets.maxOutputTokens }
+          : {}),
         warn: (m) => io.err(`aqa: ${scrub(m).text}\n`),
       });
 
