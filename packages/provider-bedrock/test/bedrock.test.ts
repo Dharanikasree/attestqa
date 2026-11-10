@@ -6,7 +6,7 @@ import { provider, factory, createBedrockMessagesFactory } from "../src/index.js
 // built-in ModelProvider union; at runtime the loader has registered it. The
 // config carries the name as an opaque string, as it does in a real run.
 const bedrockConfig = (name: string): ModelConfig =>
-  ({ provider: "bedrock", name } as unknown as ModelConfig);
+  ({ provider: "bedrock", name }) as unknown as ModelConfig;
 
 interface SeenRequest {
   model: string;
