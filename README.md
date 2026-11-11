@@ -3,8 +3,8 @@
 Governed, open-source end-to-end testing for any website. A model your company already pays for writes and runs ordinary Playwright tests in a folder you own, and attestqa refuses — in code, not in a prompt — to make a failing test pass by weakening it. Every step is written to a ledger you can audit.
 
 Status: **v2.0.3** — the engine and CLI are on npm (`attestqa` 2.0.2, 3 Nov 2026, carries the fixes from the October evaluation; 2.0.3 corrects the citation file), the attestqa
-extension on the VS Code Marketplace). The design set was approved on 10 October 2026
-(`Docs/00_Signoff.pdf`).
+extension on the VS Code Marketplace). The design set was approved on 10 October 2026 and is the
+frozen baseline in `Docs/baseline/` (`Docs/baseline/00_Signoff.pdf`).
 
 ## Start here
 
@@ -23,7 +23,7 @@ extension on the VS Code Marketplace). The design set was approved on 10 October
 | `Winapp/` | The Windows desktop app (from v2.2.0) |
 | `WebApplication/` | The web version, `@attestqa/server` (from v4.0.0) |
 | `TestRunApplication/` | One plain Playwright project per site under test, plus `targets.yaml` |
-| `Docs/` | Product, design, HLD, LLD, plan, test strategy, packaging and publishing documents (PDF), with sources |
+| `Docs/` | The signed design baseline (frozen, in `Docs/baseline/`) and cross-package handoffs; see `Docs/README.md` |
 | `research/` | Findings, decisions, hypotheses, run manifest and weekly journal |
 
-Releases: a new major number for each stage (v1 web, v2 API, v3 web version, v4 security, v5 ETL), the middle number for the monthly releases, the last for fixes. Licence: MIT.
+Releases: one version line across the tag, npm and the extension (ADR-005). A new major for each kind of testing — 2.x web, 3.x API, 4.x web version, 5.x security, 6.x ETL — a new minor for each feature release, a patch for fixes. See [ROADMAP.md](ROADMAP.md) and [VERSIONS.md](packages/core/docs/VERSIONS.md). Licence: MIT.

@@ -12,9 +12,12 @@ Check this table against reality before every release, with the commands below.
 
 | Artefact | Name | Version | Published | Source |
 | --- | --- | --- | --- | --- |
-| Runtime | `attestqa` | **2.0.3** (2.0.2 on npm 3 Nov 2026) | npm | `packages/core/package.json` |
-| Extension | `attestqa-vscode` | **2.0.3** (2.0.2 on the Marketplace 3 Nov 2026) | VS Code Marketplace | `packages/vscode/package.json` |
+| Runtime | `attestqa` | **2.1.0** (on npm 5 Nov 2026) | npm | `packages/core/package.json` |
+| Extension | `attestqa-vscode` | **2.1.0** (on the Marketplace 5 Nov 2026) | VS Code Marketplace | `packages/vscode/package.json` |
 | Archive | `attestqa` | every release; cite the concept DOI (see `CITATION.cff`) | Zenodo (GitHub release integration) | `CITATION.cff` |
+
+The next version is built on `release/2.2.0` (ADR-006); nothing is published until its tag. The
+forward plan is in [ROADMAP.md](../../../ROADMAP.md).
 
 One version line (ADR-005, 3 Nov 2026): the product release tag, the runtime and the extension carry the
 same number. They are not technically coupled — the extension reads ledgers the runtime writes — but two
@@ -25,7 +28,7 @@ release is citable. `CITATION.cff` carries the *concept* DOI, which always resol
 version, so only `version` and `date-released` change per release (`packages/core/CITATION.cff` is
 the copy that ships in the npm package and must say the same). A paper that needs a fixed version
 cites that version's own DOI from its Zenodo page (2.0.1: 10.5281/zenodo.23897787, cited by the
-SoftwareX article; 2.0.2: 10.5281/zenodo.23932981).
+SoftwareX article; 2.0.2: 10.5281/zenodo.23932981; 2.1.0: 10.5281/zenodo.23979481).
 
 ## What 2.0.x means here
 
@@ -63,27 +66,13 @@ git rev-parse v2.0.2
 git log --oneline -1 v2.0.2
 ```
 
-## Release order, and why it is this order
+## Release order
 
-1. `npm run typecheck && npm test && npm run lint` — all three, on a clean tree.
-2. `npm run build`, then `node dist/cli.js --version`. A stale `dist/` has
-   silently shipped old behaviour once: a build predating its source by thirteen
-   minutes made a feature look absent when it was present.
-3. `npm run fixture:make` if any ledger event shape changed, then re-run the
-   tests. The golden fixture is generated, never hand-edited — a hand-inserted
-   event passes the "covers every kind" check and fails the byte-for-byte one,
-   which is the suite telling you the fixture is a record of what the loop does.
-4. `npm run version-packages` (changesets bump `package.json` and write the CHANGELOG); bump
-   `CITATION.cff` (version, date-released) to the same number; commit.
-5. `npm publish --access public`.
-6. Tag **the published commit**: `git tag v2.0.2 <that sha>`, then push the tag.
-   Tagging HEAD afterwards is how a tag and a release come to describe different
-   code.
-7. `gh release create v2.0.2` with notes from the CHANGELOG; Zenodo archives it and mints the DOI —
-   put that DOI into `CITATION.cff` and the README badge in a follow-up commit.
-8. Extension: set `packages/vscode/package.json` to the same number, `npm run package` in `packages/vscode/`,
-   then `npx vsce publish`.
-9. Update the table at the top of this file.
+The release runbook is [RELEASING.md](RELEASING.md): one tag, one token-free workflow
+(`npm run preflight` → `changeset version` → commit → tag `vX.Y.Z` → CI publishes npm, the VS Code
+Marketplace and the GitHub release, which Zenodo archives). This file is only the version-of-record;
+it does not restate the steps. After a release, update the table at the top of this file and put the
+new Zenodo DOI into `CITATION.cff`.
 
 ## Windows note
 

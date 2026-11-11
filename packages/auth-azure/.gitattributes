@@ -1,0 +1,11 @@
+# Normalise line endings to LF everywhere, on every platform.
+# Prettier checks LF, so the Windows CI runner must not check files out as CRLF.
+* text=auto eol=lf
+
+# Binaries
+*.png binary
+*.jpg binary
+*.gif binary
+*.pdf binary
+*.woff binary
+*.woff2 binary

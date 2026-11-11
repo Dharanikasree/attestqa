@@ -92,8 +92,8 @@ packages, `@vijaypjavvadi/bdd2pw` (the generator) and `@vijaypjavvadi/pw-self-he
 ranker). Everything else is Node's standard library — a runtime whose job is auditability should not
 itself be a supply chain.
 
-Full inventory in [FUNCTIONAL.md](docs/FUNCTIONAL.md#what-provides-each-capability); wire formats and
-event shapes in [TECHNICAL.md](docs/TECHNICAL.md).
+Wire formats and event shapes are in [TECHNICAL.md](docs/TECHNICAL.md); the engine pipeline, stage
+by stage, is in [ENGINE_MAP.md](docs/ENGINE_MAP.md).
 
 ## Install
 
@@ -180,11 +180,10 @@ Deliberate limits, not missing features:
 | [User guide](docs/USAGE.md)                | installing, configuring, running, approving, results, VS Code |
 | [Adoption](docs/ADOPTION.md)               | what a team has to change, who does it, in what order    |
 | [Roadmap](https://github.com/javvadivijayprasad/attestqa/blob/main/ROADMAP.md) | what ships each month |
-| [How a run works](docs/HOW-A-RUN-WORKS.md) | every stage of one real run, in order                    |
-| [Functional](docs/FUNCTIONAL.md)           | what it does, capability by capability                   |
 | [Architecture](docs/ARCHITECTURE.md)       | the design decisions, and the trade-offs behind them     |
 | [Technical](docs/TECHNICAL.md)             | components, contracts, event shapes, extension points    |
 | [Releasing](docs/RELEASING.md)             | cutting a version and publishing it                      |
+| [Versions](docs/VERSIONS.md)               | what is published where, and what 2.0.x means            |
 | [CHANGELOG](CHANGELOG.md)                  | every change, with the observed failure that prompted it |
 
 ## Status

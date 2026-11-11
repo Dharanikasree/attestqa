@@ -1,7 +1,7 @@
 # Sites attestqa tests. Website only — never their source code.
 # types: which test types may run against the target (web, api, security, etl).
 # Each entry must have permission_basis and checked (date) filled in during Phase 0
-# before any run. Rules of engagement: Docs/06_Local_Test_Strategy.pdf §5.
+# before any run. Rules of engagement: Docs/baseline/06_Local_Test_Strategy.pdf §5.
 defaults:
   workers: 1
   min_delay_ms: 1500

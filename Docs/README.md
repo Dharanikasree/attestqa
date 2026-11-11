@@ -1,11 +1,21 @@
 # Docs
 
-PDFs here are the deliverables; `00_Signoff.pdf` lists each one with its SHA-256.
+This folder holds the project's non-engine documents.
 
-To regenerate after editing `src/*.md` (needs Python with `markdown` and `playwright`):
+- **`baseline/`** — the signed pre-development design set (AQ-00 to AQ-09), **frozen**. It is a
+  historical record of the original plan, not the current state; see `baseline/README.md`.
+- **`handoff/`** — cross-package handoffs (e.g. bdd2pw / pw-emit) prepared for another package's
+  maintainer.
 
-    python prototype/build.py      # UI screens  -> assets/0*.png
-    python prototype/diagrams.py   # diagrams    -> assets/d*.svg (rasterise to .png before rendering)
-    python render.py               # every src/*.md -> *.pdf
+The living documentation lives with the code and the plan, not here:
 
-Re-rendering changes the PDF hashes, so a revised document needs a new line on the sign-off sheet.
+| You want | Read |
+| --- | --- |
+| What ships, and when | `../ROADMAP.md` |
+| How a run works, the rules | `../packages/core/docs/ENGINE_MAP.md` |
+| Using the product | `../packages/core/docs/USAGE.md` |
+| Versions, what's published | `../packages/core/docs/VERSIONS.md` |
+| Release process | `../packages/core/docs/RELEASING.md` |
+
+How the documentation is organised, and why it is split this way, is recorded in
+`../research/decisions/ADR-007-documentation-structure.md`.

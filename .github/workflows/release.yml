@@ -10,7 +10,7 @@ name: release
 on:
   pull_request:
   push:
-    branches: [main]
+    branches: [main, "release/**"]
     # A pre-release tag (v2.1.0-rc.1) marks a commit and publishes nothing.
     tags: ["v*.*.*", "!v*.*.*-*"]
   workflow_dispatch:
@@ -95,6 +95,35 @@ jobs:
             npm publish --provenance --access public
           fi
 
+      - name: Plug-in packages - what would ship
+        # The @attestqa/* provider and sign-in plug-ins version INDEPENDENTLY of the
+        # engine (they are not in the `fixed` set in .changeset/config.json), so they
+        # are not matched to the tag. Each publish below is idempotent, so listing
+        # them on every release only ships the ones whose version actually moved.
+        run: |
+          for dir in packages/provider-bedrock packages/auth-aws packages/auth-azure; do
+            echo "== $dir =="
+            ( cd "$dir" && npm pack --dry-run )
+          done
+
+      - name: Plug-in packages - publish to npm
+        if: env.DRY_RUN != 'true'
+        # Same trusted publishing (OIDC, no token) as the engine: EACH package name
+        # needs its own Trusted Publisher on npmjs.com (owner javvadivijayprasad,
+        # repo attestqa, workflow release.yml). A brand-new package's FIRST publish
+        # is done once by hand from its folder (`npm publish --access public`) to
+        # create the name; CI then publishes every version after that through OIDC.
+        run: |
+          for dir in packages/provider-bedrock packages/auth-aws packages/auth-azure; do
+            name=$(node -p "require('./$dir/package.json').name")
+            v=$(node -p "require('./$dir/package.json').version")
+            if npm view "$name@$v" version >/dev/null 2>&1; then
+              echo "$name@$v is already on npm - skipping"
+            else
+              ( cd "$dir" && npm publish --provenance --access public )
+            fi
+          done
+
       - name: Extension - package
         working-directory: packages/vscode
         run: npx @vscode/vsce@4.1.0 package --no-dependencies
@@ -116,6 +145,25 @@ jobs:
             npx @vscode/vsce@4.1.0 publish --oidc --no-dependencies --packagePath attestqa-vscode-*.vsix
           fi
 
+      - name: Release notes from the changelog
+        if: env.DRY_RUN != 'true'
+        shell: bash
+        # The GitHub release body is this version's own section of the engine
+        # CHANGELOG (written by `changeset version`). awk prints the lines between
+        # "## X.Y.Z" and the next "## " header. No hand-maintained RELEASE_NOTES.md.
+        run: |
+          v="${GITHUB_REF_NAME#v}"
+          awk -v v="## $v" '
+            $0 == v {flag=1; next}
+            /^## / && flag {exit}
+            flag {print}
+          ' packages/core/CHANGELOG.md > RELEASE_NOTES.generated.md
+          if [ ! -s RELEASE_NOTES.generated.md ]; then
+            echo "::error::no CHANGELOG section for $v in packages/core/CHANGELOG.md"
+            exit 1
+          fi
+          echo "---- release notes for $v ----"; cat RELEASE_NOTES.generated.md
+
       - name: GitHub release
         if: env.DRY_RUN != 'true'
         env:
@@ -125,7 +173,7 @@ jobs:
             echo "release $GITHUB_REF_NAME already exists - skipping"
           else
             gh release create "$GITHUB_REF_NAME" packages/vscode/attestqa-vscode-*.vsix \
-              --title "attestqa $GITHUB_REF_NAME" --notes-file RELEASE_NOTES.md
+              --title "attestqa $GITHUB_REF_NAME" --notes-file RELEASE_NOTES.generated.md
           fi
 
       - uses: actions/upload-artifact@v4

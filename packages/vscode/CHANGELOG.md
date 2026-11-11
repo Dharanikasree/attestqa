@@ -1,5 +1,7 @@
 # Changelog
 
+## 2.2.0
+
 ## 2.1.0
 
 - Version aligned with the engine's 2.1.0 (one version line, ADR-005). The extension's own behaviour is unchanged; 2.1.0 is an engine release — an organization-scoped Anthropic key (`ANTHROPIC_WORKSPACE_ID`), a configurable per-call output cap, and the fixes for the 27 W items from the October evaluation.
@@ -33,7 +35,6 @@ First release as **attestqa** (previously the agentic-qa extension).
 - Progress notification shows the CLI's own progress lines.
 - The Runs view describes today's ledger events (route, role, triage, refusals, verifier).
 - Fixed: starting `aqa.cmd` on Windows failed with `spawn EINVAL` on current Node.js.
-
 
 The extension and the runtime version independently. This file covers the extension only; the
 runtime's own changes are in the repository root `CHANGELOG.md`.

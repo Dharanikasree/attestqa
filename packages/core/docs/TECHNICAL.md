@@ -2,9 +2,8 @@
 
 Components, contracts, event shapes, and the three places you extend this.
 
-For _why_ any of it is shaped this way, see [ARCHITECTURE.md](ARCHITECTURE.md). For a narrative
-walkthrough of one run, stage by stage, see [HOW-A-RUN-WORKS.md](HOW-A-RUN-WORKS.md). For running
-it, see [USAGE.md](USAGE.md).
+For _why_ any of it is shaped this way, see [ARCHITECTURE.md](ARCHITECTURE.md). For the pipeline
+stage by stage, see [ENGINE_MAP.md](ENGINE_MAP.md). For running it, see [USAGE.md](USAGE.md).
 
 ---
 
