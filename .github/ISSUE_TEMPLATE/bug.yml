@@ -3,7 +3,7 @@ description: Something attestqa did that it should not have, or did not do that 
 labels: [bug]
 body:
   - type: input
-    attributes: { label: attestqa version, placeholder: "v1.0.0" }
+    attributes: { label: attestqa version, placeholder: "2.2.0 (run aqa --version)" }
     validations: { required: true }
   - type: textarea
     attributes: { label: What happened, description: "What you ran, what you expected, what happened instead." }
